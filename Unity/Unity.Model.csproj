@@ -480,7 +480,13 @@
     <Compile Include="Assets\Model\UI\UILoading\Event\LoadingBeginEvent_CreateLoadingUI.cs" />
     <Compile Include="Assets\Model\UI\UILoading\Event\LoadingFinishEvent_RemoveLoadingUI.cs" />
     <Compile Include="Assets\Model\UI\UILoading\Factory\UILoadingFactory.cs" />
+    <None Include="Assets\Model\Module\Pathfinding\AstarPathfindingProject\ExampleScenes\Materials\DiffuseAlwaysVisible.shader" />
+    <None Include="Assets\Model\Module\Pathfinding\AstarPathfindingProject\ExampleScenes\_Example Scenes.txt" />
+    <None Include="Assets\Model\Module\Pathfinding\AstarPathfindingProject\Readme_upgrading.txt" />
+    <None Include="Assets\Model\Module\Pathfinding\AstarPathfindingProject\ExampleScenes\Materials\Projector Light.shader" />
+    <None Include="Assets\Model\Module\Pathfinding\AstarPathfindingProject\Readme.txt" />
     <None Include="Assets\Model\Unity.Model.asmdef" />
+    <None Include="Assets\Model\Module\Pathfinding\AstarPathfindingProject\link.xml" />
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>C:/Apps/Unity2017/Editor/Data/Managed/UnityEngine/UnityEngine.CoreModule.dll</HintPath>
     </Reference>
