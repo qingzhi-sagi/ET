@@ -19,7 +19,7 @@ namespace ET
 
 		protected abstract ETTask Run(S scene, A a);
 
-		public async ETTask Handle(IScene scene, A a)
+		public async ETTask Handle(S scene, A a)
 		{
 			try
 			{
