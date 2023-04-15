@@ -25,24 +25,19 @@ namespace ET.Client
 
 		private static void Awake(this CameraComponent self)
 		{
-			self.Camera = Camera.main;
+			self.mainCamera = Camera.main;
 		}
 
 		private static void LateUpdate(this CameraComponent self)
 		{
 			// 摄像机每帧更新位置
-			UnitF unit = self.GetMyUnit();
-			if (unit != null)
-			{
-				Vector3 pos = unit.Position.ToVector();
-				Vector3 cameraPos = self.Transform.position;
-				self.Transform.position = new Vector3(pos.x, cameraPos.y, pos.z - 1);
-			}
+			self.UpdatePosition();
 		}
-		
-		private static UnitF GetMyUnit(this CameraComponent self)
+
+		private static void UpdatePosition(this CameraComponent self)
 		{
-			return self.DomainScene().GetComponent<BattleComponent>().LSScene.Get(self.MyId) as UnitF;
+			Vector3 cameraPos = self.mainCamera.transform.position;
+			self.mainCamera.transform.position = new Vector3(self.Unit.Position.x, cameraPos.y, self.Unit.Position.z - 1);
 		}
 	}
 }

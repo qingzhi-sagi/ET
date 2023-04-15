@@ -36,7 +36,7 @@ namespace ET.Server
             int fromProcess = instanceIdStruct.Process;
             instanceIdStruct.Process = Options.Instance.Process;
             long realActorId = instanceIdStruct.ToLong();
-            
+
             Entity entity = Root.Instance.Get(realActorId);
             if (entity == null)
             {
@@ -44,8 +44,6 @@ namespace ET.Server
                 Reply(fromProcess, response);
                 return;
             }
-            
-            OpcodeHelper.LogMsg(entity.DomainScene(), iActorRequest);
 
             MailBoxComponent mailBoxComponent = entity.GetComponent<MailBoxComponent>();
             if (mailBoxComponent == null)
@@ -100,8 +98,6 @@ namespace ET.Server
                 return;
             }
             
-            OpcodeHelper.LogMsg(entity.DomainScene(), iActorMessage);
-            
             MailBoxComponent mailBoxComponent = entity.GetComponent<MailBoxComponent>();
             if (mailBoxComponent == null)
             {
@@ -130,9 +126,9 @@ namespace ET.Server
                 }
                 case MailboxType.GateSession:
                 {
-                    if (entity is PlayerSessionComponent playerSessionComponent)
+                    if (entity is Player player)
                     {
-                        playerSessionComponent.Session?.Send(iActorMessage);
+                        player.GetComponent<PlayerSessionComponent>()?.Session?.Send(iActorMessage);
                     }
                     break;
                 }

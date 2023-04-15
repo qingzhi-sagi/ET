@@ -36,8 +36,6 @@
             
             Game.AddSingleton<NetServices>();
             Game.AddSingleton<Root>();
-            Game.AddSingleton<LSSington>();
-            
             await Game.AddSingleton<ConfigComponent>().LoadAsync();
 
             await EventSystem.Instance.PublishAsync(Root.Instance.Scene, new EventType.EntryEvent1());

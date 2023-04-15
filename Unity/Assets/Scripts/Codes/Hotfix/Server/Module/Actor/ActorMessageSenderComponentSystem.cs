@@ -119,8 +119,6 @@ namespace ET.Server
             session.Send(processActorId.ActorId, message);
         }
 
-
-
         public static int GetRpcId(this ActorMessageSenderComponent self)
         {
             return ++self.RpcId;

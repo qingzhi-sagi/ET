@@ -4,18 +4,6 @@
     [ComponentOf(typeof(Scene))]
     public class CurrentScenesComponent: Entity, IAwake
     {
-        private long sceneInstanceId;
-
-        public Scene Scene
-        {
-            get
-            {
-                return Root.Instance.Get(this.sceneInstanceId) as Scene;
-            }
-            set
-            {
-                this.sceneInstanceId = value.InstanceId;
-            }
-        }
+        public Scene Scene { get; set; }
     }
 }

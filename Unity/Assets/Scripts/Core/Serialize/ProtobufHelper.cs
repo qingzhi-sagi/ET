@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.IO;
 using ProtoBuf.Meta;
-using TrueSync;
 using Unity.Mathematics;
 
 namespace ET
@@ -19,12 +18,6 @@ namespace ET
 			RuntimeTypeModel.Default.Add(typeof(float3), false).Add("x", "y", "z");
 			RuntimeTypeModel.Default.Add(typeof(float4), false).Add("x", "y", "z", "w");
 			RuntimeTypeModel.Default.Add(typeof(quaternion), false).Add("value");
-			
-			RuntimeTypeModel.Default.Add(typeof(FP), false).Add("_serializedValue");
-			RuntimeTypeModel.Default.Add(typeof(TSVector2), false).Add("x", "y");
-			RuntimeTypeModel.Default.Add(typeof(TSVector), false).Add("x", "y", "z");
-			RuntimeTypeModel.Default.Add(typeof(TSVector4), false).Add("x", "y", "z", "w");
-			RuntimeTypeModel.Default.Add(typeof(TSQuaternion), false).Add("x", "y", "z", "w");
 		}
 		
 		public static object Deserialize(Type type, byte[] bytes, int index, int count)

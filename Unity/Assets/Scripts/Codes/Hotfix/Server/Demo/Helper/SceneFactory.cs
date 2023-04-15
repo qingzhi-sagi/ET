@@ -34,7 +34,6 @@ namespace ET.Server
                 case SceneType.Map:
                     scene.AddComponent<UnitComponent>();
                     scene.AddComponent<AOIManagerComponent>();
-                    scene.AddComponent<RoomManagerComponent>();
                     break;
                 case SceneType.Location:
                     scene.AddComponent<LocationManagerComoponent>();
@@ -48,9 +47,6 @@ namespace ET.Server
                     break;
                 case SceneType.BenchmarkClient:
                     scene.AddComponent<BenchmarkClientComponent>();
-                    break;
-                case SceneType.Match:
-                    scene.AddComponent<MatchComponent>();
                     break;
             }
 

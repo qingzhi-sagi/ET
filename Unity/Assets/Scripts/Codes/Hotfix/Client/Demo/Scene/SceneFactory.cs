@@ -25,5 +25,7 @@ namespace ET.Client
             EventSystem.Instance.Publish(currentScene, new EventType.AfterCreateCurrentScene());
             return currentScene;
         }
+        
+        
     }
 }

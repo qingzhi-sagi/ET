@@ -19,16 +19,22 @@ namespace ET
 		BenchmarkClient = 1 << 11,
 		BenchmarkServer = 1 << 12,
 		Benchmark = 1 << 13,
-		Match = 1 << 14,
-		Room = 1 << 15,
-		LockStepClient = 1 << 16,
-		LockStepServer = 1 << 17,
 
 		// 客户端Model层
 		Client = 1 << 30,
 		Current = 1ul << 31,
-		
-		
 		All = ulong.MaxValue,
+	}
+
+	public static class SceneTypeHelper
+	{
+		public static bool HasSameFlag(this SceneType a, SceneType b)
+		{
+			if (((ulong) a & (ulong) b) == 0)
+			{
+				return false;
+			}
+			return true;
+		}
 	}
 }

@@ -23,7 +23,7 @@ namespace ET
 		{
 			try
 			{
-				await Run(scene as S, a);
+				await Run(scene, a);
 			}
 			catch (Exception e)
 			{

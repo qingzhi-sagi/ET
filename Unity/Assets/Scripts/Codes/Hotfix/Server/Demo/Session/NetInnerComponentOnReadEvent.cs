@@ -15,11 +15,6 @@ namespace ET.Server
                 // 收到actor消息,放入actor队列
                 switch (message)
                 {
-                    case IFrameMessage iFrameMessage:
-                    {
-                        FrameMessageHelper.HandleIFrameMessage(iFrameMessage);
-                        break;
-                    }
                     case IActorResponse iActorResponse:
                     {
                         ActorHandleHelper.HandleIActorResponse(iActorResponse);

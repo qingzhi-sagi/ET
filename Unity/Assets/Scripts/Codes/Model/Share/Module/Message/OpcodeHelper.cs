@@ -34,7 +34,7 @@ namespace ET
             return opcode >= OpcodeRangeDefine.InnerMinOpcode;
         }
 
-        public static void LogMsg(Scene scene, object message)
+        public static void LogMsg(int zone, object message)
         {
             ushort opcode = NetServices.Instance.GetOpcode(message.GetType());
             if (!IsNeedLogMessage(opcode))
@@ -42,7 +42,18 @@ namespace ET
                 return;
             }
             
-            Logger.Instance.Debug($"{scene.Name} {message}");
+            Logger.Instance.Debug("zone: {0} {1}", zone, message);
+        }
+        
+        public static void LogMsg(long actorId, object message)
+        {
+            ushort opcode = NetServices.Instance.GetOpcode(message.GetType());
+            if (!IsNeedLogMessage(opcode))
+            {
+                return;
+            }
+            
+            Logger.Instance.Debug("actorId: {0} {1}", actorId, message);
         }
     }
 }
