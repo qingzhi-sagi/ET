@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+﻿using System;
 
 namespace ET
 {
@@ -51,7 +51,7 @@ namespace ET
         {
             get
             {
-                return $"{this.GetType().Name} ({this.SceneType})";    
+                return $"{this.GetType().Name} ({this.SceneType})";
             }
         }
     }

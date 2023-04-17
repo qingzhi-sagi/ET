@@ -44,6 +44,8 @@ namespace ET.Server
                 Reply(fromProcess, response);
                 return;
             }
+            
+            OpcodeHelper.LogMsg(entity.DomainScene(), iActorRequest);
 
             MailBoxComponent mailBoxComponent = entity.GetComponent<MailBoxComponent>();
             if (mailBoxComponent == null)
@@ -126,9 +128,9 @@ namespace ET.Server
                 }
                 case MailboxType.GateSession:
                 {
-                    if (entity is Player player)
+                    if (entity is PlayerSessionComponent playerSessionComponent)
                     {
-                        player.GetComponent<PlayerSessionComponent>()?.Session?.Send(iActorMessage);
+                        playerSessionComponent.Session?.Send(iActorMessage);
                     }
                     break;
                 }
