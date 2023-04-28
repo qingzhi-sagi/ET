@@ -125,8 +125,8 @@ namespace ET
         public static void Send(this Session self, long actorId, IMessage message)
         {
             self.LastSendTime = TimeHelper.ClientNow();
-            OpcodeHelper.LogMsg(self.DomainScene(), message);
-            NetServices.Instance.SendMessage(self.ServiceId, self.Id, actorId, message);
+            OpcodeHelper.LogMsg(self.DomainZone(), message);
+            NetServices.Instance.SendMessage(self.ServiceId, self.Id, actorId, message as MessageObject);
         }
     }
 
