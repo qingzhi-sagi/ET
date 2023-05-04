@@ -35,8 +35,7 @@ namespace ET
             return opcode >= OpcodeRangeDefine.InnerMinOpcode;
         }
 
-        [Conditional("CLOSE")]
-        public static void LogMsg(int zone, object message)
+        public static void LogMsg(Scene scene, object message)
         {
             ushort opcode = NetServices.Instance.GetOpcode(message.GetType());
             if (!IsNeedLogMessage(opcode))
