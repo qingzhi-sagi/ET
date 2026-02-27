@@ -29,5 +29,10 @@ namespace ET
         {
             return this.enumValueString.GetKeyByValue(name);
         }
+
+        public DoubleMap<int, string> GetAllValues()
+        {
+            return this.enumValueString;
+        }
     }
 }
