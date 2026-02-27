@@ -1,80 +1,6 @@
 {
 	"_t" : "ET.BuffConfigCategory",
-	"dict" : [[300001, {
-				"_id" : 300001,
-				"Desc" : "怪物AI",
-				"Duration" : -1,
-				"TickTime" : 500,
-				"MaxStack" : 1,
-				"Stack" : 1,
-				"OverLayRuleType" : 0,
-				"Flags" : [],
-				"NoticeType" : 0,
-				"Effects" : [{
-						"_t" : "ET.EffectServerBuffTick",
-						"_id" : 1,
-						"Children" : [{
-								"_t" : "ET.BTGetBuffOwner",
-								"_id" : 16,
-								"Children" : [],
-								"Buff" : "Buff",
-								"Unit" : "Unit"
-							}, {
-								"_t" : "ET.BTSelector",
-								"_id" : 5,
-								"Children" : [{
-										"_t" : "ET.BTSequence",
-										"_id" : 9,
-										"Children" : [{
-												"_t" : "ET.AI_MonsterReturnCheck",
-												"_id" : 10,
-												"Children" : [],
-												"Buff" : "Buff"
-											}, {
-												"_t" : "ET.AI_MonsterReturn",
-												"_id" : 6,
-												"Children" : [],
-												"Buff" : "Buff"
-											}]
-									}, {
-										"_t" : "ET.BTSequence",
-										"_id" : 11,
-										"Children" : [{
-												"_t" : "ET.BTHasThreat",
-												"_id" : 17,
-												"Children" : [],
-												"Unit" : "Unit"
-											}, {
-												"_t" : "ET.AI_MonsterZhuiJi",
-												"_id" : 7,
-												"Children" : [],
-												"Buff" : "Buff"
-											}]
-									}, {
-										"_t" : "ET.BTSequence",
-										"_id" : 13,
-										"Children" : [{
-												"_t" : "ET.BTNot",
-												"_id" : 15,
-												"Children" : [{
-														"_t" : "ET.BTHasThreat",
-														"_id" : 14,
-														"Children" : [],
-														"Unit" : "Unit"
-													}]
-											}, {
-												"_t" : "ET.AI_MonsterXunLuo",
-												"_id" : 8,
-												"Children" : [],
-												"Buff" : "Buff"
-											}]
-									}]
-							}],
-						"TreeId" : NumberLong("9160521892227564777"),
-						"Buff" : "Buff",
-						"Override" : true
-					}]
-			}], [200000, {
+	"dict" : [[200000, {
 				"_id" : 200000,
 				"Desc" : "普攻自动Tick Buff",
 				"Duration" : 1000000,
@@ -1264,6 +1190,80 @@
 								"SpellConfigId" : 100130
 							}],
 						"TreeId" : NumberLong("8260875540629730541"),
+						"Buff" : "Buff",
+						"Override" : true
+					}]
+			}], [300001, {
+				"_id" : 300001,
+				"Desc" : "怪物AI",
+				"Duration" : -1,
+				"TickTime" : 500,
+				"MaxStack" : 1,
+				"Stack" : 1,
+				"OverLayRuleType" : 0,
+				"Flags" : [],
+				"NoticeType" : 0,
+				"Effects" : [{
+						"_t" : "ET.EffectServerBuffTick",
+						"_id" : 1,
+						"Children" : [{
+								"_t" : "ET.BTGetBuffOwner",
+								"_id" : 16,
+								"Children" : [],
+								"Buff" : "Buff",
+								"Unit" : "Unit"
+							}, {
+								"_t" : "ET.BTSelector",
+								"_id" : 5,
+								"Children" : [{
+										"_t" : "ET.BTSequence",
+										"_id" : 9,
+										"Children" : [{
+												"_t" : "ET.AI_MonsterReturnCheck",
+												"_id" : 10,
+												"Children" : [],
+												"Buff" : "Buff"
+											}, {
+												"_t" : "ET.AI_MonsterReturn",
+												"_id" : 6,
+												"Children" : [],
+												"Buff" : "Buff"
+											}]
+									}, {
+										"_t" : "ET.BTSequence",
+										"_id" : 11,
+										"Children" : [{
+												"_t" : "ET.BTHasThreat",
+												"_id" : 17,
+												"Children" : [],
+												"Unit" : "Unit"
+											}, {
+												"_t" : "ET.AI_MonsterZhuiJi",
+												"_id" : 7,
+												"Children" : [],
+												"Buff" : "Buff"
+											}]
+									}, {
+										"_t" : "ET.BTSequence",
+										"_id" : 13,
+										"Children" : [{
+												"_t" : "ET.BTNot",
+												"_id" : 15,
+												"Children" : [{
+														"_t" : "ET.BTHasThreat",
+														"_id" : 14,
+														"Children" : [],
+														"Unit" : "Unit"
+													}]
+											}, {
+												"_t" : "ET.AI_MonsterXunLuo",
+												"_id" : 8,
+												"Children" : [],
+												"Buff" : "Buff"
+											}]
+									}]
+							}],
+						"TreeId" : NumberLong("9160521892227564777"),
 						"Buff" : "Buff",
 						"Override" : true
 					}]
