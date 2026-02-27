@@ -13,9 +13,10 @@ namespace YooAsset.Editor
     /// <summary>
     /// Unity2022版本以上推荐官方类：MultiColumnListView组件
     /// </summary>
-    [UxmlElement]
     public partial class TableViewer : VisualElement
     {
+        public new class UxmlFactory : UxmlFactory<TableViewer, UxmlTraits> { }
+
         private readonly Toolbar _toolbar;
         private readonly ListView _listView;
 

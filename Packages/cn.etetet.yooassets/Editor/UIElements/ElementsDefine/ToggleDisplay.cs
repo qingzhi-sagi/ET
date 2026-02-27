@@ -10,9 +10,10 @@ namespace YooAsset.Editor
     /// <summary>
     /// 显示开关（眼睛图标）
     /// </summary>
-    [UxmlElement]
     public partial class ToggleDisplay : Toggle
     {
+        public new class UxmlFactory : UxmlFactory<ToggleDisplay, UxmlTraits> { }
+
         private readonly VisualElement _checkbox;
 
         public ToggleDisplay()
