@@ -5,8 +5,8 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "cn.etetet.core": "2.0.0",
-        "cn.etetet.netinner": "2.0.1",
+        "cn.etetet.core": "3.0.3",
+        "cn.etetet.netinner": "2.0.4",
         "cn.etetet.startconfig": "2.0.1"
       }
     },
@@ -21,7 +21,7 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "cn.etetet.unit": "2.0.0"
+        "cn.etetet.unit": "2.0.2"
       }
     },
     "cn.etetet.console": {
@@ -29,17 +29,14 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "cn.etetet.core": "2.0.0"
+        "cn.etetet.core": "3.0.3"
       }
     },
     "cn.etetet.core": {
       "version": "file:cn.etetet.core",
       "depth": 0,
       "source": "embedded",
-      "dependencies": {
-        "cn.etetet.sourcegenerator": "0.0.5",
-        "cn.etetet.memorypack": "1.10.0"
-      }
+      "dependencies": {}
     },
     "cn.etetet.demores": {
       "version": "file:cn.etetet.demores",
@@ -58,7 +55,7 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "cn.etetet.core": "2.0.0"
+        "cn.etetet.core": "3.0.3"
       }
     },
     "cn.etetet.hybridclr": {
@@ -71,18 +68,13 @@
       "version": "file:cn.etetet.loader",
       "depth": 0,
       "source": "embedded",
-      "dependencies": {
-        "cn.etetet.core": "2.0.8",
-        "cn.etetet.yooassets": "2.1.4"
-      }
+      "dependencies": {}
     },
     "cn.etetet.login": {
       "version": "file:cn.etetet.login",
       "depth": 0,
       "source": "embedded",
-      "dependencies": {
-        "cn.etetet.router": "2.0.1"
-      }
+      "dependencies": {}
     },
     "cn.etetet.mathematics": {
       "version": "file:cn.etetet.mathematics",
@@ -103,7 +95,7 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "cn.etetet.unit": "2.0.0"
+        "cn.etetet.unit": "2.0.2"
       }
     },
     "cn.etetet.netinner": {
@@ -112,8 +104,8 @@
       "source": "embedded",
       "dependencies": {
         "cn.etetet.excel": "2.0.0",
-        "cn.etetet.proto": "2.0.1",
-        "cn.etetet.sourcegenerator": "0.0.5"
+        "cn.etetet.proto": "3.0.2",
+        "cn.etetet.sourcegenerator": "0.0.7"
       }
     },
     "cn.etetet.numeric": {
@@ -121,7 +113,7 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "cn.etetet.unit": "2.0.0"
+        "cn.etetet.unit": "2.0.2"
       }
     },
     "cn.etetet.packagemanager": {
@@ -134,9 +126,7 @@
       "version": "file:cn.etetet.proto",
       "depth": 0,
       "source": "embedded",
-      "dependencies": {
-        "cn.etetet.core": "2.0.0"
-      }
+      "dependencies": {}
     },
     "cn.etetet.recast": {
       "version": "file:cn.etetet.recast",
@@ -149,7 +139,7 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "cn.etetet.core": "2.0.0"
+        "cn.etetet.core": "3.0.3"
       }
     },
     "cn.etetet.router": {
@@ -157,7 +147,7 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "cn.etetet.http": "2.0.0",
+        "cn.etetet.http": "2.0.2",
         "cn.etetet.startconfig": "2.0.1"
       }
     },
@@ -180,30 +170,32 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "cn.etetet.packagemanager": "1.0.0",
-        "cn.etetet.actorlocation": "2.0.1",
-        "cn.etetet.core": "2.0.8",
-        "cn.etetet.loader": "2.0.7",
+        "cn.etetet.packagemanager": "1.0.7",
+        "cn.etetet.actorlocation": "2.0.5",
+        "cn.etetet.core": "3.0.3",
+        "cn.etetet.loader": "3.0.1",
         "cn.etetet.demores": "0.0.2",
         "cn.etetet.mathematics": "0.0.2",
-        "cn.etetet.router": "2.0.1",
-        "cn.etetet.console": "2.0.0",
-        "cn.etetet.unit": "2.0.0",
-        "cn.etetet.http": "2.0.0",
+        "cn.etetet.router": "2.0.3",
+        "cn.etetet.console": "2.0.2",
+        "cn.etetet.unit": "2.0.2",
+        "cn.etetet.http": "2.0.2",
         "cn.etetet.recast": "2.0.0",
-        "cn.etetet.numeric": "2.0.0",
-        "cn.etetet.move": "2.0.0",
-        "cn.etetet.watcher": "2.0.0",
-        "cn.etetet.aoi": "2.0.0",
-        "cn.etetet.ui": "2.0.0",
-        "cn.etetet.referencecollector": "2.0.0",
-        "cn.etetet.login": "2.0.1",
-        "cn.etetet.netinner": "2.0.1",
+        "cn.etetet.numeric": "2.0.2",
+        "cn.etetet.move": "2.0.2",
+        "cn.etetet.watcher": "2.0.2",
+        "cn.etetet.aoi": "2.0.2",
+        "cn.etetet.ui": "2.0.2",
+        "cn.etetet.referencecollector": "2.0.2",
+        "cn.etetet.login": "3.0.0",
+        "cn.etetet.netinner": "2.0.4",
         "cn.etetet.hybridclr": "6.7.1",
         "cn.etetet.excel": "2.0.0",
-        "cn.etetet.proto": "2.0.1",
         "cn.etetet.ai": "2.0.1",
-        "cn.etetet.sourcegenerator": "0.0.7"
+        "cn.etetet.sourcegenerator": "0.0.7",
+        "cn.etetet.yooassets": "2.1.4",
+        "cn.etetet.memorypack": "1.10.0",
+        "cn.etetet.startconfig": "2.0.1"
       }
     },
     "cn.etetet.ui": {
@@ -211,7 +203,7 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "cn.etetet.core": "2.0.0"
+        "cn.etetet.core": "3.0.3"
       }
     },
     "cn.etetet.unit": {
@@ -219,7 +211,7 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "cn.etetet.core": "2.0.0"
+        "cn.etetet.core": "3.0.3"
       }
     },
     "cn.etetet.watcher": {
@@ -227,7 +219,7 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "cn.etetet.core": "2.0.0"
+        "cn.etetet.core": "3.0.3"
       }
     },
     "cn.etetet.yooassets": {
@@ -266,12 +258,11 @@
       "url": "https://packages.unity.cn"
     },
     "com.unity.burst": {
-      "version": "1.8.18",
+      "version": "1.8.11",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.unity.mathematics": "1.2.1",
-        "com.unity.modules.jsonserialize": "1.0.0"
+        "com.unity.mathematics": "1.2.1"
       },
       "url": "https://packages.unity.cn"
     },
@@ -321,7 +312,7 @@
       "url": "https://packages.unity.cn"
     },
     "com.unity.render-pipelines.core": {
-      "version": "14.0.11",
+      "version": "14.0.9",
       "depth": 1,
       "source": "builtin",
       "dependencies": {
@@ -338,21 +329,21 @@
       "dependencies": {
         "com.unity.mathematics": "1.2.1",
         "com.unity.burst": "1.8.9",
-        "com.unity.render-pipelines.core": "14.0.11",
-        "com.unity.shadergraph": "14.0.11",
+        "com.unity.render-pipelines.core": "14.0.9",
+        "com.unity.shadergraph": "14.0.9",
         "com.unity.render-pipelines.universal-config": "14.0.9"
       }
     },
     "com.unity.render-pipelines.universal-config": {
-      "version": "14.0.10",
+      "version": "14.0.9",
       "depth": 1,
       "source": "builtin",
       "dependencies": {
-        "com.unity.render-pipelines.core": "14.0.10"
+        "com.unity.render-pipelines.core": "14.0.9"
       }
     },
     "com.unity.scriptablebuildpipeline": {
-      "version": "1.21.24",
+      "version": "1.21.21",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
@@ -366,11 +357,11 @@
       "url": "https://packages.unity.cn"
     },
     "com.unity.shadergraph": {
-      "version": "14.0.11",
+      "version": "14.0.9",
       "depth": 1,
       "source": "builtin",
       "dependencies": {
-        "com.unity.render-pipelines.core": "14.0.11",
+        "com.unity.render-pipelines.core": "14.0.9",
         "com.unity.searcher": "4.9.2"
       }
     },
