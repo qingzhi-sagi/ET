@@ -1,0 +1,47 @@
+﻿{
+  "name": "cn.etetet.statesync",
+  "displayName": "ET.StateSync",
+  "version": "3.0.13",
+  "unity": "2022.3",
+  "description": "statesync demo",
+  "author": {
+    "name": "tanghai",
+    "url": "https://github.com/egametang/ET"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/egametang/ET"
+  },
+  "relatedPackages": {},
+  "dependencies": {
+    "cn.etetet.packagemanager": "1.0.7",
+    "cn.etetet.actorlocation": "2.0.5",
+    "cn.etetet.core": "3.0.3",
+    "cn.etetet.loader": "3.0.1",
+    "cn.etetet.demores": "0.0.2",
+    "cn.etetet.mathematics": "0.0.2",
+    "cn.etetet.router": "2.0.3",
+    "cn.etetet.console": "2.0.2",
+    "cn.etetet.unit": "2.0.2",
+    "cn.etetet.http": "2.0.2",
+    "cn.etetet.recast": "2.0.0",
+    "cn.etetet.numeric": "2.0.2",
+    "cn.etetet.move": "2.0.2",
+    "cn.etetet.watcher": "2.0.2",
+    "cn.etetet.aoi": "2.0.2",
+    "cn.etetet.ui": "2.0.2",
+    "cn.etetet.referencecollector": "2.0.2",
+    "cn.etetet.login": "3.0.0",
+    "cn.etetet.netinner": "2.0.4",
+    "cn.etetet.hybridclr": "6.7.1",
+    "cn.etetet.excel": "2.0.0",
+    "cn.etetet.ai": "2.0.1",
+    "cn.etetet.sourcegenerator": "0.0.7",
+    "cn.etetet.yooassets": "2.1.4",
+    "cn.etetet.memorypack": "1.10.0",
+    "cn.etetet.startconfig": "2.0.1"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/@ET-Packages"
+  }
+}
