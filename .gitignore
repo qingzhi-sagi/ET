@@ -14,14 +14,14 @@ _ReSharper.CSharp/
 
 #Unity相关目录
 .gradle
-Bundles
-Library
-Logs
-UserSettings
+/Bundles
+/Library
+/Logs
+/UserSettings
 /*.csproj
 *.vsconfig
-ProjectSettings/RiderScriptEditorPersistedState.asset
-HybridCLRData
+/ProjectSettings/RiderScriptEditorPersistedState.asset
+/HybridCLRData
 
 #Unity/Assets
 Assets/Bundles/Code/*
