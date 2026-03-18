@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 
 namespace ET
@@ -16,29 +15,23 @@ namespace ET
     [EnableClass]
     public sealed partial class QuestConfig : Luban.BeanBase
     {
-        public QuestConfig(JSONNode _buf) 
+        public QuestConfig(int Id, string Name, string Desc, int[] ObjectiveIds, int[] PreQuestIds, int[] NextQuestId, string Title, string Content, string AcceptedContent, string FinishContent, int AcceptNPC, string AcceptNPCMap, int SubmitNPC, string SubmitNPCMap) 
         {
-            { if(!_buf["Id"].IsNumber) { throw new SerializationException(); }  Id = _buf["Id"]; }
-            { if(!_buf["Name"].IsString) { throw new SerializationException(); }  Name = _buf["Name"]; }
-            { if(!_buf["Desc"].IsString) { throw new SerializationException(); }  Desc = _buf["Desc"]; }
-            { var __json0 = _buf["ObjectiveIds"]; if(!__json0.IsArray) { throw new SerializationException(); } int _n0 = __json0.Count; ObjectiveIds = new int[_n0]; int __index0=0; foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  ObjectiveIds[__index0++] = __v0; }   }
-            { var __json0 = _buf["PreQuestIds"]; if(!__json0.IsArray) { throw new SerializationException(); } int _n0 = __json0.Count; PreQuestIds = new int[_n0]; int __index0=0; foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  PreQuestIds[__index0++] = __v0; }   }
-            { var __json0 = _buf["NextQuestId"]; if(!__json0.IsArray) { throw new SerializationException(); } int _n0 = __json0.Count; NextQuestId = new int[_n0]; int __index0=0; foreach(JSONNode __e0 in __json0.Children) { int __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  NextQuestId[__index0++] = __v0; }   }
-            { if(!_buf["Title"].IsString) { throw new SerializationException(); }  Title = _buf["Title"]; }
-            { if(!_buf["Content"].IsString) { throw new SerializationException(); }  Content = _buf["Content"]; }
-            { if(!_buf["AcceptedContent"].IsString) { throw new SerializationException(); }  AcceptedContent = _buf["AcceptedContent"]; }
-            { if(!_buf["FinishContent"].IsString) { throw new SerializationException(); }  FinishContent = _buf["FinishContent"]; }
-            { if(!_buf["AcceptNPC"].IsNumber) { throw new SerializationException(); }  AcceptNPC = _buf["AcceptNPC"]; }
-            { if(!_buf["AcceptNPCMap"].IsString) { throw new SerializationException(); }  AcceptNPCMap = _buf["AcceptNPCMap"]; }
-            { if(!_buf["SubmitNPC"].IsNumber) { throw new SerializationException(); }  SubmitNPC = _buf["SubmitNPC"]; }
-            { if(!_buf["SubmitNPCMap"].IsString) { throw new SerializationException(); }  SubmitNPCMap = _buf["SubmitNPCMap"]; }
-
+            this.Id = Id;
+            this.Name = Name;
+            this.Desc = Desc;
+            this.ObjectiveIds = ObjectiveIds;
+            this.PreQuestIds = PreQuestIds;
+            this.NextQuestId = NextQuestId;
+            this.Title = Title;
+            this.Content = Content;
+            this.AcceptedContent = AcceptedContent;
+            this.FinishContent = FinishContent;
+            this.AcceptNPC = AcceptNPC;
+            this.AcceptNPCMap = AcceptNPCMap;
+            this.SubmitNPC = SubmitNPC;
+            this.SubmitNPCMap = SubmitNPCMap;
             EndInit();
-        }
-
-        public static QuestConfig DeserializeQuestConfig(JSONNode _buf)
-        {
-            return new ET.QuestConfig(_buf);
         }
 
         /// <summary>
@@ -101,7 +94,7 @@ namespace ET
         public const int __ID__ = -507727899;
         public override int GetTypeId() => __ID__;
 
-        public  void ResolveRef()
+        public  void ResolveRef(Tables tables)
         {
             EndRef();
         }

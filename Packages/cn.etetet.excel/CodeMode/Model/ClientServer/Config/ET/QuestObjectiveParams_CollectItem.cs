@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 
 namespace ET
@@ -16,16 +15,10 @@ namespace ET
     [EnableClass]
     public sealed partial class QuestObjectiveParams_CollectItem : ET.QuestObjectiveParams
     {
-        public QuestObjectiveParams_CollectItem(JSONNode _buf)  : base(_buf) 
+        public QuestObjectiveParams_CollectItem(int ItemId)  : base()
         {
-            { if(!_buf["ItemId"].IsNumber) { throw new SerializationException(); }  ItemId = _buf["ItemId"]; }
-
+            this.ItemId = ItemId;
             EndInit();
-        }
-
-        public static QuestObjectiveParams_CollectItem DeserializeQuestObjectiveParams_CollectItem(JSONNode _buf)
-        {
-            return new ET.QuestObjectiveParams_CollectItem(_buf);
         }
 
         /// <summary>
@@ -36,9 +29,9 @@ namespace ET
         public const int __ID__ = -1136348582;
         public override int GetTypeId() => __ID__;
 
-        public override void ResolveRef()
+        public override void ResolveRef(Tables tables)
         {
-            base.ResolveRef();
+            base.ResolveRef(tables);
             EndRef();
         }
 

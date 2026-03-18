@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 
 namespace ET
@@ -16,16 +15,10 @@ namespace ET
     [EnableClass]
     public sealed partial class QuestObjectiveParams_KillMonster : ET.QuestObjectiveParams
     {
-        public QuestObjectiveParams_KillMonster(JSONNode _buf)  : base(_buf) 
+        public QuestObjectiveParams_KillMonster(int MonsterId)  : base()
         {
-            { if(!_buf["MonsterId"].IsNumber) { throw new SerializationException(); }  MonsterId = _buf["MonsterId"]; }
-
+            this.MonsterId = MonsterId;
             EndInit();
-        }
-
-        public static QuestObjectiveParams_KillMonster DeserializeQuestObjectiveParams_KillMonster(JSONNode _buf)
-        {
-            return new ET.QuestObjectiveParams_KillMonster(_buf);
         }
 
         /// <summary>
@@ -36,9 +29,9 @@ namespace ET
         public const int __ID__ = -933968487;
         public override int GetTypeId() => __ID__;
 
-        public override void ResolveRef()
+        public override void ResolveRef(Tables tables)
         {
-            base.ResolveRef();
+            base.ResolveRef(tables);
             EndRef();
         }
 

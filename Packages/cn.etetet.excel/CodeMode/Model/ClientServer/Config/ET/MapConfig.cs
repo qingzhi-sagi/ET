@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 
 namespace ET
@@ -16,23 +15,17 @@ namespace ET
     [EnableClass]
     public sealed partial class MapConfig : Luban.BeanBase
     {
-        public MapConfig(JSONNode _buf) 
+        public MapConfig(int Id, string Name, string Desc, ET.CopyType CopyType, int MaxLineNum, int MaxPlayerNum, int RecommendPlayerNum, string MapResName) 
         {
-            { if(!_buf["Id"].IsNumber) { throw new SerializationException(); }  Id = _buf["Id"]; }
-            { if(!_buf["Name"].IsString) { throw new SerializationException(); }  Name = _buf["Name"]; }
-            { if(!_buf["Desc"].IsString) { throw new SerializationException(); }  Desc = _buf["Desc"]; }
-            { if(!_buf["CopyType"].IsNumber) { throw new SerializationException(); }  CopyType = (ET.CopyType)_buf["CopyType"].AsInt; }
-            { if(!_buf["MaxLineNum"].IsNumber) { throw new SerializationException(); }  MaxLineNum = _buf["MaxLineNum"]; }
-            { if(!_buf["MaxPlayerNum"].IsNumber) { throw new SerializationException(); }  MaxPlayerNum = _buf["MaxPlayerNum"]; }
-            { if(!_buf["RecommendPlayerNum"].IsNumber) { throw new SerializationException(); }  RecommendPlayerNum = _buf["RecommendPlayerNum"]; }
-            { if(!_buf["MapResName"].IsString) { throw new SerializationException(); }  MapResName = _buf["MapResName"]; }
-
+            this.Id = Id;
+            this.Name = Name;
+            this.Desc = Desc;
+            this.CopyType = CopyType;
+            this.MaxLineNum = MaxLineNum;
+            this.MaxPlayerNum = MaxPlayerNum;
+            this.RecommendPlayerNum = RecommendPlayerNum;
+            this.MapResName = MapResName;
             EndInit();
-        }
-
-        public static MapConfig DeserializeMapConfig(JSONNode _buf)
-        {
-            return new ET.MapConfig(_buf);
         }
 
         /// <summary>
@@ -71,7 +64,7 @@ namespace ET
         public const int __ID__ = 1701072159;
         public override int GetTypeId() => __ID__;
 
-        public  void ResolveRef()
+        public  void ResolveRef(Tables tables)
         {
             EndRef();
         }

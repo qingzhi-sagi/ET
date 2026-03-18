@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 
 namespace ET
@@ -16,21 +15,15 @@ namespace ET
     [EnableClass]
     public sealed partial class NumericTypeConfig : Luban.BeanBase
     {
-        public NumericTypeConfig(JSONNode _buf) 
+        public NumericTypeConfig(int Id, string Name, int NeedSaveDB, NoticeType NoticeType, int MaxNumericType, System.Collections.Generic.Dictionary<int, long> AffectNumeric) 
         {
-            { if(!_buf["Id"].IsNumber) { throw new SerializationException(); }  Id = _buf["Id"]; }
-            { if(!_buf["Name"].IsString) { throw new SerializationException(); }  Name = _buf["Name"]; }
-            { if(!_buf["NeedSaveDB"].IsNumber) { throw new SerializationException(); }  NeedSaveDB = _buf["NeedSaveDB"]; }
-            { if(!_buf["NoticeType"].IsNumber) { throw new SerializationException(); }  NoticeType = (NoticeType)_buf["NoticeType"].AsInt; }
-            { if(!_buf["MaxNumericType"].IsNumber) { throw new SerializationException(); }  MaxNumericType = _buf["MaxNumericType"]; }
-            { var __json0 = _buf["AffectNumeric"]; if(!__json0.IsArray) { throw new SerializationException(); } AffectNumeric = new System.Collections.Generic.Dictionary<int, long>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { int _k0;  { if(!__e0[0].IsNumber) { throw new SerializationException(); }  _k0 = __e0[0]; } long _v0;  { if(!__e0[1].IsNumber) { throw new SerializationException(); }  _v0 = __e0[1]; }  AffectNumeric.Add(_k0, _v0); }   }
-
+            this.Id = Id;
+            this.Name = Name;
+            this.NeedSaveDB = NeedSaveDB;
+            this.NoticeType = NoticeType;
+            this.MaxNumericType = MaxNumericType;
+            this.AffectNumeric = AffectNumeric;
             EndInit();
-        }
-
-        public static NumericTypeConfig DeserializeNumericTypeConfig(JSONNode _buf)
-        {
-            return new ET.NumericTypeConfig(_buf);
         }
 
         /// <summary>
@@ -61,7 +54,7 @@ namespace ET
         public const int __ID__ = 1076638314;
         public override int GetTypeId() => __ID__;
 
-        public  void ResolveRef()
+        public  void ResolveRef(Tables tables)
         {
             EndRef();
         }

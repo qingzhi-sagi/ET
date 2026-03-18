@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 
 namespace ET
@@ -16,18 +15,12 @@ namespace ET
     [EnableClass]
     public sealed partial class MapUnitConfig : Luban.BeanBase
     {
-        public MapUnitConfig(JSONNode _buf) 
+        public MapUnitConfig(int Id, int UnitConfigId, string MapName) 
         {
-            { if(!_buf["Id"].IsNumber) { throw new SerializationException(); }  Id = _buf["Id"]; }
-            { if(!_buf["UnitConfigId"].IsNumber) { throw new SerializationException(); }  UnitConfigId = _buf["UnitConfigId"]; }
-            { if(!_buf["MapName"].IsString) { throw new SerializationException(); }  MapName = _buf["MapName"]; }
-
+            this.Id = Id;
+            this.UnitConfigId = UnitConfigId;
+            this.MapName = MapName;
             EndInit();
-        }
-
-        public static MapUnitConfig DeserializeMapUnitConfig(JSONNode _buf)
-        {
-            return new ET.MapUnitConfig(_buf);
         }
 
         /// <summary>
@@ -46,7 +39,7 @@ namespace ET
         public const int __ID__ = -2012370621;
         public override int GetTypeId() => __ID__;
 
-        public  void ResolveRef()
+        public  void ResolveRef(Tables tables)
         {
             EndRef();
         }

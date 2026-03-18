@@ -8,64 +8,30 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using System.Collections.Generic;
-using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson.Serialization.Options;
-using SimpleJSON;
+
 
 namespace ET
 {
+public partial class EquipmentConfigCategory
+{
+    private readonly System.Collections.Generic.Dictionary<int, ET.EquipmentConfig> _dataMap;
+    private readonly System.Collections.Generic.List<ET.EquipmentConfig> _dataList;
 
-    [ConfigProcess(ConfigType.Json)]
-    public partial class EquipmentConfigCategory : Singleton<EquipmentConfigCategory>, IConfig
+    public System.Collections.Generic.IReadOnlyDictionary<int, ET.EquipmentConfig> DataMap => _dataMap;
+    public System.Collections.Generic.IReadOnlyList<ET.EquipmentConfig> DataList => _dataList;
+    public ET.EquipmentConfig GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
+    public ET.EquipmentConfig Get(int key) => _dataMap[key];
+    public ET.EquipmentConfig this[int key] => _dataMap[key];
+
+    public void ResolveRef(Tables tables)
     {
-        [BsonElement]
-        [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
-        private readonly Dictionary<int, ET.EquipmentConfig> _dataMap;
-        private readonly List<ET.EquipmentConfig> _dataList;
-
-        public EquipmentConfigCategory(JSONNode _buf)
+        foreach (var _v in _dataList)
         {
-            _dataMap = new Dictionary<int, ET.EquipmentConfig>();
-            _dataList = new List<ET.EquipmentConfig>();
-
-            foreach(JSONNode _ele in _buf.Children)
-            {
-                ET.EquipmentConfig _v;
-                { if(!_ele.IsObject) { throw new SerializationException(); }  _v = global::ET.EquipmentConfig.DeserializeEquipmentConfig(_ele);  }
-                _dataList.Add(_v);
-                _dataMap.Add(_v.Id, _v);
-            }
-            EndInit();
+            _v.ResolveRef(tables);
         }
-
-        public Dictionary<int, ET.EquipmentConfig> GetAll() => _dataMap;
-        public Dictionary<int, ET.EquipmentConfig> DataMap => _dataMap;
-        public List<ET.EquipmentConfig> DataList => _dataList;
-
-        public ET.EquipmentConfig GetOrDefault(int key) => _dataMap.GetValueOrDefault(key);
-
-        public ET.EquipmentConfig Get(int key)
-        {
-            if (_dataMap.TryGetValue(key,out var v))
-            {
-                return v;
-            }
-            throw new System.Exception($"not found config: {this.GetType().FullName}, key: {key}");
-        }
-
-        public void ResolveRef()
-        {
-            foreach(var _v in _dataList)
-            {
-                _v.ResolveRef();
-            }
-            EndRef();
-        }
-
-
-        partial void EndRef();
     }
 
+    partial void PostInit();
+}
 }
 

@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 
 namespace ET
@@ -16,17 +15,11 @@ namespace ET
     [EnableClass]
     public sealed partial class EquipmentConfig : Luban.BeanBase
     {
-        public EquipmentConfig(JSONNode _buf) 
+        public EquipmentConfig(int Id, int EquipSlot) 
         {
-            { if(!_buf["id"].IsNumber) { throw new SerializationException(); }  Id = _buf["id"]; }
-            { if(!_buf["EquipSlot"].IsNumber) { throw new SerializationException(); }  EquipSlot = _buf["EquipSlot"]; }
-
+            this.Id = Id;
+            this.EquipSlot = EquipSlot;
             EndInit();
-        }
-
-        public static EquipmentConfig DeserializeEquipmentConfig(JSONNode _buf)
-        {
-            return new ET.EquipmentConfig(_buf);
         }
 
         /// <summary>
@@ -41,7 +34,7 @@ namespace ET
         public const int __ID__ = -904342767;
         public override int GetTypeId() => __ID__;
 
-        public  void ResolveRef()
+        public  void ResolveRef(Tables tables)
         {
             EndRef();
         }

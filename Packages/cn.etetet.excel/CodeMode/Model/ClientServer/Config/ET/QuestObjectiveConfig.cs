@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 
 namespace ET
@@ -16,21 +15,15 @@ namespace ET
     [EnableClass]
     public sealed partial class QuestObjectiveConfig : Luban.BeanBase
     {
-        public QuestObjectiveConfig(JSONNode _buf) 
+        public QuestObjectiveConfig(int Id, string Name, string Desc, ET.QuestObjectiveType Type, int NeedCount, ET.QuestObjectiveParams Params) 
         {
-            { if(!_buf["Id"].IsNumber) { throw new SerializationException(); }  Id = _buf["Id"]; }
-            { if(!_buf["Name"].IsString) { throw new SerializationException(); }  Name = _buf["Name"]; }
-            { if(!_buf["Desc"].IsString) { throw new SerializationException(); }  Desc = _buf["Desc"]; }
-            { if(!_buf["Type"].IsNumber) { throw new SerializationException(); }  Type = (ET.QuestObjectiveType)_buf["Type"].AsInt; }
-            { if(!_buf["NeedCount"].IsNumber) { throw new SerializationException(); }  NeedCount = _buf["NeedCount"]; }
-            { if(!_buf["Params"].IsObject) { throw new SerializationException(); }  Params = global::ET.QuestObjectiveParams.DeserializeQuestObjectiveParams(_buf["Params"]);  }
-
+            this.Id = Id;
+            this.Name = Name;
+            this.Desc = Desc;
+            this.Type = Type;
+            this.NeedCount = NeedCount;
+            this.Params = Params;
             EndInit();
-        }
-
-        public static QuestObjectiveConfig DeserializeQuestObjectiveConfig(JSONNode _buf)
-        {
-            return new ET.QuestObjectiveConfig(_buf);
         }
 
         /// <summary>
@@ -61,9 +54,9 @@ namespace ET
         public const int __ID__ = -70847336;
         public override int GetTypeId() => __ID__;
 
-        public  void ResolveRef()
+        public  void ResolveRef(Tables tables)
         {
-            Params?.ResolveRef();
+            Params?.ResolveRef(tables);
             EndRef();
         }
 

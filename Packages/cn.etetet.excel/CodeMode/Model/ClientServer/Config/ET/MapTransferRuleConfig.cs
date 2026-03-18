@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 
 namespace ET
@@ -16,18 +15,12 @@ namespace ET
     [EnableClass]
     public sealed partial class MapTransferRuleConfig : Luban.BeanBase
     {
-        public MapTransferRuleConfig(JSONNode _buf) 
+        public MapTransferRuleConfig(int Id, string ToMap, float[] Pos) 
         {
-            { if(!_buf["Id"].IsNumber) { throw new SerializationException(); }  Id = _buf["Id"]; }
-            { if(!_buf["ToMap"].IsString) { throw new SerializationException(); }  ToMap = _buf["ToMap"]; }
-            { var __json0 = _buf["Pos"]; if(!__json0.IsArray) { throw new SerializationException(); } int _n0 = __json0.Count; Pos = new float[_n0]; int __index0=0; foreach(JSONNode __e0 in __json0.Children) { float __v0;  { if(!__e0.IsNumber) { throw new SerializationException(); }  __v0 = __e0; }  Pos[__index0++] = __v0; }   }
-
+            this.Id = Id;
+            this.ToMap = ToMap;
+            this.Pos = Pos;
             EndInit();
-        }
-
-        public static MapTransferRuleConfig DeserializeMapTransferRuleConfig(JSONNode _buf)
-        {
-            return new ET.MapTransferRuleConfig(_buf);
         }
 
         /// <summary>
@@ -46,7 +39,7 @@ namespace ET
         public const int __ID__ = 2092018182;
         public override int GetTypeId() => __ID__;
 
-        public  void ResolveRef()
+        public  void ResolveRef(Tables tables)
         {
             EndRef();
         }

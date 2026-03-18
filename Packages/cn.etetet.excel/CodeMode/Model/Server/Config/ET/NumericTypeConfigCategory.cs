@@ -8,64 +8,30 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using System.Collections.Generic;
-using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson.Serialization.Options;
-using SimpleJSON;
+
 
 namespace ET
 {
+public partial class NumericTypeConfigCategory
+{
+    private readonly System.Collections.Generic.Dictionary<int, ET.NumericTypeConfig> _dataMap;
+    private readonly System.Collections.Generic.List<ET.NumericTypeConfig> _dataList;
 
-    [ConfigProcess(ConfigType.Json)]
-    public partial class NumericTypeConfigCategory : Singleton<NumericTypeConfigCategory>, IConfig
+    public System.Collections.Generic.IReadOnlyDictionary<int, ET.NumericTypeConfig> DataMap => _dataMap;
+    public System.Collections.Generic.IReadOnlyList<ET.NumericTypeConfig> DataList => _dataList;
+    public ET.NumericTypeConfig GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
+    public ET.NumericTypeConfig Get(int key) => _dataMap[key];
+    public ET.NumericTypeConfig this[int key] => _dataMap[key];
+
+    public void ResolveRef(Tables tables)
     {
-        [BsonElement]
-        [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
-        private readonly Dictionary<int, ET.NumericTypeConfig> _dataMap;
-        private readonly List<ET.NumericTypeConfig> _dataList;
-
-        public NumericTypeConfigCategory(JSONNode _buf)
+        foreach (var _v in _dataList)
         {
-            _dataMap = new Dictionary<int, ET.NumericTypeConfig>();
-            _dataList = new List<ET.NumericTypeConfig>();
-
-            foreach(JSONNode _ele in _buf.Children)
-            {
-                ET.NumericTypeConfig _v;
-                { if(!_ele.IsObject) { throw new SerializationException(); }  _v = global::ET.NumericTypeConfig.DeserializeNumericTypeConfig(_ele);  }
-                _dataList.Add(_v);
-                _dataMap.Add(_v.Id, _v);
-            }
-            EndInit();
+            _v.ResolveRef(tables);
         }
-
-        public Dictionary<int, ET.NumericTypeConfig> GetAll() => _dataMap;
-        public Dictionary<int, ET.NumericTypeConfig> DataMap => _dataMap;
-        public List<ET.NumericTypeConfig> DataList => _dataList;
-
-        public ET.NumericTypeConfig GetOrDefault(int key) => _dataMap.GetValueOrDefault(key);
-
-        public ET.NumericTypeConfig Get(int key)
-        {
-            if (_dataMap.TryGetValue(key,out var v))
-            {
-                return v;
-            }
-            throw new System.Exception($"not found config: {this.GetType().FullName}, key: {key}");
-        }
-
-        public void ResolveRef()
-        {
-            foreach(var _v in _dataList)
-            {
-                _v.ResolveRef();
-            }
-            EndRef();
-        }
-
-
-        partial void EndRef();
     }
 
+    partial void PostInit();
+}
 }
 

@@ -29,17 +29,17 @@ $OutputFormats
 if ($ConfigType -eq "Luban") {
     $OutputFormats = "cs-bin"
 } else {
-    $OutputFormats = "cs-simple-json"
+    $OutputFormats = "cs-code"
 }
 
 # 客户端
-& $DotNet $GEN_CLIENT --customTemplateDir $CUSTOM -t client -c $OutputFormats -d bin -d json --conf $PACKAGE/Luban/$CONFIG_NAME/luban.conf -x outputCodeDir=$PACKAGE/CodeMode/Model/Client/$CONFIG_NAME/ -x bin.outputDataDir=$PACKAGE/Bundles/Luban/$CONFIG_NAME/Client/Binary/ -x json.outputDataDir=$PACKAGE/Bundles/Luban/$CONFIG_NAME/Client/Json/
+& $DotNet $GEN_CLIENT --customTemplateDir $CUSTOM -t client -c cs-code -d cs-code-data --conf $PACKAGE/Luban/$CONFIG_NAME/luban.conf -x outputCodeDir=$PACKAGE/CodeMode/Model/Client/$CONFIG_NAME/ -x outputDataDir=$PACKAGE/CodeMode/Hotfix/Client/$CONFIG_NAME/
 Write-Host "==================== 客户端 完成 ===================="
 
 # 服务器
-& $DotNet $GEN_CLIENT --customTemplateDir $CUSTOM -t server -c $OutputFormats -d bin -d json --conf $PACKAGE/Luban/$CONFIG_NAME/luban.conf -x outputCodeDir=$PACKAGE/CodeMode/Model/Server/$CONFIG_NAME/ -x bin.outputDataDir=$PACKAGE/Bundles/Luban/$CONFIG_NAME/Server/Binary/ -x json.outputDataDir=$PACKAGE/Bundles/Luban/$CONFIG_NAME/Server/Json/
+& $DotNet $GEN_CLIENT --customTemplateDir $CUSTOM -t server -c cs-code -d cs-code-data --conf $PACKAGE/Luban/$CONFIG_NAME/luban.conf -x outputCodeDir=$PACKAGE/CodeMode/Model/Server/$CONFIG_NAME/ -x outputDataDir=$PACKAGE/CodeMode/Hotfix/Server/$CONFIG_NAME/
 Write-Host "==================== 服务器 完成 ===================="
 
 # 所有
-& $DotNet $GEN_CLIENT --customTemplateDir $CUSTOM -t all -c $OutputFormats -d bin -d json --conf $PACKAGE/Luban/$CONFIG_NAME/luban.conf -x outputCodeDir=$PACKAGE/CodeMode/Model/ClientServer/$CONFIG_NAME/ -x bin.outputDataDir=$PACKAGE/Bundles/Luban/$CONFIG_NAME/ClientServer/Binary/ -x json.outputDataDir=$PACKAGE/Bundles/Luban/$CONFIG_NAME/ClientServer/Json/
+& $DotNet $GEN_CLIENT --customTemplateDir $CUSTOM -t all -c cs-code -d cs-code-data --conf $PACKAGE/Luban/$CONFIG_NAME/luban.conf -x outputCodeDir=$PACKAGE/CodeMode/Model/ClientServer/$CONFIG_NAME/ -x outputDataDir=$PACKAGE/CodeMode/Hotfix/ClientServer/$CONFIG_NAME/
 Write-Host "==================== 所有 完成 ===================="

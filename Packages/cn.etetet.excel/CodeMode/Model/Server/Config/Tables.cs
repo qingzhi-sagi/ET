@@ -7,4 +7,54 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using Luban;
+
+
+public partial class Tables
+{
+    public ET.ItemConfigCategory ItemConfigCategory { get; }
+    public ET.QuestConfigCategory QuestConfigCategory { get; }
+    public ET.QuestObjectiveConfigCategory QuestObjectiveConfigCategory { get; }
+    public ET.NumericTypeConfigCategory NumericTypeConfigCategory { get; }
+    public ET.MapTransferRuleConfigCategory MapTransferRuleConfigCategory { get; }
+    public ET.MapConfigCategory MapConfigCategory { get; }
+    public ET.UnitConfigCategory UnitConfigCategory { get; }
+    public ET.MapUnitConfigCategory MapUnitConfigCategory { get; }
+    public ET.EquipmentConfigCategory EquipmentConfigCategory { get; }
+    public ET.TextConfigCategory TextConfigCategory { get; }
+
+    public Tables()
+    {
+        ItemConfigCategory = new ET.ItemConfigCategory();
+        QuestConfigCategory = new ET.QuestConfigCategory();
+        QuestObjectiveConfigCategory = new ET.QuestObjectiveConfigCategory();
+        NumericTypeConfigCategory = new ET.NumericTypeConfigCategory();
+        MapTransferRuleConfigCategory = new ET.MapTransferRuleConfigCategory();
+        MapConfigCategory = new ET.MapConfigCategory();
+        UnitConfigCategory = new ET.UnitConfigCategory();
+        MapUnitConfigCategory = new ET.MapUnitConfigCategory();
+        EquipmentConfigCategory = new ET.EquipmentConfigCategory();
+        TextConfigCategory = new ET.TextConfigCategory();
+
+        PostInit();
+        ResolveRef();
+    }
+
+    private void ResolveRef()
+    {
+        ItemConfigCategory.ResolveRef(this);
+        QuestConfigCategory.ResolveRef(this);
+        QuestObjectiveConfigCategory.ResolveRef(this);
+        NumericTypeConfigCategory.ResolveRef(this);
+        MapTransferRuleConfigCategory.ResolveRef(this);
+        MapConfigCategory.ResolveRef(this);
+        UnitConfigCategory.ResolveRef(this);
+        MapUnitConfigCategory.ResolveRef(this);
+        EquipmentConfigCategory.ResolveRef(this);
+        TextConfigCategory.ResolveRef(this);
+    }
+
+    partial void PostInit();
+}
+
 
