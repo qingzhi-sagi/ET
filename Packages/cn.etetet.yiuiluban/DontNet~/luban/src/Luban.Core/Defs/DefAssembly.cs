@@ -256,7 +256,6 @@ public class DefAssembly
         else
         {
             return TEnum.Create(nullable, defType, tags);
-            ;
         }
     }
 

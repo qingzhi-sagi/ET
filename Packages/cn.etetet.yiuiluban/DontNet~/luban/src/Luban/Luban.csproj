@@ -26,7 +26,7 @@
 
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
+        <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>disable</Nullable>
         <OutputType>Exe</OutputType>
         <RepositoryUrl>https://github.com/focus-creative-games/luban</RepositoryUrl>
@@ -34,6 +34,7 @@
         <PackAsTool>True</PackAsTool>
         <FileVersion>$(AssemblyVersion)</FileVersion>
         <Version>4.2.1</Version>
+        <LangVersion>default</LangVersion>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -42,7 +43,7 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <OutputPath>../../../.Tools/Luban</OutputPath>
+      <OutputPath>../../../../.Tools/Luban/</OutputPath>
     </PropertyGroup>
 
     <ItemGroup>

@@ -29,6 +29,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
         <EnableDynamicLoading>true</EnableDynamicLoading>
+        <LangVersion>default</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
