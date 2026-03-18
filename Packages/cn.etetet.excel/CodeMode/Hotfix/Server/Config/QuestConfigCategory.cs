@@ -17,10 +17,10 @@ public sealed class QuestConfigCategoryFactory : IConfigFactory
 
     public ASingleton Create()
     {
-        return new QuestConfigCategory(new System.Collections.Generic.List<ET.QuestConfig>()
+        return new QuestConfigCategory(new System.Collections.Generic.Dictionary<int, ET.QuestConfig>()
         {
-            new ET.QuestConfig(1, @"烦人的野猪", @"击杀3只野猪", new int[] { 1 }, new int[] { }, new int[] { 2 }, @"烦人的野猪", @"野猪骚扰老百姓，请帮忙清除！", @"麻烦您了！", @"谢谢您帮我清除了野猪！", 10024, @"Map2", 10024, @"Map2"),
-            new ET.QuestConfig(2, @"暴躁的熊", @"击杀1头熊", new int[] { 2 }, new int[] { }, new int[] { }, @"暴躁的熊", @"附近出现了一头熊，很危险！", @"麻烦您了！", @"谢谢！", 10024, @"Map2", 10024, @"Map2")
+            [ 1 ] = new ET.QuestConfig(1, @"烦人的野猪", @"击杀3只野猪", new int[] { 1 }, new int[] { }, new int[] { 2 }, @"烦人的野猪", @"野猪骚扰老百姓，请帮忙清除！", @"麻烦您了！", @"谢谢您帮我清除了野猪！", 10024, @"Map2", 10024, @"Map2"),
+            [ 2 ] = new ET.QuestConfig(2, @"暴躁的熊", @"击杀1头熊", new int[] { 2 }, new int[] { }, new int[] { }, @"暴躁的熊", @"附近出现了一头熊，很危险！", @"麻烦您了！", @"谢谢！", 10024, @"Map2", 10024, @"Map2")
         });
     }
 }

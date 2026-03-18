@@ -16,29 +16,22 @@ namespace ET
 public partial class ItemConfigCategory : Singleton<ItemConfigCategory>, IConfig
 {
     private readonly System.Collections.Generic.Dictionary<int, ET.ItemConfig> _dataMap;
-    private readonly System.Collections.Generic.List<ET.ItemConfig> _dataList;
 
-    public ItemConfigCategory(System.Collections.Generic.List<ET.ItemConfig> dataList)
+    public ItemConfigCategory(System.Collections.Generic.Dictionary<int, ET.ItemConfig> dataMap)
     {
-        _dataList = dataList;
-        _dataMap = new System.Collections.Generic.Dictionary<int, ET.ItemConfig>(_dataList.Count);
-        foreach (var _v in _dataList)
-        {
-            _dataMap.Add(_v.Id, _v);
-        }
+        _dataMap = dataMap;
         EndInit();
     }
 
     public System.Collections.Generic.Dictionary<int, ET.ItemConfig> GetAll() => _dataMap;
     public System.Collections.Generic.IReadOnlyDictionary<int, ET.ItemConfig> DataMap => _dataMap;
-    public System.Collections.Generic.IReadOnlyList<ET.ItemConfig> DataList => _dataList;
     public ET.ItemConfig GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
     public ET.ItemConfig Get(int key) => _dataMap[key];
     public ET.ItemConfig this[int key] => _dataMap[key];
 
     public void ResolveRef()
     {
-        foreach (var _v in _dataList)
+        foreach (var _v in _dataMap.Values)
         {
             _v.ResolveRef();
         }

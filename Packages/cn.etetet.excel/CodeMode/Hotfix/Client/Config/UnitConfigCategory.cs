@@ -17,13 +17,13 @@ public sealed class UnitConfigCategoryFactory : IConfigFactory
 
     public ASingleton Create()
     {
-        return new UnitConfigCategory(new System.Collections.Generic.List<ET.UnitConfig>()
+        return new UnitConfigCategory(new System.Collections.Generic.Dictionary<int, ET.UnitConfig>()
         {
-            new ET.UnitConfig(1001, ET.UnitType.Player, @"Mage", @"Portrait", ET.EClassType.Mage),
-            new ET.UnitConfig(1002, ET.UnitType.Virtual, @"TrainingDummy", @"UI-ChatIcon-Battlenet", ET.EClassType.DeathKnight),
-            new ET.UnitConfig(1003, ET.UnitType.Monster, @"Boar", @"UI-ChatIcon-Battlenet", ET.EClassType.Druid),
-            new ET.UnitConfig(1004, ET.UnitType.Monster, @"Bear", @"UI-ChatIcon-Battlenet", ET.EClassType.Priest),
-            new ET.UnitConfig(1005, ET.UnitType.NPC, @"Mage", @"UI-ChatIcon-Battlenet", ET.EClassType.Warrior)
+            [ 1001 ] = new ET.UnitConfig(1001, ET.UnitType.Player, @"Mage", @"Portrait", ET.EClassType.Mage),
+            [ 1002 ] = new ET.UnitConfig(1002, ET.UnitType.Virtual, @"TrainingDummy", @"UI-ChatIcon-Battlenet", ET.EClassType.DeathKnight),
+            [ 1003 ] = new ET.UnitConfig(1003, ET.UnitType.Monster, @"Boar", @"UI-ChatIcon-Battlenet", ET.EClassType.Druid),
+            [ 1004 ] = new ET.UnitConfig(1004, ET.UnitType.Monster, @"Bear", @"UI-ChatIcon-Battlenet", ET.EClassType.Priest),
+            [ 1005 ] = new ET.UnitConfig(1005, ET.UnitType.NPC, @"Mage", @"UI-ChatIcon-Battlenet", ET.EClassType.Warrior)
         });
     }
 }

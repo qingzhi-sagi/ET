@@ -8,6 +8,11 @@ using Luban;
         dataList = __records |array.each do; ret (apply_value $0); end
         ret array.join dataList ',\n'
     end
+
+    func table_data_map
+        dataMap = __records |array.each do; ret '[ ' + (apply_key __table $0) + ' ] = ' + (apply_value $0); end
+        ret array.join dataMap ',\n'
+    end
 }}
 {{namespace_with_grace_begin __namespace_with_top_module}}
 {{~if __table.comment != '' ~}}
@@ -21,7 +26,12 @@ public sealed class {{__name}}Factory : IConfigFactory
 
     public ASingleton Create()
     {
-        {{~if __table.is_map_table || __table.is_list_table ~}}
+        {{~if __table.is_map_table ~}}
+        return new {{__name}}(new System.Collections.Generic.Dictionary<{{declaring_type_name key_type}}, {{declaring_type_name value_type}}>()
+        {
+            {{table_data_map}}
+        });
+        {{~else if __table.is_list_table ~}}
         return new {{__name}}(new System.Collections.Generic.List<{{declaring_type_name value_type}}>()
         {
             {{table_data_list}}

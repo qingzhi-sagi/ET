@@ -16,29 +16,22 @@ namespace ET
 public partial class MapTransferRuleConfigCategory : Singleton<MapTransferRuleConfigCategory>, IConfig
 {
     private readonly System.Collections.Generic.Dictionary<int, ET.MapTransferRuleConfig> _dataMap;
-    private readonly System.Collections.Generic.List<ET.MapTransferRuleConfig> _dataList;
 
-    public MapTransferRuleConfigCategory(System.Collections.Generic.List<ET.MapTransferRuleConfig> dataList)
+    public MapTransferRuleConfigCategory(System.Collections.Generic.Dictionary<int, ET.MapTransferRuleConfig> dataMap)
     {
-        _dataList = dataList;
-        _dataMap = new System.Collections.Generic.Dictionary<int, ET.MapTransferRuleConfig>(_dataList.Count);
-        foreach (var _v in _dataList)
-        {
-            _dataMap.Add(_v.Id, _v);
-        }
+        _dataMap = dataMap;
         EndInit();
     }
 
     public System.Collections.Generic.Dictionary<int, ET.MapTransferRuleConfig> GetAll() => _dataMap;
     public System.Collections.Generic.IReadOnlyDictionary<int, ET.MapTransferRuleConfig> DataMap => _dataMap;
-    public System.Collections.Generic.IReadOnlyList<ET.MapTransferRuleConfig> DataList => _dataList;
     public ET.MapTransferRuleConfig GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
     public ET.MapTransferRuleConfig Get(int key) => _dataMap[key];
     public ET.MapTransferRuleConfig this[int key] => _dataMap[key];
 
     public void ResolveRef()
     {
-        foreach (var _v in _dataList)
+        foreach (var _v in _dataMap.Values)
         {
             _v.ResolveRef();
         }

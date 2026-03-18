@@ -17,17 +17,17 @@ public sealed class EquipmentConfigCategoryFactory : IConfigFactory
 
     public ASingleton Create()
     {
-        return new EquipmentConfigCategory(new System.Collections.Generic.List<ET.EquipmentConfig>()
+        return new EquipmentConfigCategory(new System.Collections.Generic.Dictionary<int, ET.EquipmentConfig>()
         {
-            new ET.EquipmentConfig(10004, 1, new System.Collections.Generic.Dictionary<int, long> { [ 10001 ] = 0, [ 10021 ] = 100, [ 10041 ] = 0 }),
-            new ET.EquipmentConfig(10005, 2, new System.Collections.Generic.Dictionary<int, long> { [ 10001 ] = 6000, [ 10021 ] = 1000, [ 10041 ] = 1000 }),
-            new ET.EquipmentConfig(10006, 3, new System.Collections.Generic.Dictionary<int, long> { [ 10001 ] = 0, [ 10021 ] = 100, [ 10041 ] = 100 }),
-            new ET.EquipmentConfig(10007, 3, new System.Collections.Generic.Dictionary<int, long> { [ 10001 ] = 0, [ 10021 ] = 100, [ 10041 ] = 100 }),
-            new ET.EquipmentConfig(10008, 4, new System.Collections.Generic.Dictionary<int, long> { [ 10001 ] = 2000, [ 10021 ] = 100, [ 10041 ] = 100 }),
-            new ET.EquipmentConfig(10009, 5, new System.Collections.Generic.Dictionary<int, long> { [ 10001 ] = 2000, [ 10021 ] = 100, [ 10041 ] = 100 }),
-            new ET.EquipmentConfig(10010, 1, new System.Collections.Generic.Dictionary<int, long> { [ 10001 ] = 2000, [ 10021 ] = 100, [ 10041 ] = 100 }),
-            new ET.EquipmentConfig(10011, 7, new System.Collections.Generic.Dictionary<int, long> { [ 10001 ] = 2000, [ 10021 ] = 100, [ 10041 ] = 100 }),
-            new ET.EquipmentConfig(10012, 8, new System.Collections.Generic.Dictionary<int, long> { [ 10001 ] = 2000, [ 10021 ] = 100, [ 10041 ] = 100 })
+            [ 10004 ] = new ET.EquipmentConfig(10004, 1, new System.Collections.Generic.Dictionary<int, long> { [ 10001 ] = 0, [ 10021 ] = 100, [ 10041 ] = 0 }),
+            [ 10005 ] = new ET.EquipmentConfig(10005, 2, new System.Collections.Generic.Dictionary<int, long> { [ 10001 ] = 6000, [ 10021 ] = 1000, [ 10041 ] = 1000 }),
+            [ 10006 ] = new ET.EquipmentConfig(10006, 3, new System.Collections.Generic.Dictionary<int, long> { [ 10001 ] = 0, [ 10021 ] = 100, [ 10041 ] = 100 }),
+            [ 10007 ] = new ET.EquipmentConfig(10007, 3, new System.Collections.Generic.Dictionary<int, long> { [ 10001 ] = 0, [ 10021 ] = 100, [ 10041 ] = 100 }),
+            [ 10008 ] = new ET.EquipmentConfig(10008, 4, new System.Collections.Generic.Dictionary<int, long> { [ 10001 ] = 2000, [ 10021 ] = 100, [ 10041 ] = 100 }),
+            [ 10009 ] = new ET.EquipmentConfig(10009, 5, new System.Collections.Generic.Dictionary<int, long> { [ 10001 ] = 2000, [ 10021 ] = 100, [ 10041 ] = 100 }),
+            [ 10010 ] = new ET.EquipmentConfig(10010, 1, new System.Collections.Generic.Dictionary<int, long> { [ 10001 ] = 2000, [ 10021 ] = 100, [ 10041 ] = 100 }),
+            [ 10011 ] = new ET.EquipmentConfig(10011, 7, new System.Collections.Generic.Dictionary<int, long> { [ 10001 ] = 2000, [ 10021 ] = 100, [ 10041 ] = 100 }),
+            [ 10012 ] = new ET.EquipmentConfig(10012, 8, new System.Collections.Generic.Dictionary<int, long> { [ 10001 ] = 2000, [ 10021 ] = 100, [ 10041 ] = 100 })
         });
     }
 }

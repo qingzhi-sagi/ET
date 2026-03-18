@@ -17,10 +17,10 @@ public sealed class QuestObjectiveConfigCategoryFactory : IConfigFactory
 
     public ASingleton Create()
     {
-        return new QuestObjectiveConfigCategory(new System.Collections.Generic.List<ET.QuestObjectiveConfig>()
+        return new QuestObjectiveConfigCategory(new System.Collections.Generic.Dictionary<int, ET.QuestObjectiveConfig>()
         {
-            new ET.QuestObjectiveConfig(1, @"击杀3只野猪", @"击杀3只野猪", ET.QuestObjectiveType.KillMonster, 3, new ET.QuestObjectiveParams_KillMonster(1003)),
-            new ET.QuestObjectiveConfig(2, @"击杀1头熊", @"击杀1头熊", ET.QuestObjectiveType.KillMonster, 1, new ET.QuestObjectiveParams_KillMonster(1004))
+            [ 1 ] = new ET.QuestObjectiveConfig(1, @"击杀3只野猪", @"击杀3只野猪", ET.QuestObjectiveType.KillMonster, 3, new ET.QuestObjectiveParams_KillMonster(1003)),
+            [ 2 ] = new ET.QuestObjectiveConfig(2, @"击杀1头熊", @"击杀1头熊", ET.QuestObjectiveType.KillMonster, 1, new ET.QuestObjectiveParams_KillMonster(1004))
         });
     }
 }

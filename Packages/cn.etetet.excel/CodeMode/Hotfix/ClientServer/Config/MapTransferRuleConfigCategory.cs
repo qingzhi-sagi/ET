@@ -17,11 +17,11 @@ public sealed class MapTransferRuleConfigCategoryFactory : IConfigFactory
 
     public ASingleton Create()
     {
-        return new MapTransferRuleConfigCategory(new System.Collections.Generic.List<ET.MapTransferRuleConfig>()
+        return new MapTransferRuleConfigCategory(new System.Collections.Generic.Dictionary<int, ET.MapTransferRuleConfig>()
         {
-            new ET.MapTransferRuleConfig(1, @"Map2", new float[] { }),
-            new ET.MapTransferRuleConfig(2, @"Map1", new float[] { }),
-            new ET.MapTransferRuleConfig(3, @"Lordaeron", new float[] { })
+            [ 1 ] = new ET.MapTransferRuleConfig(1, @"Map2", new float[] { }),
+            [ 2 ] = new ET.MapTransferRuleConfig(2, @"Map1", new float[] { }),
+            [ 3 ] = new ET.MapTransferRuleConfig(3, @"Lordaeron", new float[] { })
         });
     }
 }

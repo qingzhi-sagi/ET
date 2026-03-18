@@ -17,24 +17,24 @@ public sealed class NumericTypeConfigCategoryFactory : IConfigFactory
 
     public ASingleton Create()
     {
-        return new NumericTypeConfigCategory(new System.Collections.Generic.List<ET.NumericTypeConfig>()
+        return new NumericTypeConfigCategory(new System.Collections.Generic.Dictionary<int, ET.NumericTypeConfig>()
         {
-            new ET.NumericTypeConfig(1000, @"Speed", 1, NoticeType.Broadcast, 0, new System.Collections.Generic.Dictionary<int, long> { }),
-            new ET.NumericTypeConfig(1001, @"HP", 1, NoticeType.Broadcast, 1002, new System.Collections.Generic.Dictionary<int, long> { }),
-            new ET.NumericTypeConfig(1002, @"MaxHP", 1, NoticeType.Broadcast, 0, new System.Collections.Generic.Dictionary<int, long> { }),
-            new ET.NumericTypeConfig(1003, @"MP", 1, NoticeType.Broadcast, 1004, new System.Collections.Generic.Dictionary<int, long> { }),
-            new ET.NumericTypeConfig(1004, @"MaxMP", 1, NoticeType.Broadcast, 0, new System.Collections.Generic.Dictionary<int, long> { }),
-            new ET.NumericTypeConfig(1005, @"Radius", 1, NoticeType.Broadcast, 0, new System.Collections.Generic.Dictionary<int, long> { }),
-            new ET.NumericTypeConfig(1006, @"AOI", 1, NoticeType.Self, 0, new System.Collections.Generic.Dictionary<int, long> { }),
-            new ET.NumericTypeConfig(1007, @"Height", 1, NoticeType.Broadcast, 0, new System.Collections.Generic.Dictionary<int, long> { }),
-            new ET.NumericTypeConfig(1008, @"Weight", 1, NoticeType.Broadcast, 0, new System.Collections.Generic.Dictionary<int, long> { }),
-            new ET.NumericTypeConfig(1009, @"AI", 1, NoticeType.NoNotice, 0, new System.Collections.Generic.Dictionary<int, long> { }),
-            new ET.NumericTypeConfig(1010, @"X", 0, NoticeType.NoNotice, 0, new System.Collections.Generic.Dictionary<int, long> { }),
-            new ET.NumericTypeConfig(1011, @"Y", 0, NoticeType.NoNotice, 0, new System.Collections.Generic.Dictionary<int, long> { }),
-            new ET.NumericTypeConfig(1012, @"Z", 0, NoticeType.NoNotice, 0, new System.Collections.Generic.Dictionary<int, long> { }),
-            new ET.NumericTypeConfig(1013, @"Stun", 1, NoticeType.NoNotice, 0, new System.Collections.Generic.Dictionary<int, long> { }),
-            new ET.NumericTypeConfig(1014, @"Yaw", 0, NoticeType.NoNotice, 0, new System.Collections.Generic.Dictionary<int, long> { }),
-            new ET.NumericTypeConfig(1015, @"Phase", 1, NoticeType.NoNotice, 0, new System.Collections.Generic.Dictionary<int, long> { })
+            [ 1000 ] = new ET.NumericTypeConfig(1000, @"Speed", 1, NoticeType.Broadcast, 0, new System.Collections.Generic.Dictionary<int, long> { }),
+            [ 1001 ] = new ET.NumericTypeConfig(1001, @"HP", 1, NoticeType.Broadcast, 1002, new System.Collections.Generic.Dictionary<int, long> { }),
+            [ 1002 ] = new ET.NumericTypeConfig(1002, @"MaxHP", 1, NoticeType.Broadcast, 0, new System.Collections.Generic.Dictionary<int, long> { }),
+            [ 1003 ] = new ET.NumericTypeConfig(1003, @"MP", 1, NoticeType.Broadcast, 1004, new System.Collections.Generic.Dictionary<int, long> { }),
+            [ 1004 ] = new ET.NumericTypeConfig(1004, @"MaxMP", 1, NoticeType.Broadcast, 0, new System.Collections.Generic.Dictionary<int, long> { }),
+            [ 1005 ] = new ET.NumericTypeConfig(1005, @"Radius", 1, NoticeType.Broadcast, 0, new System.Collections.Generic.Dictionary<int, long> { }),
+            [ 1006 ] = new ET.NumericTypeConfig(1006, @"AOI", 1, NoticeType.Self, 0, new System.Collections.Generic.Dictionary<int, long> { }),
+            [ 1007 ] = new ET.NumericTypeConfig(1007, @"Height", 1, NoticeType.Broadcast, 0, new System.Collections.Generic.Dictionary<int, long> { }),
+            [ 1008 ] = new ET.NumericTypeConfig(1008, @"Weight", 1, NoticeType.Broadcast, 0, new System.Collections.Generic.Dictionary<int, long> { }),
+            [ 1009 ] = new ET.NumericTypeConfig(1009, @"AI", 1, NoticeType.NoNotice, 0, new System.Collections.Generic.Dictionary<int, long> { }),
+            [ 1010 ] = new ET.NumericTypeConfig(1010, @"X", 0, NoticeType.NoNotice, 0, new System.Collections.Generic.Dictionary<int, long> { }),
+            [ 1011 ] = new ET.NumericTypeConfig(1011, @"Y", 0, NoticeType.NoNotice, 0, new System.Collections.Generic.Dictionary<int, long> { }),
+            [ 1012 ] = new ET.NumericTypeConfig(1012, @"Z", 0, NoticeType.NoNotice, 0, new System.Collections.Generic.Dictionary<int, long> { }),
+            [ 1013 ] = new ET.NumericTypeConfig(1013, @"Stun", 1, NoticeType.NoNotice, 0, new System.Collections.Generic.Dictionary<int, long> { }),
+            [ 1014 ] = new ET.NumericTypeConfig(1014, @"Yaw", 0, NoticeType.NoNotice, 0, new System.Collections.Generic.Dictionary<int, long> { }),
+            [ 1015 ] = new ET.NumericTypeConfig(1015, @"Phase", 1, NoticeType.NoNotice, 0, new System.Collections.Generic.Dictionary<int, long> { })
         });
     }
 }

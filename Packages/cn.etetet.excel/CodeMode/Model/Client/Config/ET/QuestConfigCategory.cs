@@ -16,29 +16,22 @@ namespace ET
 public partial class QuestConfigCategory : Singleton<QuestConfigCategory>, IConfig
 {
     private readonly System.Collections.Generic.Dictionary<int, ET.QuestConfig> _dataMap;
-    private readonly System.Collections.Generic.List<ET.QuestConfig> _dataList;
 
-    public QuestConfigCategory(System.Collections.Generic.List<ET.QuestConfig> dataList)
+    public QuestConfigCategory(System.Collections.Generic.Dictionary<int, ET.QuestConfig> dataMap)
     {
-        _dataList = dataList;
-        _dataMap = new System.Collections.Generic.Dictionary<int, ET.QuestConfig>(_dataList.Count);
-        foreach (var _v in _dataList)
-        {
-            _dataMap.Add(_v.Id, _v);
-        }
+        _dataMap = dataMap;
         EndInit();
     }
 
     public System.Collections.Generic.Dictionary<int, ET.QuestConfig> GetAll() => _dataMap;
     public System.Collections.Generic.IReadOnlyDictionary<int, ET.QuestConfig> DataMap => _dataMap;
-    public System.Collections.Generic.IReadOnlyList<ET.QuestConfig> DataList => _dataList;
     public ET.QuestConfig GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
     public ET.QuestConfig Get(int key) => _dataMap[key];
     public ET.QuestConfig this[int key] => _dataMap[key];
 
     public void ResolveRef()
     {
-        foreach (var _v in _dataList)
+        foreach (var _v in _dataMap.Values)
         {
             _v.ResolveRef();
         }

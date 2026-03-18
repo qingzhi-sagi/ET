@@ -17,17 +17,17 @@ public sealed class EquipmentConfigCategoryFactory : IConfigFactory
 
     public ASingleton Create()
     {
-        return new EquipmentConfigCategory(new System.Collections.Generic.List<ET.EquipmentConfig>()
+        return new EquipmentConfigCategory(new System.Collections.Generic.Dictionary<int, ET.EquipmentConfig>()
         {
-            new ET.EquipmentConfig(10004, 1),
-            new ET.EquipmentConfig(10005, 2),
-            new ET.EquipmentConfig(10006, 3),
-            new ET.EquipmentConfig(10007, 3),
-            new ET.EquipmentConfig(10008, 4),
-            new ET.EquipmentConfig(10009, 5),
-            new ET.EquipmentConfig(10010, 1),
-            new ET.EquipmentConfig(10011, 7),
-            new ET.EquipmentConfig(10012, 8)
+            [ 10004 ] = new ET.EquipmentConfig(10004, 1),
+            [ 10005 ] = new ET.EquipmentConfig(10005, 2),
+            [ 10006 ] = new ET.EquipmentConfig(10006, 3),
+            [ 10007 ] = new ET.EquipmentConfig(10007, 3),
+            [ 10008 ] = new ET.EquipmentConfig(10008, 4),
+            [ 10009 ] = new ET.EquipmentConfig(10009, 5),
+            [ 10010 ] = new ET.EquipmentConfig(10010, 1),
+            [ 10011 ] = new ET.EquipmentConfig(10011, 7),
+            [ 10012 ] = new ET.EquipmentConfig(10012, 8)
         });
     }
 }

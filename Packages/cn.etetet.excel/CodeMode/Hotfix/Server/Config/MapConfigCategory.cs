@@ -17,12 +17,12 @@ public sealed class MapConfigCategoryFactory : IConfigFactory
 
     public ASingleton Create()
     {
-        return new MapConfigCategory(new System.Collections.Generic.List<ET.MapConfig>()
+        return new MapConfigCategory(new System.Collections.Generic.Dictionary<int, ET.MapConfig>()
         {
-            new ET.MapConfig(1, @"GateMap", @"GateMap", ET.CopyType.Normal, 1, 1, 1, @""),
-            new ET.MapConfig(2, @"Map1", @"Map1", ET.CopyType.Normal, 1, 10, 8, @"Map1"),
-            new ET.MapConfig(3, @"Map2", @"Map2", ET.CopyType.Line, 1000, 5, 4, @"Map1"),
-            new ET.MapConfig(4, @"Lordaeron", @"Lordaeron", ET.CopyType.Copy, 1000, 1, 1, @"Lordaeron")
+            [ 1 ] = new ET.MapConfig(1, @"GateMap", @"GateMap", ET.CopyType.Normal, 1, 1, 1, @""),
+            [ 2 ] = new ET.MapConfig(2, @"Map1", @"Map1", ET.CopyType.Normal, 1, 10, 8, @"Map1"),
+            [ 3 ] = new ET.MapConfig(3, @"Map2", @"Map2", ET.CopyType.Line, 1000, 5, 4, @"Map1"),
+            [ 4 ] = new ET.MapConfig(4, @"Lordaeron", @"Lordaeron", ET.CopyType.Copy, 1000, 1, 1, @"Lordaeron")
         });
     }
 }
