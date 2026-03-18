@@ -17,6 +17,7 @@
     
     <PropertyGroup>
         <ETRootDir>$([MSBuild]::EnsureTrailingSlash($([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\..\..\' ))))</ETRootDir>
+        <ETRootDirForPwsh>$(ETRootDir).</ETRootDirForPwsh>
         <MainPackageFile>$(ETRootDir)MainPackage.txt</MainPackageFile>
         <MainPackageDesignTimeProps>$(MSBuildProjectDirectory)/$(BaseIntermediateOutputPath)ET.Core.MainPackage.g.props</MainPackageDesignTimeProps>
     </PropertyGroup>
@@ -46,7 +47,7 @@
 
     <!-- 生成 IDE 设计时引用文件，解决 ET.Core 无法显示 MainPackage 引用代码 -->
     <Target Name="GenerateDesignTimePackageProps" BeforeTargets="BeforeBuild" Inputs="$(MainPackageFile)" Outputs="$(MainPackageDesignTimeProps)" Condition="Exists('$(MainPackageFile)')">
-        <Exec Command="pwsh -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildThisFileDirectory)Generate-ETCoreMainPackageProps.ps1&quot; -RootDir &quot;$(ETRootDir)&quot; -OutputPath &quot;$(MainPackageDesignTimeProps)&quot;" />
+        <Exec Command="pwsh -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildThisFileDirectory)Generate-ETCoreMainPackageProps.ps1&quot; -RootDir &quot;$(ETRootDirForPwsh)&quot; -OutputPath &quot;$(MainPackageDesignTimeProps)&quot;" />
     </Target>
 
     <!-- 动态读取 MainPackage.txt 并生成 Compile 项 -->
