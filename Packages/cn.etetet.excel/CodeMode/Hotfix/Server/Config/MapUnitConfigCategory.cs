@@ -11,11 +11,13 @@ using Luban;
 
 namespace ET
 {
-public partial class MapUnitConfigCategory
+public sealed class MapUnitConfigCategoryFactory : IConfigFactory
 {
-    public MapUnitConfigCategory()
+    public System.Type ConfigType => typeof(MapUnitConfigCategory);
+
+    public ASingleton Create()
     {
-        _dataList = new System.Collections.Generic.List<ET.MapUnitConfig>()
+        return new MapUnitConfigCategory(new System.Collections.Generic.List<ET.MapUnitConfig>()
         {
             new ET.MapUnitConfig(10002, 1002, @"Map1", new System.Collections.Generic.Dictionary<int, long> { [ 1010 ] = 0, [ 1011 ] = 25200, [ 1012 ] = -50000, [ 1014 ] = 90, [ 10001 ] = 0, [ 10051 ] = 500, [ 10061 ] = 0, [ 10071 ] = 500, [ 10081 ] = 30000, [ 1009 ] = 200121, [ 10021 ] = 100, [ 1001 ] = 100, [ 10041 ] = 100, [ 1003 ] = 100, [ 1015 ] = 1 }),
             new ET.MapUnitConfig(10004, 1003, @"Map1", new System.Collections.Generic.Dictionary<int, long> { [ 1010 ] = 21600, [ 1011 ] = 26800, [ 1012 ] = -58702, [ 1014 ] = 0, [ 10001 ] = 2000, [ 10051 ] = 500, [ 10061 ] = 10000, [ 10071 ] = 500, [ 10081 ] = 30000, [ 1009 ] = 300001, [ 10021 ] = 100, [ 1001 ] = 100, [ 10041 ] = 100, [ 1003 ] = 100, [ 1015 ] = 1 }),
@@ -41,13 +43,7 @@ public partial class MapUnitConfigCategory
             new ET.MapUnitConfig(10024, 1005, @"Map2", new System.Collections.Generic.Dictionary<int, long> { [ 1010 ] = 10000, [ 1011 ] = 25200, [ 1012 ] = 0, [ 1014 ] = 0, [ 10001 ] = 2000, [ 10051 ] = 2000, [ 10061 ] = 10000, [ 10071 ] = 500, [ 10081 ] = 30000, [ 1009 ] = 0, [ 10021 ] = 100, [ 1001 ] = 100, [ 10041 ] = 100, [ 1003 ] = 100, [ 1015 ] = 1 }),
             new ET.MapUnitConfig(10025, 1005, @"Map2", new System.Collections.Generic.Dictionary<int, long> { [ 1010 ] = -10000, [ 1011 ] = 25200, [ 1012 ] = 0, [ 1014 ] = 0, [ 10001 ] = 2000, [ 10051 ] = 2000, [ 10061 ] = 10000, [ 10071 ] = 500, [ 10081 ] = 30000, [ 1009 ] = 0, [ 10021 ] = 100, [ 1001 ] = 100, [ 10041 ] = 100, [ 1003 ] = 100, [ 1015 ] = 1 }),
             new ET.MapUnitConfig(10026, 1002, @"Map2", new System.Collections.Generic.Dictionary<int, long> { [ 1010 ] = 0, [ 1011 ] = 25200, [ 1012 ] = 0, [ 1014 ] = 270, [ 10001 ] = 0, [ 10051 ] = 500, [ 10061 ] = 0, [ 10071 ] = 500, [ 10081 ] = 30000, [ 1009 ] = 200131, [ 10021 ] = 100, [ 1001 ] = 100, [ 10041 ] = 100, [ 1003 ] = 100, [ 1015 ] = 1 })
-        };
-        _dataMap = new System.Collections.Generic.Dictionary<int, ET.MapUnitConfig>(_dataList.Count);
-        foreach (var _v in _dataList)
-        {
-            _dataMap.Add(_v.Id, _v);
-        }
-        PostInit();
+        });
     }
 }
 }

@@ -12,26 +12,40 @@ using Luban;
 
 namespace ET
 {
-public partial class UnitConfigCategory
+[ConfigProcess(ConfigType.Code)]
+public partial class UnitConfigCategory : Singleton<UnitConfigCategory>, IConfig
 {
     private readonly System.Collections.Generic.Dictionary<int, ET.UnitConfig> _dataMap;
     private readonly System.Collections.Generic.List<ET.UnitConfig> _dataList;
 
+    public UnitConfigCategory(System.Collections.Generic.List<ET.UnitConfig> dataList)
+    {
+        _dataList = dataList;
+        _dataMap = new System.Collections.Generic.Dictionary<int, ET.UnitConfig>(_dataList.Count);
+        foreach (var _v in _dataList)
+        {
+            _dataMap.Add(_v.Id, _v);
+        }
+        EndInit();
+    }
+
+    public System.Collections.Generic.Dictionary<int, ET.UnitConfig> GetAll() => _dataMap;
     public System.Collections.Generic.IReadOnlyDictionary<int, ET.UnitConfig> DataMap => _dataMap;
     public System.Collections.Generic.IReadOnlyList<ET.UnitConfig> DataList => _dataList;
     public ET.UnitConfig GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
     public ET.UnitConfig Get(int key) => _dataMap[key];
     public ET.UnitConfig this[int key] => _dataMap[key];
 
-    public void ResolveRef(Tables tables)
+    public void ResolveRef()
     {
         foreach (var _v in _dataList)
         {
-            _v.ResolveRef(tables);
+            _v.ResolveRef();
         }
+        EndRef();
     }
 
-    partial void PostInit();
+    partial void EndRef();
 }
 }
 

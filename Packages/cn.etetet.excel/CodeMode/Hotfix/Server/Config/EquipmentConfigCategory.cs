@@ -11,11 +11,13 @@ using Luban;
 
 namespace ET
 {
-public partial class EquipmentConfigCategory
+public sealed class EquipmentConfigCategoryFactory : IConfigFactory
 {
-    public EquipmentConfigCategory()
+    public System.Type ConfigType => typeof(EquipmentConfigCategory);
+
+    public ASingleton Create()
     {
-        _dataList = new System.Collections.Generic.List<ET.EquipmentConfig>()
+        return new EquipmentConfigCategory(new System.Collections.Generic.List<ET.EquipmentConfig>()
         {
             new ET.EquipmentConfig(10004, 1, new System.Collections.Generic.Dictionary<int, long> { [ 10001 ] = 0, [ 10021 ] = 100, [ 10041 ] = 0 }),
             new ET.EquipmentConfig(10005, 2, new System.Collections.Generic.Dictionary<int, long> { [ 10001 ] = 6000, [ 10021 ] = 1000, [ 10041 ] = 1000 }),
@@ -26,13 +28,7 @@ public partial class EquipmentConfigCategory
             new ET.EquipmentConfig(10010, 1, new System.Collections.Generic.Dictionary<int, long> { [ 10001 ] = 2000, [ 10021 ] = 100, [ 10041 ] = 100 }),
             new ET.EquipmentConfig(10011, 7, new System.Collections.Generic.Dictionary<int, long> { [ 10001 ] = 2000, [ 10021 ] = 100, [ 10041 ] = 100 }),
             new ET.EquipmentConfig(10012, 8, new System.Collections.Generic.Dictionary<int, long> { [ 10001 ] = 2000, [ 10021 ] = 100, [ 10041 ] = 100 })
-        };
-        _dataMap = new System.Collections.Generic.Dictionary<int, ET.EquipmentConfig>(_dataList.Count);
-        foreach (var _v in _dataList)
-        {
-            _dataMap.Add(_v.Id, _v);
-        }
-        PostInit();
+        });
     }
 }
 }

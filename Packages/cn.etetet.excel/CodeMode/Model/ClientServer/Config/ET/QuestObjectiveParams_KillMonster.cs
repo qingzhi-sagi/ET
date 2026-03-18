@@ -29,9 +29,9 @@ namespace ET
         public const int __ID__ = -933968487;
         public override int GetTypeId() => __ID__;
 
-        public override void ResolveRef(Tables tables)
+        public override void ResolveRef()
         {
-            base.ResolveRef(tables);
+            base.ResolveRef();
             EndRef();
         }
 

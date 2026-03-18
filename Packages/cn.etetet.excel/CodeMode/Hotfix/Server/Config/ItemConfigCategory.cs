@@ -11,11 +11,13 @@ using Luban;
 
 namespace ET
 {
-public partial class ItemConfigCategory
+public sealed class ItemConfigCategoryFactory : IConfigFactory
 {
-    public ItemConfigCategory()
+    public System.Type ConfigType => typeof(ItemConfigCategory);
+
+    public ASingleton Create()
     {
-        _dataList = new System.Collections.Generic.List<ET.ItemConfig>()
+        return new ItemConfigCategory(new System.Collections.Generic.List<ET.ItemConfig>()
         {
             new ET.ItemConfig(10001, @"生命药水", 2, 99, 1, 1, 1),
             new ET.ItemConfig(10002, @"魔法药水", 2, 99, 1, 1, 1),
@@ -29,13 +31,7 @@ public partial class ItemConfigCategory
             new ET.ItemConfig(10010, @"精灵之弓", 4, 1, 1, 2, 5),
             new ET.ItemConfig(10011, @"魔法项链", 4, 1, 2, 2, 10),
             new ET.ItemConfig(10012, @"力量戒指", 4, 1, 1, 2, 8)
-        };
-        _dataMap = new System.Collections.Generic.Dictionary<int, ET.ItemConfig>(_dataList.Count);
-        foreach (var _v in _dataList)
-        {
-            _dataMap.Add(_v.Id, _v);
-        }
-        PostInit();
+        });
     }
 }
 }

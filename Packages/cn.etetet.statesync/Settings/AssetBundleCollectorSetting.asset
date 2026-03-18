@@ -54,23 +54,7 @@ MonoBehaviour:
       GroupDesc: 
       AssetTags: 
       ActiveRuleName: EnableGroup
-      Collectors:
-      - CollectPath: Packages/cn.etetet.excel/Bundles/Luban/Config/Client/Json
-        CollectorGUID: 6d353d321450547208af01b459886be6
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
-      - CollectPath: Packages/cn.etetet.map/Bundles/Json
-        CollectorGUID: b8082d5bceee043f38e89d8514f8f856
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
+      Collectors: []
     - GroupName: Scenes
       GroupDesc: 
       AssetTags: 

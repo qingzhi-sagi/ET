@@ -11,4 +11,14 @@ namespace ET
         //Ref的初始化
         void ResolveRef();
     }
+
+    /// <summary>
+    /// 代码配置工厂接口，由Hotfix返回已经填充完数据的配置单例实例。
+    /// </summary>
+    public interface IConfigFactory
+    {
+        Type ConfigType { get; }
+
+        ASingleton Create();
+    }
 }

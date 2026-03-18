@@ -12,26 +12,40 @@ using Luban;
 
 namespace ET
 {
-public partial class EquipmentConfigCategory
+[ConfigProcess(ConfigType.Code)]
+public partial class EquipmentConfigCategory : Singleton<EquipmentConfigCategory>, IConfig
 {
     private readonly System.Collections.Generic.Dictionary<int, ET.EquipmentConfig> _dataMap;
     private readonly System.Collections.Generic.List<ET.EquipmentConfig> _dataList;
 
+    public EquipmentConfigCategory(System.Collections.Generic.List<ET.EquipmentConfig> dataList)
+    {
+        _dataList = dataList;
+        _dataMap = new System.Collections.Generic.Dictionary<int, ET.EquipmentConfig>(_dataList.Count);
+        foreach (var _v in _dataList)
+        {
+            _dataMap.Add(_v.Id, _v);
+        }
+        EndInit();
+    }
+
+    public System.Collections.Generic.Dictionary<int, ET.EquipmentConfig> GetAll() => _dataMap;
     public System.Collections.Generic.IReadOnlyDictionary<int, ET.EquipmentConfig> DataMap => _dataMap;
     public System.Collections.Generic.IReadOnlyList<ET.EquipmentConfig> DataList => _dataList;
     public ET.EquipmentConfig GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
     public ET.EquipmentConfig Get(int key) => _dataMap[key];
     public ET.EquipmentConfig this[int key] => _dataMap[key];
 
-    public void ResolveRef(Tables tables)
+    public void ResolveRef()
     {
         foreach (var _v in _dataList)
         {
-            _v.ResolveRef(tables);
+            _v.ResolveRef();
         }
+        EndRef();
     }
 
-    partial void PostInit();
+    partial void EndRef();
 }
 }
 

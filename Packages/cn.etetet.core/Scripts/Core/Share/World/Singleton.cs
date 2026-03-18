@@ -1,6 +1,6 @@
-﻿namespace ET
-{    
-    public abstract class ASingleton: DisposeObject
+namespace ET
+{
+    public abstract class ASingleton : DisposeObject
     {
         internal abstract void Register();
 
@@ -9,12 +9,12 @@
             return 10000;
         }
     }
-    
-    public abstract class Singleton<T>: ASingleton where T: Singleton<T>
+
+    public abstract class Singleton<T> : ASingleton where T : Singleton<T>
     {
         [StaticField]
         private static T instance;
-        
+
         [StaticField]
         public static T Instance
         {
@@ -35,18 +35,15 @@
 
         protected virtual void Destroy()
         {
-            
         }
 
         public override void Dispose()
         {
-            if (Instance == null)
+            if (ReferenceEquals(Instance, this))
             {
-                return;
+                Instance = null;
             }
-            
-            Instance = null;
-            
+
             this.Destroy();
         }
     }

@@ -1,9 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-#if DOTNET || UNITY_STANDALONE
-using System.Threading.Tasks;
-#endif
 
 namespace ET
 {
@@ -12,13 +9,13 @@ namespace ET
         public Type Type;
         public object ConfigBytes;
     }
-    
+
     public class ConfigLoader : Singleton<ConfigLoader>, ISingletonAwake
     {
         public struct ConfigGetAllConfigBytes
         {
         }
-        
+
         private readonly ConcurrentDictionary<Type, IConfig> allConfig = new();
 
         public void Awake()
@@ -27,49 +24,133 @@ namespace ET
 
         public async ETTask LoadAsync()
         {
-            this.allConfig.Clear();
-
-            // load config
             Dictionary<Type, object> configBytes = await EventSystem.Instance.Invoke<ConfigGetAllConfigBytes, ETTask<Dictionary<Type, object>>>(new ConfigGetAllConfigBytes());
+            Dictionary<Type, IConfigFactory> configFactories = this.LoadConfigFactories();
+            List<Type> configTypes = this.GetConfigTypes();
+            var loadedConfigs = new Dictionary<Type, IConfig>(configTypes.Count);
+            var loadedSingletons = new List<ASingleton>(configTypes.Count);
 
-#if DOTNET || UNITY_STANDALONE
+            foreach (Type configType in configTypes)
             {
-                using ListComponent<Task> listTasks = ListComponent<Task>.Create();
-
-                foreach (Type type in configBytes.Keys)
-                {
-                    object oneConfigBytes = configBytes[type];
-                    Task task = Task.Run(() => this.LoadOneConfig(type, oneConfigBytes));
-                    listTasks.Add(task);
-                }
-
-                await Task.WhenAll(listTasks.ToArray());
+                ASingleton singleton = this.LoadOneConfig(configType, configBytes, configFactories, loadedConfigs);
+                loadedSingletons.Add(singleton);
             }
-#else
-            foreach (Type type in configBytes.Keys)
+
+            foreach (ASingleton singleton in loadedSingletons)
             {
-                LoadOneConfig(type, configBytes[type]);
+                World.Instance.ReplaceSingleton(singleton);
             }
-#endif
-            
-            // 处理Ref
-            foreach (IConfig config in this.allConfig.Values)
+
+            foreach (IConfig config in loadedConfigs.Values)
             {
                 config.ResolveRef();
             }
+
+            this.allConfig.Clear();
+            foreach ((Type type, IConfig config) in loadedConfigs)
+            {
+                this.allConfig[type] = config;
+            }
         }
-        
-        private void LoadOneConfig(Type configType, object oneConfigBytes)
+
+        private List<Type> GetConfigTypes()
         {
-            object category = null;
-            
+            var configTypes = new List<Type>(CodeTypes.Instance.GetTypes(typeof(ConfigProcessAttribute)));
+            configTypes.Sort((left, right) => string.CompareOrdinal(left.FullName, right.FullName));
+            return configTypes;
+        }
+
+        private Dictionary<Type, IConfigFactory> LoadConfigFactories()
+        {
+            var factoryTypes = new List<Type>();
+            foreach (Type type in CodeTypes.Instance.GetTypes().Values)
+            {
+                if (type.IsAbstract || type.IsInterface)
+                {
+                    continue;
+                }
+
+                if (!typeof(IConfigFactory).IsAssignableFrom(type))
+                {
+                    continue;
+                }
+
+                factoryTypes.Add(type);
+            }
+
+            factoryTypes.Sort((left, right) => string.CompareOrdinal(left.FullName, right.FullName));
+            var factories = new Dictionary<Type, IConfigFactory>();
+            foreach (Type factoryType in factoryTypes)
+            {
+                if (Activator.CreateInstance(factoryType) is not IConfigFactory factory)
+                {
+                    throw new Exception($"create config factory failed: {factoryType.FullName}");
+                }
+
+                if (factory.ConfigType == null)
+                {
+                    throw new Exception($"config factory target is null: {factoryType.FullName}");
+                }
+
+                if (!factories.TryAdd(factory.ConfigType, factory))
+                {
+                    throw new Exception($"duplicate config factory: {factory.ConfigType.FullName}");
+                }
+            }
+
+            return factories;
+        }
+
+        private ASingleton LoadOneConfig(Type configType, Dictionary<Type, object> configBytes, Dictionary<Type, IConfigFactory> configFactories, Dictionary<Type, IConfig> loadedConfigs)
+        {
+            object category;
             ConfigProcessAttribute configProcessAttribute = configType.GetCustomAttributes(typeof(ConfigProcessAttribute), false)[0] as ConfigProcessAttribute;
-            
-            category = EventSystem.Instance.Invoke<ConfigDeserialize, object>(configProcessAttribute.ConfigType, new ConfigDeserialize() {Type = configType, ConfigBytes = oneConfigBytes});
-            
-            IConfig iConfig = category as IConfig;
-            this.allConfig[configType] = iConfig;
-            World.Instance.AddSingleton(category as ASingleton);
+
+            if (configProcessAttribute.ConfigType == ConfigType.Code)
+            {
+                if (!configFactories.TryGetValue(configType, out IConfigFactory factory))
+                {
+                    throw new Exception($"config factory not found: {configType.FullName}");
+                }
+
+                category = factory.Create();
+            }
+            else
+            {
+                if (!configBytes.TryGetValue(configType, out object oneConfigBytes))
+                {
+                    throw new Exception($"config bytes not found: {configType.FullName}");
+                }
+
+                category = EventSystem.Instance.Invoke<ConfigDeserialize, object>(configProcessAttribute.ConfigType, new ConfigDeserialize
+                {
+                    Type = configType,
+                    ConfigBytes = oneConfigBytes,
+                });
+            }
+
+            if (category == null)
+            {
+                throw new Exception($"config create failed: {configType.FullName}");
+            }
+
+            if (category.GetType() != configType)
+            {
+                throw new Exception($"config type mismatch: expect={configType.FullName} actual={category.GetType().FullName}");
+            }
+
+            if (category is not ASingleton singleton)
+            {
+                throw new Exception($"config singleton invalid: {configType.FullName}");
+            }
+
+            if (category is not IConfig iConfig)
+            {
+                throw new Exception($"config interface invalid: {configType.FullName}");
+            }
+
+            loadedConfigs.Add(configType, iConfig);
+            return singleton;
         }
     }
 }

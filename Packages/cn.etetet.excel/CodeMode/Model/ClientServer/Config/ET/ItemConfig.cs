@@ -69,7 +69,7 @@ namespace ET
         public const int __ID__ = 1663635188;
         public override int GetTypeId() => __ID__;
 
-        public  void ResolveRef(Tables tables)
+        public  void ResolveRef()
         {
             EndRef();
         }

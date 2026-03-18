@@ -11,21 +11,17 @@ using Luban;
 
 namespace ET
 {
-public partial class QuestObjectiveConfigCategory
+public sealed class QuestObjectiveConfigCategoryFactory : IConfigFactory
 {
-    public QuestObjectiveConfigCategory()
+    public System.Type ConfigType => typeof(QuestObjectiveConfigCategory);
+
+    public ASingleton Create()
     {
-        _dataList = new System.Collections.Generic.List<ET.QuestObjectiveConfig>()
+        return new QuestObjectiveConfigCategory(new System.Collections.Generic.List<ET.QuestObjectiveConfig>()
         {
             new ET.QuestObjectiveConfig(1, @"击杀3只野猪", @"击杀3只野猪", ET.QuestObjectiveType.KillMonster, 3, new ET.QuestObjectiveParams_KillMonster(1003)),
             new ET.QuestObjectiveConfig(2, @"击杀1头熊", @"击杀1头熊", ET.QuestObjectiveType.KillMonster, 1, new ET.QuestObjectiveParams_KillMonster(1004))
-        };
-        _dataMap = new System.Collections.Generic.Dictionary<int, ET.QuestObjectiveConfig>(_dataList.Count);
-        foreach (var _v in _dataList)
-        {
-            _dataMap.Add(_v.Id, _v);
-        }
-        PostInit();
+        });
     }
 }
 }

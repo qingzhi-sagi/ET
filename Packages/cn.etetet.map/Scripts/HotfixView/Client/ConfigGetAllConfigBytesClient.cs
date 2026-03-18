@@ -10,17 +10,17 @@ namespace ET.Client
     {
         public override async ETTask<Dictionary<Type, object>> Handle(ConfigLoader.ConfigGetAllConfigBytes args)
         {
-            var output   = new Dictionary<Type, object>();
+            var output = new Dictionary<Type, object>();
             var allTypes = CodeTypes.Instance.GetTypes(typeof(ConfigProcessAttribute));
 
 #if UNITY_EDITOR
             var globalConfig = Resources.Load<GlobalConfig>("GlobalConfig");
-            var codeMode     = globalConfig.CodeMode.ToString();
+            var codeMode = globalConfig.CodeMode.ToString();
             foreach (Type configType in allTypes)
             {
                 string configFilePath = null;
                 ConfigProcessAttribute configProcessAttribute = configType.GetCustomAttributes(typeof(ConfigProcessAttribute), false)[0] as ConfigProcessAttribute;
-                switch(configProcessAttribute.ConfigType)
+                switch (configProcessAttribute.ConfigType)
                 {
                     case ConfigType.Luban:
                         configFilePath = Path.Combine($"Packages/cn.etetet.excel/Bundles/Luban/Config/{codeMode}/Binary/{configType.Name}.bytes");
@@ -29,11 +29,11 @@ namespace ET.Client
                     case ConfigType.Json:
                         if (StartConfigHelper.StartConfigs.Contains(configType.Name))
                         {
-                            configFilePath = Path.Combine($"Packages/cn.etetet.startconfig/Bundles/Luban/{Options.Instance.StartConfig}/Server/Json/{configType.Name}.json");
+                            configFilePath = Path.Combine($"Packages/cn.etetet.startconfig/Bundles/Luban/{Options.Instance.StartConfig}/Server/Json/{configType.Name}.txt");
                         }
                         else
                         {
-                            configFilePath = Path.Combine($"Packages/cn.etetet.excel/Bundles/Luban/Config/{codeMode}/Json/{configType.Name}.json");
+                            configFilePath = Path.Combine($"Packages/cn.etetet.excel/Bundles/Luban/Config/{codeMode}/Json/{configType.Name}.txt");
                         }
                         output[configType] = File.ReadAllText(configFilePath);
                         break;
@@ -41,14 +41,20 @@ namespace ET.Client
                         configFilePath = Path.Combine($"Packages/cn.etetet.map/Bundles/Json/{configType.Name}.txt");
                         output[configType] = File.ReadAllText(configFilePath);
                         break;
+                    case ConfigType.Code:
+                        break;
                 }
-                
             }
             await ETTask.CompletedTask;
 #else
             foreach (Type configType in allTypes)
             {
                 ConfigProcessAttribute configProcessAttribute = configType.GetCustomAttributes(typeof(ConfigProcessAttribute), false)[0] as ConfigProcessAttribute;
+                if (configProcessAttribute.ConfigType == ConfigType.Code)
+                {
+                    continue;
+                }
+
                 TextAsset v = await ResourcesComponent.Instance.LoadAssetAsync<TextAsset>(configType.Name);
                 switch (configProcessAttribute.ConfigType)
                 {

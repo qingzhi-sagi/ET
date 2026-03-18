@@ -11,11 +11,13 @@ using Luban;
 
 namespace ET
 {
-public partial class NumericTypeConfigCategory
+public sealed class NumericTypeConfigCategoryFactory : IConfigFactory
 {
-    public NumericTypeConfigCategory()
+    public System.Type ConfigType => typeof(NumericTypeConfigCategory);
+
+    public ASingleton Create()
     {
-        _dataList = new System.Collections.Generic.List<ET.NumericTypeConfig>()
+        return new NumericTypeConfigCategory(new System.Collections.Generic.List<ET.NumericTypeConfig>()
         {
             new ET.NumericTypeConfig(1000, @"Speed", 0, new System.Collections.Generic.Dictionary<int, long> { }),
             new ET.NumericTypeConfig(1001, @"HP", 1002, new System.Collections.Generic.Dictionary<int, long> { }),
@@ -33,13 +35,7 @@ public partial class NumericTypeConfigCategory
             new ET.NumericTypeConfig(1013, @"Stun", 0, new System.Collections.Generic.Dictionary<int, long> { }),
             new ET.NumericTypeConfig(1014, @"Yaw", 0, new System.Collections.Generic.Dictionary<int, long> { }),
             new ET.NumericTypeConfig(1015, @"Phase", 0, new System.Collections.Generic.Dictionary<int, long> { })
-        };
-        _dataMap = new System.Collections.Generic.Dictionary<int, ET.NumericTypeConfig>(_dataList.Count);
-        foreach (var _v in _dataList)
-        {
-            _dataMap.Add(_v.Id, _v);
-        }
-        PostInit();
+        });
     }
 }
 }

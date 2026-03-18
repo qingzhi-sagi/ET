@@ -22,7 +22,7 @@ namespace ET
 
 
 
-        public virtual void ResolveRef(Tables tables)
+        public virtual void ResolveRef()
         {
             EndRef();
         }

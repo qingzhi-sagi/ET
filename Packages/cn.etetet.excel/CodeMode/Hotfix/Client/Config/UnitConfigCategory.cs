@@ -11,24 +11,20 @@ using Luban;
 
 namespace ET
 {
-public partial class UnitConfigCategory
+public sealed class UnitConfigCategoryFactory : IConfigFactory
 {
-    public UnitConfigCategory()
+    public System.Type ConfigType => typeof(UnitConfigCategory);
+
+    public ASingleton Create()
     {
-        _dataList = new System.Collections.Generic.List<ET.UnitConfig>()
+        return new UnitConfigCategory(new System.Collections.Generic.List<ET.UnitConfig>()
         {
             new ET.UnitConfig(1001, ET.UnitType.Player, @"Mage", @"Portrait", ET.EClassType.Mage),
             new ET.UnitConfig(1002, ET.UnitType.Virtual, @"TrainingDummy", @"UI-ChatIcon-Battlenet", ET.EClassType.DeathKnight),
             new ET.UnitConfig(1003, ET.UnitType.Monster, @"Boar", @"UI-ChatIcon-Battlenet", ET.EClassType.Druid),
             new ET.UnitConfig(1004, ET.UnitType.Monster, @"Bear", @"UI-ChatIcon-Battlenet", ET.EClassType.Priest),
             new ET.UnitConfig(1005, ET.UnitType.NPC, @"Mage", @"UI-ChatIcon-Battlenet", ET.EClassType.Warrior)
-        };
-        _dataMap = new System.Collections.Generic.Dictionary<int, ET.UnitConfig>(_dataList.Count);
-        foreach (var _v in _dataList)
-        {
-            _dataMap.Add(_v.Id, _v);
-        }
-        PostInit();
+        });
     }
 }
 }

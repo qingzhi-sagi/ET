@@ -11,23 +11,19 @@ using Luban;
 
 namespace ET
 {
-public partial class MapConfigCategory
+public sealed class MapConfigCategoryFactory : IConfigFactory
 {
-    public MapConfigCategory()
+    public System.Type ConfigType => typeof(MapConfigCategory);
+
+    public ASingleton Create()
     {
-        _dataList = new System.Collections.Generic.List<ET.MapConfig>()
+        return new MapConfigCategory(new System.Collections.Generic.List<ET.MapConfig>()
         {
             new ET.MapConfig(1, @"GateMap", @"GateMap", ET.CopyType.Normal, 1, 1, 1, @""),
             new ET.MapConfig(2, @"Map1", @"Map1", ET.CopyType.Normal, 1, 10, 8, @"Map1"),
             new ET.MapConfig(3, @"Map2", @"Map2", ET.CopyType.Line, 1000, 5, 4, @"Map1"),
             new ET.MapConfig(4, @"Lordaeron", @"Lordaeron", ET.CopyType.Copy, 1000, 1, 1, @"Lordaeron")
-        };
-        _dataMap = new System.Collections.Generic.Dictionary<int, ET.MapConfig>(_dataList.Count);
-        foreach (var _v in _dataList)
-        {
-            _dataMap.Add(_v.Id, _v);
-        }
-        PostInit();
+        });
     }
 }
 }

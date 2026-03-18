@@ -11,24 +11,20 @@ using Luban;
 
 namespace ET
 {
-public partial class UnitConfigCategory
+public sealed class UnitConfigCategoryFactory : IConfigFactory
 {
-    public UnitConfigCategory()
+    public System.Type ConfigType => typeof(UnitConfigCategory);
+
+    public ASingleton Create()
     {
-        _dataList = new System.Collections.Generic.List<ET.UnitConfig>()
+        return new UnitConfigCategory(new System.Collections.Generic.List<ET.UnitConfig>()
         {
             new ET.UnitConfig(1001, ET.UnitType.Player, @"Mage", @"Portrait", ET.EClassType.Mage, new System.Collections.Generic.Dictionary<int, long> { [ 10001 ] = 6000, [ 10051 ] = 500, [ 10061 ] = 10000, [ 10071 ] = 1780, [ 10081 ] = 68000, [ 1009 ] = 0, [ 10021 ] = 1000, [ 1001 ] = 1000, [ 10041 ] = 1000, [ 1003 ] = 1000, [ 1015 ] = 1, [ 1010 ] = 0, [ 1011 ] = 25200, [ 1012 ] = 10000, [ 1014 ] = 0 }),
             new ET.UnitConfig(1002, ET.UnitType.Virtual, @"TrainingDummy", @"UI-ChatIcon-Battlenet", ET.EClassType.DeathKnight, new System.Collections.Generic.Dictionary<int, long> { [ 10001 ] = 0, [ 10051 ] = 500, [ 10061 ] = 0, [ 10071 ] = 500, [ 10081 ] = 30000, [ 1009 ] = 300001, [ 10021 ] = 100, [ 1001 ] = 100, [ 10041 ] = 100, [ 1003 ] = 100, [ 1015 ] = 1 }),
             new ET.UnitConfig(1003, ET.UnitType.Monster, @"Boar", @"UI-ChatIcon-Battlenet", ET.EClassType.Druid, new System.Collections.Generic.Dictionary<int, long> { [ 10001 ] = 0, [ 10051 ] = 500, [ 10061 ] = 0, [ 10071 ] = 500, [ 10081 ] = 30000, [ 1009 ] = 300001, [ 10021 ] = 100, [ 1001 ] = 100, [ 10041 ] = 100, [ 1003 ] = 100, [ 1015 ] = 1 }),
             new ET.UnitConfig(1004, ET.UnitType.Monster, @"Bear", @"UI-ChatIcon-Battlenet", ET.EClassType.Priest, new System.Collections.Generic.Dictionary<int, long> { [ 10001 ] = 2000, [ 10051 ] = 500, [ 10061 ] = 10000, [ 10071 ] = 500, [ 10081 ] = 30000, [ 1009 ] = 300001, [ 10021 ] = 100, [ 1001 ] = 100, [ 10041 ] = 100, [ 1003 ] = 100, [ 1015 ] = 1 }),
             new ET.UnitConfig(1005, ET.UnitType.NPC, @"Mage", @"UI-ChatIcon-Battlenet", ET.EClassType.Warrior, new System.Collections.Generic.Dictionary<int, long> { [ 10001 ] = 2000, [ 10051 ] = 500, [ 10061 ] = 10000, [ 10071 ] = 500, [ 10081 ] = 30000, [ 10021 ] = 100, [ 1001 ] = 100, [ 10041 ] = 100, [ 1003 ] = 100, [ 1015 ] = 1 })
-        };
-        _dataMap = new System.Collections.Generic.Dictionary<int, ET.UnitConfig>(_dataList.Count);
-        foreach (var _v in _dataList)
-        {
-            _dataMap.Add(_v.Id, _v);
-        }
-        PostInit();
+        });
     }
 }
 }

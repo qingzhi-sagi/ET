@@ -11,11 +11,13 @@ using Luban;
 
 namespace ET
 {
-public partial class TextConfigCategory
+public sealed class TextConfigCategoryFactory : IConfigFactory
 {
-    public TextConfigCategory()
+    public System.Type ConfigType => typeof(TextConfigCategory);
+
+    public ASingleton Create()
     {
-        _dataList = new System.Collections.Generic.List<ET.TextConfig>()
+        return new TextConfigCategory(new System.Collections.Generic.List<ET.TextConfig>()
         {
             new ET.TextConfig(38001, @"Quest_NotAvailable", @"任务无效", @""),
             new ET.TextConfig(38002, @"Quest_AlreadyAccepted", @"任务已接", @""),
@@ -31,13 +33,7 @@ public partial class TextConfigCategory
             new ET.TextConfig(37004, @"SpellCast_MPNotEnought", @"魔法值不足！", @""),
             new ET.TextConfig(37005, @"SpellCast_HPNotEnought", @"生命值不足！", @""),
             new ET.TextConfig(37006, @"SpellCast_TargetNotInFrontOfCaster", @"目标不在前方！", @"")
-        };
-        _dataMap = new System.Collections.Generic.Dictionary<int, ET.TextConfig>(_dataList.Count);
-        foreach (var _v in _dataList)
-        {
-            _dataMap.Add(_v.Id, _v);
-        }
-        PostInit();
+        });
     }
 }
 }

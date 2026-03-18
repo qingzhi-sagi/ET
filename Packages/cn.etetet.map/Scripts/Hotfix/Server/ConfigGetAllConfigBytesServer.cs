@@ -12,12 +12,12 @@ namespace ET.Server
         {
             var output = new Dictionary<Type, object>();
             var configTypes = CodeTypes.Instance.GetTypes(typeof(ConfigProcessAttribute));
-            
+
             foreach (Type configType in configTypes)
             {
                 string configFilePath = null;
                 ConfigProcessAttribute configProcessAttribute = configType.GetCustomAttributes(typeof(ConfigProcessAttribute), false)[0] as ConfigProcessAttribute;
-                switch(configProcessAttribute.ConfigType)
+                switch (configProcessAttribute.ConfigType)
                 {
                     case ConfigType.Luban:
                         configFilePath = Path.Combine($"Packages/cn.etetet.excel/Bundles/Luban/Config/Server/Binary/{configType.Name}.bytes");
@@ -26,17 +26,19 @@ namespace ET.Server
                     case ConfigType.Json:
                         if (StartConfigHelper.StartConfigs.Contains(configType.Name))
                         {
-                            configFilePath = Path.Combine($"Packages/cn.etetet.startconfig/Bundles/Luban/{Options.Instance.StartConfig}/Server/Json/{configType.Name}.json");
+                            configFilePath = Path.Combine($"Packages/cn.etetet.startconfig/Bundles/Luban/{Options.Instance.StartConfig}/Server/Json/{configType.Name}.txt");
                         }
                         else
                         {
-                            configFilePath = Path.Combine($"Packages/cn.etetet.excel/Bundles/Luban/Config/Server/Json/{configType.Name}.json");
+                            configFilePath = Path.Combine($"Packages/cn.etetet.excel/Bundles/Luban/Config/Server/Json/{configType.Name}.txt");
                         }
                         output[configType] = File.ReadAllText(configFilePath);
                         break;
                     case ConfigType.Bson:
                         configFilePath = Path.Combine($"Packages/cn.etetet.map/Bundles/Json/{configType.Name}.txt");
                         output[configType] = File.ReadAllText(configFilePath);
+                        break;
+                    case ConfigType.Code:
                         break;
                 }
             }

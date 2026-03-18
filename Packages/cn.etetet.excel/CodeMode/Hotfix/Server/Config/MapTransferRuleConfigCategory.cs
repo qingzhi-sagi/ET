@@ -11,22 +11,18 @@ using Luban;
 
 namespace ET
 {
-public partial class MapTransferRuleConfigCategory
+public sealed class MapTransferRuleConfigCategoryFactory : IConfigFactory
 {
-    public MapTransferRuleConfigCategory()
+    public System.Type ConfigType => typeof(MapTransferRuleConfigCategory);
+
+    public ASingleton Create()
     {
-        _dataList = new System.Collections.Generic.List<ET.MapTransferRuleConfig>()
+        return new MapTransferRuleConfigCategory(new System.Collections.Generic.List<ET.MapTransferRuleConfig>()
         {
             new ET.MapTransferRuleConfig(1, @"Map2", new float[] { }),
             new ET.MapTransferRuleConfig(2, @"Map1", new float[] { }),
             new ET.MapTransferRuleConfig(3, @"Lordaeron", new float[] { })
-        };
-        _dataMap = new System.Collections.Generic.Dictionary<int, ET.MapTransferRuleConfig>(_dataList.Count);
-        foreach (var _v in _dataList)
-        {
-            _dataMap.Add(_v.Id, _v);
-        }
-        PostInit();
+        });
     }
 }
 }

@@ -12,26 +12,40 @@ using Luban;
 
 namespace ET
 {
-public partial class NumericTypeConfigCategory
+[ConfigProcess(ConfigType.Code)]
+public partial class NumericTypeConfigCategory : Singleton<NumericTypeConfigCategory>, IConfig
 {
     private readonly System.Collections.Generic.Dictionary<int, ET.NumericTypeConfig> _dataMap;
     private readonly System.Collections.Generic.List<ET.NumericTypeConfig> _dataList;
 
+    public NumericTypeConfigCategory(System.Collections.Generic.List<ET.NumericTypeConfig> dataList)
+    {
+        _dataList = dataList;
+        _dataMap = new System.Collections.Generic.Dictionary<int, ET.NumericTypeConfig>(_dataList.Count);
+        foreach (var _v in _dataList)
+        {
+            _dataMap.Add(_v.Id, _v);
+        }
+        EndInit();
+    }
+
+    public System.Collections.Generic.Dictionary<int, ET.NumericTypeConfig> GetAll() => _dataMap;
     public System.Collections.Generic.IReadOnlyDictionary<int, ET.NumericTypeConfig> DataMap => _dataMap;
     public System.Collections.Generic.IReadOnlyList<ET.NumericTypeConfig> DataList => _dataList;
     public ET.NumericTypeConfig GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
     public ET.NumericTypeConfig Get(int key) => _dataMap[key];
     public ET.NumericTypeConfig this[int key] => _dataMap[key];
 
-    public void ResolveRef(Tables tables)
+    public void ResolveRef()
     {
         foreach (var _v in _dataList)
         {
-            _v.ResolveRef(tables);
+            _v.ResolveRef();
         }
+        EndRef();
     }
 
-    partial void PostInit();
+    partial void EndRef();
 }
 }
 
