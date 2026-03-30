@@ -23,6 +23,7 @@ namespace ET
     /// Actor消息分发组件
     /// </summary>
     [CodeProcess]
+    [AllowInstance]
     public class BTDispatcher: Singleton<BTDispatcher>, ISingletonAwake
     {
         private readonly Dictionary<Type, IBTHandler> btHandlers = new();

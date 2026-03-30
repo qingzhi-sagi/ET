@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace ET
 {
+    [AllowInstance]
     public class OpcodeType: Singleton<OpcodeType>, ISingletonAwake
     {
         // 初始化后不变，所以主线程，网络线程都可以读

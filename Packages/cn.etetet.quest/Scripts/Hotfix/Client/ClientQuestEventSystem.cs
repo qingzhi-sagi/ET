@@ -110,7 +110,7 @@ namespace ET.Client
             // TODO: 根据NPC ID查询可接取的任务
             // 这里需要遍历任务配置表，找到AcceptNPC为该npcId的任务
             /*
-            var availableQuests = QuestConfigCategory.Instance.GetAll()
+            var availableQuests = scene.Fiber().GetSingleton<QuestConfigCategory>().GetAll()
                 .Where(config => config.Value.AcceptNPC == npcId)
                 .Where(config => ClientQuestHelper.CanAcceptQuest(scene, config.Key))
                 .ToList();

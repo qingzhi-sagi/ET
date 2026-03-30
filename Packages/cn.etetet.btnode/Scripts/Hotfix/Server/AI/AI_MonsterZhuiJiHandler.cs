@@ -1,4 +1,4 @@
-﻿using Unity.Mathematics;
+using Unity.Mathematics;
 
 namespace ET.Server
 {
@@ -41,7 +41,7 @@ namespace ET.Server
                 unit.GetComponent<TargetComponent>().Unit = target;
                 // 选择技能，移动到技能攻击范围
                 int spellId = 100100;
-                SpellConfig spellConfig = SpellConfigCategory.Instance.Get(spellId);
+                SpellConfig spellConfig = unit.Fiber().GetSingleton<SpellConfigCategory>().Get(spellId);
                 float distance = math.distance(unit.Position, target.Position);
                 float targetRadius = target.NumericComponent.GetAsFloat(NumericType.Radius);
                 float d1 = distance - targetRadius - unitRadius;

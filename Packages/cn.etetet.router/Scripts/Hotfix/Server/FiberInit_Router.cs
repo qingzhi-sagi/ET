@@ -16,7 +16,7 @@ namespace ET.Server
             root.AddComponent<ProcessInnerSender>();
             root.AddComponent<MessageSender>();
             
-            int outerPort = AddressSingleton.Instance.GetSceneOuterPort(root.Name.GetSceneConfigName());
+            int outerPort = AddressSingleton.Instance.GetSceneOuterPort(root.Fiber(), root.Name.GetSceneConfigName());
             string innerIP = AddressSingleton.Instance.InnerIP;
             IPEndPoint outerIPOutPort = new Address(AddressSingleton.Instance.OuterIP, outerPort);
             

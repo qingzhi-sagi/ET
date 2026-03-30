@@ -18,7 +18,7 @@ namespace ET.Server
 
         public static QuestObjectiveConfig GetConfig(this QuestObjective self)
         {
-            QuestObjectiveConfig questObjectiveConfig = QuestObjectiveConfigCategory.Instance.Get((int)self.Id);
+            QuestObjectiveConfig questObjectiveConfig = self.Fiber().GetSingleton<QuestObjectiveConfigCategory>().Get((int)self.Id);
             return questObjectiveConfig;
         }
 

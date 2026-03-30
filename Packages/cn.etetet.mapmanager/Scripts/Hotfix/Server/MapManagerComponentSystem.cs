@@ -71,7 +71,7 @@ namespace ET.Server
 
         public static async ETTask<MapCopy> GetCopy(this MapInfo self, long id = 0)
         {
-            MapConfig mapConfig = MapConfigCategory.Instance.GetByName(self.MapName);
+            MapConfig mapConfig = self.Fiber().GetSingleton<MapConfigCategory>().GetByName(self.MapName);
             string mapName = self.MapName;
             MapCopy mapCopy = null;
             if (id != 0)
@@ -153,7 +153,7 @@ namespace ET.Server
 
         private static MapInfo AddMap(this MapManagerComponent self, string mapName)
         {
-            MapConfig mapConfig = MapConfigCategory.Instance.GetByName(mapName);
+            MapConfig mapConfig = self.Fiber().GetSingleton<MapConfigCategory>().GetByName(mapName);
             MapInfo mapInfo = self.AddChild<MapInfo, string>(mapName);
             if (mapConfig.CopyType == CopyType.Line)
             {

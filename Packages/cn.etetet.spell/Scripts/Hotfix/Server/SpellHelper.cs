@@ -7,7 +7,7 @@ namespace ET.Server
     {
         public static int Cast(Unit unit, int spellConfigId, Buff parent = null)
         {
-            SpellConfig spellConfig = SpellConfigCategory.Instance.Get(spellConfigId);
+            SpellConfig spellConfig = unit.Fiber().GetSingleton<SpellConfigCategory>().Get(spellConfigId);
 
             SpellComponent spellComponent = unit.GetComponent<SpellComponent>();
             
@@ -47,7 +47,7 @@ namespace ET.Server
         /// <returns></returns>
         public static int Cast(Unit unit, int spellConfigId, Unit target, Buff parent = null)
         {
-            SpellConfig spellConfig = SpellConfigCategory.Instance.Get(spellConfigId);
+            SpellConfig spellConfig = unit.Fiber().GetSingleton<SpellConfigCategory>().Get(spellConfigId);
 
             SpellComponent spellComponent = unit.GetComponent<SpellComponent>();
             

@@ -33,7 +33,7 @@ namespace ET.Client
                 return false;
             }
 
-            self.m_UnitConfig = UnitConfigCategory.Instance.Get(self.Unit.ConfigId);
+            self.m_UnitConfig = self.Fiber().GetSingleton<UnitConfigCategory>().Get(self.Unit.ConfigId);
             return true;
         }
 

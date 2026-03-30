@@ -23,7 +23,7 @@ namespace ET.Server
             if (unit.UnitType != UnitType.Player)
             {
                 // 地图配置数据覆盖UnitConfig中的数据
-                MapUnitConfig mapUnitConfig = MapUnitConfigCategory.Instance.Get((int)id);
+                MapUnitConfig mapUnitConfig = scene.Fiber().GetSingleton<MapUnitConfigCategory>().Get((int)id);
                 if (mapUnitConfig != null)
                 {
                     foreach ((int k, long v) in mapUnitConfig.KV)

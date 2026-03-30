@@ -24,6 +24,10 @@ namespace ET
         
         public static Fiber Fiber(this Entity entity)
         {
+            if (entity == null || entity.IScene == null)
+            {
+                Log.Debug($"111111");
+            }
             return entity.IScene.Fiber;
         }
     }

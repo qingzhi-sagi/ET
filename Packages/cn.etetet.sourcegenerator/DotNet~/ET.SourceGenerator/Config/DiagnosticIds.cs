@@ -83,5 +83,7 @@
         public const string DisableGetComponentAnalyzerRuleId = "ET0037";
         
         public const string EntitySystemLocationAnalyzerRuleId = "ET0038";
+
+        public const string DisableSingletonInstanceAccessAnalyzerRuleId = "ET0039";
     }
 }

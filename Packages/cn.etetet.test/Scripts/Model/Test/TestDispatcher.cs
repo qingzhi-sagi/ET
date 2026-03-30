@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace ET.Test
 {
+    [AllowInstance]
     public class TestDispatcher: Singleton<TestDispatcher>, ISingletonAwake
     {
         private SortedDictionary<string, ITestHandler> dispatcher = new(); 

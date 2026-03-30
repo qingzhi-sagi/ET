@@ -4,6 +4,7 @@ using System;
 
 namespace ET
 {
+    [AllowInstance]
     public class CodeTypes: Singleton<CodeTypes>, ISingletonAwake<Assembly[]>
     {
         private readonly Dictionary<string, Type> allTypes = new();

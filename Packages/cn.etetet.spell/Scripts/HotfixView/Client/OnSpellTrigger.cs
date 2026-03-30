@@ -8,7 +8,7 @@ namespace ET.Client
         protected override async ETTask Run(Scene scene, OnSpellTrigger args)
         {
             int spellConfigId = args.SpellConfigId;
-            SpellConfig spellConfig = SpellConfigCategory.Instance.Get(spellConfigId);
+            SpellConfig spellConfig = scene.Fiber().GetSingleton<SpellConfigCategory>().Get(spellConfigId);
             
             C2M_SpellCast c2MSpellCast = C2M_SpellCast.Create();
             c2MSpellCast.SpellConfigId = spellConfigId;

@@ -7,6 +7,7 @@ using DotRecast.Detour.Io;
 
 namespace ET
 {
+    [AllowInstance]
     public class NavmeshComponent: Singleton<NavmeshComponent>, ISingletonAwake
     {
         public struct RecastFileLoader

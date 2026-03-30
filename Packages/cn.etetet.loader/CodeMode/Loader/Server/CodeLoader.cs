@@ -6,6 +6,7 @@ using System.Runtime.Loader;
 
 namespace ET
 {
+    [AllowInstance]
     public class CodeLoader: Singleton<CodeLoader>, ISingletonAwake
     {
         private AssemblyLoadContext assemblyLoadContext;

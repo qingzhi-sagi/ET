@@ -5,6 +5,7 @@ using System.Linq;
 namespace ET
 {
     [CodeProcess]
+    [AllowInstance]
     public class EventSystem: Singleton<EventSystem>, ISingletonAwake
     {
         private class EventInfo

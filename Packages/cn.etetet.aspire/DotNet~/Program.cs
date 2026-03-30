@@ -42,11 +42,12 @@ namespace ET.Server
                 int replicasNum = startProcessConfig.Num > 1 ? startProcessConfig.Num : 1;
 
                 List<StartSceneConfig> processScenes = StartSceneConfigCategory.Instance.GetByProcess(processId);
+                StartMachineConfig startMachineConfig = StartMachineConfigCategory.Instance.Get(startProcessConfig.MachineId);
 
-                string innerIP = startProcessConfig.InnerIP;
+                string innerIP = startMachineConfig.InnerIP;
                 string innerPortStr = startProcessConfig.Port.ToString();
 
-                string outerIP = startProcessConfig.OuterIP;
+                string outerIP = startMachineConfig.OuterIP;
                 
                 string outerPortStr = "0";
                 // 进程只有一个Scene，需要设置Scene OuterPort

@@ -147,6 +147,24 @@ namespace ET
                     Description);
     }
 
+    public static class DisableSingletonInstanceAccessAnalyzerRule
+    {
+        private const string Title = "禁止直接访问 Singleton.Instance";
+
+        private const string MessageFormat = "类型: {0} 未标记 [AllowInstance]，禁止直接访问 .Instance，请改用 Fiber.GetSingleton<{0}>()";
+
+        private const string Description = "在 Model/ModelView/Hotfix/HotfixView 程序集中，未标记 [AllowInstance] 的 Singleton 禁止直接访问 .Instance.";
+
+        public static readonly DiagnosticDescriptor Rule =
+                new DiagnosticDescriptor(DiagnosticIds.DisableSingletonInstanceAccessAnalyzerRuleId,
+                    Title,
+                    MessageFormat,
+                    DiagnosticCategories.All,
+                    DiagnosticSeverity.Error,
+                    true,
+                    Description);
+    }
+
     public static class StaticFieldDeclarationAnalyzerRule
     {
         private const string Title = "Static字段声明需要标记标签";

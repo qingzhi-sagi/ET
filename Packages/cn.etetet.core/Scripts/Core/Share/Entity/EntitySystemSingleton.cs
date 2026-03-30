@@ -4,6 +4,7 @@ using System.Collections.Generic;
 namespace ET
 {
     [CodeProcess]
+    [AllowInstance]
     public class EntitySystemSingleton: Singleton<EntitySystemSingleton>, ISingletonAwake
     {
         public TypeSystems TypeSystems { get; private set; }

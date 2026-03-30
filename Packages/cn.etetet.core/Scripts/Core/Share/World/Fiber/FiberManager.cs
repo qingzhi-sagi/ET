@@ -29,6 +29,7 @@ namespace ET
         }
     }
     
+    [AllowInstance]
     public class FiberManager: Singleton<FiberManager>, ISingletonAwake
     {
         private int idGenerator;

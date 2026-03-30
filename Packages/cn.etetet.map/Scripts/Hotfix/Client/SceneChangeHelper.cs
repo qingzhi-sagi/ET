@@ -9,7 +9,7 @@
             CurrentScenesComponent currentScenesComponent = root.GetComponent<CurrentScenesComponent>();
             EntityRef<CurrentScenesComponent> currentScenesComponentRef = currentScenesComponent;
             
-            bool changeScene = TransferSceneHelper.IsChangeScene(currentScenesComponent.Scene?.Name, sceneName);
+            bool changeScene = TransferSceneHelper.IsChangeScene(root.Fiber(), currentScenesComponent.Scene?.Name, sceneName);
             if (changeScene)
             {
                 // 先卸载当前场景

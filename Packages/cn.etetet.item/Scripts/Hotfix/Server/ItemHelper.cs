@@ -32,7 +32,7 @@ namespace ET.Server
                 throw new Exception("invalid item count");
             }
 
-            ItemConfigCategory itemConfigCategory = ItemConfigCategory.Instance;
+            ItemConfigCategory itemConfigCategory = self.Fiber().GetSingleton<ItemConfigCategory>();
             ItemConfig itemConfig = itemConfigCategory.Get(configId);
             if (itemConfig == null)
             {
@@ -344,7 +344,7 @@ namespace ET.Server
             }
 
             // 情况3：ConfigId不同，交换位置
-            ItemConfigCategory itemConfigCategory = ItemConfigCategory.Instance;
+            ItemConfigCategory itemConfigCategory = self.Fiber().GetSingleton<ItemConfigCategory>();
             ItemConfig itemConfig = itemConfigCategory.Get(fromItem.ConfigId);
             if (itemConfig == null)
             {
@@ -420,7 +420,7 @@ namespace ET.Server
         {
             Log.Debug($"sort bag: reason={ItemChangeReason.SortBag}");
 
-            ItemConfigCategory itemConfigCategory = ItemConfigCategory.Instance;
+            ItemConfigCategory itemConfigCategory = self.Fiber().GetSingleton<ItemConfigCategory>();
             Unit unit = self.GetParent<Unit>();
 
             // 第一步：收集所有物品信息，按ConfigId分组统计数量
@@ -512,3 +512,4 @@ namespace ET.Server
         }
     }
 }
+

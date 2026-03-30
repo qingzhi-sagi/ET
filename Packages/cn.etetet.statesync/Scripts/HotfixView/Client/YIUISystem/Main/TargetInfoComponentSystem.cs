@@ -54,7 +54,7 @@ namespace ET.Client
             self.m_Unit = target;
             if (self.Unit == null) return;
 
-            self.m_UnitConfig = UnitConfigCategory.Instance.Get(self.Unit.ConfigId);
+            self.m_UnitConfig = self.Fiber().GetSingleton<UnitConfigCategory>().Get(self.Unit.ConfigId);
             self.UIUnitInfo.RefreshUnitInfo(self.Unit);
         }
 

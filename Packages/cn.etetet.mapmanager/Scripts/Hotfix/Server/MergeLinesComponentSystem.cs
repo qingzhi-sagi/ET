@@ -130,7 +130,7 @@ namespace ET.Server
         {
             MapInfo mapInfo = self.GetParent<MapInfo>();
 
-            MapConfig mapConfig = MapConfigCategory.Instance.GetByName(mapInfo.MapName);
+            MapConfig mapConfig = self.Fiber().GetSingleton<MapConfigCategory>().GetByName(mapInfo.MapName);
             
             foreach ((long line1, Entity e1) in mapInfo.Children)
             {

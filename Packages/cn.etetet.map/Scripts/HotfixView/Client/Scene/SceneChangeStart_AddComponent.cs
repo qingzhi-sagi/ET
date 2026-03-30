@@ -24,13 +24,14 @@ namespace ET.Client
                 {
                     await root.YIUIRoot().OpenPanelAsync<LoadingPanelComponent>();
 
+                    root = rootRef;
                     currentScenesComponent = currentScenesComponentRef;
                     currentScenesComponent.Progress = 0;
 
                     currentScene = currentSceneRef;
                     ResourcesLoaderComponent resourcesLoaderComponent = currentScene.GetComponent<ResourcesLoaderComponent>();
 
-                    MapConfig mapConfig = MapConfigCategory.Instance.GetByName(currentScene.Name.GetSceneConfigName());
+                    MapConfig mapConfig = root.Fiber().GetSingleton<MapConfigCategory>().GetByName(currentScene.Name.GetSceneConfigName());
                     // 加载场景资源
                     await resourcesLoaderComponent.LoadSceneAsync(mapConfig.MapResName, LoadSceneMode.Single,
                         (progress) =>

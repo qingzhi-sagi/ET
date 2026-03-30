@@ -102,5 +102,7 @@ namespace ET
         public const string DisableGetComponentAttribute = "ET.DisableGetComponentAttribute";
 
         public const string EnableGetComponentAttribute = "ET.EnableGetComponentAttribute";
+
+        public const string AllowInstanceAttribute = "ET.AllowInstanceAttribute";
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 namespace ET.Server
 {
     [CodeProcess]
+    [AllowInstance]
     public class ConsoleDispatcher: Singleton<ConsoleDispatcher>, ISingletonAwake
     {
         private readonly Dictionary<string, IConsoleHandler> handlers = new();

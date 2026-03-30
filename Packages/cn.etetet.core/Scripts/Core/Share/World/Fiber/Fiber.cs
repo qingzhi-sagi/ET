@@ -84,6 +84,8 @@ namespace ET
 
         private readonly Dictionary<int, Fiber> children = new();
         
+        private Dictionary<Type, object> singletons;
+        
         internal Fiber(int id, long rootId, int zone, int sceneType, string name, SchedulerType schedulerType, Fiber parent)
         {
             this.Id = id;
@@ -348,6 +350,64 @@ namespace ET
             }
             return null;
         }
+        
+        public void AddSingleton<T>() where T: ASingleton, ISingletonAwake, new()
+        {
+            T singleton = new();
+            singleton.Awake();
+            AddSingleton(singleton);
+        }
+        
+        public void AddSingleton<T, A>(A a) where T: ASingleton, ISingletonAwake<A>, new()
+        {
+            T singleton = new();
+            singleton.Awake(a);
+            AddSingleton(singleton);
+        }
+        
+        public void AddSingleton<T, A, B>(A a, B b) where T: ASingleton, ISingletonAwake<A, B>, new()
+        {
+            T singleton = new();
+            singleton.Awake(a, b);
+            AddSingleton(singleton);
+        }
+        
+        public void AddSingleton<T, A, B, C>(A a, B b, C c) where T: ASingleton, ISingletonAwake<A, B>, new()
+        {
+            T singleton = new();
+            singleton.Awake(a, b);
+            AddSingleton(singleton);
+        }
+
+        public void AddSingleton<T>(T singleton) where T : ASingleton
+        {
+            this.singletons ??= new Dictionary<Type, object>();
+            this.singletons[typeof(T)] = singleton;
+        }
+
+        public T GetSingleton<T>() where T : Singleton<T>
+        {
+            if (this.singletons == null)
+            {
+                return Singleton<T>.Instance;
+            }
+            
+            if (!this.singletons.TryGetValue(typeof(T), out object singleton))
+            {
+                return Singleton<T>.Instance;
+            }
+            
+            return (T)singleton;
+        }
+
+        public bool RemoveSingleton<T>() where T : class
+        {
+            if (this.singletons == null)
+            {
+                return false;
+            }
+            return this.singletons.Remove(typeof(T));
+        }
 
         /// <summary>
         /// 禁止逻辑调用此方法，应该由Fiber.Remove去移除一个fiber
@@ -369,6 +429,7 @@ namespace ET
             }
             
             FiberManager.Instance?.RemoveMonitor(this.Id);
+            this.singletons?.Clear();
             
             foreach (int child in this.children.Keys.ToArray())
             {

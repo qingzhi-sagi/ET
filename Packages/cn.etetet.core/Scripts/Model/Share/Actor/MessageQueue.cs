@@ -9,6 +9,7 @@ namespace ET
         public MessageObject MessageObject;
     }
     
+    [AllowInstance]
     public class MessageQueue: Singleton<MessageQueue>, ISingletonAwake
     {
         private readonly ConcurrentDictionary<int, ConcurrentQueue<MessageInfo>> messages = new();

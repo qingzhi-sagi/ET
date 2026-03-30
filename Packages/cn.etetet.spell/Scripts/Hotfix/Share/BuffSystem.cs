@@ -1,4 +1,4 @@
-﻿namespace ET
+namespace ET
 {
     [EntitySystemOf(typeof(Buff))]
     public static partial class BuffSystem
@@ -40,12 +40,12 @@
         public static BuffConfig GetConfig(this Buff self)
         {
             
-            return BuffConfigCategory.Instance.Get(self.ConfigId);
+            return self.Fiber().GetSingleton<BuffConfigCategory>().Get(self.ConfigId);
         }
 
         public static SpellConfig GetSpellConfig(this Buff self)
         {
-            return SpellConfigCategory.Instance.Get(self.ConfigId / 10 * 10 - 100000);
+            return self.Fiber().GetSingleton<SpellConfigCategory>().Get(self.ConfigId / 10 * 10 - 100000);
         }
 
         public static int GetSpellConfigId(this Buff self)

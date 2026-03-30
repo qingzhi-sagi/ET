@@ -275,7 +275,8 @@ namespace ET.Server
             BuffRemoveTypeComponent buffRemoveTypeComponent = buff.GetComponent<BuffRemoveTypeComponent>() ?? buff.AddComponent<BuffRemoveTypeComponent>();
             buffRemoveTypeComponent.BuffRemoveType = removeType;
             
-            EffectServerBuffRemove effect = buff.GetConfig().GetEffect<EffectServerBuffRemove>();
+            BuffConfig buffConfig = buff.GetConfig();
+            EffectServerBuffRemove effect = buffConfig.GetEffect<EffectServerBuffRemove>();
             if (effect != null)
             {
                 using BTEnv env = BTEnv.Create(buff.Scene(), unit.Id);
@@ -287,7 +288,7 @@ namespace ET.Server
 
             buffComponent.RemoveBuff(buff);
             
-            MapMessageHelper.NoticeClient(unit, m2CBuffRemove, buff.GetConfig().NoticeType);
+            MapMessageHelper.NoticeClient(unit, m2CBuffRemove, buffConfig.NoticeType);
         }
         
         public static void RemoveBuff(Unit unit, long id, BuffFlags removeType)

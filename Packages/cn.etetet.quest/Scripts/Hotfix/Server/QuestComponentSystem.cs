@@ -32,7 +32,7 @@ namespace ET.Server
         // 判断前置任务是否完成
         public static bool IsPreQuestFinished(this QuestComponent self, long questId)
         {
-            QuestConfig questConfig = QuestConfigCategory.Instance.Get((int)questId);
+            QuestConfig questConfig = self.Fiber().GetSingleton<QuestConfigCategory>().Get((int)questId);
             foreach (int preQuestId in questConfig.PreQuestIds)
             {
                 if (!self.FinishedQuests.Contains(preQuestId))

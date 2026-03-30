@@ -2,32 +2,48 @@ using System.Net;
 
 namespace ET.Server
 {
+    [EnableClass]
+    public partial class StartProcessConfigCategory
+    {
+    }
+
+    [EnableClass]
+    public partial class StartMachineConfigCategory
+    {
+    }
+
     public partial class StartProcessConfig
     {
-        public string InnerIP => this.StartMachineConfig.InnerIP;
-
-        public string OuterIP => this.StartMachineConfig.OuterIP;
-
-        public IPEndPoint InnerIPInnerPort
-        {
-            get
-            {
-                return NetworkHelper.ToIPEndPoint($"{this.InnerIP}:{this.Port}");
-            }
-        }
-
-        public Address Address
-        {
-            get
-            {
-                return new Address(this.InnerIP, this.Port);
-            }
-        }
-
-        public StartMachineConfig StartMachineConfig => StartMachineConfigCategory.Instance.Get(this.MachineId);
-
         public override void EndInit()
         {
+        }
+    }
+
+    public static class StartProcessConfigExtensions
+    {
+        public static StartMachineConfig GetStartMachineConfig(this StartProcessConfig self, Fiber fiber)
+        {
+            return fiber.GetSingleton<StartMachineConfigCategory>().Get(self.MachineId);
+        }
+
+        public static string GetInnerIP(this StartProcessConfig self, Fiber fiber)
+        {
+            return self.GetStartMachineConfig(fiber).InnerIP;
+        }
+
+        public static string GetOuterIP(this StartProcessConfig self, Fiber fiber)
+        {
+            return self.GetStartMachineConfig(fiber).OuterIP;
+        }
+
+        public static IPEndPoint GetInnerIPInnerPort(this StartProcessConfig self, Fiber fiber)
+        {
+            return NetworkHelper.ToIPEndPoint($"{self.GetInnerIP(fiber)}:{self.Port}");
+        }
+
+        public static Address GetAddress(this StartProcessConfig self, Fiber fiber)
+        {
+            return new Address(self.GetInnerIP(fiber), self.Port);
         }
     }
 }

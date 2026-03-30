@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace ET
 {
+    [AllowInstance]
     public class CodeLoader: Singleton<CodeLoader>, ISingletonAwake
     {
         private Dictionary<string, TextAsset> dlls;

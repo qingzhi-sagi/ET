@@ -93,7 +93,7 @@ namespace ET.Server
             }
 
             // 获取任务配置
-            var questConfig = QuestConfigCategory.Instance.Get((int)questId);
+            var questConfig = unit.Fiber().GetSingleton<QuestConfigCategory>().Get((int)questId);
 
             // 检查等级要求
             // TODO: 获取玩家等级进行检查

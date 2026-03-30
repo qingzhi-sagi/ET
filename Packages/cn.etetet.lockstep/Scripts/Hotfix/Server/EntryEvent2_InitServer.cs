@@ -12,11 +12,11 @@ namespace ET.Server
             EntityRef<Scene> rootRef = root;
             
             int process = Options.Instance.Process;
-            StartProcessConfig startProcessConfig = StartProcessConfigCategory.Instance.Get(process);
+            StartProcessConfig startProcessConfig = fiber.GetSingleton<StartProcessConfigCategory>().Get(process);
 
             // 先看环境变量是否有地址传过来，如果没有，则使用StartProcessConfig的地址跟端口
             AddressSingleton addressSingleton = World.Instance.AddSingleton<AddressSingleton>();
-            addressSingleton.SetInnerIPInnerPortOuterIP(startProcessConfig);
+            addressSingleton.SetInnerIPInnerPortOuterIP(fiber, startProcessConfig);
             
             // 因为bind的地址有可能是0.0.0.0:0,NetInner创建完成会设置具体的地址到AddressSingleton中
             await fiber.CreateFiberWithId(ConstFiberId.NetInnerFiberId, SchedulerType.ThreadPool, ConstFiberId.NetInnerFiberId, 0, SceneType.NetInner, $"NetInner@{process}@{Options.Instance.ReplicaIndex}");
@@ -24,7 +24,7 @@ namespace ET.Server
             if (startProcessConfig != null)
             {
                 // 根据配置创建纤程
-                var scenes = StartSceneConfigCategory.Instance.GetByProcess(process);
+                var scenes = fiber.GetSingleton<StartSceneConfigCategory>().GetByProcess(process);
 
                 foreach (StartSceneConfig startConfig in scenes)
                 {

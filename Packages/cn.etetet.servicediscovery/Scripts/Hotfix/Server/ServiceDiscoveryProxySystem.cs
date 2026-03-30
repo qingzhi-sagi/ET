@@ -37,9 +37,11 @@ namespace ET.Server
         [EntitySystem]
         private static void Awake(this ServiceDiscoveryProxy self)
         {
-            self.MessageSender = self.Root().GetComponent<MessageSender>();
-            StartSceneConfig startSceneConfig = StartSceneConfigCategory.Instance.GetBySceneName(nameof(SceneType.ServiceDiscovery));
-            self.ServiceDiscoveryActorId = new ActorId(startSceneConfig.Address, new FiberInstanceId(ConstFiberId.ServiceDiscoveryFiberId));
+            Scene root = self.Root();
+            Fiber fiber = root.Fiber();
+            self.MessageSender = root.GetComponent<MessageSender>();
+            StartSceneConfig startSceneConfig = fiber.GetSingleton<StartSceneConfigCategory>().GetBySceneName(nameof(SceneType.ServiceDiscovery));
+            self.ServiceDiscoveryActorId = new ActorId(startSceneConfig.GetAddress(fiber), new FiberInstanceId(ConstFiberId.ServiceDiscoveryFiberId));
         }
 
         [Invoke(TimerInvokeType.ServiceDiscoveryProxyHeartbeat)]

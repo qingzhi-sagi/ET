@@ -4,6 +4,7 @@ using System.Diagnostics;
 
 namespace ET
 {
+    [AllowInstance]
     public class LogMsg: Singleton<LogMsg>, ISingletonAwake
     {
         private readonly HashSet<Type> ignore = new();

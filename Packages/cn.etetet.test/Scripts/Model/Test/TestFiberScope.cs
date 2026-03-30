@@ -13,7 +13,7 @@ namespace ET.Test
         {
             TestFiberScope scope = new(fiber);
             
-            StartSceneConfig startConfig = StartSceneConfigCategory.Instance.GetBySceneName(nameof(SceneType.ServiceDiscovery));
+            StartSceneConfig startConfig = fiber.GetSingleton<StartSceneConfigCategory>().GetBySceneName(nameof(SceneType.ServiceDiscovery));
             scope.serviceDiscoveryFiberId = await fiber.CreateFiberWithId(
                 ServiceDiscovery.ServiceDiscoveryFiberId, SchedulerType.Parent, startConfig.Id, startConfig.Zone,
                 SceneType.ServiceDiscovery, startConfig.Name);

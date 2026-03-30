@@ -5,7 +5,7 @@
     {
         protected override async ETTask Run(Scene root, M2C_Error message)
         {
-            TextHelper.OutputText(message.Error, message.Values.ToArray());
+            TextHelper.OutputText(root.Fiber(), message.Error, message.Values.ToArray());
             await ETTask.CompletedTask;
         }
     }

@@ -108,4 +108,8 @@
 	<HintPath>..\..\..\..\Assets\Plugins\Sirenix\Assemblies\Sirenix.OdinInspector.Attributes.dll</HintPath>
 	</Reference>
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Remove="..\..\..\cn.etetet.excel\Scripts\Model\Share\Config\**" />
+	</ItemGroup>
 </Project>

@@ -14,7 +14,7 @@ namespace ET.Server
             root.AddComponent<ProcessInnerSender>();
             root.AddComponent<MessageSender>();
             
-            int outerPort = AddressSingleton.Instance.GetSceneOuterPort(root.Name.GetSceneConfigName());
+            int outerPort = AddressSingleton.Instance.GetSceneOuterPort(root.Fiber(), root.Name.GetSceneConfigName());
             
             string httpHost = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "+" : "*";
             root.AddComponent<HttpComponent, string>($"http://{httpHost}:{outerPort}/");

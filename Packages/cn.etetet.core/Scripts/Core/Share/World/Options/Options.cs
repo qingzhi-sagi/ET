@@ -2,6 +2,7 @@ using CommandLine;
 
 namespace ET
 {
+    [AllowInstance]
     public class Options: Singleton<Options>, ISingletonAwake
     {
         [Option("SceneName", Required = false, Default = "", HelpText = "define in SceneType class")]

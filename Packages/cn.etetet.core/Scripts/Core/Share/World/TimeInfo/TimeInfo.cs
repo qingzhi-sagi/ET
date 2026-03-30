@@ -2,6 +2,7 @@ using System;
 
 namespace ET
 {
+    [AllowInstance]
     public class TimeInfo: Singleton<TimeInfo>, ISingletonAwake
     {
         private int timeZone;

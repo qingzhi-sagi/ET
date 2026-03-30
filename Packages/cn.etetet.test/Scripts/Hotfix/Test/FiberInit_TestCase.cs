@@ -17,13 +17,13 @@ namespace ET.Test
             
             int process = Options.Instance.Process;
             
-            StartProcessConfig startProcessConfig = StartProcessConfigCategory.Instance.Get(process);
+            StartProcessConfig startProcessConfig = fiber.GetSingleton<StartProcessConfigCategory>().Get(process);
             // 先看环境变量是否有地址传过来，如果没有，则使用StartProcessConfig的地址跟端口
             AddressSingleton addressSingleton = World.Instance.AddSingleton<AddressSingleton>();
-            addressSingleton.SetInnerIPInnerPortOuterIP(startProcessConfig);
+            addressSingleton.SetInnerIPInnerPortOuterIP(fiber, startProcessConfig);
 
             // 根据配置创建纤程
-            var scenes = StartSceneConfigCategory.Instance.GetByProcess(process);
+            var scenes = fiber.GetSingleton<StartSceneConfigCategory>().GetByProcess(process);
             
             foreach (StartSceneConfig startConfig in scenes)
             {

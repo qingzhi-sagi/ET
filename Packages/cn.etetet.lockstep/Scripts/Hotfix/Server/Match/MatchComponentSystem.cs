@@ -22,7 +22,8 @@ namespace ET.Server
             }
             
             // 申请一个房间
-            List<StartSceneConfig> maps = StartSceneConfigCategory.Instance.GetBySceneType(self.Zone(), SceneType.Map);
+            Fiber fiber = self.Fiber();
+            List<StartSceneConfig> maps = fiber.GetSingleton<StartSceneConfigCategory>().GetBySceneType(self.Zone(), SceneType.Map);
             StartSceneConfig startSceneConfig = RandomGenerator.RandomArray(maps);
             Match2Map_GetRoom match2MapGetRoom = Match2Map_GetRoom.Create();
             foreach (long id in self.waitMatchPlayers)
@@ -35,7 +36,7 @@ namespace ET.Server
             Scene root = self.Root();
             EntityRef<Scene> rootRef = root;
             Map2Match_GetRoom map2MatchGetRoom = await root.GetComponent<MessageSender>().Call(
-                startSceneConfig.ActorId, match2MapGetRoom) as Map2Match_GetRoom;
+                startSceneConfig.GetActorId(fiber), match2MapGetRoom) as Map2Match_GetRoom;
 
             Match2G_NotifyMatchSuccess match2GNotifyMatchSuccess = Match2G_NotifyMatchSuccess.Create();
             match2GNotifyMatchSuccess.ActorId = map2MatchGetRoom.ActorId;

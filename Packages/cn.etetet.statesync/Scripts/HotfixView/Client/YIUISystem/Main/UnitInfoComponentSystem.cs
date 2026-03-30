@@ -56,7 +56,7 @@ namespace ET.Client
 
         private static void UpdateInfo(this UnitInfoComponent self)
         {
-            self.m_UnitConfig = UnitConfigCategory.Instance.Get(self.Unit.ConfigId);
+            self.m_UnitConfig = self.Fiber().GetSingleton<UnitConfigCategory>().Get(self.Unit.ConfigId);
             self.u_DataName.SetValue(self.m_UnitConfig.Name);
             self.u_DataIcon.SetValue(self.m_UnitConfig.HeadIcon);
             var classType = self.m_UnitConfig.ClassType;

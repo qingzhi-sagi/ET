@@ -6,7 +6,7 @@
         protected override async ETTask Run(Scene scene, NumbericChange a)
         {
             Unit unit = a.Unit;
-            NumericTypeConfig numericTypeConfig = NumericTypeConfigCategory.Instance.Get(a.NumericType);
+            NumericTypeConfig numericTypeConfig = unit.Fiber().GetSingleton<NumericTypeConfigCategory>().Get(a.NumericType);
             M2C_NumericChange m2CNumericChange = M2C_NumericChange.Create();
             m2CNumericChange.NumericType = a.NumericType;
             m2CNumericChange.UnitId = unit.Id;

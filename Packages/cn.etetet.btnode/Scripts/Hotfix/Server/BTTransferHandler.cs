@@ -1,4 +1,4 @@
-﻿namespace ET.Server
+namespace ET.Server
 {
     public class BTTransferHandler: ABTHandler<BTTransfer>
     {
@@ -7,7 +7,7 @@
             Unit target = env.GetEntity<Unit>(node.Target);
             
             // 获取传送规则
-            MapTransferRuleConfig mapTransferRuleConfig = MapTransferRuleConfigCategory.Instance.Get(node.TransferId);
+            MapTransferRuleConfig mapTransferRuleConfig = target.Fiber().GetSingleton<MapTransferRuleConfigCategory>().Get(node.TransferId);
 
             TransferHelper.TransferLock(target, mapTransferRuleConfig.ToMap, 0, true).Coroutine();
             return 0;

@@ -82,7 +82,7 @@ namespace ET
             }
 
             // 如果有最大值，需要限制最大值
-            NumericTypeConfig numericTypeConfig = NumericTypeConfigCategory.Instance.Get(numericType);
+            NumericTypeConfig numericTypeConfig = self.Fiber().GetSingleton<NumericTypeConfigCategory>().Get(numericType);
             if (numericTypeConfig.MaxNumericType > 0)
             {
                 long max = self.GetByKey(numericTypeConfig.MaxNumericType);

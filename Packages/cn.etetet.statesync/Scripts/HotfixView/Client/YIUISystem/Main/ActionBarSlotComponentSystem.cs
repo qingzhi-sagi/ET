@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using YIUIFramework;
 using System.Collections.Generic;
@@ -75,7 +75,7 @@ namespace ET.Client
                 return;
             }
 
-            self.m_SpellConfig = SpellConfigCategory.Instance.Get(skillId);
+            self.m_SpellConfig = self.Fiber().GetSingleton<SpellConfigCategory>().Get(skillId);
             if (self.m_SpellConfig == null)
             {
                 self.ResetInfo();

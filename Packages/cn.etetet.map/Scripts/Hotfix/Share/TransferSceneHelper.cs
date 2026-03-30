@@ -2,14 +2,14 @@ namespace ET
 {
     public static class TransferSceneHelper
     {
-        public static bool IsChangeScene(string preSceneName, string nextSceneName)
+        public static bool IsChangeScene(Fiber fiber, string preSceneName, string nextSceneName)
         {
             MapConfig preMapConfig = null;
             if (preSceneName != null)
             {
-                preMapConfig = MapConfigCategory.Instance.GetByName(preSceneName.GetSceneConfigName());
+                preMapConfig = fiber.GetSingleton<MapConfigCategory>().GetByName(preSceneName.GetSceneConfigName());
             }
-            MapConfig mapConfig = MapConfigCategory.Instance.GetByName(nextSceneName.GetSceneConfigName());
+            MapConfig mapConfig = fiber.GetSingleton<MapConfigCategory>().GetByName(nextSceneName.GetSceneConfigName());
             return preMapConfig?.MapResName != mapConfig?.MapResName;
         }
     }

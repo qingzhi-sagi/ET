@@ -35,7 +35,7 @@ namespace ET.Server
             root = rootRef;
             unitComponent = unitComponentRef;
 
-            foreach (var kv in MapUnitConfigCategory.Instance.GetAll())
+            foreach (var kv in root.Fiber().GetSingleton<MapUnitConfigCategory>().GetAll())
             {
                 if (mapName != kv.Value.MapName)
                 {

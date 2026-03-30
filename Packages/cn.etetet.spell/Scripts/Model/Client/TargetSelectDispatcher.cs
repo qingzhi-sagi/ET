@@ -38,6 +38,7 @@ namespace ET.Client
     /// 分发组件
     /// </summary>
     [CodeProcess]
+    [AllowInstance]
     public class TargetSelectDispatcher: Singleton<TargetSelectDispatcher>, ISingletonAwake
     {
         private readonly Dictionary<Type, ITargetSelectHandler> handlers = new();

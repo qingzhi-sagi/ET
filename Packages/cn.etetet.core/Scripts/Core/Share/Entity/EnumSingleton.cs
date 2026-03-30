@@ -3,6 +3,7 @@ using System.Reflection;
 
 namespace ET
 {
+    [AllowInstance]
     public class EnumSingleton<T>: Singleton<T> where T: EnumSingleton<T>
     {
         protected readonly DoubleMap<int, string> enumValueString = new();

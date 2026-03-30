@@ -10,6 +10,7 @@ namespace ET
         public object ConfigBytes;
     }
 
+    [AllowInstance]
     public class ConfigLoader : Singleton<ConfigLoader>, ISingletonAwake
     {
         public struct ConfigGetAllConfigBytes

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 namespace ET.Server
 {
     [CodeProcess]
+    [AllowInstance]
     public class HttpDispatcher: Singleton<HttpDispatcher>, ISingletonAwake
     {
         private readonly Dictionary<string, Dictionary<int, IHttpHandler>> dispatcher = new();

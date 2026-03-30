@@ -7,7 +7,7 @@ namespace ET.Server
     {
         public static async ETTask DropDB(this DBManagerComponent self, int zone)
         {
-            StartZoneConfig startZoneConfig = StartZoneConfigCategory.Instance.Get(zone);
+            StartZoneConfig startZoneConfig = self.Root().Fiber().GetSingleton<StartZoneConfigCategory>().Get(zone);
             if (startZoneConfig.DBName == "")
             {
                 return;
@@ -25,7 +25,7 @@ namespace ET.Server
                 return dbComponent;
             }
 
-            StartZoneConfig startZoneConfig = StartZoneConfigCategory.Instance.Get(zone);
+            StartZoneConfig startZoneConfig = self.Root().Fiber().GetSingleton<StartZoneConfigCategory>().Get(zone);
             if (startZoneConfig.DBConnection == "")
             {
                 throw new Exception($"zone: {zone} not found mongo connect string");

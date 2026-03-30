@@ -45,6 +45,7 @@ namespace ET
         }
     }
 
+    [AllowInstance]
     public class IdGenerater: Singleton<IdGenerater>, ISingletonAwake
     {
         public const uint Mask32bit = 0xffffffff;

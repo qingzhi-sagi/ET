@@ -20,15 +20,16 @@ namespace ET.Server
 			// 有可接任务则发送任务信息
 			QuestComponent questComponent = unit.GetComponent<QuestComponent>();
 			
-			HashSet<int> allIds = QuestConfigCategory.Instance.GetAllQuestsById(target.Id);
+            QuestConfigCategory questConfigCategory = unit.Fiber().GetSingleton<QuestConfigCategory>();
+            HashSet<int> allIds = questConfigCategory.GetAllQuestsById(target.Id);
 
 			if (allIds == null)
 			{
 				return;
 			}
 			
-			HashSet<int> questIds = QuestConfigCategory.Instance.GetAcceptQuestsById(target.Id);
-			HashSet<int> submitQuestIds = QuestConfigCategory.Instance.GetSubmitQuestsById(target.Id);
+            HashSet<int> questIds = questConfigCategory.GetAcceptQuestsById(target.Id);
+            HashSet<int> submitQuestIds = questConfigCategory.GetSubmitQuestsById(target.Id);
 			
 			foreach (int questId in allIds)
 			{

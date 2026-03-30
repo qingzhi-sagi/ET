@@ -2,6 +2,7 @@ using System;
 
 namespace ET.Server
 {
+    [AllowInstance]
     public class AddressSingleton: Singleton<AddressSingleton>, ISingletonAwake
     {
         public string InnerIP { get; set; }

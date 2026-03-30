@@ -108,6 +108,27 @@ namespace ET
             singleton.Register();
         }
 
+        public bool TryGetSingleton<T>(out T singleton) where T : class
+        {
+            lock (this)
+            {
+                if (this.singletons.TryGetValue(typeof(T), out ASingleton value))
+                {
+                    singleton = value as T;
+                    return singleton != null;
+                }
+            }
+
+            singleton = null;
+            return false;
+        }
+
+        public T GetSingleton<T>() where T : class
+        {
+            this.TryGetSingleton<T>(out T singleton);
+            return singleton;
+        }
+
         public void ReplaceSingleton(ASingleton singleton)
         {
             ASingleton oldSingleton = null;

@@ -37,7 +37,7 @@ namespace ET.Server
             EntityRef<Unit> unitRef = unit;
             long unitId = unit.Id;
             
-            bool changeScene = TransferSceneHelper.IsChangeScene(unit.Scene().Name, mapName);
+            bool changeScene = TransferSceneHelper.IsChangeScene(unit.Fiber(), unit.Scene().Name, mapName);
             
             
             //1. 申请地图副本
