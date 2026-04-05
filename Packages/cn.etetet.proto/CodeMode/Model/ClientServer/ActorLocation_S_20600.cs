@@ -119,6 +119,8 @@ namespace ET
         public int Error { get; set; }
         [MemoryPackOrder(2)]
         public string Message { get; set; }
+        [MemoryPackOrder(3)]
+        public long LockToken { get; set; }
         public override void Dispose()
         {
             if (!this.IsFromPool)
@@ -129,6 +131,7 @@ namespace ET
             this.RpcId = default;
             this.Error = default;
             this.Message = default;
+            this.LockToken = default;
 
             ObjectPool.Recycle(this);
         }
@@ -154,6 +157,8 @@ namespace ET
         public ActorId OldActorId { get; set; }
         [MemoryPackOrder(4)]
         public ActorId NewActorId { get; set; }
+        [MemoryPackOrder(5)]
+        public long LockToken { get; set; }
         public override void Dispose()
         {
             if (!this.IsFromPool)
@@ -166,6 +171,7 @@ namespace ET
             this.Key = default;
             this.OldActorId = default;
             this.NewActorId = default;
+            this.LockToken = default;
 
             ObjectPool.Recycle(this);
         }
@@ -217,6 +223,8 @@ namespace ET
         public int Type { get; set; }
         [MemoryPackOrder(2)]
         public long Key { get; set; }
+        [MemoryPackOrder(3)]
+        public ActorId ExpectedActorId { get; set; }
         public override void Dispose()
         {
             if (!this.IsFromPool)
@@ -227,6 +235,7 @@ namespace ET
             this.RpcId = default;
             this.Type = default;
             this.Key = default;
+            this.ExpectedActorId = default;
 
             ObjectPool.Recycle(this);
         }

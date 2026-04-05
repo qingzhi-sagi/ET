@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using MongoDB.Bson;
+using System;
 
 namespace ET.Server
 {
@@ -123,6 +121,14 @@ namespace ET.Server
                     {
                         throw new RpcException(ErrorCode.ERR_ActorLocationSenderTimeout2, $"{message}");
                     }
+
+                    if (actorId == default)
+                    {
+                        self = selfRef;
+                        self?.Remove(entityId);
+                        throw new RpcException(ErrorCode.ERR_NotFoundActor, $"{message}");
+                    }
+
                     messageLocationSender.ActorId = actorId;
                 }
                 
@@ -226,16 +232,25 @@ namespace ET.Server
             Type requestType = iRequest.GetType();
             while (true)
             {
+                self = selfRef;
+                root = rootRef;
+                messageLocationSender = messageLocationSenderRef;
+                if (self == null || messageLocationSender == null)
+                {
+                    throw new RpcException(ErrorCode.ERR_ActorLocationSenderTimeout2, $"{iRequest}");
+                }
+
                 if (messageLocationSender.ActorId == default)
                 {
-                    root = rootRef;
-                    self = selfRef;
-                    messageLocationSender.ActorId = await root.GetComponent<LocationProxyComponent>().Get((int)self.Id, messageLocationSender.Id);
+                    long messageLocationSenderEntityId = messageLocationSender.Id;
+                    ActorId locationActorId = await root.GetComponent<LocationProxyComponent>().Get((int)self.Id, messageLocationSenderEntityId);
                     messageLocationSender = messageLocationSenderRef;
                     if (messageLocationSender == null)
                     {
                         throw new RpcException(ErrorCode.ERR_ActorLocationSenderTimeout2, $"{iRequest}");
                     }
+
+                    messageLocationSender.ActorId = locationActorId;
                 }
 
                 if (messageLocationSender.ActorId == default)
@@ -244,7 +259,8 @@ namespace ET.Server
                 }
 
                 root = rootRef;
-                IResponse response = await root.GetComponent<MessageSender>().Call(messageLocationSender.ActorId, iRequest, needException: false);
+                ActorId targetActorId = messageLocationSender.ActorId;
+                IResponse response = await root.GetComponent<MessageSender>().Call(targetActorId, iRequest, needException: false);
                 messageLocationSender = messageLocationSenderRef;
                 if (messageLocationSender == null)
                 {

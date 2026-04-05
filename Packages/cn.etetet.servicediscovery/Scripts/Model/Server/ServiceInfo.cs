@@ -30,4 +30,21 @@ namespace ET.Server
         /// </summary>
         public long LastHeartbeatTime;
     }
+
+    [ComponentOf(typeof(ServiceDiscovery))]
+    public class ServiceDiscoveryMaster : Entity, IAwake
+    {
+        public string SceneName;
+
+        public ActorId ActorId;
+
+        public long Epoch;
+
+        public long LeaseExpireTime;
+
+        public long LeaseTimeout;
+
+        public long UpdateTime;
+    }
+
 }

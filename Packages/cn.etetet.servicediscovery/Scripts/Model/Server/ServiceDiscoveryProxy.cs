@@ -1,26 +1,22 @@
+using System;
 using System.Collections.Generic;
 
 namespace ET.Server
 {
     /// <summary>
-    /// 服务发现代理组件，挂载在Fiber上提供服务注册和心跳功能
-    /// 通过此组件可以将Fiber注册到服务发现服务器上
+    /// 服务发现代理组件，挂载在Fiber上提供服务注册/订阅/查询入口
+    /// 通过此组件统一转发到进程级 ServiceDiscoveryAgent
     /// </summary>
     [ComponentOf(typeof(Scene))]
-    public class ServiceDiscoveryProxy : Entity, IAwake, IDestroy
+    public partial class ServiceDiscoveryProxy : Entity, IAwake, IDestroy
     {
         // 这里可以指定索引
-        public readonly string[] Indexs = { ServiceMetaKey.SceneType, ServiceMetaKey.Zone };
+        public readonly string[] Indexs = { ServiceMetaKey.SceneType };
         
         /// <summary>
-        /// 服务发现服务器的ActorId
+        /// 进程级 ServiceDiscoveryAgent 的 FiberInstanceId。
         /// </summary>
-        public ActorId ServiceDiscoveryActorId;
-
-        /// <summary>
-        /// 心跳发送间隔（毫秒）
-        /// </summary>
-        public long HeartbeatInterval = 2 * 1000;
+        public FiberInstanceId AgentFiberInstanceId;
 
         /// <summary>
         /// 缓存的服务列表，Key为SceneType，Value为该类型的服务SceneName列表
@@ -29,20 +25,30 @@ namespace ET.Server
         //  索引,key1例如"SceneType",  key2 是值，例如SceneType的值，  HashSet中是ServiceCacheInfo的SceneName
         public Dictionary<string, MultiMapSet<string, string>> ServicesIndexs = new();
 
-        public long HeartbeatTimer;
-        
-        private EntityRef<MessageSender> messageSender;
+        /// <summary>
+        /// 订阅过滤条件缓存（用于本地保留调用参数）。
+        /// </summary>
+        public Dictionary<string, StringKV> SubscribeFilters = new();
 
-        public MessageSender MessageSender
+        private EntityRef<ProcessInnerSender> processInnerSender;
+
+        public string RootName;
+
+        public int ServiceResolveRetryTimes;
+
+        public int ServiceResolveRetryIntervalMs;
+
+        public ProcessInnerSender ProcessInnerSender
         {
             get
             {
-                return this.messageSender;
+                return this.processInnerSender;
             }
             set
             {
-                this.messageSender = value;
+                this.processInnerSender = value;
             }
         }
     }
+
 }

@@ -33,6 +33,7 @@ message ObjectLockResponse // IResponse
 	int32 RpcId = 1;
 	int32 Error = 2;
 	string Message = 3;
+	int64 LockToken = 4;
 }
 
 // ResponseType ObjectUnLockResponse
@@ -43,6 +44,7 @@ message ObjectUnLockRequest // IRequest
 	int64 Key = 3;
 	ActorId OldActorId = 4;
 	ActorId NewActorId = 5;
+	int64 LockToken = 6;
 }
 message ObjectUnLockResponse // IResponse
 {
@@ -57,6 +59,7 @@ message ObjectRemoveRequest // IRequest
 	int32 RpcId = 1;
 	int32 Type = 2;
 	int64 Key = 3;
+	ActorId ExpectedActorId = 4;
 }
 message ObjectRemoveResponse // IResponse
 {

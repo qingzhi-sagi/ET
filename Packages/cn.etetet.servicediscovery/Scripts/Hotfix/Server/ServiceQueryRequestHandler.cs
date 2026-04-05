@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace ET.Server
 {
     [MessageHandler(SceneType.ServiceDiscovery)]
@@ -7,15 +5,8 @@ namespace ET.Server
     {
         protected override async ETTask Run(Scene scene, ServiceQueryRequest request, ServiceQueryResponse response)
         {
-            ServiceDiscovery serviceDiscovery = scene.GetComponent<ServiceDiscovery>();
-            List<ServiceInfo> services = serviceDiscovery.GetServiceInfoByFilter(request.Filter);
-            foreach (ServiceInfo serviceInfo in services)
-            {
-                response.Services.Add(serviceInfo.ToProto());
-            }
-
-            Log.Debug($"Query services: {request} found {response}");
-
+            response.Error = ErrorCode.ERR_ServiceDiscoveryInvalidArgument;
+            response.Message = "direct query on ServiceDiscovery is not supported; use ServiceDiscoveryAgent";
             await ETTask.CompletedTask;
         }
     }

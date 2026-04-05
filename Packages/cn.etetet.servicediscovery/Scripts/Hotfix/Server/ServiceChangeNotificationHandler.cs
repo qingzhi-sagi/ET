@@ -11,6 +11,12 @@ namespace ET.Server
                 proxy.OnServiceChangeNotification(message.ChangeType, message.ServiceInfo);
             }
 
+            ServiceDiscoveryAgent agent = scene.GetComponent<ServiceDiscoveryAgent>();
+            if (agent != null)
+            {
+                agent.OnServiceChangeNotification(message);
+            }
+
             await ETTask.CompletedTask;
         }
     }

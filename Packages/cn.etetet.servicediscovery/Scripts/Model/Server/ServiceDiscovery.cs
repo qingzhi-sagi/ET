@@ -4,47 +4,31 @@ namespace ET.Server
 {
     /// <summary>
     /// 服务发现组件，挂载到Fiber上成为服务发现Fiber
-    /// 管理所有注册的服务信息和订阅者
+    /// 管理所有注册的服务信息，并向Agent广播服务变更
     /// </summary>
     [ComponentOf(typeof(Scene))]
     public class ServiceDiscovery : Entity, IAwake, IDestroy, IUpdate
     {
-        public const int ServiceDiscoveryFiberId = -2;
-        
-        // 这里可以指定索引
-        public readonly string[] Indexs = { ServiceMetaKey.SceneType, ServiceMetaKey.Zone };
-
         /// <summary>
         /// 所有注册的服务信息，Key为服务的唯一标识SceneName
         /// </summary>
         public Dictionary<string, EntityRef<ServiceInfo>> Services = new();
 
-        //  索引,key1例如"SceneType",  key2 是值，例如SceneType的值，  HashSet中是ServiceInfo的SceneName
+        /// <summary>
+        /// 服务索引，key 为索引名，value 为索引值到 SceneName 的映射。
+        /// </summary>
         public Dictionary<string, MultiMapSet<string, string>> ServicesIndexs = new();
-        
 
         /// <summary>
-        /// 订阅者信息，Key为SceneName，value是订阅的过滤条件,可以多个过滤条件
+        /// Agent 路由表（按进程地址路由到ServiceDiscoveryAgent ActorId）。
         /// </summary>
-        public MultiDictionary<string, string, StringKV> Subscribers = new();
+        public Dictionary<Address, ActorId> AgentActorIds = new();
 
         /// <summary>
-        /// 心跳超时时间（毫秒）
+        /// 记录每个 Agent 最近一次注册重放声明拥有的服务名集合。
+        /// 仅用于后续重注册时按“上次已声明拥有的服务”做收敛，避免误删同地址下的其他服务。
         /// </summary>
-#if !UNITY_EDITOR
-        public long HeartbeatTimeout = 30 * 1000;
-#else
-        public long HeartbeatTimeout = 3000 * 1000;
-#endif
+        public Dictionary<Address, HashSet<string>> AgentOwnedSceneNames = new();
 
-        /// <summary>
-        /// 心跳检查间隔（毫秒）
-        /// </summary>
-        public long HeartbeatCheckInterval = 5 * 1000;
-
-        /// <summary>
-        /// 上次心跳检查时间
-        /// </summary>
-        public long LastHeartbeatCheckTime;
     }
 }

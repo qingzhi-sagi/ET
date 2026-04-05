@@ -14,7 +14,8 @@
   "relatedPackages": {},
   "dependencies": {
     "cn.etetet.core": "4.0.0",
-    "cn.etetet.proto": "4.0.0"
+    "cn.etetet.proto": "4.0.0",
+    "cn.etetet.db": "4.0.0"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/@ET-Packages"

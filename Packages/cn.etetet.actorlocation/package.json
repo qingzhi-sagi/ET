@@ -3,7 +3,7 @@
   "displayName": "ET.ActorLocation",
   "version": "2.0.1",
   "unity": "2022.3",
-  "description": "\u5b9e\u73b0\u4e86actor location\u673a\u5236",
+  "description": "实现了actor location机制",
   "author": {
     "name": "tanghai",
     "url": "https://github.com/egametang/ET"
@@ -15,10 +15,12 @@
   "relatedPackages": {},
   "dependencies": {
     "cn.etetet.core": "4.0.0",
+    "cn.etetet.db": "4.0.0",
     "cn.etetet.excel": "4.0.0",
     "cn.etetet.proto": "4.0.0",
     "cn.etetet.netinner": "4.0.0",
-    "cn.etetet.startconfig": "4.0.0"
+    "cn.etetet.startconfig": "4.0.0",
+    "cn.etetet.test": "2.0.0"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/@ET-Packages"

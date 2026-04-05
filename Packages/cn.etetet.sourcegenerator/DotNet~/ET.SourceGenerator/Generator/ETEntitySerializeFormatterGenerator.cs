@@ -135,7 +135,7 @@ namespace ET
         StringBuilder sb = new StringBuilder();
         foreach (var entityName in receiver.entities)
         {
-            sb.AppendLine($$"""        { typeof(global::{{entityName}}), {{entityName.GetLongHashCode()}} },""");
+                sb.AppendLine($$"""        { typeof(global::{{entityName}}), {{SourceGenerator.SourceGenStringHashHelper.GetLongHashCode(entityName)}} },""");
         }
         return sb.ToString();
     }
@@ -145,7 +145,7 @@ namespace ET
         StringBuilder sb = new StringBuilder();
         foreach (var entityName in receiver.entities)
         {
-            sb.AppendLine($$"""                case {{entityName.GetLongHashCode()}}: writer.WritePackable(System.Runtime.CompilerServices.Unsafe.As<global::{{Definition.EntityType}}?, global::{{entityName}}>(ref value)); break;""");
+                sb.AppendLine($$"""                case {{SourceGenerator.SourceGenStringHashHelper.GetLongHashCode(entityName)}}: writer.WritePackable(System.Runtime.CompilerServices.Unsafe.As<global::{{Definition.EntityType}}?, global::{{entityName}}>(ref value)); break;""");
         }
         return sb.ToString();
     }
@@ -156,7 +156,7 @@ namespace ET
         foreach (var entityName in receiver.entities)
         {
             sb.AppendLine($$"""
-            case {{entityName.GetLongHashCode()}}:
+                    case {{SourceGenerator.SourceGenStringHashHelper.GetLongHashCode(entityName)}}:
                     if(value == null)
                     {
                         value = global::{{entityName}}.Fetch<global::{{entityName}}>();

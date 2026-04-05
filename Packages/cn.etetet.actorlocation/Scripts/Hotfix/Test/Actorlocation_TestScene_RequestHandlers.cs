@@ -1,0 +1,93 @@
+using System;
+using ET.Server;
+
+namespace ET.Test
+{
+    [MessageHandler(SceneType.TestEmpty)]
+    public class Actorlocation_TestScene_ObjectAddRequestHandler : MessageHandler<Scene, ObjectAddRequest, ObjectAddResponse>
+    {
+        protected override async ETTask Run(Scene scene, ObjectAddRequest request, ObjectAddResponse response)
+        {
+            LocationManagerComponent locationManagerComponent = scene.GetComponent<LocationManagerComponent>();
+            if (!locationManagerComponent.EnsurePrimary(response))
+            {
+                return;
+            }
+
+            await locationManagerComponent.Get(request.Type).Add(request.Key, request.ActorId);
+        }
+    }
+
+    [MessageHandler(SceneType.TestEmpty)]
+    public class Actorlocation_TestScene_ObjectGetRequestHandler : MessageHandler<Scene, ObjectGetRequest, ObjectGetResponse>
+    {
+        protected override async ETTask Run(Scene scene, ObjectGetRequest request, ObjectGetResponse response)
+        {
+            LocationManagerComponent locationManagerComponent = scene.GetComponent<LocationManagerComponent>();
+            if (!locationManagerComponent.EnsurePrimary(response))
+            {
+                return;
+            }
+
+            response.ActorId = await locationManagerComponent.Get(request.Type).Get(request.Key);
+        }
+    }
+
+    [MessageHandler(SceneType.TestEmpty)]
+    public class Actorlocation_TestScene_ObjectLockRequestHandler : MessageHandler<Scene, ObjectLockRequest, ObjectLockResponse>
+    {
+        protected override async ETTask Run(Scene scene, ObjectLockRequest request, ObjectLockResponse response)
+        {
+            LocationManagerComponent locationManagerComponent = scene.GetComponent<LocationManagerComponent>();
+            if (!locationManagerComponent.EnsurePrimary(response))
+            {
+                return;
+            }
+
+            response.LockToken = await locationManagerComponent
+                    .Get(request.Type)
+                    .Lock(request.Key, request.ActorId, request.Time);
+        }
+    }
+
+    [MessageHandler(SceneType.TestEmpty)]
+    public class Actorlocation_TestScene_ObjectUnLockRequestHandler : MessageHandler<Scene, ObjectUnLockRequest, ObjectUnLockResponse>
+    {
+        protected override async ETTask Run(Scene scene, ObjectUnLockRequest request, ObjectUnLockResponse response)
+        {
+            LocationManagerComponent locationManagerComponent = scene.GetComponent<LocationManagerComponent>();
+            if (!locationManagerComponent.EnsurePrimary(response))
+            {
+                return;
+            }
+
+            await locationManagerComponent.Get(request.Type)
+                    .UnLock(request.Key, request.OldActorId, request.NewActorId, request.LockToken);
+        }
+    }
+
+    [MessageHandler(SceneType.TestEmpty)]
+    public class Actorlocation_TestScene_ObjectRemoveRequestHandler : MessageHandler<Scene, ObjectRemoveRequest, ObjectRemoveResponse>
+    {
+        protected override async ETTask Run(Scene scene, ObjectRemoveRequest request, ObjectRemoveResponse response)
+        {
+            LocationManagerComponent locationManagerComponent = scene.GetComponent<LocationManagerComponent>();
+            if (!locationManagerComponent.EnsurePrimary(response))
+            {
+                return;
+            }
+
+            await locationManagerComponent.Get(request.Type).Remove(request.Key, request.ExpectedActorId);
+        }
+    }
+
+    [MessageHandler(SceneType.TestEmpty)]
+    public class Actorlocation_TestScene_C2M_TestRequestHandler : MessageLocationHandler<Scene, C2M_TestRequest, M2C_TestResponse>
+    {
+        protected override async ETTask Run(Scene scene, C2M_TestRequest request, M2C_TestResponse response)
+        {
+            response.response = $"echo:{request.request}";
+            await ETTask.CompletedTask;
+        }
+    }
+}

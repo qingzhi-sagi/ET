@@ -1,25 +1,40 @@
-using System.Collections.Generic;
-
 namespace ET.Server
 {
-    [ChildOf(typeof(LocationOneType))]
-    public class LockInfo: Entity, IAwake<ActorId, EntityRef<CoroutineLock>>, IDestroy
+    public static class LocationPersistenceConst
     {
-        public ActorId LockActorId;
+        public const string DBName = "Share";
 
-        public EntityRef<CoroutineLock> CoroutineLock;
+        public const string RouteCollection = "LocationInfo";
+    }
+
+    public struct LocationState
+    {
+        public bool Exists;
+        public ActorId ActorId;
+        public long LockToken;
+        public long LockExpireTime;
+    }
+
+    [ChildOf(typeof(LocationOneType))]
+    public class LocationInfo: Entity, IAwake<ActorId>, IDestroy
+    {
+        public ActorId ActorId;
+
+        public long LockToken;
+
+        public long LockExpireTime;
     }
 
     [ChildOf(typeof(LocationManagerComponent))]
     public class LocationOneType: Entity, IAwake
     {
-        public readonly Dictionary<long, ActorId> locations = new();
-
-        public readonly Dictionary<long, EntityRef<LockInfo>> lockInfos = new();
     }
 
     [ComponentOf(typeof(Scene))]
     public class LocationManagerComponent: Entity, IAwake
     {
+        public bool IsPrimaryLocation;
+
+        public string PrimaryLocationSceneName;
     }
 }

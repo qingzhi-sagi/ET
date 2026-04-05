@@ -12,7 +12,6 @@ namespace ET.Server
 		protected override async ETTask Run(Session session, C2R_Login request, R2C_Login response)
 		{
 			EntityRef<Session> sessionRef = session;
-			const int UserZone = 2; // 这里一般会有创角，选择区服，demo就不做这个操作了，直接放在3区
 			// 随机分配一个Gate
 			Scene root = session.Root();
 			EntityRef<Scene> rootRef = root;
@@ -20,7 +19,7 @@ namespace ET.Server
 			
 			ServiceDiscoveryProxy serviceDiscoveryProxy = root.GetComponent<ServiceDiscoveryProxy>();
 
-			List<ServiceInfo> gates = serviceDiscoveryProxy.GetBySceneTypeAndZone(SceneType.Gate, UserZone);
+			List<ServiceInfo> gates = serviceDiscoveryProxy.GetBySceneTypeAndZone(SceneType.Gate, session.Fiber().Zone);
 			ServiceInfo gateServiceInfo = gates[(int)(hash % (ulong)gates.Count)];
 			Log.Debug($"gate address: {gateServiceInfo.SceneName}");
 			

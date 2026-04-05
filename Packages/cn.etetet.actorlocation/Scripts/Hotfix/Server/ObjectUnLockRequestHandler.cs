@@ -7,9 +7,14 @@ namespace ET.Server
     {
         protected override async ETTask Run(Scene scene, ObjectUnLockRequest request, ObjectUnLockResponse response)
         {
-            scene.GetComponent<LocationManagerComponent>().Get(request.Type).UnLock(request.Key, request.OldActorId, request.NewActorId);
+            LocationManagerComponent locationManagerComponent = scene.GetComponent<LocationManagerComponent>();
+            if (!locationManagerComponent.EnsurePrimary(response))
+            {
+                return;
+            }
 
-            await ETTask.CompletedTask;
+            await locationManagerComponent.Get(request.Type)
+                    .UnLock(request.Key, request.OldActorId, request.NewActorId, request.LockToken);
         }
     }
 }

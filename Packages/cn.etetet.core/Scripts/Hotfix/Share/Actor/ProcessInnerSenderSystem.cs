@@ -115,6 +115,17 @@ namespace ET
                 bool needException = true
         )
         {
+            return await self.Call(fiberInstanceId, request, ProcessInnerSender.TIMEOUT_TIME, needException);
+        }
+
+        public static async ETTask<IResponse> Call(
+                this ProcessInnerSender self,
+                FiberInstanceId fiberInstanceId,
+                IRequest request,
+                long timeout,
+                bool needException = true
+        )
+        {
             int rpcId = self.GetRpcId();
             request.RpcId = rpcId;
             
@@ -138,7 +149,7 @@ namespace ET
             async ETTask Timeout()
             {
                 EntityRef<ProcessInnerSender> selfRef = self;
-                await fiber.Root.TimerComponent.WaitAsync(ProcessInnerSender.TIMEOUT_TIME);
+                await fiber.Root.TimerComponent.WaitAsync(timeout);
                 self = selfRef;
                 if (!self.requestCallback.Remove(rpcId, out ProcessInnerMessageSenderStruct action))
                 {

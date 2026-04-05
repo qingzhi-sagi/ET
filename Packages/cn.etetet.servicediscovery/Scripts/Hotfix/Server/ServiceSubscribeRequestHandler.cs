@@ -5,9 +5,8 @@ namespace ET.Server
     {
         protected override async ETTask Run(Scene scene, ServiceSubscribeRequest request, ServiceSubscribeResponse response)
         {
-            ServiceDiscovery serviceDiscovery = scene.GetComponent<ServiceDiscovery>();
-            serviceDiscovery.SubscribeServiceChange(request.SceneName, request.FilterName, request.FilterMetadata);
-
+            response.Error = ErrorCode.ERR_ServiceDiscoveryInvalidArgument;
+            response.Message = "direct subscribe on ServiceDiscovery is not supported; use ServiceDiscoveryAgent";
             await ETTask.CompletedTask;
         }
     }

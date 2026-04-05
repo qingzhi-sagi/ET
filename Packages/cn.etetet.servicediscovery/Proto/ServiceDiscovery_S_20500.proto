@@ -37,6 +37,7 @@ message ServiceHeartbeatRequest // IRequest
 {
 	int32 RpcId = 1;
 	string SceneName = 2;
+	ActorId AgentActorId = 3;
 }
 
 message ServiceHeartbeatResponse // IResponse
@@ -44,6 +45,22 @@ message ServiceHeartbeatResponse // IResponse
 	int32 RpcId = 1;
 	int32 Error = 2;
 	string Message = 3;
+}
+
+// ResponseType ServiceAgentRegisterResponse
+message ServiceAgentRegisterRequest // IRequest
+{
+	int32 RpcId = 1;
+	ActorId AgentActorId = 2;
+	repeated ServiceInfoProto LocalServices = 3;
+}
+
+message ServiceAgentRegisterResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	repeated ServiceInfoProto Services = 4;
 }
 
 // ResponseType ServiceQueryResponse
@@ -68,6 +85,7 @@ message ServiceSubscribeRequest // IRequest
 	string SceneName = 2;
 	string FilterName = 3;
 	StringKV FilterMetadata = 4; // new()
+	ActorId SubscriberActorId = 5;
 }
 
 message ServiceSubscribeResponse // IResponse
@@ -75,6 +93,7 @@ message ServiceSubscribeResponse // IResponse
 	int32 RpcId = 1;
 	int32 Error = 2;
 	string Message = 3;
+	repeated ServiceInfoProto Services = 4;
 }
 
 // ResponseType ServiceUnsubscribeResponse
@@ -94,8 +113,16 @@ message ServiceUnsubscribeResponse // IResponse
 // 服务变更通知消息
 message ServiceChangeNotification // IMessage
 {
-	int32 ChangeType = 1; // 1=添加, 2=删除
+	int32 ChangeType = 1; // 1=添加, 2=删除, 3=主机切换
+	int64 Epoch = 2;
+	ActorId MasterActorId = 3;
 	repeated ServiceInfoProto ServiceInfo = 4;
+}
+
+// Proxy销毁时单向通知Agent执行注销
+message ServiceProxyDestroyUnregisterMessage // IMessage
+{
+	string SceneName = 1;
 }
 
 // 服务信息Proto定义

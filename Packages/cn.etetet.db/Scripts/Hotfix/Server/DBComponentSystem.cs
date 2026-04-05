@@ -17,27 +17,29 @@ namespace ET.Server
 			self.GetCollectionNames();
 		}
 
-	    private static IMongoCollection<T> GetCollection<T>(this DBComponent self, string collection = null)
-	    {
-		    string name = collection ?? typeof (T).Name;
-		    if (!self.CollectionDic.Contains(name))
-		    {
-			    throw new Exception($"数据库不存在表:{name}, 请在DBVersion中追加表");
-		    }
-		    return self.database.GetCollection<T>(collection ?? typeof (T).Name);
-	    }
+		private static IMongoCollection<T> GetCollection<T>(this DBComponent self, string collection = null)
+		{
+		    return self.database.GetCollection<T>(collection ?? GetDefaultCollectionName(typeof(T)));
+		}
 
 	    private static IMongoCollection<Entity> GetCollection(this DBComponent self, string name)
 	    {
-		    if (!self.CollectionDic.Contains(name))
-		    {
-			    throw new Exception($"数据库不存在表:{name}, 请在DBVersion中追加表");
-		    }
 		    return self.database.GetCollection<Entity>(name);
+	    }
+
+	    private static string GetDefaultCollectionName(Type type)
+	    {
+		    if (type == null)
+		    {
+			    throw new ArgumentNullException(nameof(type));
+		    }
+
+		    return type.Name;
 	    }
 	    
 	    public static void GetCollectionNames(this DBComponent self)
 	    {
+		    self.CollectionDic.Clear();
 		    var list = self.database.ListCollectionNames().ToList();
 		    foreach (string collection in list)
 		    {
@@ -47,33 +49,26 @@ namespace ET.Server
         
 	    public static async ETTask CreateCollection<T>(this DBComponent self)
 	    {
-		    string name = typeof(T).Name;
-		    if (self.CollectionDic.Contains(name))
-		    {
-			    Log.Error($"重复创建表:{name}");
-			    return;
-		    }
-
-		    EntityRef<DBComponent> selfRef = self;
-		    // Log.Error($"CreateDB <> {name}"); // 追踪 重复创建表
-		    await self.database.CreateCollectionAsync(name);
-		    self = selfRef;
-		    self.CollectionDic.Add(name);
+		    string name = GetDefaultCollectionName(typeof(T));
+		    await self.CreateCollection(name);
 	    }
         
 	    public static async ETTask CreateCollection(this DBComponent self, string name)
 	    {
-		    if (self.CollectionDic.Contains(name))
+		    try
 		    {
-			    Log.Error($"重复创建表:{name}");
-			    return;
+			    EntityRef<DBComponent> selfRef = self;
+			    await self.database.CreateCollectionAsync(name);
+			    self = selfRef;
 		    }
-		    // Log.Error($"CreateDB () {name}"); // 追踪 重复创建表
-		    
-		    EntityRef<DBComponent> selfRef = self;
-		    await self.database.CreateCollectionAsync(name);
-		    self = selfRef;
-		    self.CollectionDic.Add(name);
+		    catch (MongoCommandException e) when (e.CodeName == "NamespaceExists")
+		    {
+		    }
+
+		    if (self != null)
+		    {
+			    self.CollectionDic.Add(name);
+		    }
 	    }
 	    
 	    #region Count
@@ -115,11 +110,31 @@ namespace ET.Server
 	    // //是否存在表
 	    public static async ETTask<bool> CollectionExistsAsync(this DBComponent self, string collectionName)
 	    {
+		    EntityRef<DBComponent> selfRef = self;
 		    var filter = new BsonDocument("name", collectionName);
 		    //filter by collection name
 		    var collections = await self.database.ListCollectionsAsync(new ListCollectionsOptions { Filter = filter });
+		    self = selfRef;
+		    if (self == null)
+		    {
+			    return false;
+		    }
 		    //check for existence
-		    return await collections.AnyAsync();
+		    bool exists = await collections.AnyAsync();
+		    self = selfRef;
+		    if (self == null)
+		    {
+			    return false;
+		    }
+		    if (exists)
+		    {
+			    self.CollectionDic.Add(collectionName);
+		    }
+		    else
+		    {
+			    self.CollectionDic.Remove(collectionName);
+		    }
+		    return exists;
 	    }
 
 	    #endregion
@@ -203,6 +218,36 @@ namespace ET.Server
 			    IAsyncCursor<T> cursor = await self.GetCollection<T>(collection).FindAsync(filterDefinition);
 			    return await cursor.ToListAsync();
 		    }
+	    }
+
+	    #endregion
+
+	    #region CompareAndSwap
+
+	    public static async ETTask<T> FindOneAndReplace<T>(this DBComponent self, long taskId, Expression<Func<T, bool>> filter,
+			    T replacement, bool isUpsert = false, string collection = null) where T : Entity
+	    {
+		    if (replacement == null)
+		    {
+			    throw new Exception($"find and replace entity is null: {typeof(T).Name}");
+		    }
+
+		    using (await self.Root().CoroutineLockComponent.Wait(CoroutineLockType.MongoDB, taskId % DBComponent.TaskCount))
+		    {
+			    FindOneAndReplaceOptions<T> options = new()
+			    {
+				    IsUpsert = isUpsert,
+				    ReturnDocument = ReturnDocument.After,
+			    };
+
+			    return await self.GetCollection<T>(collection).FindOneAndReplaceAsync(filter, replacement, options);
+		    }
+	    }
+
+	    public static async ETTask<T> FindOneAndReplace<T>(this DBComponent self, Expression<Func<T, bool>> filter,
+			    T replacement, bool isUpsert = false, string collection = null) where T : Entity
+	    {
+		    return await self.FindOneAndReplace(RandomGenerator.RandInt64(), filter, replacement, isUpsert, collection);
 	    }
 
 	    #endregion

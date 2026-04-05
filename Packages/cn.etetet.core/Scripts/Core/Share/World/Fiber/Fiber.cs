@@ -207,58 +207,80 @@ namespace ET
             }
         }
 
-        /// <summary>
-        /// 创建的fiber在由该fiber调度，所以可以返回Fiber，父Fiber可以直接操作子Fiber
-        /// </summary>
-        /// <param name="zone"></param>
-        /// <param name="sceneType"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public async ETTask<Fiber> CreateFiber(long rootId, int zone, int sceneType, string name)
+        public async ETTask<Fiber> CreateFiber(long rootId, int sceneType, string name)
+        {
+            Fiber fiber = await FiberManager.Instance.CreateFiber(SchedulerType.Parent, rootId, this.Zone, sceneType, name, this);
+            this.children.Add(fiber.Id, fiber);
+            return fiber;
+        }
+
+        public async ETTask<Fiber> CreateFiberWithId(int localSlot, long rootId, int sceneType, string name)
+        {
+            Fiber fiber = await FiberManager.Instance.CreateFiber(localSlot, SchedulerType.Parent, rootId, this.Zone, sceneType, name, this);
+            this.children.Add(fiber.Id, fiber);
+            return fiber;
+        }
+
+        public async ETTask<int> CreateFiber(SchedulerType schedulerType, long rootId, int sceneType, string name)
+        {
+            // 如果是单线程模式，强制设置为父fiber调度
+            if (Options.Instance.SingleThread == 1)
+            {
+                schedulerType = SchedulerType.Parent;
+            }
+            
+            Fiber fiber = await FiberManager.Instance.CreateFiber(schedulerType, rootId, this.Zone, sceneType, name, this);
+            this.children.Add(fiber.Id, fiber);
+            return fiber.Id;
+        }
+        
+        public async ETTask<int> CreateFiberWithId(int localSlot, SchedulerType schedulerType, long rootId, int sceneType, string name)
+        {
+            // 如果是单线程模式，强制设置为父fiber调度
+            if (Options.Instance.SingleThread == 1)
+            {
+                schedulerType = SchedulerType.Parent;
+            }
+            
+            Fiber fiber = await FiberManager.Instance.CreateFiber(localSlot, schedulerType, rootId, this.Zone, sceneType, name, this);
+            this.children.Add(fiber.Id, fiber);
+            return fiber.Id;
+        }
+
+        public async ETTask<Fiber> CreateZoneFiber(int zone, long rootId, int sceneType, string name)
         {
             Fiber fiber = await FiberManager.Instance.CreateFiber(SchedulerType.Parent, rootId, zone, sceneType, name, this);
             this.children.Add(fiber.Id, fiber);
             return fiber;
         }
 
-        /// <summary>
-        /// 这个会跟parent fiber在同一线程调度，所以可以返回Fiber，父Fiber可以直接操作子Fiber
-        /// </summary>
-        /// <param name="fiberId"></param>
-        /// <param name="rootId"></param>
-        /// <param name="zone"></param>
-        /// <param name="sceneType"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public async ETTask<Fiber> CreateFiberWithId(int fiberId, long rootId, int zone, int sceneType, string name)
+        public async ETTask<Fiber> CreateZoneFiberWithId(int zone, int localSlot, long rootId, int sceneType, string name)
         {
-            Fiber fiber = await FiberManager.Instance.CreateFiber(fiberId, SchedulerType.Parent, rootId, zone, sceneType, name, this);
+            Fiber fiber = await FiberManager.Instance.CreateFiber(localSlot, SchedulerType.Parent, rootId, zone, sceneType, name, this);
             this.children.Add(fiber.Id, fiber);
             return fiber;
         }
 
-        public async ETTask<int> CreateFiber(SchedulerType schedulerType, long rootId, int zone, int sceneType, string name)
+        public async ETTask<int> CreateZoneFiber(int zone, SchedulerType schedulerType, long rootId, int sceneType, string name)
         {
-            // 如果是单线程模式，强制设置为父fiber调度
             if (Options.Instance.SingleThread == 1)
             {
                 schedulerType = SchedulerType.Parent;
             }
-            
+
             Fiber fiber = await FiberManager.Instance.CreateFiber(schedulerType, rootId, zone, sceneType, name, this);
             this.children.Add(fiber.Id, fiber);
             return fiber.Id;
         }
-        
-        public async ETTask<int> CreateFiberWithId(int fiberId, SchedulerType schedulerType, long rootId, int zone, int sceneType, string name)
+
+        public async ETTask<int> CreateZoneFiberWithId(int zone, int localSlot, SchedulerType schedulerType, long rootId, int sceneType, string name)
         {
-            // 如果是单线程模式，强制设置为父fiber调度
             if (Options.Instance.SingleThread == 1)
             {
                 schedulerType = SchedulerType.Parent;
             }
-            
-            Fiber fiber = await FiberManager.Instance.CreateFiber(fiberId, schedulerType, rootId, zone, sceneType, name, this);
+
+            Fiber fiber = await FiberManager.Instance.CreateFiber(localSlot, schedulerType, rootId, zone, sceneType, name, this);
             this.children.Add(fiber.Id, fiber);
             return fiber.Id;
         }

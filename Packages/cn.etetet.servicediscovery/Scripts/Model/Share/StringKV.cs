@@ -30,6 +30,7 @@ namespace ET
 
         // ✅ 这个方法让集合初始化器语法可用
         public void Add(string key, string value) => this.data.Add(key, value);
+        public void Add(KeyValuePair<string, string> item) => this.data[item.Key] = item.Value;
 
         // ✅ 实现 IEnumerable，让集合初始化器合法
         public IEnumerator<KeyValuePair<string, string>> GetEnumerator() => this.data.GetEnumerator();

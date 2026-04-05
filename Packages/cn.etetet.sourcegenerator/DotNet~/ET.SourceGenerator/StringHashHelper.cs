@@ -1,12 +1,12 @@
 using System;
 using System.Text;
 
-namespace ET
+namespace ET.SourceGenerator
 {
-    public static class StringHashHelper
+    public static class SourceGenStringHashHelper
     {
         // bkdr hash
-        public static long GetLongHashCode(this string str)
+        public static long GetLongHashCode(string str)
         {
             const uint seed = 1313; // 31 131 1313 13131 131313 etc..
             
@@ -22,13 +22,13 @@ namespace ET
             return (long)hash;
         }
 
-        public static int Mode(this string strText, int mode)
+        public static int Mode(string strText, int mode)
         {
             if (mode <= 0)
             {
                 throw new Exception($"string mode < 0: {strText} {mode}");
             }
-            return (int)((ulong)strText.GetLongHashCode() % (uint)mode);
+            return (int)((ulong)GetLongHashCode(strText) % (uint)mode);
         }
     }
 }

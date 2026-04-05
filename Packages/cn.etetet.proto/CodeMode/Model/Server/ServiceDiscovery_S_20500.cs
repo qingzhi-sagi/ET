@@ -142,6 +142,8 @@ namespace ET
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
         public string SceneName { get; set; }
+        [MemoryPackOrder(2)]
+        public ActorId AgentActorId { get; set; }
         public override void Dispose()
         {
             if (!this.IsFromPool)
@@ -151,6 +153,7 @@ namespace ET
 
             this.RpcId = default;
             this.SceneName = default;
+            this.AgentActorId = default;
 
             ObjectPool.Recycle(this);
         }
@@ -181,6 +184,72 @@ namespace ET
             this.RpcId = default;
             this.Error = default;
             this.Message = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(Opcode.ServiceAgentRegisterRequest)]
+    [ResponseType(nameof(ServiceAgentRegisterResponse))]
+    public partial class ServiceAgentRegisterRequest : MessageObject, IRequest
+    {
+        public static ServiceAgentRegisterRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<ServiceAgentRegisterRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+        [MemoryPackOrder(1)]
+        public ActorId AgentActorId { get; set; }
+        [MemoryPackOrder(2)]
+        public List<ServiceInfoProto> LocalServices { get; set; } = new();
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.AgentActorId = default;
+            this.LocalServices.Clear();
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(Opcode.ServiceAgentRegisterResponse)]
+    public partial class ServiceAgentRegisterResponse : MessageObject, IResponse
+    {
+        public static ServiceAgentRegisterResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<ServiceAgentRegisterResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+        [MemoryPackOrder(1)]
+        public int Error { get; set; }
+        [MemoryPackOrder(2)]
+        public string Message { get; set; }
+        [MemoryPackOrder(3)]
+        public List<ServiceInfoProto> Services { get; set; } = new();
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.Services.Clear();
 
             ObjectPool.Recycle(this);
         }
@@ -272,6 +341,8 @@ namespace ET
         /// </summary>
         [MemoryPackOrder(3)]
         public StringKV FilterMetadata { get; set; } = new();
+        [MemoryPackOrder(4)]
+        public ActorId SubscriberActorId { get; set; }
         public override void Dispose()
         {
             if (!this.IsFromPool)
@@ -283,6 +354,7 @@ namespace ET
             this.SceneName = default;
             this.FilterName = default;
             this.FilterMetadata = default;
+            this.SubscriberActorId = default;
 
             ObjectPool.Recycle(this);
         }
@@ -303,6 +375,9 @@ namespace ET
         public int Error { get; set; }
         [MemoryPackOrder(2)]
         public string Message { get; set; }
+        [MemoryPackOrder(3)]
+        public List<ServiceInfoProto> Services { get; set; } = new();
+
         public override void Dispose()
         {
             if (!this.IsFromPool)
@@ -313,6 +388,7 @@ namespace ET
             this.RpcId = default;
             this.Error = default;
             this.Message = default;
+            this.Services.Clear();
 
             ObjectPool.Recycle(this);
         }
@@ -387,10 +463,14 @@ namespace ET
         }
 
         /// <summary>
-        /// 1=添加, 2=删除
+        /// 1=添加, 2=删除, 3=主机切换
         /// </summary>
         [MemoryPackOrder(0)]
         public int ChangeType { get; set; }
+        [MemoryPackOrder(1)]
+        public long Epoch { get; set; }
+        [MemoryPackOrder(2)]
+        public ActorId MasterActorId { get; set; }
         [MemoryPackOrder(3)]
         public List<ServiceInfoProto> ServiceInfo { get; set; } = new();
 
@@ -402,7 +482,34 @@ namespace ET
             }
 
             this.ChangeType = default;
+            this.Epoch = default;
+            this.MasterActorId = default;
             this.ServiceInfo.Clear();
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    // Proxy销毁时单向通知Agent执行注销
+    [MemoryPackable]
+    [Message(Opcode.ServiceProxyDestroyUnregisterMessage)]
+    public partial class ServiceProxyDestroyUnregisterMessage : MessageObject, IMessage
+    {
+        public static ServiceProxyDestroyUnregisterMessage Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<ServiceProxyDestroyUnregisterMessage>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public string SceneName { get; set; }
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.SceneName = default;
 
             ObjectPool.Recycle(this);
         }
@@ -450,13 +557,16 @@ namespace ET
         public const ushort ServiceUnregisterResponse = 20504;
         public const ushort ServiceHeartbeatRequest = 20505;
         public const ushort ServiceHeartbeatResponse = 20506;
-        public const ushort ServiceQueryRequest = 20507;
-        public const ushort ServiceQueryResponse = 20508;
-        public const ushort ServiceSubscribeRequest = 20509;
-        public const ushort ServiceSubscribeResponse = 20510;
-        public const ushort ServiceUnsubscribeRequest = 20511;
-        public const ushort ServiceUnsubscribeResponse = 20512;
-        public const ushort ServiceChangeNotification = 20513;
-        public const ushort ServiceInfoProto = 20514;
+        public const ushort ServiceAgentRegisterRequest = 20507;
+        public const ushort ServiceAgentRegisterResponse = 20508;
+        public const ushort ServiceQueryRequest = 20509;
+        public const ushort ServiceQueryResponse = 20510;
+        public const ushort ServiceSubscribeRequest = 20511;
+        public const ushort ServiceSubscribeResponse = 20512;
+        public const ushort ServiceUnsubscribeRequest = 20513;
+        public const ushort ServiceUnsubscribeResponse = 20514;
+        public const ushort ServiceChangeNotification = 20515;
+        public const ushort ServiceProxyDestroyUnregisterMessage = 20516;
+        public const ushort ServiceInfoProto = 20517;
     }
 }

@@ -2,6 +2,15 @@ namespace ET.Server
 {
     public static class AddressHelper
     {
+        public static void SetInnerIPInnerPortOuterIP(this AddressSingleton addressSingleton, StartProcessConfig startProcessConfig)
+        {
+            StartMachineConfigCategory machineConfigCategory = World.Instance.GetSingleton<StartMachineConfigCategory>();
+            StartMachineConfig startMachineConfig = machineConfigCategory?.Get(startProcessConfig.MachineId);
+            addressSingleton.InnerIP ??= startMachineConfig?.InnerIP;
+            addressSingleton.OuterIP ??= startMachineConfig?.OuterIP;
+            addressSingleton.InnerPort = addressSingleton.InnerPort > 0 ? addressSingleton.InnerPort : startProcessConfig.Port;
+        }
+
         public static void SetInnerIPInnerPortOuterIP(this AddressSingleton addressSingleton, Fiber fiber, StartProcessConfig startProcessConfig)
         {
             addressSingleton.InnerIP ??= startProcessConfig.GetInnerIP(fiber);

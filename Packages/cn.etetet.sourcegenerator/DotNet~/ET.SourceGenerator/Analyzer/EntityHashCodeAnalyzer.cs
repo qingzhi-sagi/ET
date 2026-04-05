@@ -65,7 +65,7 @@ namespace ET
             }
 
             var entityName = namedTypeSymbol.ToString();
-            var hashCode = entityName.GetLongHashCode();
+            var hashCode = SourceGenerator.SourceGenStringHashHelper.GetLongHashCode(entityName);
 
             if (entityHashCodeMap.TryGetValue(hashCode, out var existEntityName))
             {
@@ -84,4 +84,3 @@ namespace ET
         }
     }
 }
-

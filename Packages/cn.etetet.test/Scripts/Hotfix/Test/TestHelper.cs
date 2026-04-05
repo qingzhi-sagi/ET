@@ -6,7 +6,7 @@ namespace ET.Test
     {
         public static async ETTask<Fiber> CreateRobot(Fiber fiber, string robotName)
         {
-            Fiber robot = await fiber.CreateFiber(IdGenerater.Instance.GenerateId(), 0, SceneType.Client, robotName);
+            Fiber robot = await fiber.CreateFiber(IdGenerater.Instance.GenerateId(), SceneType.Client, robotName);
             Scene root = robot.Root;
             EntityRef<Scene> rootRef = root;
             root = rootRef;

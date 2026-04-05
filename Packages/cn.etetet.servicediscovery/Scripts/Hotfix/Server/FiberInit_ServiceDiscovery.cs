@@ -2,6 +2,7 @@ namespace ET.Server
 {
     /// <summary>
     /// 服务发现Fiber初始化处理器
+    /// 注意FiberId=-2
     /// </summary>
     [Invoke(SceneType.ServiceDiscovery)]
     public class FiberInit_ServiceDiscovery : AInvokeHandler<FiberInit, ETTask>
@@ -14,11 +15,11 @@ namespace ET.Server
             root.AddComponent<CoroutineLockComponent>();
             root.AddComponent<ProcessInnerSender>();
             root.AddComponent<MessageSender>();
+            root.AddComponent<DBManagerComponent>();
             
             // 添加服务发现核心组件
-            root.AddComponent<ServiceDiscovery>();
-
-            await ETTask.CompletedTask;
+            ServiceDiscovery serviceDiscovery = root.AddComponent<ServiceDiscovery>();
+            await serviceDiscovery.InitializeAsync();
         }
     }
 }

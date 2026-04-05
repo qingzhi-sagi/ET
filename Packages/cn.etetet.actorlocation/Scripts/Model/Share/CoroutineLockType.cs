@@ -4,5 +4,6 @@ namespace ET
     {
         public const int Location = PackageType.ActorLocation * 1000 + 1;                  // location进程上使用
         public const int MessageLocationSender = PackageType.ActorLocation * 1000 + 2;       // MessageLocationSender中队列消息 
+        public const int LocationPersistence = PackageType.ActorLocation * 1000 + 3;         // location持久化初始化
     }
 }

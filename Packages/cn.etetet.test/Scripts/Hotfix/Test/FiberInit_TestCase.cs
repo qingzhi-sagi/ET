@@ -33,7 +33,7 @@ namespace ET.Test
                     continue;
                 }
 
-                await fiber.CreateFiber(startConfig.Id, startConfig.Zone, sceneType, startConfig.Name);
+                await fiber.CreateFiber(startConfig.Id, sceneType, startConfig.Name);
             }
         }
     }

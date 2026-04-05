@@ -1,3 +1,5 @@
+using System;
+
 namespace ET.Server
 {
     [MessageHandler(SceneType.ServiceDiscovery)]
@@ -5,9 +7,55 @@ namespace ET.Server
     {
         protected override async ETTask Run(Scene scene, ServiceRegisterRequest request, ServiceRegisterResponse response)
         {
+            if (!ServiceDiscoveryHelper.TryValidateRequiredText(request.SceneName, nameof(ServiceRegisterRequest), nameof(request.SceneName),
+                    out string errorMessage))
+            {
+                ServiceDiscoveryErrorHelper.SetInvalidArgument(response, errorMessage);
+                return;
+            }
+
+            if (!ServiceDiscoveryHelper.TryValidateRequiredActorId(request.ActorId, nameof(ServiceRegisterRequest), nameof(request.ActorId),
+                    out errorMessage))
+            {
+                ServiceDiscoveryErrorHelper.SetInvalidArgument(response, errorMessage);
+                return;
+            }
+
+            if (!ServiceDiscoveryHelper.TryValidateMetadataMap(request.Metadata, nameof(ServiceRegisterRequest), nameof(request.Metadata),
+                    out errorMessage))
+            {
+                ServiceDiscoveryErrorHelper.SetInvalidArgument(response, errorMessage);
+                return;
+            }
+
             ServiceDiscovery serviceDiscovery = scene.GetComponent<ServiceDiscovery>();
-            serviceDiscovery.RegisterService(request.SceneName, request.ActorId, request.Metadata);
-            await ETTask.CompletedTask;
+            EntityRef<ServiceDiscovery> serviceDiscoveryRef = serviceDiscovery;
+            try
+            {
+                bool isMaster = await serviceDiscovery.EnsureActiveMasterWithFenceAsync();
+                serviceDiscovery = serviceDiscoveryRef;
+                if (serviceDiscovery == null)
+                {
+                    return;
+                }
+                if (!isMaster)
+                {
+                    ServiceDiscoveryErrorHelper.SetNotWritableMaster(response, serviceDiscovery);
+                    return;
+                }
+
+                await serviceDiscovery.RegisterServiceAsync(request.SceneName, request.ActorId, request.Metadata);
+            }
+            catch (Exception e)
+            {
+                serviceDiscovery = serviceDiscoveryRef;
+                if (serviceDiscovery == null)
+                {
+                    return;
+                }
+                ServiceDiscoveryErrorHelper.SetPersistenceFailed(response, e.Message);
+                Log.Error($"Service register failed scene: {request.SceneName} error: {e}");
+            }
         }
     }
 }

@@ -142,11 +142,17 @@ namespace ET
             }
             try
             {
+                int runtimeFiberId = fiberId;
+                if (zone != 0 && fiberId > 0 && fiberId <= FiberIdHelper.MaxLocalSlot)
+                {
+                    runtimeFiberId = FiberIdHelper.Encode(zone, fiberId);
+                }
+
                 int parentId = parent?.Id ?? 0;
-                Log.Debug($"create fiber: {name} {fiberId} {zone} {sceneType} {schedulerType} {parentId}");
+                Log.Debug($"create fiber: {name} {runtimeFiberId} {zone} {sceneType} {schedulerType} {parentId}");
                 
                 // 如果调度器是父fiber，那么日志也是父fiber的日志
-                Fiber fiber = new(fiberId, rootId, zone, sceneType, name, schedulerType, parent);
+                Fiber fiber = new(runtimeFiberId, rootId, zone, sceneType, name, schedulerType, parent);
 
                 IScheduler iScheduler = schedulerType == SchedulerType.Parent ? parent : this.schedulers[(int)schedulerType];
                 iScheduler.AddToScheduler(fiber);

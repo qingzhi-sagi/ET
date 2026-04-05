@@ -33,6 +33,12 @@ namespace ET.Server
 
         public static async ETTask<IResponse> Call(this MessageSender self, ActorId actorId, IRequest request, bool needException = true)
         {
+            return await self.Call(actorId, request, ProcessInnerSender.TIMEOUT_TIME, needException);
+        }
+
+        public static async ETTask<IResponse> Call(this MessageSender self, ActorId actorId, IRequest request, long timeout,
+            bool needException = true)
+        {
             if (actorId == default)
             {
                 throw new Exception($"actor id is 0: {request}");
@@ -41,7 +47,7 @@ namespace ET.Server
             IResponse response;
             if (actorId.Address == AddressSingleton.Instance.InnerAddress)
             {
-                response = await self.ProcessInnerSender.Call(actorId.FiberInstanceId, request, needException: needException);
+                response = await self.ProcessInnerSender.Call(actorId.FiberInstanceId, request, timeout, needException);
             }
             else
             {
@@ -51,7 +57,7 @@ namespace ET.Server
                 a2NetInner_Request.MessageObject = request;
 
                 using A2NetInner_Response a2NetInnerResponse = await self.ProcessInnerSender.Call(
-                    new FiberInstanceId(ConstFiberId.NetInnerFiberId), a2NetInner_Request) as A2NetInner_Response;
+                    new FiberInstanceId(ConstFiberId.NetInnerFiberId), a2NetInner_Request, timeout) as A2NetInner_Response;
                 response = a2NetInnerResponse.MessageObject;
             }
 
