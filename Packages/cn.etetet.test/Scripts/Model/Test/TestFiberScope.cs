@@ -5,13 +5,15 @@ using SimpleJSON;
 
 namespace ET.Test
 {
-    public struct TestFiberScope(Fiber fiber) : IAsyncDisposable
+    public struct TestFiberScope : IAsyncDisposable
     {
         public Fiber TestFiber { get; private set; }
+        private readonly Fiber fiber;
 
-        public static async ETTask<TestFiberScope> Create(Fiber fiber, string testName)
+        public TestFiberScope(Fiber fiber)
         {
-            return await Create(fiber, SceneType.TestCase, testName);
+            this.fiber = fiber;
+            this.TestFiber = null;
         }
 
         public static async ETTask<TestFiberScope> Create(Fiber fiber, int sceneType, string testName)
@@ -22,32 +24,18 @@ namespace ET.Test
             return scope;
         }
 
-        public static async ETTask<TestFiberScope> CreateOneFiber(Fiber fiber, int sceneType, string testName)
-        {
-            TestFiberScope scope = new(fiber);
-            int zone = AllocateZone(fiber);
-            scope.TestFiber = await fiber.CreateZoneFiber(zone, IdGenerater.Instance.GenerateId(), sceneType, testName);
-            return scope;
-        }
-
         public async ValueTask DisposeAsync()
         {
-            try
+            if (this.fiber == null || this.TestFiber == null)
             {
-                if (fiber == null || this.TestFiber == null)
-                {
-                    return;
-                }
+                return;
+            }
 
-                await fiber.RemoveFiber(this.TestFiber.Id).NewContext(null);
-            }
-            catch (Exception e)
-            {
-                Log.Error(e);
-            }
+            // 注意这里因为是在ValueTask里面，ValueTask不带上下文，所以必须设置上下文，否则会卡住await无法回调回来
+            await fiber.RemoveFiber(this.TestFiber.Id).NewContext(null);
         }
 
-        public static int AllocateZone(Fiber fiber)
+        private static int AllocateZone(Fiber fiber)
         {
             TestZoneAllocatorComponent allocator = GetAllocator(fiber);
             int zone = allocator.Zone;

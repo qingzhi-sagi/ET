@@ -6,7 +6,7 @@ namespace ET.Test
     {
         public override async ETTask<int> Handle(TestContext context)
         {
-            await using TestFiberScope scope = await TestFiberScope.Create(context.Fiber, nameof(Test_CreateRobot_Test));
+            await using TestFiberScope scope = await TestFiberScope.Create(context.Fiber, SceneType.TestCase, nameof(Test_CreateRobot_Test));
             Fiber testFiber = scope.TestFiber;
             
             Fiber robot = await TestHelper.CreateRobot(testFiber, nameof(Test_CreateRobot_Test));

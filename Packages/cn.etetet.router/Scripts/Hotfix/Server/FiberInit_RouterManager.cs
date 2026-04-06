@@ -19,11 +19,15 @@ namespace ET.Server
             string httpHost = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "+" : "*";
             root.AddComponent<HttpComponent, string>($"http://{httpHost}:{outerPort}/");
 
-            // 注册服务发现
             ServiceDiscoveryProxy serviceDiscoveryProxy = root.AddComponent<ServiceDiscoveryProxy>();
             EntityRef<ServiceDiscoveryProxy> serviceDiscoveryProxyComponentRef = serviceDiscoveryProxy;
-            serviceDiscoveryProxy = serviceDiscoveryProxyComponentRef;
-            await serviceDiscoveryProxy.RegisterToServiceDiscovery();
+            
+            // Test场景下动态zone不会创建对应Agent，跳过注册避免初始化失败。
+            if (Options.Instance.SceneName != SceneTypeSingleton.Instance.GetSceneName(SceneType.Test))
+            {
+                serviceDiscoveryProxy = serviceDiscoveryProxyComponentRef;
+                await serviceDiscoveryProxy.RegisterToServiceDiscovery();
+            }
             // 订阅Router
             serviceDiscoveryProxy = serviceDiscoveryProxyComponentRef;
             await serviceDiscoveryProxy.SubscribeServiceChange("Router", 

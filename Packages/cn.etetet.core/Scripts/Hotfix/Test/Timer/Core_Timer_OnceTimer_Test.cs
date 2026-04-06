@@ -7,7 +7,7 @@ namespace ET.Test
     {
         public override async ETTask<int> Handle(TestContext context)
         {
-            await using TestFiberScope scope = await TestFiberScope.CreateOneFiber(
+            await using TestFiberScope scope = await TestFiberScope.Create(
                 context.Fiber, SceneType.TestEmpty, nameof(Core_Timer_OnceTimer_Test));
 
             Scene scene = scope.TestFiber.Root;

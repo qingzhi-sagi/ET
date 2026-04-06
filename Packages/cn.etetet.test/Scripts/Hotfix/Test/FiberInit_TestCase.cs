@@ -22,6 +22,12 @@ namespace ET.Test
             AddressSingleton addressSingleton = World.Instance.AddSingleton<AddressSingleton>();
             addressSingleton.SetInnerIPInnerPortOuterIP(fiber, startProcessConfig);
 
+            await fiber.CreateFiber(IdGenerater.Instance.GenerateId(), SceneType.ServiceDiscovery, nameof(SceneType.ServiceDiscovery));
+
+            // 进程级ServiceDiscovery Agent Fiber：所有业务Fiber的ServiceDiscoveryProxy统一通过此Fiber转发。
+            await fiber.CreateFiberWithId(Const.ServiceDiscoveryAgentFiberId, SchedulerType.ThreadPool, IdGenerater.Instance.GenerateId(),
+                SceneType.ServiceDiscoveryAgent, $"ServiceDiscoveryAgent@{process}@{Options.Instance.ReplicaIndex}");
+
             // 根据配置创建纤程
             var scenes = fiber.GetSingleton<StartSceneConfigCategory>().GetByProcess(process);
             

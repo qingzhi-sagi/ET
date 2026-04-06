@@ -10,38 +10,17 @@ namespace ET.Server
 
         private static StartZoneConfig GetStartZoneConfig(this DBManagerComponent self, int zone)
         {
-            StartZoneConfigCategory startZoneConfigCategory =
-                    self.Root().Fiber().GetSingleton<StartZoneConfigCategory>()
-                    ?? World.Instance.GetSingleton<StartZoneConfigCategory>();
-            if (startZoneConfigCategory == null)
-            {
-                throw new Exception("start zone config category is not initialized");
-            }
-
-            StartZoneConfig startZoneConfig = startZoneConfigCategory.GetOrDefault(zone);
-            if (startZoneConfig != null)
-            {
-                return startZoneConfig;
-            }
-
-            throw new Exception($"not found start zone config, zone: {zone}");
+            StartZoneConfigCategory startZoneConfigCategory = self.Fiber().GetSingleton<StartZoneConfigCategory>();
+            StartZoneConfig startZoneConfig = startZoneConfigCategory.Get(zone);
+            return startZoneConfig;
         }
 
         public static string GetZoneDBName(this DBManagerComponent self, int zone)
         {
             StartZoneConfigCategory startZoneConfigCategory =
-                    self.Root().Fiber().GetSingleton<StartZoneConfigCategory>()
-                    ?? World.Instance.GetSingleton<StartZoneConfigCategory>();
-            if (startZoneConfigCategory == null)
-            {
-                throw new Exception("start zone config category is not initialized");
-            }
+                    self.Fiber().GetSingleton<StartZoneConfigCategory>();
 
-            StartZoneConfig zoneConfig = startZoneConfigCategory.GetOrDefault(zone);
-            if (zoneConfig == null)
-            {
-                throw new Exception($"not found start zone config, zone: {zone}");
-            }
+            StartZoneConfig zoneConfig = startZoneConfigCategory.Get(zone);
 
             if (string.IsNullOrEmpty(zoneConfig.DBName))
             {
