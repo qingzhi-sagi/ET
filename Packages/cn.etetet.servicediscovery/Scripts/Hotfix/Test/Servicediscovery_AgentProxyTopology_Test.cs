@@ -32,20 +32,8 @@ namespace ET.Test
 
             Fiber sdNode = await ServiceDiscovery_HA_TestHelper.CreateServiceDiscoveryNodeByConfig(testFiber, 0,
                 "ServiceDiscovery_AgentTopology");
-            if (sdNode == null)
-            {
-                Log.Console("agent topology create service discovery node failed");
-                return 3;
-            }
-
             ServiceDiscovery sd = sdNode.Root.GetComponent<ServiceDiscovery>();
             TimerComponent timer = sdNode.Root.TimerComponent;
-            if (sd == null || timer == null)
-            {
-                Log.Console("agent topology service discovery or timer is null");
-                return 4;
-            }
-
             bool isMaster = await ServiceDiscovery_HA_TestHelper.WaitUntilMaster(sd, timer, 5000);
             if (!isMaster)
             {
@@ -74,12 +62,6 @@ namespace ET.Test
 
             ServiceDiscoveryProxy proxyA = proxyFiberA.Root.GetComponent<ServiceDiscoveryProxy>();
             ServiceDiscoveryProxy proxyB = proxyFiberB.Root.GetComponent<ServiceDiscoveryProxy>();
-            if (proxyA == null || proxyB == null)
-            {
-                Log.Console("agent topology proxy component is null");
-                return 7;
-            }
-
             if (proxyA.AgentFiberInstanceId == default || proxyB.AgentFiberInstanceId == default)
             {
                 Log.Console("agent topology proxy agent fiber instance id is empty");
@@ -94,12 +76,6 @@ namespace ET.Test
             }
 
             Fiber agentFiber = ServiceDiscovery_HA_TestHelper.GetServiceDiscoveryAgentFiber(testFiber);
-            if (agentFiber == null)
-            {
-                Log.Console("agent topology agent fiber not found");
-                return 10;
-            }
-
             if (agentFiber.Root.SceneType != SceneType.ServiceDiscoveryAgent)
             {
                 Log.Console(
@@ -108,12 +84,6 @@ namespace ET.Test
             }
 
             ServiceDiscoveryAgent agent = agentFiber.Root.GetComponent<ServiceDiscoveryAgent>();
-            if (agent == null)
-            {
-                Log.Console("agent topology ServiceDiscoveryAgent component is null");
-                return 12;
-            }
-
             ServiceDiscoveryProxy agentProxy = agentFiber.Root.GetComponent<ServiceDiscoveryProxy>();
             if (agentProxy != null)
             {
@@ -122,12 +92,6 @@ namespace ET.Test
             }
 
             ProcessInnerSender sender = proxyFiberA.Root.GetComponent<ProcessInnerSender>();
-            if (sender == null)
-            {
-                Log.Console("agent topology proxy process inner sender is null");
-                return 14;
-            }
-
             ServiceQueryRequest queryRequest = ServiceQueryRequest.Create();
             queryRequest.Filter["Role"] = "ProxyA";
             using ServiceQueryResponse queryResponse =

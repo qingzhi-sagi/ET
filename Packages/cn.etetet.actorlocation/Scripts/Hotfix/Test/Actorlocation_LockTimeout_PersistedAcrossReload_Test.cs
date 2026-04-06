@@ -19,10 +19,6 @@ namespace ET.Test
                 EntityRef<LocationOneType> locationRef = location;
 
                 TimerComponent timerComponent = scene.TimerComponent;
-                if (timerComponent == null)
-                {
-                    throw new Exception("persist-timeout: timer component not found");
-                }
                 EntityRef<TimerComponent> timerRef = timerComponent;
 
                 long key = IdGenerater.Instance.GenerateId();

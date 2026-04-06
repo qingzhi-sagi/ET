@@ -44,21 +44,9 @@ namespace ET.Test
                 serviceDiscoveryConfigs[0].Name);
             Fiber nodeB = await ServiceDiscovery_HA_TestHelper.CreateServiceDiscoveryNodeByConfig(testFiber, 1,
                 "ServiceDiscovery_SplitFollower");
-            if (nodeA == null || nodeB == null)
-            {
-                Log.Console("split brain create nodes failed");
-                return 301;
-            }
-
             ServiceDiscovery sdA = nodeA.Root.GetComponent<ServiceDiscovery>();
             ServiceDiscovery sdB = nodeB.Root.GetComponent<ServiceDiscovery>();
             TimerComponent timer = nodeA.Root.TimerComponent;
-            if (sdA == null || sdB == null || timer == null)
-            {
-                Log.Console("split brain sdA/sdB/timer is null");
-                return 302;
-            }
-
             int leasePrepareError = await ServiceDiscovery_HA_TestHelper.ConfigureFastLease(sdA, sdB, timer);
             if (leasePrepareError != 0)
             {

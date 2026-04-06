@@ -33,21 +33,9 @@ namespace ET.Test
 
             Fiber node = await ServiceDiscovery_HA_TestHelper.CreateServiceDiscoveryNodeByConfig(testFiber, 0,
                 "ServiceDiscovery_PersistenceFailure");
-            if (node == null)
-            {
-                Log.Console("persistence create service discovery node failed");
-                return 3;
-            }
-
             ServiceDiscovery sd = node.Root.GetComponent<ServiceDiscovery>();
             TimerComponent timer = node.Root.TimerComponent;
             MessageSender sender = node.Root.GetComponent<MessageSender>();
-            if (sd == null || timer == null || sender == null)
-            {
-                Log.Console("persistence sd/timer/sender is null");
-                return 4;
-            }
-
             bool isMaster = await ServiceDiscovery_HA_TestHelper.WaitUntilMaster(sd, timer, 5000);
             if (!isMaster)
             {

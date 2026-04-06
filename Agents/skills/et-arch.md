@@ -29,6 +29,26 @@
 - **分离原则**：严格分离数据定义和业务逻辑
 - **Entity跟System只做数据相关管理，以及自身的一些简单方法**：不要在System中实现复杂的业务逻辑。具体的业务逻辑应该写到XXXHelper中，例如ItemHelper
 
+### 组件存在性契约（强制）
+
+- 编码前必须先明确每个组件的来源：由 `FiberInit_*` 预创建、由 `AddComponent<T>()` 当场创建、或本来就是可选组件。
+- 一旦来源明确，禁止使用 `if (x == null)` / `GetComponent<T>() ?? AddComponent<T>()` 这种兜底写法掩盖契约。
+- 如果组件按设计必须存在：直接使用（缺失时应立即暴露错误，而不是偷偷补齐）。
+- 如果当前方法负责初始化组件：直接 `AddComponent<T>()`，不要先判空。
+- 只有“业务上确实可选”的组件才允许判空分支，并且要在代码中清楚表达“为什么可选”。
+- 对于 `TimerComponent`、`CoroutineLockComponent` 这类在 `Awake` 已回写 `Scene` 引用的组件，`AddComponent` 后禁止再手工赋值 `scene.TimerComponent = ...` / `scene.CoroutineLockComponent = ...`。
+
+### 反兜底守则（强制）
+
+- 新增任何判空、`ThrowIfNull`、`?? throw`、`GetComponent<T>() ?? AddComponent<T>()`、`RemoveComponent<T>()` 后再 `AddComponent<T>()` 之前，必须先回答 3 个问题：
+  1. 这个对象是谁创建的，创建位置在哪个文件/方法。
+  2. 它在当前调用链里是否真的存在“合法为空”的运行路径。
+  3. 缺失时这是业务分支，还是应该立即暴露的 bug。
+- 如果不能证明“合法为空”，禁止添加防御式判空；直接使用，让真实契约失败暴露出来。
+- 对框架强契约对象禁止写低价值防御代码，例如成功创建后的 `Fiber`、`Fiber.Root`、`TestFiberScope.Create(...)` 返回的 `scope.TestFiber`。这类对象不允许再补 `if (x == null)`、`ArgumentNullException.ThrowIfNull(x)`、`x ?? throw ...` 来伪装安全。
+- 对当前 helper/方法自己负责初始化的组件，直接 `AddComponent<T>()`；如果重复添加会抛异常，就说明调用方违反了初始化契约，不能靠先判空或删了重建来掩盖。
+- 只有真正的开放边界参数才允许 `ArgumentNullException.ThrowIfNull`，例如公共 API、外部输入、反序列化结果。仓库内受控测试链路、Fiber 生命周期链路、已被框架保证的对象，不要为了“看起来稳”再加一层空判断。
+
 ## 程序集分层结构
 
 ```

@@ -14,6 +14,14 @@ namespace ET.Test
             LogMsg.Instance.AddIgnore(typeof(ServiceHeartbeatResponse));
             
             Fiber fiber = fiberInit.Fiber;
+            Scene root = fiber.Root;
+            root.AddComponent<TimerComponent>();
+            root.AddComponent<CoroutineLockComponent>();
+            root.AddComponent<DBManagerComponent>();
+
+            TestFiberDatabaseCleanupComponent cleanupComponent = root.AddComponent<TestFiberDatabaseCleanupComponent>();
+            cleanupComponent.RegisterLogicalDbName(ServiceDiscoveryPersistenceConst.DBName);
+            await cleanupComponent.CleanupAsync("FiberInit_TestCase");
             
             int process = Options.Instance.Process;
             
@@ -41,6 +49,21 @@ namespace ET.Test
 
                 await fiber.CreateFiber(startConfig.Id, sceneType, startConfig.Name);
             }
+        }
+    }
+
+    [Event(SceneType.All)]
+    public class FiberDestroyEvent_TestFiberDatabaseCleanup : AEvent<Scene, FiberDestroyEvent>
+    {
+        protected override async ETTask Run(Scene scene, FiberDestroyEvent args)
+        {
+            TestFiberDatabaseCleanupComponent cleanupComponent = scene.GetComponent<TestFiberDatabaseCleanupComponent>();
+            if (cleanupComponent == null)
+            {
+                return;
+            }
+
+            await cleanupComponent.CleanupAsync(nameof(FiberDestroyEvent));
         }
     }
 }

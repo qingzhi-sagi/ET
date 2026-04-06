@@ -45,21 +45,9 @@ namespace ET.Test
                 serviceDiscoveryConfigs[0].Name);
             Fiber nodeB = await ServiceDiscovery_HA_TestHelper.CreateServiceDiscoveryNodeByConfig(testFiber, 1,
                 "ServiceDiscovery_NetworkFollower");
-            if (nodeA == null || nodeB == null)
-            {
-                Log.Console("network partition create nodes failed");
-                return 201;
-            }
-
             ServiceDiscovery sdA = nodeA.Root.GetComponent<ServiceDiscovery>();
             ServiceDiscovery sdB = nodeB.Root.GetComponent<ServiceDiscovery>();
             TimerComponent timerB = nodeB.Root.TimerComponent;
-            if (sdA == null || sdB == null || timerB == null)
-            {
-                Log.Console("network partition sdA/sdB/timerB is null");
-                return 202;
-            }
-
             int prepareError = await ServiceDiscovery_HA_TestHelper.ConfigureFastLease(sdA, sdB, timerB);
             if (prepareError != 0)
             {
@@ -113,12 +101,6 @@ namespace ET.Test
             }
 
             MessageSender sender = nodeB.Root.GetComponent<MessageSender>();
-            if (sender == null)
-            {
-                Log.Console("network partition nodeB sender is null");
-                return 208;
-            }
-
             ServiceRegisterRequest request = ServiceRegisterRequest.Create();
             request.SceneName = "PartitionWriteProbe";
             request.ActorId = nodeA.Root.GetActorId();

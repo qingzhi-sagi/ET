@@ -49,20 +49,8 @@ namespace ET.Test
 
             Fiber node = await ServiceDiscovery_HA_TestHelper.CreateServiceDiscoveryNodeByConfig(testFiber, 0,
                 "ServiceDiscovery_Subscription");
-            if (node == null)
-            {
-                Log.Console("subscription create service discovery node failed");
-                return 3;
-            }
-
             ServiceDiscovery sd = node.Root.GetComponent<ServiceDiscovery>();
             TimerComponent timer = node.Root.TimerComponent;
-            if (sd == null || timer == null)
-            {
-                Log.Console("subscription sd or timer is null");
-                return 4;
-            }
-
             bool isMaster = await ServiceDiscovery_HA_TestHelper.WaitUntilMaster(sd, timer, 5000);
             if (!isMaster)
             {
@@ -100,13 +88,7 @@ namespace ET.Test
             TimerComponent subATimer = subAFiber.Root.TimerComponent;
             TimerComponent subBTimer = subBFiber.Root.TimerComponent;
             ServiceDiscoveryTestAddEventCounterComponent subACounter =
-                subAFiber.Root.GetComponent<ServiceDiscoveryTestAddEventCounterComponent>()
-                        ?? subAFiber.Root.AddComponent<ServiceDiscoveryTestAddEventCounterComponent>();
-            if (subAProxy == null || subBProxy == null || subATimer == null || subBTimer == null || subACounter == null)
-            {
-                Log.Console("subscription subscriber proxy, timer or add-event counter is null");
-                return 8;
-            }
+                    subAFiber.Root.AddComponent<ServiceDiscoveryTestAddEventCounterComponent>();
 
             subACounter.Counts.Clear();
             await subAProxy.SubscribeServiceChange("RoleProvider", new StringKV { { "Role", "Provider" } });
@@ -153,12 +135,6 @@ namespace ET.Test
 
             // 4. 注销 Provider，验证删除通知准确性。
             ServiceDiscoveryProxy providerProxy = providerFiber.Root.GetComponent<ServiceDiscoveryProxy>();
-            if (providerProxy == null)
-            {
-                Log.Console("subscription provider proxy is null");
-                return 15;
-            }
-
             await providerProxy.UnregisterFromServiceDiscovery();
             bool subAProviderRemoved = await ServiceDiscovery_HA_TestHelper.WaitForProxyNotHasService(subAProxy, subATimer,
                 providerSceneName, 5000);

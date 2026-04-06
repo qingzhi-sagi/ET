@@ -30,20 +30,8 @@ namespace ET.Test
 
             Fiber node = await ServiceDiscovery_HA_TestHelper.CreateServiceDiscoveryNodeByConfig(testFiber, 0,
                 "ServiceDiscovery_ZoneFilteredLateRegistration");
-            if (node == null)
-            {
-                Log.Console("zone filtered late registration create service discovery node failed");
-                return 3;
-            }
-
             ServiceDiscovery master = node.Root.GetComponent<ServiceDiscovery>();
             TimerComponent masterTimer = node.Root.TimerComponent;
-            if (master == null || masterTimer == null)
-            {
-                Log.Console("zone filtered late registration master or timer is null");
-                return 4;
-            }
-
             bool isMaster = await ServiceDiscovery_HA_TestHelper.WaitUntilMaster(master, masterTimer, 5000);
             if (!isMaster)
             {
@@ -61,12 +49,6 @@ namespace ET.Test
 
             ServiceDiscoveryProxy subscriberProxy = subscriberFiber.Root.GetComponent<ServiceDiscoveryProxy>();
             TimerComponent subscriberTimer = subscriberFiber.Root.TimerComponent;
-            if (subscriberProxy == null || subscriberTimer == null)
-            {
-                Log.Console("zone filtered late registration subscriber proxy or timer is null");
-                return 7;
-            }
-
             string sceneTypeName = SceneTypeSingleton.Instance.GetSceneName(SceneType.TestEmpty);
             int zone = subscriberFiber.Zone;
             await subscriberProxy.SubscribeServiceChange("ZoneScopedProvider", new StringKV

@@ -16,11 +16,6 @@ namespace ET.Test
             {
                 Scene scene = Actorlocation_TestHelper.PrepareLocationScene(scope.TestFiber);
                 TimerComponent initTimerComponent = scene.TimerComponent;
-                if (initTimerComponent == null)
-                {
-                    throw new Exception("timeout: timer component not found");
-                }
-
                 EntityRef<TimerComponent> timerRef = initTimerComponent;
                 LocationOneType location = Actorlocation_TestHelper.GetLocationOneType(scene, LocationType);
                 EntityRef<LocationOneType> locationRef = location;

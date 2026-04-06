@@ -30,21 +30,9 @@ namespace ET.Test
                 "ServiceDiscovery_StaleNotification_A");
             Fiber nodeB = await ServiceDiscovery_HA_TestHelper.CreateServiceDiscoveryNodeByConfig(testFiber, 1,
                 "ServiceDiscovery_StaleNotification_B");
-            if (nodeA == null || nodeB == null)
-            {
-                Log.Console("stale notification create service discovery nodes failed");
-                return 3;
-            }
-
             ServiceDiscovery sdA = nodeA.Root.GetComponent<ServiceDiscovery>();
             ServiceDiscovery sdB = nodeB.Root.GetComponent<ServiceDiscovery>();
             TimerComponent timerB = nodeB.Root.TimerComponent;
-            if (sdA == null || sdB == null || timerB == null)
-            {
-                Log.Console("stale notification sdA/sdB/timerB is null");
-                return 4;
-            }
-
             int leasePrepareError = await ServiceDiscovery_HA_TestHelper.ConfigureFastLease(sdA, sdB, timerB);
             if (leasePrepareError != 0)
             {
@@ -78,22 +66,10 @@ namespace ET.Test
             ServiceDiscoveryProxy watcherProxy = watcherFiber.Root.GetComponent<ServiceDiscoveryProxy>();
             MessageSender watcherSender = watcherFiber.Root.GetComponent<MessageSender>();
             TimerComponent watcherTimer = watcherFiber.Root.TimerComponent;
-            if (watcherProxy == null || watcherSender == null || watcherTimer == null)
-            {
-                Log.Console("stale notification watcher proxy/sender/timer is null");
-                return 9;
-            }
-
             await watcherProxy.SubscribeServiceChange("InjectedRole", new StringKV { { "Role", "Injected" } });
 
             Fiber agentFiber = ServiceDiscovery_HA_TestHelper.GetServiceDiscoveryAgentFiber(testFiber);
-            ServiceDiscoveryAgent agent = agentFiber?.Root?.GetComponent<ServiceDiscoveryAgent>();
-            if (agent == null)
-            {
-                Log.Console("stale notification agent is null");
-                return 10;
-            }
-
+            ServiceDiscoveryAgent agent = agentFiber.Root.GetComponent<ServiceDiscoveryAgent>();
             bool agentOnOldMaster = await WaitForAgentBoundToMasterAndEpoch(agent, beforeMasterActorId, beforeEpoch, timerB, 6000);
             if (!agentOnOldMaster)
             {

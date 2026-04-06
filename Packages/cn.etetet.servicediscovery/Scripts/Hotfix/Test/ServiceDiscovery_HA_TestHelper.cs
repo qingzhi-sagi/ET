@@ -87,21 +87,9 @@ namespace ET.Test
                 throw new ArgumentNullException(nameof(db));
             }
 
-            ServiceDiscovery persistenceOwner = ownerScene.GetComponent<ServiceDiscovery>();
-            bool createdTempOwner = false;
-            if (persistenceOwner == null)
-            {
-                persistenceOwner = ownerScene.AddComponent<ServiceDiscovery>();
-                createdTempOwner = true;
-            }
-
-            ServiceDiscoveryMaster masterRecord = persistenceOwner.GetComponent<ServiceDiscoveryMaster>();
-            bool createdTempMaster = false;
-            if (masterRecord == null)
-            {
-                masterRecord = persistenceOwner.AddComponentWithId<ServiceDiscoveryMaster>(ServiceDiscoveryPersistenceConst.MasterRecordId);
-                createdTempMaster = true;
-            }
+            ServiceDiscovery persistenceOwner = ownerScene.AddComponent<ServiceDiscovery>();
+            ServiceDiscoveryMaster masterRecord =
+                    persistenceOwner.AddComponentWithId<ServiceDiscoveryMaster>(ServiceDiscoveryPersistenceConst.MasterRecordId);
 
             try
             {
@@ -115,15 +103,8 @@ namespace ET.Test
             }
             finally
             {
-                if (createdTempMaster && persistenceOwner.GetComponent<ServiceDiscoveryMaster>() != null)
-                {
-                    persistenceOwner.RemoveComponent<ServiceDiscoveryMaster>();
-                }
-
-                if (createdTempOwner && ownerScene.GetComponent<ServiceDiscovery>() != null)
-                {
-                    ownerScene.RemoveComponent<ServiceDiscovery>();
-                }
+                persistenceOwner.RemoveComponent<ServiceDiscoveryMaster>();
+                ownerScene.RemoveComponent<ServiceDiscovery>();
             }
         }
 
@@ -278,88 +259,38 @@ namespace ET.Test
                 return 2;
             }
 
-            TestFiberDatabaseCleanupComponent cleanupComponent =
-                    root.GetComponent<TestFiberDatabaseCleanupComponent>() ?? root.AddComponent<TestFiberDatabaseCleanupComponent>();
-            cleanupComponent.LogicalDbNames.Add(ServiceDiscoveryPersistenceConst.DBName);
-
-            TimerComponent timerComponent = root.GetComponent<TimerComponent>();
-            if (timerComponent == null)
+            TestFiberDatabaseCleanupComponent cleanupComponent = root.GetComponent<TestFiberDatabaseCleanupComponent>();
+            if (cleanupComponent == null)
             {
-                timerComponent = root.AddComponent<TimerComponent>();
+                return 9;
             }
 
-            root.TimerComponent = timerComponent;
+            cleanupComponent.RegisterLogicalDbName(ServiceDiscoveryPersistenceConst.DBName);
 
-            CoroutineLockComponent coroutineLockComponent = root.GetComponent<CoroutineLockComponent>();
-            if (coroutineLockComponent == null)
+            DBManagerComponent dbManager;
+            try
             {
-                coroutineLockComponent = root.AddComponent<CoroutineLockComponent>();
+                root.AddComponent<TimerComponent>();
+                root.AddComponent<CoroutineLockComponent>();
+                dbManager = root.AddComponent<DBManagerComponent>();
+            }
+            catch (Exception e)
+            {
+                Log.Console($"reset service discovery storage infrastructure init failed: {e.Message}");
+                return 5;
             }
 
-            root.CoroutineLockComponent = coroutineLockComponent;
-
-            DBManagerComponent dbManager = root.GetComponent<DBManagerComponent>() ?? root.AddComponent<DBManagerComponent>();
-
-            string dbName = dbManager.GetZoneDBName(testFiber.Zone);
             EntityRef<Scene> rootRef = root;
             EntityRef<DBManagerComponent> dbManagerRef = dbManager;
-            EntityRef<TimerComponent> timerRef = timerComponent;
 
             try
             {
-                await dbManager.DropDB(testFiber.Zone);
+                await cleanupComponent.CleanupAsync(nameof(ResetServiceDiscoveryStorage));
             }
             catch (Exception e)
             {
                 Log.Console($"reset service discovery storage exception: {e.Message}");
                 return 5;
-            }
-
-            for (int retry = 0; retry < 20; ++retry)
-            {
-                dbManager = dbManagerRef;
-                if (dbManager == null)
-                {
-                    return 3;
-                }
-
-                DBComponent db = ServiceDiscovery_HA_TestHelper.GetServiceDiscoveryDB(dbManager);
-                if (db == null)
-                {
-                    TimerComponent retryTimer = timerRef;
-                    if (retryTimer != null)
-                    {
-                        await retryTimer.WaitAsync(50);
-                    }
-
-                    continue;
-                }
-
-                using ServiceDiscoveryMaster queriedMasterRecord = await db.Query<ServiceDiscoveryMaster>(
-                    ServiceDiscoveryPersistenceConst.MasterRecordId, ServiceDiscoveryPersistenceConst.MasterCollection);
-                if (queriedMasterRecord == null)
-                {
-                    return 0;
-                }
-
-                if (retry + 1 >= 20)
-                {
-                    Log.Console("reset service discovery storage failed: master record still exists after drop db");
-                    return 7;
-                }
-
-                DBManagerComponent retryDbManager = dbManagerRef;
-                if (retryDbManager == null)
-                {
-                    return 3;
-                }
-
-                await retryDbManager.DropDB(testFiber.Zone);
-                TimerComponent retryDelayTimer = timerRef;
-                if (retryDelayTimer != null)
-                {
-                    await retryDelayTimer.WaitAsync(100);
-                }
             }
 
             dbManager = dbManagerRef;
@@ -533,15 +464,10 @@ namespace ET.Test
             }
 
             DBManagerComponent dbManager = serviceDiscovery.Root().GetComponent<DBManagerComponent>();
-            if (dbManager == null)
-            {
-                return (2, string.Empty, default, 0, 0);
-            }
-
             DBComponent db = GetServiceDiscoveryDB(dbManager);
             if (db == null)
             {
-                return (3, string.Empty, default, 0, 0);
+                return (2, string.Empty, default, 0, 0);
             }
 
             using ServiceDiscoveryMaster record =
@@ -549,7 +475,7 @@ namespace ET.Test
                     ServiceDiscoveryPersistenceConst.MasterCollection);
             if (record == null)
             {
-                return (4, string.Empty, default, 0, 0);
+                return (3, string.Empty, default, 0, 0);
             }
 
             return (0, record.SceneName, record.ActorId, record.Epoch, record.LeaseExpireTime);
@@ -566,17 +492,11 @@ namespace ET.Test
             }
 
             Scene root = serviceDiscovery.Root();
-            if (root == null)
-            {
-                return 2;
-            }
-
-            DBManagerComponent dbManager = root.GetComponent<DBManagerComponent>() ?? root.AddComponent<DBManagerComponent>();
-
+            DBManagerComponent dbManager = root.GetComponent<DBManagerComponent>();
             DBComponent db = GetServiceDiscoveryDB(dbManager);
             if (db == null)
             {
-                return 4;
+                return 2;
             }
 
             using ServiceDiscoveryMaster masterRecord = await db.Query<ServiceDiscoveryMaster>(
@@ -614,24 +534,16 @@ namespace ET.Test
             }
 
             Fiber fiber = await parent.CreateFiber(IdGenerater.Instance.GenerateId(), SceneType.TestEmpty, name);
-            if (fiber == null)
-            {
-                return null;
-            }
-
             Scene root = fiber.Root;
             root.AddComponent<MailBoxComponent, int>(MailBoxType.UnOrderedMessage);
-            _ = root.GetComponent<TimerComponent>() ?? root.AddComponent<TimerComponent>();
-            _ = root.GetComponent<CoroutineLockComponent>() ?? root.AddComponent<CoroutineLockComponent>();
+            root.AddComponent<TimerComponent>();
+            root.AddComponent<CoroutineLockComponent>();
+
             root.AddComponent<ProcessInnerSender>();
             root.AddComponent<MessageSender>();
-            _ = root.GetComponent<DBManagerComponent>() ?? root.AddComponent<DBManagerComponent>();
-            ServiceDiscoveryProxy proxy = root.AddComponent<ServiceDiscoveryProxy>();
-            if (proxy == null)
-            {
-                return null;
-            }
+            root.AddComponent<DBManagerComponent>();
 
+            ServiceDiscoveryProxy proxy = root.AddComponent<ServiceDiscoveryProxy>();
             await proxy.RegisterToServiceDiscovery(metadata);
 
             if (!waitUntilRegistered)
@@ -684,12 +596,7 @@ namespace ET.Test
                 }
             }
 
-            ServiceDiscoveryAgent agent = agentFiber?.Root?.GetComponent<ServiceDiscoveryAgent>();
-            if (agent == null)
-            {
-                return 3;
-            }
-
+            ServiceDiscoveryAgent agent = agentFiber.Root.GetComponent<ServiceDiscoveryAgent>();
             agent.TriggerBackgroundRegister();
             return 0;
         }

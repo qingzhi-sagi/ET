@@ -33,20 +33,8 @@ namespace ET.Test
             }
 
             Fiber node = await ServiceDiscovery_HA_TestHelper.CreateServiceDiscoveryNodeByConfig(testFiber, 0, "ServiceDiscovery_Query");
-            if (node == null)
-            {
-                Log.Console("query create service discovery node failed");
-                return 3;
-            }
-
             ServiceDiscovery sd = node.Root.GetComponent<ServiceDiscovery>();
             TimerComponent timer = node.Root.TimerComponent;
-            if (sd == null || timer == null)
-            {
-                Log.Console("query sd or timer is null");
-                return 4;
-            }
-
             bool isMaster = await ServiceDiscovery_HA_TestHelper.WaitUntilMaster(sd, timer, 5000);
             if (!isMaster)
             {
@@ -81,12 +69,6 @@ namespace ET.Test
 
             // 3. 验证仅通过 Agent 查询，结果与预期一致
             MessageSender sender = node.Root.GetComponent<MessageSender>();
-            if (sender == null)
-            {
-                Log.Console("query message sender is null");
-                return 9;
-            }
-
             ActorId agentActorId = new ActorId(node.Root.GetActorId().Address,
                 ServiceDiscovery_HA_TestHelper.CreateServiceDiscoveryAgentFiberInstanceId(testFiber.Zone));
 

@@ -29,7 +29,7 @@ namespace ET.Test
             Scene clientScene = robotFiber.Root;
             string mapName = clientScene.CurrentScene().Name;
             Fiber map = testFiber.GetFiber("MapManager").GetFiber(mapName);
-            PlayerComponent player = clientScene.GetComponent<PlayerComponent>();
+            ET.Client.PlayerComponent player = clientScene.GetComponent<ET.Client.PlayerComponent>();
             Unit unit = map.Root.GetComponent<UnitComponent>().Get(player.MyId);
             return unit;
         }

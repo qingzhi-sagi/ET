@@ -45,21 +45,9 @@ namespace ET.Test
                 serviceDiscoveryConfigs[0].Name);
             Fiber nodeB = await ServiceDiscovery_HA_TestHelper.CreateServiceDiscoveryNodeByConfig(testFiber, 1,
                 "ServiceDiscovery_PerfFollower");
-            if (nodeA == null || nodeB == null)
-            {
-                Log.Console("performance create nodes failed");
-                return 401;
-            }
-
             ServiceDiscovery sdA = nodeA.Root.GetComponent<ServiceDiscovery>();
             ServiceDiscovery sdB = nodeB.Root.GetComponent<ServiceDiscovery>();
             TimerComponent timerB = nodeB.Root.TimerComponent;
-            if (sdA == null || sdB == null || timerB == null)
-            {
-                Log.Console("performance sdA/sdB/timerB is null");
-                return 402;
-            }
-
             int leasePrepareError = await ServiceDiscovery_HA_TestHelper.ConfigureFastLease(sdA, sdB, timerB);
             if (leasePrepareError != 0)
             {

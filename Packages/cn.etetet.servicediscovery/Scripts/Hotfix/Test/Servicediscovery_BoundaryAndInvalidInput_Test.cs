@@ -36,21 +36,9 @@ namespace ET.Test
 
             Fiber node = await ServiceDiscovery_HA_TestHelper.CreateServiceDiscoveryNodeByConfig(testFiber, 0,
                 "ServiceDiscovery_Boundary");
-            if (node == null)
-            {
-                Log.Console("boundary create service discovery node failed");
-                return 3;
-            }
-
             ServiceDiscovery sd = node.Root.GetComponent<ServiceDiscovery>();
             TimerComponent timer = node.Root.TimerComponent;
             MessageSender sender = node.Root.GetComponent<MessageSender>();
-            if (sd == null || timer == null || sender == null)
-            {
-                Log.Console("boundary sd or timer or sender is null");
-                return 4;
-            }
-
             bool isMaster = await ServiceDiscovery_HA_TestHelper.WaitUntilMaster(sd, timer, 5000);
             if (!isMaster)
             {
@@ -135,20 +123,8 @@ namespace ET.Test
             // 6. 备节点写入必须被明确识别为 follower 拒绝
             Fiber followerNode = await ServiceDiscovery_HA_TestHelper.CreateServiceDiscoveryNodeByConfig(testFiber, 1,
                 "ServiceDiscovery_Boundary_Follower");
-            if (followerNode == null)
-            {
-                Log.Console("boundary create follower node failed");
-                return 16;
-            }
-
             ServiceDiscovery followerSd = followerNode.Root.GetComponent<ServiceDiscovery>();
             MessageSender followerSender = followerNode.Root.GetComponent<MessageSender>();
-            if (followerSd == null || followerSender == null)
-            {
-                Log.Console("boundary follower sd or sender is null");
-                return 17;
-            }
-
             bool followerAcceptedMaster = await followerSd.EnsureActiveMasterWithFenceAsync();
             if (followerAcceptedMaster || followerSd.GetOrAddLease().IsActiveMaster)
             {

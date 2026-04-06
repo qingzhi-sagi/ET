@@ -32,20 +32,8 @@ namespace ET.Test
 
             Fiber node = await ServiceDiscovery_HA_TestHelper.CreateServiceDiscoveryNodeByConfig(testFiber, 0,
                 "ServiceDiscovery_DuplicateRegister");
-            if (node == null)
-            {
-                Log.Console("duplicate register create service discovery node failed");
-                return 3;
-            }
-
             ServiceDiscovery sd = node.Root.GetComponent<ServiceDiscovery>();
             TimerComponent timer = node.Root.TimerComponent;
-            if (sd == null || timer == null)
-            {
-                Log.Console("duplicate register sd or timer is null");
-                return 4;
-            }
-
             bool isMaster = await ServiceDiscovery_HA_TestHelper.WaitUntilMaster(sd, timer, 5000);
             if (!isMaster)
             {
@@ -64,13 +52,7 @@ namespace ET.Test
             ServiceDiscoveryProxy watcherProxy = watcherFiber.Root.GetComponent<ServiceDiscoveryProxy>();
             TimerComponent watcherTimer = watcherFiber.Root.TimerComponent;
             ServiceDiscoveryTestAddEventCounterComponent watcherCounter =
-                watcherFiber.Root.GetComponent<ServiceDiscoveryTestAddEventCounterComponent>()
-                        ?? watcherFiber.Root.AddComponent<ServiceDiscoveryTestAddEventCounterComponent>();
-            if (watcherProxy == null || watcherTimer == null || watcherCounter == null)
-            {
-                Log.Console("duplicate register watcher proxy or timer or counter is null");
-                return 7;
-            }
+                    watcherFiber.Root.AddComponent<ServiceDiscoveryTestAddEventCounterComponent>();
 
             watcherCounter.Counts.Clear();
             await watcherProxy.SubscribeServiceChange("RoleProvider", new StringKV { { "Role", "Provider" } });
@@ -84,12 +66,6 @@ namespace ET.Test
             }
 
             ServiceDiscoveryProxy providerProxy = providerFiber.Root.GetComponent<ServiceDiscoveryProxy>();
-            if (providerProxy == null)
-            {
-                Log.Console("duplicate register provider proxy is null");
-                return 9;
-            }
-
             bool watcherHasProvider = await ServiceDiscovery_HA_TestHelper.WaitForProxyHasService(watcherProxy, watcherTimer,
                 providerFiber.Root.Name, 5000);
             if (!watcherHasProvider)

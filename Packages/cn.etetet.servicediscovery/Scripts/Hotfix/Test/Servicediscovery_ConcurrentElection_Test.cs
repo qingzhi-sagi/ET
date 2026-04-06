@@ -44,24 +44,12 @@ namespace ET.Test
             List<Fiber> nodes = new();
             Fiber primaryNode = await ServiceDiscovery_HA_TestHelper.CreateServiceDiscoveryNodeByConfig(testFiber, 0,
                 serviceDiscoveryConfigs[0].Name);
-            if (primaryNode == null)
-            {
-                Log.Console("concurrent election create primary node failed");
-                return 101;
-            }
-
             nodes.Add(primaryNode);
 
             if (serviceDiscoveryConfigs.Count > 1)
             {
                 Fiber standbyNode = await ServiceDiscovery_HA_TestHelper.CreateServiceDiscoveryNodeByConfig(testFiber, 1,
                     serviceDiscoveryConfigs[1].Name);
-                if (standbyNode == null)
-                {
-                    Log.Console("concurrent election create standby node failed");
-                    return 113;
-                }
-
                 nodes.Add(standbyNode);
             }
 
@@ -70,33 +58,15 @@ namespace ET.Test
             {
                 string extraSceneName = $"ServiceDiscovery_Election_{i:00}";
                 Fiber node = await ServiceDiscovery_HA_TestHelper.CreateServiceDiscoveryNodeByConfig(testFiber, i, extraSceneName);
-                if (node == null)
-                {
-                    Log.Console($"concurrent election create extra node failed, index: {i}");
-                    return 114;
-                }
-
                 nodes.Add(node);
             }
 
             // 3. 并发触发抢主流程
             TimerComponent timer = nodes[0].Root.TimerComponent;
-            if (timer == null)
-            {
-                Log.Console("concurrent election timer is null");
-                return 102;
-            }
-
             ETTask<bool>[] electionTasks = new ETTask<bool>[nodes.Count];
             for (int i = 0; i < nodes.Count; ++i)
             {
                 ServiceDiscovery sd = nodes[i].Root.GetComponent<ServiceDiscovery>();
-                if (sd == null)
-                {
-                    Log.Console($"concurrent election node service discovery is null, index: {i}");
-                    return 110;
-                }
-
                 sd.GetOrAddLease().MasterLeaseTimeout = ServiceDiscovery_HA_TestHelper.FastLeaseTimeoutMs;
                 sd.GetOrAddLease().MasterLeaseRenewInterval = ServiceDiscovery_HA_TestHelper.FastLeaseRenewIntervalMs;
                 sd.GetOrAddLease().CurrentMasterLeaseExpireTime = 0;

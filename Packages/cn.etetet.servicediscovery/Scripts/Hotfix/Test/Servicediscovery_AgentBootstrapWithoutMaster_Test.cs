@@ -40,19 +40,7 @@ namespace ET.Test
             }
 
             Fiber agentFiber = ServiceDiscovery_HA_TestHelper.GetServiceDiscoveryAgentFiber(testFiber);
-            if (agentFiber == null)
-            {
-                Log.Console("agent fiber init nonblocking agent fiber not found");
-                return 7;
-            }
-
             ServiceDiscoveryAgent agent = agentFiber.Root.GetComponent<ServiceDiscoveryAgent>();
-            if (agent == null)
-            {
-                Log.Console("agent fiber init nonblocking agent component is null");
-                return 8;
-            }
-
             // 未创建主节点前，Agent 不应处于 ready（但 Fiber 必须能创建成功）。
             if (agent.IsReady())
             {
@@ -78,20 +66,8 @@ namespace ET.Test
 
             Fiber node = await ServiceDiscovery_HA_TestHelper.CreateServiceDiscoveryNodeByConfig(testFiber, 0,
                 "ServiceDiscovery_AgentFiberInitNonBlocking");
-            if (node == null)
-            {
-                Log.Console("agent fiber init nonblocking create service discovery node failed");
-                return 12;
-            }
-
             ServiceDiscovery sd = node.Root.GetComponent<ServiceDiscovery>();
             TimerComponent timer = node.Root.TimerComponent;
-            if (sd == null || timer == null)
-            {
-                Log.Console("agent fiber init nonblocking sd or timer is null");
-                return 13;
-            }
-
             bool isMaster = await ServiceDiscovery_HA_TestHelper.WaitUntilMaster(sd, timer, 5000);
             if (!isMaster)
             {
@@ -154,20 +130,8 @@ namespace ET.Test
 
             Fiber node = await ServiceDiscovery_HA_TestHelper.CreateServiceDiscoveryNodeByConfig(testFiber, 0,
                 "ServiceDiscovery_AgentFiber_ByZone");
-            if (node == null)
-            {
-                Log.Console("agent fiber by zone create service discovery node failed");
-                return 3;
-            }
-
             ServiceDiscovery sd = node.Root.GetComponent<ServiceDiscovery>();
             TimerComponent timer = node.Root.TimerComponent;
-            if (sd == null || timer == null)
-            {
-                Log.Console("agent fiber by zone service discovery or timer is null");
-                return 4;
-            }
-
             bool isMaster = await ServiceDiscovery_HA_TestHelper.WaitUntilMaster(sd, timer, 5000);
             if (!isMaster)
             {
@@ -183,12 +147,6 @@ namespace ET.Test
             }
 
             Fiber agentFiber = ServiceDiscovery_HA_TestHelper.GetServiceDiscoveryAgentFiber(testFiber);
-            if (agentFiber == null)
-            {
-                Log.Console("agent fiber by zone agent fiber is null");
-                return 7;
-            }
-
             int expectedAgentFiberId = ServiceDiscoveryFiberHelper.GetAgentFiberId(testFiber.Zone);
             if (agentFiber.Id != expectedAgentFiberId)
             {
@@ -205,12 +163,6 @@ namespace ET.Test
             }
 
             ServiceDiscoveryProxy proxy = proxyFiber.Root.GetComponent<ServiceDiscoveryProxy>();
-            if (proxy == null)
-            {
-                Log.Console("agent fiber by zone proxy component is null");
-                return 10;
-            }
-
             if (proxy.AgentFiberInstanceId.Fiber != expectedAgentFiberId)
             {
                 Log.Console(

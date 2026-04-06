@@ -15,24 +15,13 @@ namespace ET.Test
 
         public static Scene PrepareLocationScene(Fiber testFiber)
         {
-            if (testFiber == null)
-            {
-                throw new Exception("test fiber is null");
-            }
-
             Scene scene = testFiber.Root;
-            if (scene == null)
-            {
-                throw new Exception("test root scene is null");
-            }
 
-            _ = scene.TimerComponent ?? scene.AddComponent<TimerComponent>();
-            _ = scene.CoroutineLockComponent ?? scene.AddComponent<CoroutineLockComponent>();
-            _ = scene.GetComponent<DBManagerComponent>() ?? scene.AddComponent<DBManagerComponent>();
-            TestFiberDatabaseCleanupComponent cleanupComponent =
-                    scene.GetComponent<TestFiberDatabaseCleanupComponent>() ?? scene.AddComponent<TestFiberDatabaseCleanupComponent>();
-            cleanupComponent.LogicalDbNames.Add(LocationPersistenceConst.DBName);
-            _ = scene.GetComponent<LocationManagerComponent>() ?? scene.AddComponent<LocationManagerComponent>();
+            scene.AddComponent<TimerComponent>();
+            scene.AddComponent<CoroutineLockComponent>();
+            scene.AddComponent<DBManagerComponent>();
+            scene.GetComponent<TestFiberDatabaseCleanupComponent>().RegisterLogicalDbName(LocationPersistenceConst.DBName);
+            scene.AddComponent<LocationManagerComponent>();
 
             return scene;
         }
@@ -40,16 +29,15 @@ namespace ET.Test
         public static Scene PrepareProxyScene(Fiber testFiber)
         {
             Scene scene = PrepareLocationScene(testFiber);
-            _ = scene.GetComponent<MailBoxComponent>() ?? scene.AddComponent<MailBoxComponent, int>(MailBoxType.UnOrderedMessage);
-            _ = scene.GetComponent<ProcessInnerSender>() ?? scene.AddComponent<ProcessInnerSender>();
-            _ = scene.GetComponent<MessageSender>() ?? scene.AddComponent<MessageSender>();
+            scene.AddComponent<MailBoxComponent, int>(MailBoxType.UnOrderedMessage);
+            scene.AddComponent<ProcessInnerSender>();
+            scene.AddComponent<MessageSender>();
+            ServiceDiscoveryProxy serviceDiscoveryProxy = scene.AddComponent<ServiceDiscoveryProxy>();
 
-            ServiceDiscoveryProxy serviceDiscoveryProxy =
-                    scene.GetComponent<ServiceDiscoveryProxy>() ?? scene.AddComponent<ServiceDiscoveryProxy>();
             serviceDiscoveryProxy.RemoveComponent<ServiceDiscoveryProxyHeartbeat>();
 
-            _ = scene.GetComponent<LocationProxyComponent>() ?? scene.AddComponent<LocationProxyComponent>();
-            _ = scene.GetComponent<MessageLocationSenderComponent>() ?? scene.AddComponent<MessageLocationSenderComponent>();
+            scene.AddComponent<LocationProxyComponent>();
+            scene.AddComponent<MessageLocationSenderComponent>();
 
             return scene;
         }
@@ -69,11 +57,6 @@ namespace ET.Test
         private static void NotifyLocalLocationService(ServiceDiscoveryProxy proxy, string sceneName, ActorId actorId, int zone, int changeType,
             long? priorityId)
         {
-            if (proxy == null)
-            {
-                throw new Exception("service discovery proxy is null");
-            }
-
             if (string.IsNullOrWhiteSpace(sceneName))
             {
                 throw new Exception("scene name is empty");
@@ -103,29 +86,14 @@ namespace ET.Test
 
         public static LocationOneType GetLocationOneType(Scene scene, int locationType)
         {
-            if (scene == null)
-            {
-                throw new Exception("scene is null");
-            }
-
             LocationManagerComponent locationManagerComponent = scene.GetComponent<LocationManagerComponent>();
-            if (locationManagerComponent == null)
-            {
-                throw new Exception($"location manager component not found in scene: {scene.Name}");
-            }
-
             return locationManagerComponent.Get(locationType);
         }
 
         public static LocationOneType EnsureLocation(EntityRef<LocationOneType> locationRef, string scenario)
         {
             LocationOneType location = locationRef;
-            if (location == null)
-            {
-                throw new Exception($"{scenario}: location disposed");
-            }
-
-            return location;
+            return location ?? throw new Exception($"{scenario}: location disposed");
         }
 
         public static void AssertTrue(bool condition, string message)

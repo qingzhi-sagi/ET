@@ -44,21 +44,9 @@ public class Servicediscovery_FailureRecoveryAndClientState_Test : ATestHandler
                 serviceDiscoveryConfigs[0].Name);
             Fiber nodeB = await ServiceDiscovery_HA_TestHelper.CreateServiceDiscoveryNodeByConfig(testFiber, 1,
                 "ServiceDiscovery_RecoveryFollower");
-            if (nodeA == null || nodeB == null)
-            {
-                Log.Console("recovery create service discovery nodes failed");
-                return 501;
-            }
-
             ServiceDiscovery sdA = nodeA.Root.GetComponent<ServiceDiscovery>();
             ServiceDiscovery sdB = nodeB.Root.GetComponent<ServiceDiscovery>();
             TimerComponent timerB = nodeB.Root.TimerComponent;
-            if (sdA == null || sdB == null || timerB == null)
-            {
-                Log.Console("recovery sdA/sdB/timerB is null");
-                return 502;
-            }
-
             int leasePrepareError = await ServiceDiscovery_HA_TestHelper.ConfigureFastLease(sdA, sdB, timerB);
             if (leasePrepareError != 0)
             {
@@ -86,12 +74,6 @@ public class Servicediscovery_FailureRecoveryAndClientState_Test : ATestHandler
 
             ServiceDiscoveryProxy clientProxy = clientFiber.Root.GetComponent<ServiceDiscoveryProxy>();
             TimerComponent clientTimer = clientFiber.Root.TimerComponent;
-            if (clientProxy == null || clientTimer == null)
-            {
-                Log.Console("recovery clientProxy/clientTimer is null");
-                return 506;
-            }
-
             await clientProxy.SubscribeServiceChange("ProviderRoleFilter", new StringKV { { "Role", "Provider" } });
 
             bool providerVisible = await ServiceDiscovery_HA_TestHelper.WaitForProxyHasService(clientProxy, clientTimer,
@@ -199,21 +181,9 @@ public class Servicediscovery_FailureRecoveryAndClientState_Test : ATestHandler
                 "ServiceDiscovery_MetadataReplay_A");
             Fiber nodeB = await ServiceDiscovery_HA_TestHelper.CreateServiceDiscoveryNodeByConfig(testFiber, 1,
                 "ServiceDiscovery_MetadataReplay_B");
-            if (nodeA == null || nodeB == null)
-            {
-                Log.Console("metadata replay create service discovery nodes failed");
-                return 602;
-            }
-
             ServiceDiscovery sdA = nodeA.Root.GetComponent<ServiceDiscovery>();
             ServiceDiscovery sdB = nodeB.Root.GetComponent<ServiceDiscovery>();
             TimerComponent timerB = nodeB.Root.TimerComponent;
-            if (sdA == null || sdB == null || timerB == null)
-            {
-                Log.Console("metadata replay sdA/sdB/timerB is null");
-                return 603;
-            }
-
             int leasePrepareError = await ServiceDiscovery_HA_TestHelper.ConfigureFastLease(sdA, sdB, timerB);
             if (leasePrepareError != 0)
             {
@@ -244,12 +214,6 @@ public class Servicediscovery_FailureRecoveryAndClientState_Test : ATestHandler
             ServiceDiscoveryProxy newWatcherProxy = newWatcherFiber.Root.GetComponent<ServiceDiscoveryProxy>();
             TimerComponent oldWatcherTimer = oldWatcherFiber.Root.TimerComponent;
             TimerComponent newWatcherTimer = newWatcherFiber.Root.TimerComponent;
-            if (oldWatcherProxy == null || newWatcherProxy == null || oldWatcherTimer == null || newWatcherTimer == null)
-            {
-                Log.Console("metadata replay watcher proxy/timer is null");
-                return 607;
-            }
-
             await oldWatcherProxy.SubscribeServiceChange("RoleProvider", new StringKV { { "Role", "Provider" } });
             await newWatcherProxy.SubscribeServiceChange("RoleProviderV2", new StringKV { { "Role", "ProviderV2" } });
 
@@ -377,12 +341,7 @@ public class Servicediscovery_FailureRecoveryAndClientState_Test : ATestHandler
             }
 
             Fiber agentFiber = ServiceDiscovery_HA_TestHelper.GetServiceDiscoveryAgentFiber(testFiber);
-            ServiceDiscoveryAgent agent = agentFiber?.Root?.GetComponent<ServiceDiscoveryAgent>();
-            if (agent == null)
-            {
-                return false;
-            }
-
+            ServiceDiscoveryAgent agent = agentFiber.Root.GetComponent<ServiceDiscoveryAgent>();
             if (!agent.LocalPublishedServices.TryGetValue(sceneName, out (ActorId ActorId, StringKV Metadata) localService))
             {
                 return false;

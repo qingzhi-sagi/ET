@@ -201,6 +201,12 @@ if (quest.State != QuestState.Completed)
 return ErrorCode.ERR_Success;
 ```
 
+## 组件初始化契约（强制）
+
+- 通用组件契约、反兜底守则、`ThrowIfNull`/`?? throw`/`GetComponent<T>() ?? AddComponent<T>()` 的使用边界，统一遵循 `et-arch`，这里不重复定义。
+- 写测试时必须在 Arrange 阶段先想清楚初始化责任：哪些组件由 `FiberInit_*` 提供，哪些组件由当前测试方法主动创建。
+- 如果当前测试方法负责初始化组件，直接 `AddComponent<T>()`；如果组件按设计应由初始化链路保证存在，就直接使用，不要在测试里再补一层“看起来更安全”的判空。
+
 ## 常见坑点
 
 ### 1. await后Entity访问
@@ -234,4 +240,3 @@ task.DoSomething();
 1. 编译项目：使用 `/et-build`
 2. 执行测试：使用 `/et-test-run`
 3. 检查日志：`cat Logs/All.log`
-

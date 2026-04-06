@@ -34,21 +34,9 @@ namespace ET.Test
                 "ServiceDiscovery_IdleAgent_A");
             Fiber nodeB = await ServiceDiscovery_HA_TestHelper.CreateServiceDiscoveryNodeByConfig(testFiber, 1,
                 "ServiceDiscovery_IdleAgent_B");
-            if (nodeA == null || nodeB == null)
-            {
-                Log.Console("idle agent failover create service discovery nodes failed");
-                return 702;
-            }
-
             ServiceDiscovery sdA = nodeA.Root.GetComponent<ServiceDiscovery>();
             ServiceDiscovery sdB = nodeB.Root.GetComponent<ServiceDiscovery>();
             TimerComponent timerB = nodeB.Root.TimerComponent;
-            if (sdA == null || sdB == null || timerB == null)
-            {
-                Log.Console("idle agent failover sdA/sdB/timerB is null");
-                return 703;
-            }
-
             int leasePrepareError = await ServiceDiscovery_HA_TestHelper.ConfigureFastLease(sdA, sdB, timerB);
             if (leasePrepareError != 0)
             {
@@ -71,13 +59,7 @@ namespace ET.Test
             }
 
             Fiber agentFiber = ServiceDiscovery_HA_TestHelper.GetServiceDiscoveryAgentFiber(testFiber);
-            ServiceDiscoveryAgent agent = agentFiber?.Root?.GetComponent<ServiceDiscoveryAgent>();
-            if (agent == null)
-            {
-                Log.Console("idle agent failover agent is null");
-                return 707;
-            }
-
+            ServiceDiscoveryAgent agent = agentFiber.Root.GetComponent<ServiceDiscoveryAgent>();
             ActorId agentActorId = agent.Root().GetActorId();
             if (agentActorId == default)
             {

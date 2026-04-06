@@ -284,17 +284,7 @@ namespace ET.Test
                     IdGenerater.Instance.GenerateId(),
                     SceneType.TestEmpty,
                     nameof(Actorlocation_MessageLocationSender_PrimarySwitch_ActorMove_Test) + "_secondary");
-                if (secondaryFiber == null)
-                {
-                    throw new Exception("primary-switch: create secondary fiber failed");
-                }
-
                 Scene secondaryScene = Actorlocation_TestHelper.PrepareProxyScene(secondaryFiber);
-                if (secondaryScene == null)
-                {
-                    throw new Exception("primary-switch: secondary scene is null");
-                }
-
                 long entityId = IdGenerater.Instance.GenerateId();
                 ActorId oldActorId = secondaryScene.GetActorId();
 
@@ -438,17 +428,7 @@ namespace ET.Test
                     IdGenerater.Instance.GenerateId(),
                     SceneType.TestEmpty,
                     nameof(Actorlocation_MessageLocationSender_ThreeFiber_LockSwitchMove_Test) + "_A");
-                if (fiberA == null)
-                {
-                    throw new Exception("three-fiber: create fiber A failed");
-                }
-
                 Scene sceneA = Actorlocation_TestHelper.PrepareProxyScene(fiberA);
-                if (sceneA == null)
-                {
-                    throw new Exception("three-fiber: scene A is null");
-                }
-
                 ServiceDiscoveryProxy serviceDiscoveryProxyA = sceneA.GetComponent<ServiceDiscoveryProxy>();
                 LocationProxyComponent locationProxyA = sceneA.GetComponent<LocationProxyComponent>();
                 EntityRef<ServiceDiscoveryProxy> serviceDiscoveryProxyARef = serviceDiscoveryProxyA;
@@ -459,16 +439,7 @@ namespace ET.Test
                     IdGenerater.Instance.GenerateId(),
                     SceneType.TestEmpty,
                     nameof(Actorlocation_MessageLocationSender_ThreeFiber_LockSwitchMove_Test) + "_C");
-                if (fiberC == null)
-                {
-                    throw new Exception("three-fiber: create fiber C failed");
-                }
-
                 Scene sceneC = Actorlocation_TestHelper.PrepareProxyScene(fiberC);
-                if (sceneC == null)
-                {
-                    throw new Exception("three-fiber: scene C is null");
-                }
                 ActorId actorCId = sceneC.GetActorId();
 
                 locationProxyB = locationProxyBRef;

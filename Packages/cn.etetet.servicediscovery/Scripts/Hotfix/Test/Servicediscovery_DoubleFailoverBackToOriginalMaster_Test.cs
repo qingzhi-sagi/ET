@@ -37,22 +37,10 @@ namespace ET.Test
                 "ServiceDiscovery_DoubleFailover_A");
             Fiber nodeB = await ServiceDiscovery_HA_TestHelper.CreateServiceDiscoveryNodeByConfig(testFiber, 1,
                 "ServiceDiscovery_DoubleFailover_B");
-            if (nodeA == null || nodeB == null)
-            {
-                Log.Console("double failover create nodeA/nodeB failed");
-                return 601;
-            }
-
             ServiceDiscovery sdA = nodeA.Root.GetComponent<ServiceDiscovery>();
             ServiceDiscovery sdB = nodeB.Root.GetComponent<ServiceDiscovery>();
             TimerComponent timerA = nodeA.Root.TimerComponent;
             TimerComponent timerB = nodeB.Root.TimerComponent;
-            if (sdA == null || sdB == null || timerA == null || timerB == null)
-            {
-                Log.Console("double failover sdA/sdB/timerA/timerB is null");
-                return 602;
-            }
-
             int leasePrepareError = await ServiceDiscovery_HA_TestHelper.ConfigureFastLease(sdA, sdB, timerB);
             if (leasePrepareError != 0)
             {
@@ -121,20 +109,8 @@ namespace ET.Test
             // 4. 重建 A，确认 B 仍保持主（避免重建后直接脑裂）
             Fiber nodeARecovered = await ServiceDiscovery_HA_TestHelper.CreateServiceDiscoveryNodeByConfig(testFiber, 0,
                 "ServiceDiscovery_DoubleFailover_A_Recovered");
-            if (nodeARecovered == null)
-            {
-                Log.Console("double failover recreate nodeA failed");
-                return 615;
-            }
-
             ServiceDiscovery sdARecovered = nodeARecovered.Root.GetComponent<ServiceDiscovery>();
             TimerComponent timerARecovered = nodeARecovered.Root.TimerComponent;
-            if (sdARecovered == null || timerARecovered == null)
-            {
-                Log.Console("double failover sdARecovered/timerARecovered is null");
-                return 616;
-            }
-
             sdARecovered.GetOrAddLease().MasterLeaseTimeout = ServiceDiscovery_HA_TestHelper.FastLeaseTimeoutMs;
             sdARecovered.GetOrAddLease().MasterLeaseRenewInterval = ServiceDiscovery_HA_TestHelper.FastLeaseRenewIntervalMs;
             sdB.GetOrAddLease().MasterLeaseTimeout = ServiceDiscovery_HA_TestHelper.FastLeaseTimeoutMs;
