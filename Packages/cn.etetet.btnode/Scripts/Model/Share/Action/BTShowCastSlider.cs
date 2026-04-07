@@ -1,4 +1,3 @@
-﻿using System;
 using MongoDB.Bson.Serialization.Attributes;
 using Sirenix.OdinInspector;
 
@@ -18,21 +17,21 @@ namespace ET
 #if UNITY
         [BoxGroup("显示信息", CenterLabel = true)]
         [LabelText("进度条显示名称")]
+#endif
         public string ShowDisplayName;
 
+#if UNITY
         [BoxGroup("显示信息")]
-        [InlineProperty] // 去掉折叠和标题
-        [HideReferenceObjectPicker]
-        [LabelText("进度条显示图标")]
-        public OdinUnityObject Icon = new();
+        [LabelText("进度条显示图标资源名")]
 #endif
+        public string IconName;
     }
     
     public struct BTEvent_ShowCastSlider
     {
-        public EntityRef<Unit>   Unit;
-        public EntityRef<Buff>   Buff;
-        public bool   IsIncrease;
+        public EntityRef<Unit> Unit;
+        public EntityRef<Buff> Buff;
+        public bool IsIncrease;
         public string IconName;
         public string ShowDisplayName;
     }

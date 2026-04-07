@@ -33,16 +33,22 @@ MonoBehaviour:
     - Name: Desc
       Entry: 1
       Data: "\u602A\u7269\u6218\u6597\u72B6\u6001"
-    - Name: Icon
+    - Name: IconName
+      Entry: 1
+      Data: ABILITY_DRUID_DEMORALIZINGROAR
+    - Name: legacyIcon
       Entry: 7
       Data: 1|ET.OdinUnityObject, ET.Model
     - Name: Name
       Entry: 1
-      Data: ABILITY_DRUID_DEMORALIZINGROAR
+      Data: 
     - Name: 
       Entry: 8
       Data: 
     - Name: CD
+      Entry: 3
+      Data: 0
+    - Name: DamageMultiplier
       Entry: 3
       Data: 0
     - Name: Cost
@@ -78,6 +84,15 @@ MonoBehaviour:
     - Name: DescCollapsed
       Entry: 5
       Data: true
+    - Name: EditorLayoutVisible
+      Entry: 5
+      Data: false
+    - Name: EditorNodeWidth
+      Entry: 4
+      Data: 0
+    - Name: EditorHorizontalSpacing
+      Entry: 4
+      Data: 0
     - Name: Position
       Entry: 7
       Data: UnityEngine.Vector2, UnityEngine.CoreModule

@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using MongoDB.Bson.Serialization.Attributes;
 using Sirenix.OdinInspector;
@@ -12,18 +11,16 @@ namespace ET
         [BTOutput(typeof(Unit))]
         public string Unit = "Unit";
         
-        
         [Sirenix.OdinInspector.BoxGroup("输出参数")]
         [BTOutput(typeof(List<long>))]
         public string Units = "Units";
         
         public int Radius;
-        
         public UnitType UnitType;
-        
-        [InlineProperty] // 去掉折叠和标题
-        [HideReferenceObjectPicker]
-        [LabelText("技能指示器")]
-        public OdinUnityObject SpellIndicator = new();
+
+#if UNITY
+        [LabelText("技能指示器资源名")]
+#endif
+        public string SpellIndicatorName;
     }
 }

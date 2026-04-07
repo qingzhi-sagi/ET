@@ -1,8 +1,9 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson.Serialization.Attributes;
+using Sirenix.OdinInspector;
 
 namespace ET
 {
-    public class BTCreateFakeBullet: BTAction
+    public class BTCreateFakeBullet : BTAction
     {
         [BTInput(typeof(Unit))]
         public string Caster;
@@ -11,12 +12,13 @@ namespace ET
         public string Target;
         
         public BindPoint CasterBindPoint;
-        
         public BindPoint TargetBindPoint;
-
         public int Speed;
 
-        public OdinUnityObject Effect;
+#if UNITY
+        [LabelText("特效资源名")]
+#endif
+        public string EffectName;
 
         public int Duration = 50000;
     }

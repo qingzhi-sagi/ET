@@ -1,4 +1,3 @@
-﻿using System;
 using MongoDB.Bson.Serialization.Attributes;
 using Sirenix.OdinInspector;
 
@@ -12,10 +11,10 @@ namespace ET
         public string Pos = "Pos";
 
         public int Radius;
-        
-        [InlineProperty] // 去掉折叠和标题
-        [HideReferenceObjectPicker]
-        [LabelText("技能指示器")]
-        public OdinUnityObject SpellIndicator = new();
+
+#if UNITY
+        [LabelText("技能指示器资源名")]
+#endif
+        public string SpellIndicatorName;
     }
 }

@@ -111,6 +111,15 @@ MonoBehaviour:
     - Name: DescCollapsed
       Entry: 5
       Data: true
+    - Name: EditorLayoutVisible
+      Entry: 5
+      Data: false
+    - Name: EditorNodeWidth
+      Entry: 4
+      Data: 0
+    - Name: EditorHorizontalSpacing
+      Entry: 4
+      Data: 0
     - Name: Position
       Entry: 7
       Data: UnityEngine.Vector2, UnityEngine.CoreModule
@@ -156,6 +165,15 @@ MonoBehaviour:
     - Name: DescCollapsed
       Entry: 5
       Data: true
+    - Name: EditorLayoutVisible
+      Entry: 5
+      Data: false
+    - Name: EditorNodeWidth
+      Entry: 4
+      Data: 0
+    - Name: EditorHorizontalSpacing
+      Entry: 4
+      Data: 0
     - Name: Position
       Entry: 7
       Data: UnityEngine.Vector2, UnityEngine.CoreModule
@@ -225,6 +243,15 @@ MonoBehaviour:
     - Name: DescCollapsed
       Entry: 5
       Data: true
+    - Name: EditorLayoutVisible
+      Entry: 5
+      Data: false
+    - Name: EditorNodeWidth
+      Entry: 4
+      Data: 0
+    - Name: EditorHorizontalSpacing
+      Entry: 4
+      Data: 0
     - Name: Position
       Entry: 7
       Data: UnityEngine.Vector2, UnityEngine.CoreModule
@@ -246,18 +273,21 @@ MonoBehaviour:
     - Name: BindPoint
       Entry: 3
       Data: 3
-    - Name: Effect
+    - Name: EffectName
+      Entry: 1
+      Data: effect_heart
+    - Name: Duration
+      Entry: 3
+      Data: 5000
+    - Name: legacyEffect
       Entry: 7
       Data: 11|ET.OdinUnityObject, ET.Model
     - Name: Name
       Entry: 1
-      Data: effect_heart
+      Data: 
     - Name: 
       Entry: 8
       Data: 
-    - Name: Duration
-      Entry: 3
-      Data: 5000
     - Name: 
       Entry: 8
       Data: 
@@ -279,6 +309,15 @@ MonoBehaviour:
     - Name: DescCollapsed
       Entry: 5
       Data: true
+    - Name: EditorLayoutVisible
+      Entry: 5
+      Data: false
+    - Name: EditorNodeWidth
+      Entry: 4
+      Data: 0
+    - Name: EditorHorizontalSpacing
+      Entry: 4
+      Data: 0
     - Name: Position
       Entry: 7
       Data: UnityEngine.Vector2, UnityEngine.CoreModule

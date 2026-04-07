@@ -100,7 +100,6 @@
     <Compile Include="Packages/cn.etetet.spell/Scripts/Model/Share/EffectNode.cs" />
     <Compile Include="Packages/cn.etetet.btnode/Scripts/Model/Share/Action/BTPhaseAdd.cs" />
     <Compile Include="Packages/cn.etetet.login/Scripts/Model/Server/Gate/SessionPlayerComponent.cs" />
-    <Compile Include="Packages/cn.etetet.behaviortree/Scripts/Model/Share/OdinUnityObject.cs" />
     <Compile Include="Packages/cn.etetet.excel/CodeMode/Model/ClientServer/Config/Tables.cs" />
     <Compile Include="Packages/cn.etetet.core/Scripts/Model/Share/Actor/MessageQueue.cs" />
     <Compile Include="Packages/cn.etetet.map/Scripts/Model/Share/SceneType.cs" />

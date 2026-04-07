@@ -11,6 +11,7 @@ using Luban.TemplateExtensions;
 using Luban.Tmpl;
 using Scriban;
 using Scriban.Runtime;
+using System.Text.RegularExpressions;
 
 namespace Luban.CSharp.DataTarget;
 
@@ -94,6 +95,19 @@ public class CsharpCodeDataTarget : DataTargetBase
     {
         var result = new StringBuilder();
         GenerateCodeData(table, records, result);
-        return CreateOutputFile($"{table.OutputDataFile}.{OutputFileExt}", result.ToString());
+        string content = result.ToString();
+        string outputFileName = GetOutputFileName(table, content);
+        return CreateOutputFile($"{outputFileName}.{OutputFileExt}", content);
+    }
+
+    private static string GetOutputFileName(DefTable table, string content)
+    {
+        Match factoryMatch = Regex.Match(content, @"class\s+([A-Za-z0-9_]+Factory)\s*:\s*IConfigFactory");
+        if (factoryMatch.Success)
+        {
+            return factoryMatch.Groups[1].Value;
+        }
+
+        return table.OutputDataFile;
     }
 }

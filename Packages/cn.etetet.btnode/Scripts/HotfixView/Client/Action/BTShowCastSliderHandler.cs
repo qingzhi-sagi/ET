@@ -16,7 +16,7 @@ namespace ET.Client
                 Unit            = target,
                 Buff            = buff,
                 ShowDisplayName = node.ShowDisplayName,
-                IconName        = node.Icon.Name,
+                IconName        = node.IconName,
                 IsIncrease      = node.IsIncrease
             }).Coroutine();
 

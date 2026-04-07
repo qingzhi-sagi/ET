@@ -27,24 +27,30 @@ MonoBehaviour:
     - Name: Id
       Entry: 3
       Data: 100030
+    - Name: BuffId
+      Entry: 3
+      Data: 200030
     - Name: Desc
       Entry: 1
       Data: "\u6355\u83B7\u5BA0\u7269"
-    - Name: Icon
+    - Name: IconName
+      Entry: 1
+      Data: Spell_Druid_stampedingroar_cat
+    - Name: legacyIcon
       Entry: 7
       Data: 1|ET.OdinUnityObject, ET.Model
     - Name: Name
       Entry: 1
-      Data: Spell_Druid_stampedingroar_cat
+      Data: 
     - Name: 
       Entry: 8
       Data: 
     - Name: CD
       Entry: 3
       Data: 5000
-    - Name: BuffId
+    - Name: DamageMultiplier
       Entry: 3
-      Data: 1100030
+      Data: 0
     - Name: Cost
       Entry: 6
       Data: 
@@ -78,6 +84,15 @@ MonoBehaviour:
     - Name: DescCollapsed
       Entry: 5
       Data: false
+    - Name: EditorLayoutVisible
+      Entry: 5
+      Data: false
+    - Name: EditorNodeWidth
+      Entry: 4
+      Data: 0
+    - Name: EditorHorizontalSpacing
+      Entry: 4
+      Data: 0
     - Name: Position
       Entry: 7
       Data: UnityEngine.Vector2, UnityEngine.CoreModule

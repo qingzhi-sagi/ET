@@ -585,12 +585,15 @@ MonoBehaviour:
     - Name: ShowDisplayName
       Entry: 1
       Data: Blizzard
-    - Name: Icon
+    - Name: IconName
+      Entry: 1
+      Data: Spell_Frost_IceStorm
+    - Name: legacyIcon
       Entry: 7
       Data: 21|ET.OdinUnityObject, ET.Model
     - Name: Name
       Entry: 1
-      Data: Spell_Frost_IceStorm
+      Data: 
     - Name: 
       Entry: 8
       Data: 

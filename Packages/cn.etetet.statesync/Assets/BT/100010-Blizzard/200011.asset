@@ -114,6 +114,15 @@ MonoBehaviour:
     - Name: DescCollapsed
       Entry: 5
       Data: true
+    - Name: EditorLayoutVisible
+      Entry: 5
+      Data: false
+    - Name: EditorNodeWidth
+      Entry: 4
+      Data: 0
+    - Name: EditorHorizontalSpacing
+      Entry: 4
+      Data: 0
     - Name: Position
       Entry: 7
       Data: UnityEngine.Vector2, UnityEngine.CoreModule
@@ -177,6 +186,15 @@ MonoBehaviour:
     - Name: DescCollapsed
       Entry: 5
       Data: true
+    - Name: EditorLayoutVisible
+      Entry: 5
+      Data: false
+    - Name: EditorNodeWidth
+      Entry: 4
+      Data: 0
+    - Name: EditorHorizontalSpacing
+      Entry: 4
+      Data: 0
     - Name: Position
       Entry: 7
       Data: UnityEngine.Vector2, UnityEngine.CoreModule
@@ -222,6 +240,15 @@ MonoBehaviour:
     - Name: DescCollapsed
       Entry: 5
       Data: true
+    - Name: EditorLayoutVisible
+      Entry: 5
+      Data: false
+    - Name: EditorNodeWidth
+      Entry: 4
+      Data: 0
+    - Name: EditorHorizontalSpacing
+      Entry: 4
+      Data: 0
     - Name: Position
       Entry: 7
       Data: UnityEngine.Vector2, UnityEngine.CoreModule
@@ -261,6 +288,15 @@ MonoBehaviour:
     - Name: DescCollapsed
       Entry: 5
       Data: true
+    - Name: EditorLayoutVisible
+      Entry: 5
+      Data: false
+    - Name: EditorNodeWidth
+      Entry: 4
+      Data: 0
+    - Name: EditorHorizontalSpacing
+      Entry: 4
+      Data: 0
     - Name: Position
       Entry: 7
       Data: UnityEngine.Vector2, UnityEngine.CoreModule
@@ -330,6 +366,15 @@ MonoBehaviour:
     - Name: DescCollapsed
       Entry: 5
       Data: true
+    - Name: EditorLayoutVisible
+      Entry: 5
+      Data: false
+    - Name: EditorNodeWidth
+      Entry: 4
+      Data: 0
+    - Name: EditorHorizontalSpacing
+      Entry: 4
+      Data: 0
     - Name: Position
       Entry: 7
       Data: UnityEngine.Vector2, UnityEngine.CoreModule
@@ -381,6 +426,15 @@ MonoBehaviour:
     - Name: DescCollapsed
       Entry: 5
       Data: true
+    - Name: EditorLayoutVisible
+      Entry: 5
+      Data: false
+    - Name: EditorNodeWidth
+      Entry: 4
+      Data: 0
+    - Name: EditorHorizontalSpacing
+      Entry: 4
+      Data: 0
     - Name: Position
       Entry: 7
       Data: UnityEngine.Vector2, UnityEngine.CoreModule
@@ -396,18 +450,21 @@ MonoBehaviour:
     - Name: Pos
       Entry: 1
       Data: Pos
-    - Name: Effect
+    - Name: EffectName
+      Entry: 1
+      Data: effect_top_down_ice_circle
+    - Name: Duration
+      Entry: 3
+      Data: 5000
+    - Name: legacyEffect
       Entry: 7
       Data: 17|ET.OdinUnityObject, ET.Model
     - Name: Name
       Entry: 1
-      Data: effect_top_down_ice_circle
+      Data: 
     - Name: 
       Entry: 8
       Data: 
-    - Name: Duration
-      Entry: 3
-      Data: 5000
     - Name: 
       Entry: 8
       Data: 
@@ -429,6 +486,15 @@ MonoBehaviour:
     - Name: DescCollapsed
       Entry: 5
       Data: true
+    - Name: EditorLayoutVisible
+      Entry: 5
+      Data: false
+    - Name: EditorNodeWidth
+      Entry: 4
+      Data: 0
+    - Name: EditorHorizontalSpacing
+      Entry: 4
+      Data: 0
     - Name: Position
       Entry: 7
       Data: UnityEngine.Vector2, UnityEngine.CoreModule

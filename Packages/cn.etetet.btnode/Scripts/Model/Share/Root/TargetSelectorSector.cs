@@ -1,18 +1,17 @@
-﻿using Sirenix.OdinInspector;
+using Sirenix.OdinInspector;
 
 namespace ET
 {
     [System.Serializable]
     public class TargetSelectorSector : TargetSelector
     {
-        [InlineProperty] // 去掉折叠和标题
-        [HideReferenceObjectPicker]
-        [LabelText("技能指示器")]
-        public OdinUnityObject SpellIndicator = new();
+#if UNITY
+        [LabelText("技能指示器资源名")]
+#endif
+        public string SpellIndicatorName;
         
         public int Radius;
         public int Angle;
-        
         public UnitType UnitType;
     }
 }

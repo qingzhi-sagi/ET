@@ -32,14 +32,28 @@ if ($ConfigType -eq "Luban") {
     $OutputFormats = "cs-code"
 }
 
+function Invoke-ConfigExport
+{
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$TargetName,
+
+        [Parameter(Mandatory = $true)]
+        [string]$OutputCodeDir,
+
+        [Parameter(Mandatory = $true)]
+        [string]$OutputDataDir
+    )
+
+    & $DotNet $GEN_CLIENT --customTemplateDir $CUSTOM -t $TargetName -c cs-code -d cs-code-data --conf $PACKAGE/Luban/$CONFIG_NAME/luban.conf -x outputCodeDir=$OutputCodeDir -x outputDataDir=$OutputDataDir
+    Write-Host "==================== $TargetName 完成 ===================="
+}
+
 # 客户端
-& $DotNet $GEN_CLIENT --customTemplateDir $CUSTOM -t client -c cs-code -d cs-code-data --conf $PACKAGE/Luban/$CONFIG_NAME/luban.conf -x outputCodeDir=$PACKAGE/CodeMode/Model/Client/$CONFIG_NAME/ -x outputDataDir=$PACKAGE/CodeMode/Hotfix/Client/$CONFIG_NAME/
-Write-Host "==================== 客户端 完成 ===================="
+Invoke-ConfigExport -TargetName client -OutputCodeDir "$PACKAGE/CodeMode/Model/Client/$CONFIG_NAME/" -OutputDataDir "$PACKAGE/CodeMode/Config/Client/$CONFIG_NAME/"
 
 # 服务器
-& $DotNet $GEN_CLIENT --customTemplateDir $CUSTOM -t server -c cs-code -d cs-code-data --conf $PACKAGE/Luban/$CONFIG_NAME/luban.conf -x outputCodeDir=$PACKAGE/CodeMode/Model/Server/$CONFIG_NAME/ -x outputDataDir=$PACKAGE/CodeMode/Hotfix/Server/$CONFIG_NAME/
-Write-Host "==================== 服务器 完成 ===================="
+Invoke-ConfigExport -TargetName server -OutputCodeDir "$PACKAGE/CodeMode/Model/Server/$CONFIG_NAME/" -OutputDataDir "$PACKAGE/CodeMode/Config/Server/$CONFIG_NAME/"
 
 # 所有
-& $DotNet $GEN_CLIENT --customTemplateDir $CUSTOM -t all -c cs-code -d cs-code-data --conf $PACKAGE/Luban/$CONFIG_NAME/luban.conf -x outputCodeDir=$PACKAGE/CodeMode/Model/ClientServer/$CONFIG_NAME/ -x outputDataDir=$PACKAGE/CodeMode/Hotfix/ClientServer/$CONFIG_NAME/
-Write-Host "==================== 所有 完成 ===================="
+Invoke-ConfigExport -TargetName all -OutputCodeDir "$PACKAGE/CodeMode/Model/ClientServer/$CONFIG_NAME/" -OutputDataDir "$PACKAGE/CodeMode/Config/ClientServer/$CONFIG_NAME/"

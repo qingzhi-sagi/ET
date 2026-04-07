@@ -33,12 +33,15 @@ MonoBehaviour:
     - Name: Desc
       Entry: 1
       Data: "\u66B4\u98CE\u96EA"
-    - Name: Icon
+    - Name: IconName
+      Entry: 1
+      Data: Spell_Frost_IceStorm
+    - Name: legacyIcon
       Entry: 7
       Data: 1|ET.OdinUnityObject, ET.Model
     - Name: Name
       Entry: 1
-      Data: Spell_Frost_IceStorm
+      Data: 
     - Name: 
       Entry: 8
       Data: 
@@ -78,6 +81,15 @@ MonoBehaviour:
     - Name: DescCollapsed
       Entry: 5
       Data: true
+    - Name: EditorLayoutVisible
+      Entry: 5
+      Data: false
+    - Name: EditorNodeWidth
+      Entry: 4
+      Data: 0
+    - Name: EditorHorizontalSpacing
+      Entry: 4
+      Data: 0
     - Name: Position
       Entry: 7
       Data: UnityEngine.Vector2, UnityEngine.CoreModule
@@ -135,6 +147,15 @@ MonoBehaviour:
     - Name: DescCollapsed
       Entry: 5
       Data: true
+    - Name: EditorLayoutVisible
+      Entry: 5
+      Data: false
+    - Name: EditorNodeWidth
+      Entry: 4
+      Data: 0
+    - Name: EditorHorizontalSpacing
+      Entry: 4
+      Data: 0
     - Name: Position
       Entry: 7
       Data: UnityEngine.Vector2, UnityEngine.CoreModule
@@ -171,12 +192,15 @@ MonoBehaviour:
     - Name: Radius
       Entry: 3
       Data: 6000
-    - Name: SpellIndicator
+    - Name: SpellIndicatorName
+      Entry: 1
+      Data: RoundIndicator
+    - Name: legacySpellIndicator
       Entry: 7
       Data: 6|ET.OdinUnityObject, ET.Model
     - Name: Name
       Entry: 1
-      Data: RoundIndicator
+      Data: 
     - Name: 
       Entry: 8
       Data: 

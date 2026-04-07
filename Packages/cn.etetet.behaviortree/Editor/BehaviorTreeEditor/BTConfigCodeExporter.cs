@@ -24,9 +24,9 @@ namespace ET.Client
 
         private static readonly string[] HotfixConfigDirs =
         {
-            "Packages/cn.etetet.excel/CodeMode/Hotfix/Client/Config",
-            "Packages/cn.etetet.excel/CodeMode/Hotfix/ClientServer/Config",
-            "Packages/cn.etetet.excel/CodeMode/Hotfix/Server/Config",
+            "Packages/cn.etetet.excel/CodeMode/Config/Client/Config",
+            "Packages/cn.etetet.excel/CodeMode/Config/ClientServer/Config",
+            "Packages/cn.etetet.excel/CodeMode/Config/Server/Config",
         };
 
         private static readonly Dictionary<string, Type> RuntimeTypes = LoadRuntimeTypes();

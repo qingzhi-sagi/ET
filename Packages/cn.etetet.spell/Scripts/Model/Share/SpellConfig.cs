@@ -75,10 +75,8 @@ namespace ET
         public string Desc;
 
         [BoxGroup("技能信息")]
-        [InlineProperty] // 去掉折叠和标题
-        [HideReferenceObjectPicker]
-        [LabelText("图标")]
-        public OdinUnityObject Icon = new();
+        [LabelText("图标资源名")]
+        public string IconName;
         
         [BoxGroup("技能信息")]
         [LabelText("技能CD（毫秒）")]
@@ -91,9 +89,9 @@ namespace ET
         [LabelText("消耗")]
         public CostNode Cost;
 
-        #if UNITY
+#if UNITY
         [UnityEngine.SerializeReference]
-        #endif
+#endif
         [LabelText("目标选择")]
         public TargetSelector TargetSelector;
     }

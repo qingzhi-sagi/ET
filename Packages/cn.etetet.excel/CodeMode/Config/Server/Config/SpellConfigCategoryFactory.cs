@@ -19,10 +19,7 @@ namespace ET
                 Id = 100000,
                 BuffId = 200000,
                 Desc = @"普通攻击",
-                Icon = new global::ET.OdinUnityObject
-            {
-                    Name = @"Ability_Warrior_OffensiveStance",
-                },
+                IconName = @"Ability_Warrior_OffensiveStance",
                 CD = 2000,
                 DamageMultiplier = 0,
                 Cost = null,
@@ -45,10 +42,7 @@ namespace ET
                 Id = 100001,
                 BuffId = 200001,
                 Desc = @"普通攻击子技能",
-                Icon = new global::ET.OdinUnityObject
-            {
-                    Name = null,
-                },
+                IconName = null,
                 CD = 0,
                 DamageMultiplier = 0,
                 Cost = null,
@@ -71,10 +65,7 @@ namespace ET
                 Id = 100002,
                 BuffId = 200002,
                 Desc = @"普通攻击子技能的子技能，用来伤害技能",
-                Icon = new global::ET.OdinUnityObject
-            {
-                    Name = null,
-                },
+                IconName = null,
                 CD = 0,
                 DamageMultiplier = 0,
                 Cost = null,
@@ -97,10 +88,7 @@ namespace ET
                 Id = 100010,
                 BuffId = 200010,
                 Desc = @"暴风雪",
-                Icon = new global::ET.OdinUnityObject
-            {
-                    Name = @"Spell_Frost_IceStorm",
-                },
+                IconName = @"Spell_Frost_IceStorm",
                 CD = 5000,
                 DamageMultiplier = 0,
                 Cost = new global::ET.CostNode
@@ -124,10 +112,7 @@ namespace ET
                     MinDistance = 0,
                     Pos = @"Pos",
                     Radius = 6000,
-                    SpellIndicator = new global::ET.OdinUnityObject
-            {
-                        Name = @"RoundIndicator",
-                    },
+                    SpellIndicatorName = @"RoundIndicator",
                 },
             });
             category.Add(new global::ET.SpellConfig
@@ -135,10 +120,7 @@ namespace ET
                 Id = 100011,
                 BuffId = 200011,
                 Desc = @"暴风雪每波雪技能",
-                Icon = new global::ET.OdinUnityObject
-            {
-                    Name = null,
-                },
+                IconName = null,
                 CD = 0,
                 DamageMultiplier = 0,
                 Cost = new global::ET.CostNode
@@ -164,10 +146,7 @@ namespace ET
                     Units = @"Units",
                     Radius = 6000,
                     UnitType = (global::ET.UnitType)15,
-                    SpellIndicator = new global::ET.OdinUnityObject
-            {
-                        Name = @"RoundIndicator",
-                    },
+                    SpellIndicatorName = @"RoundIndicator",
                 },
             });
             category.Add(new global::ET.SpellConfig
@@ -175,10 +154,7 @@ namespace ET
                 Id = 100020,
                 BuffId = 200020,
                 Desc = @"寒冰箭",
-                Icon = new global::ET.OdinUnityObject
-            {
-                    Name = @"Spell_Frost_FrostBolt02",
-                },
+                IconName = @"Spell_Frost_FrostBolt02",
                 CD = 5000,
                 DamageMultiplier = 0,
                 Cost = new global::ET.CostNode
@@ -209,10 +185,7 @@ namespace ET
                 Id = 100030,
                 BuffId = 200030,
                 Desc = @"捕获宠物",
-                Icon = new global::ET.OdinUnityObject
-            {
-                    Name = @"Spell_Druid_stampedingroar_cat",
-                },
+                IconName = @"Spell_Druid_stampedingroar_cat",
                 CD = 5000,
                 DamageMultiplier = 0,
                 Cost = null,
@@ -235,10 +208,7 @@ namespace ET
                 Id = 100040,
                 BuffId = 200040,
                 Desc = null,
-                Icon = new global::ET.OdinUnityObject
-            {
-                    Name = @"Ability_Druid_BalanceofPower",
-                },
+                IconName = @"Ability_Druid_BalanceofPower",
                 CD = 0,
                 DamageMultiplier = 0,
                 Cost = null,
@@ -259,10 +229,7 @@ namespace ET
                 Id = 100050,
                 BuffId = 200050,
                 Desc = null,
-                Icon = new global::ET.OdinUnityObject
-            {
-                    Name = @"Ability_Druid_Bash",
-                },
+                IconName = @"Ability_Druid_Bash",
                 CD = 0,
                 DamageMultiplier = 0,
                 Cost = null,
@@ -283,10 +250,7 @@ namespace ET
                 Id = 100100,
                 BuffId = 200100,
                 Desc = @"怪物普通攻击",
-                Icon = new global::ET.OdinUnityObject
-            {
-                    Name = @"Ability_Druid_Berserk",
-                },
+                IconName = @"Ability_Druid_Berserk",
                 CD = 2000,
                 DamageMultiplier = 0,
                 Cost = null,
@@ -309,10 +273,7 @@ namespace ET
                 Id = 100101,
                 BuffId = 200101,
                 Desc = @"怪物普通攻击子技能",
-                Icon = new global::ET.OdinUnityObject
-            {
-                    Name = null,
-                },
+                IconName = null,
                 CD = 0,
                 DamageMultiplier = 0,
                 Cost = null,
@@ -335,10 +296,7 @@ namespace ET
                 Id = 100102,
                 BuffId = 200102,
                 Desc = @"普通攻击子技能的子技能，用来伤害技能",
-                Icon = new global::ET.OdinUnityObject
-            {
-                    Name = null,
-                },
+                IconName = null,
                 CD = 0,
                 DamageMultiplier = 0,
                 Cost = null,
@@ -361,10 +319,7 @@ namespace ET
                 Id = 100110,
                 BuffId = 200110,
                 Desc = @"怪物战斗状态",
-                Icon = new global::ET.OdinUnityObject
-            {
-                    Name = @"ABILITY_DRUID_DEMORALIZINGROAR",
-                },
+                IconName = @"ABILITY_DRUID_DEMORALIZINGROAR",
                 CD = 0,
                 DamageMultiplier = 0,
                 Cost = null,
@@ -385,10 +340,7 @@ namespace ET
                 Id = 100120,
                 BuffId = 200120,
                 Desc = null,
-                Icon = new global::ET.OdinUnityObject
-            {
-                    Name = null,
-                },
+                IconName = null,
                 CD = 0,
                 DamageMultiplier = 0,
                 Cost = null,
@@ -402,7 +354,7 @@ namespace ET
                     Owner = @"Owner",
                     MaxDistance = 10000,
                     MinDistance = 0,
-                    SpellIndicator = null,
+                    SpellIndicatorName = null,
                     Width = 1000f,
                     Length = 100f,
                     UnitType = global::ET.UnitType.Player,
@@ -413,10 +365,7 @@ namespace ET
                 Id = 100130,
                 BuffId = 200130,
                 Desc = null,
-                Icon = new global::ET.OdinUnityObject
-            {
-                    Name = null,
-                },
+                IconName = null,
                 CD = 0,
                 DamageMultiplier = 0,
                 Cost = null,
@@ -430,7 +379,7 @@ namespace ET
                     Owner = @"Owner",
                     MaxDistance = 10000,
                     MinDistance = 0,
-                    SpellIndicator = null,
+                    SpellIndicatorName = null,
                     Width = 1000f,
                     Length = 100f,
                     UnitType = global::ET.UnitType.Player,

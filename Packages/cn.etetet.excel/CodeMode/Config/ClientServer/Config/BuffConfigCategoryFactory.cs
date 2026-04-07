@@ -314,6 +314,8 @@ namespace ET
                                 Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
                                 Buff = @"Buff",
                                 IsIncrease = false,
+                                ShowDisplayName = @"Blizzard",
+                                IconName = @"Spell_Frost_IceStorm",
                             },
                         },
                         TreeId = 4778830958770092921L,
@@ -432,10 +434,7 @@ namespace ET
                                 Id = 2,
                                 Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
                                 Pos = @"Pos",
-                                Effect = new global::ET.OdinUnityObject
-            {
-                                    Name = @"effect_top_down_ice_circle",
-                                },
+                                EffectName = @"effect_top_down_ice_circle",
                                 Duration = 5000,
                             },
                         },
@@ -518,6 +517,8 @@ namespace ET
                                 Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
                                 Buff = @"Buff",
                                 IsIncrease = true,
+                                ShowDisplayName = @"Frostbolt",
+                                IconName = @"Spell_Frost_FrostBolt02",
                             },
                         },
                         TreeId = 2024985502994765610L,
@@ -661,10 +662,7 @@ namespace ET
                                 CasterBindPoint = global::ET.BindPoint.Attack,
                                 TargetBindPoint = global::ET.BindPoint.Hitted,
                                 Speed = 30000,
-                                Effect = new global::ET.OdinUnityObject
-            {
-                                    Name = @"effect_Frost Bolt",
-                                },
+                                EffectName = @"effect_Frost Bolt",
                                 Duration = 60000,
                             },
                         },
@@ -807,6 +805,8 @@ namespace ET
                                 Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
                                 Buff = @"Buff",
                                 IsIncrease = false,
+                                ShowDisplayName = @"TameBeast",
+                                IconName = @"Ability_Druid_Berserk",
                             },
                         },
                         TreeId = 5929167979800978287L,
@@ -883,10 +883,7 @@ namespace ET
                                 Unit = @"Unit",
                                 Buff = @"Buff",
                                 BindPoint = global::ET.BindPoint.Head,
-                                Effect = new global::ET.OdinUnityObject
-            {
-                                    Name = @"effect_heart",
-                                },
+                                EffectName = @"effect_heart",
                                 Duration = 5000,
                             },
                         },

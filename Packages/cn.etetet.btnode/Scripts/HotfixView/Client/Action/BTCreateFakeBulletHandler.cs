@@ -12,7 +12,7 @@ namespace ET.Client
             GameObject targetGameObject = target.GetComponent<GameObjectComponent>().GameObject;
             Transform targetTransform = targetGameObject.GetComponent<BindPointComponent>().GetBindPoints()[node.TargetBindPoint];
             
-            CreateEffectOnPosAsync(caster, targetTransform, node.Effect.Name, node.CasterBindPoint, node.Duration, node).Coroutine();
+            CreateEffectOnPosAsync(caster, targetTransform, node.EffectName, node.CasterBindPoint, node.Duration, node).Coroutine();
             
             return 0;
         }

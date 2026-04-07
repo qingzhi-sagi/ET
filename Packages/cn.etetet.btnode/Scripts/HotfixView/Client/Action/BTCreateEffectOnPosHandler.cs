@@ -9,7 +9,7 @@ namespace ET.Client
         {
             float3 pos = env.GetStruct<float3>(node.Pos);
 
-            CreateEffectOnPosAsync(env.Scene, node.Effect.Name, pos, node.Duration).Coroutine();
+            CreateEffectOnPosAsync(env.Scene, node.EffectName, pos, node.Duration).Coroutine();
             return 0;
         }
         
