@@ -6,7 +6,7 @@ using Sirenix.OdinInspector;
 
 namespace ET
 {
-    [ConfigProcess(ConfigType.Bson)]
+    [ConfigProcess(ConfigType.Code)]
     public partial class SpellConfigCategory : Singleton<SpellConfigCategory>, ISingletonAwake, IConfig
     {
         [BsonElement]
@@ -31,6 +31,11 @@ namespace ET
         public bool Contain(int id)
         {
             return this.dict.ContainsKey(id);
+        }
+
+        public IReadOnlyDictionary<int, SpellConfig> GetAll()
+        {
+            return this.dict;
         }
 
         public void ResolveRef()
@@ -93,4 +98,3 @@ namespace ET
         public TargetSelector TargetSelector;
     }
 }
-

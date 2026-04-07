@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using MongoDB.Bson;
@@ -14,8 +13,6 @@ namespace ET.Client
 {
     public static class ExportScriptableObjectEditor
     {
-        private const string ExportPath = "Packages/cn.etetet.map/Bundles/Json";
-        
         [MenuItem("ET/Map/ExportScriptableObject _F3")]
         public static void ExportScriptableObject()
         {
@@ -126,13 +123,7 @@ namespace ET.Client
                 }
             }
 
-            if (!Directory.Exists(ExportPath))
-            {
-                Directory.CreateDirectory(ExportPath);
-            }
-
-            File.WriteAllText(Path.Combine(ExportPath, "SpellConfigCategory.txt"), ((object)spellConfigCategory).ToJson(MongoHelper.ConfigSettings));
-            File.WriteAllText(Path.Combine(ExportPath, "BuffConfigCategory.txt"), ((object)buffConfigCategory).ToJson(MongoHelper.ConfigSettings));
+            BTConfigCodeExporter.Export(spellConfigCategory, buffConfigCategory);
             
             Debug.Log("Export ScriptableObject OK!");
         }

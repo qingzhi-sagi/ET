@@ -6,7 +6,7 @@ using Sirenix.OdinInspector;
 
 namespace ET
 {
-    [ConfigProcess(ConfigType.Bson)]
+    [ConfigProcess(ConfigType.Code)]
     public partial class BuffConfigCategory : Singleton<BuffConfigCategory>, ISingletonAwake, IConfig
     {
         [BsonElement]
@@ -31,6 +31,11 @@ namespace ET
         public bool Contain(int id)
         {
             return this.dict.ContainsKey(id);
+        }
+
+        public IReadOnlyDictionary<int, BuffConfig> GetAll()
+        {
+            return this.dict;
         }
 
         public void ResolveRef()
@@ -134,4 +139,3 @@ namespace ET
         Replace,
     }
 }
-

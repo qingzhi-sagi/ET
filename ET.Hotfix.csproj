@@ -302,6 +302,7 @@
     <Compile Include="Packages/cn.etetet.spell/Scripts/Hotfix/Share/SpellConfigHelper.cs" />
     <Compile Include="Packages/cn.etetet.login/Scripts/Hotfix/Server/Gate/C2G_LoginGateHandler.cs" />
     <Compile Include="Packages/cn.etetet.item/Scripts/Hotfix/Client/M2C_SyncBagDataHandler.cs" />
+    <Compile Include="Packages/cn.etetet.excel/CodeMode/Hotfix/ClientServer/Config/BuffConfigCategoryFactory.cs" />
     <Compile Include="Packages/cn.etetet.map/Scripts/Hotfix/Server/Map/NumericChange_PhaseChange.cs" />
     <Compile Include="Packages/cn.etetet.login/Scripts/Hotfix/Server/Gate/C2G_PingHandler.cs" />
     <Compile Include="Packages/cn.etetet.quest/Scripts/Hotfix/Server/QuestSystem.cs" />
@@ -317,6 +318,7 @@
     <Compile Include="Packages/cn.etetet.map/Scripts/Hotfix/Client/Unit/UnitClickHelper.cs" />
     <Compile Include="Packages/cn.etetet.excel/CodeMode/Hotfix/ClientServer/Config/MapUnitConfigCategory.cs" />
     <Compile Include="Packages/cn.etetet.login/Scripts/Hotfix/Server/Gate/PlayerSystem.cs" />
+    <Compile Include="Packages/cn.etetet.excel/CodeMode/Hotfix/ClientServer/Config/SpellConfigCategoryFactory.cs" />
     <Compile Include="Packages/cn.etetet.servicediscovery/Scripts/Hotfix/Server/ServiceDiscoveryHeartbeatCheckerSystem.cs" />
     <Compile Include="Packages/cn.etetet.actorlocation/Scripts/Hotfix/Server/ObjectLockRequestHandler.cs" />
     <Compile Include="Packages/cn.etetet.loader/Scripts/Hotfix/Server/AddressHelper.cs" />
