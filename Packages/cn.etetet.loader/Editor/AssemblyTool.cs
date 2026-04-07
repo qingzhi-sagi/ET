@@ -18,7 +18,7 @@ namespace ET
         /// <summary>
         /// 程序集名字数组
         /// </summary>
-        public static readonly string[] DllNames = { "ET.Hotfix", "ET.HotfixView", "ET.Model", "ET.ModelView" };
+        public static readonly string[] DllNames = { "ET.Config", "ET.Hotfix", "ET.HotfixView", "ET.Model", "ET.ModelView" };
 
         [InitializeOnLoadMethod]
         static void Initialize()
@@ -142,6 +142,14 @@ namespace ET
             {
                 string sourceDll = $"{Define.BuildOutputDir}/{dllName}.dll";
                 string sourcePdb = $"{Define.BuildOutputDir}/{dllName}.pdb";
+                if (!File.Exists(sourceDll))
+                {
+                    sourceDll = $"Bin/{dllName}.dll";
+                }
+                if (!File.Exists(sourcePdb))
+                {
+                    sourcePdb = $"Bin/{dllName}.pdb";
+                }
                 File.Copy(sourceDll, $"{Define.CodeDir}/{dllName}.dll.bytes", true);
                 File.Copy(sourcePdb, $"{Define.CodeDir}/{dllName}.pdb.bytes", true);
             }

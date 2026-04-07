@@ -10,7 +10,7 @@ namespace ET
 
         private static readonly string[] scriptDirs = { "Scripts", "CodeMode" };
 
-        private static readonly string[] modelDirs = { "Model", "Hotfix", "ModelView", "HotfixView", "Core", "Loader" };
+        private static readonly string[] modelDirs = { "Model", "Hotfix", "ModelView", "HotfixView", "Core", "Loader", "Config"};
 
         private static readonly string[] serverDirs = { "Server", "Client", "Share", "ClientServer" };
 

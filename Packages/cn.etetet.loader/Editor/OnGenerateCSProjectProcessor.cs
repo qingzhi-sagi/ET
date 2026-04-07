@@ -28,6 +28,11 @@ namespace ET
             {
                 return GenerateCustomProject(content, globalConfig.CodeMode, "Model");
             }
+
+            if (path.EndsWith("ET.Config.csproj"))
+            {
+                return GenerateCustomProject(content, globalConfig.CodeMode, "Config");
+            }
             
             if (path.EndsWith("ET.Hotfix.csproj"))
             {
@@ -84,6 +89,7 @@ namespace ET
                 switch (dllName)
                 {
                     case "Model":
+                    case "Config":
                     case "Hotfix":
                     case "HotfixView":
                     case "ModelView":

@@ -1,0 +1,25 @@
+{
+    "name": "ET.Config",
+    "rootNamespace": "ET",
+    "references": [
+        "ET.Core",
+        "ET.Loader",
+        "ET.Model",
+        "Unity.Mathematics",
+        "ET.HybridCLR",
+        "ET.Init",
+        "ET.YooAssets"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "INITED",
+        "IS_COMPILING || UNITY_EDITOR"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": true
+}

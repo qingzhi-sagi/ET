@@ -80,7 +80,6 @@
     <Compile Include="Packages/cn.etetet.statesync/Scripts/Hotfix/Client/FiberInit_Client.cs" />
     <Compile Include="Packages/cn.etetet.netinner/Scripts/Hotfix/Server/MessageSenderSystem.cs" />
     <Compile Include="Packages/cn.etetet.servicediscovery/Scripts/Hotfix/Server/ServiceDiscoveryAgentSystem.cs" />
-    <Compile Include="Packages/cn.etetet.excel/CodeMode/Hotfix/ClientServer/Config/NumericTypeConfigCategory.cs" />
     <Compile Include="Packages/cn.etetet.login/Scripts/Hotfix/Server/Gate/GateMapComponentSystem.cs" />
     <Compile Include="Packages/cn.etetet.btnode/Scripts/Hotfix/Server/Action/BTBuffAddExpireTimeHandler.cs" />
     <Compile Include="Packages/cn.etetet.netinner/Scripts/Hotfix/Server/FiberInit_NetInner.cs" />
@@ -105,7 +104,6 @@
     <Compile Include="Packages/cn.etetet.btnode/Scripts/Hotfix/Server/Action/BTDamageHandler.cs" />
     <Compile Include="Packages/cn.etetet.router/Scripts/Hotfix/Server/FiberInit_Router.cs" />
     <Compile Include="Packages/cn.etetet.map/Scripts/Hotfix/Client/EnterMapHelper.cs" />
-    <Compile Include="Packages/cn.etetet.excel/CodeMode/Hotfix/ClientServer/Config/ItemConfigCategory.cs" />
     <Compile Include="Packages/cn.etetet.yiuiframework/Scripts/Hotfix/Share/ETTask/ETTaskHelper.cs" />
     <Compile Include="Packages/cn.etetet.robot/Scripts/Hotfix/Server/CreateRobotConsoleHandler.cs" />
     <Compile Include="Packages/cn.etetet.quest/Scripts/Hotfix/Server/QuestObjectiveSystem.cs" />
@@ -113,7 +111,6 @@
     <Compile Include="Packages/cn.etetet.mapmanager/Scripts/Hotfix/Server/A2MapManager_GetMapRequestHandler.cs" />
     <Compile Include="Packages/cn.etetet.item/Scripts/Hotfix/Server/ItemSystem.cs" />
     <Compile Include="Packages/cn.etetet.btnode/Scripts/Hotfix/Share/Root/BTCostNodeHandler.cs" />
-    <Compile Include="Packages/cn.etetet.excel/CodeMode/Hotfix/ClientServer/Config/TextConfigCategory.cs" />
     <Compile Include="Packages/cn.etetet.login/Scripts/Hotfix/Server/HttpHelper.cs" />
     <Compile Include="Packages/cn.etetet.btnode/Scripts/Hotfix/Server/Root/BTTargetSelectorSingleHandler.cs" />
     <Compile Include="Packages/cn.etetet.core/Scripts/Hotfix/Share/Scene/SceneHelper.cs" />
@@ -128,7 +125,6 @@
     <Compile Include="Packages/cn.etetet.btnode/Scripts/Hotfix/Server/BTTurnToUnitHandler.cs" />
     <Compile Include="Packages/cn.etetet.btnode/Scripts/Hotfix/Server/Action/BTTameBeastHandler.cs" />
     <Compile Include="Packages/cn.etetet.servicediscovery/Scripts/Hotfix/Server/ServiceDiscoveryAgent_UnsubscribeForwardHandler.cs" />
-    <Compile Include="Packages/cn.etetet.excel/CodeMode/Hotfix/ClientServer/Config/UnitConfigCategory.cs" />
     <Compile Include="Packages/cn.etetet.statesync/Scripts/Hotfix/Share/ConstValue.cs" />
     <Compile Include="Packages/cn.etetet.servicediscovery/Scripts/Hotfix/Server/ServiceInfoSystem.cs" />
     <Compile Include="Packages/cn.etetet.btnode/Scripts/Hotfix/Server/Action/BTRemoveBuffHandler.cs" />
@@ -142,7 +138,6 @@
     <Compile Include="Packages/cn.etetet.aoi/Scripts/Hotfix/Server/AOIManagerComponentSystem.cs" />
     <Compile Include="Packages/cn.etetet.servicediscovery/Scripts/Hotfix/Server/ServiceDiscoveryAgent_RegisterForwardHandler.cs" />
     <Compile Include="Packages/cn.etetet.btnode/Scripts/Hotfix/Server/Root/BTTargetSelectorCircleHandler.cs" />
-    <Compile Include="Packages/cn.etetet.excel/CodeMode/Hotfix/ClientServer/Config/EquipmentConfigCategory.cs" />
     <Compile Include="Packages/cn.etetet.spell/Scripts/Hotfix/Server/DamageHelper.cs" />
     <Compile Include="Packages/cn.etetet.btnode/Scripts/Hotfix/Server/Action/BTCreatePetHandler.cs" />
     <Compile Include="Packages/cn.etetet.login/Scripts/Hotfix/Client/NetClient/PingComponentSystem.cs" />
@@ -238,7 +233,6 @@
     <Compile Include="Packages/cn.etetet.robot/Scripts/Hotfix/Server/Console2Robot_LogoutRequestHandler.cs" />
     <Compile Include="Packages/cn.etetet.actorlocation/Scripts/Hotfix/Server/ObjectAddRequestHandler.cs" />
     <Compile Include="Packages/cn.etetet.statesync/Scripts/Hotfix/Share/ConfigDeserialize.cs" />
-    <Compile Include="Packages/cn.etetet.excel/CodeMode/Hotfix/ClientServer/Config/MapTransferRuleConfigCategory.cs" />
     <Compile Include="Packages/cn.etetet.core/Scripts/Hotfix/Share/Message/SessionIdleCheckerComponentSystem.cs" />
     <Compile Include="Packages/cn.etetet.map/Scripts/Hotfix/Server/Map/M2M_UnitTransferRequestHandler.cs" />
     <Compile Include="Packages/cn.etetet.actorlocation/Scripts/Hotfix/Server/ObjectUnLockRequestHandler.cs" />
@@ -260,7 +254,6 @@
     <Compile Include="Packages/cn.etetet.servicediscovery/Scripts/Hotfix/Server/ServiceDiscoveryErrorHelper.cs" />
     <Compile Include="Packages/cn.etetet.login/Scripts/Hotfix/Client/NetClient/Router/RouterConnectorSystem.cs" />
     <Compile Include="Packages/cn.etetet.quest/Scripts/Hotfix/Client/M2C_UpdateQuestObjectiveHandler.cs" />
-    <Compile Include="Packages/cn.etetet.excel/CodeMode/Hotfix/ClientServer/Config/MapConfigCategory.cs" />
     <Compile Include="Packages/cn.etetet.servicediscovery/Scripts/Hotfix/Server/ServiceHeartbeatRequestHandler.cs" />
     <Compile Include="Packages/cn.etetet.yiuiframework/Scripts/Hotfix/Share/Mathematics/Float_Extend.cs" />
     <Compile Include="Packages/cn.etetet.actorlocation/Scripts/Hotfix/Server/MessageLocationSenderComponentSystem.cs" />
@@ -302,7 +295,6 @@
     <Compile Include="Packages/cn.etetet.spell/Scripts/Hotfix/Share/SpellConfigHelper.cs" />
     <Compile Include="Packages/cn.etetet.login/Scripts/Hotfix/Server/Gate/C2G_LoginGateHandler.cs" />
     <Compile Include="Packages/cn.etetet.item/Scripts/Hotfix/Client/M2C_SyncBagDataHandler.cs" />
-    <Compile Include="Packages/cn.etetet.excel/CodeMode/Hotfix/ClientServer/Config/BuffConfigCategoryFactory.cs" />
     <Compile Include="Packages/cn.etetet.map/Scripts/Hotfix/Server/Map/NumericChange_PhaseChange.cs" />
     <Compile Include="Packages/cn.etetet.login/Scripts/Hotfix/Server/Gate/C2G_PingHandler.cs" />
     <Compile Include="Packages/cn.etetet.quest/Scripts/Hotfix/Server/QuestSystem.cs" />
@@ -313,12 +305,9 @@
     <Compile Include="Packages/cn.etetet.btnode/Scripts/Hotfix/Server/AI/AI_MonsterReturnHandler.cs" />
     <Compile Include="Packages/cn.etetet.map/Scripts/Hotfix/Client/Move/NumericWatcher_Speed_ChangeMoveSpeed.cs" />
     <Compile Include="Packages/cn.etetet.map/Scripts/Hotfix/Server/C2M_TransferMapHandler.cs" />
-    <Compile Include="Packages/cn.etetet.excel/CodeMode/Hotfix/ClientServer/Config/QuestConfigCategory.cs" />
     <Compile Include="Packages/cn.etetet.btnode/Scripts/Hotfix/Server/AI/AI_PetFollowCheckHandler.cs" />
     <Compile Include="Packages/cn.etetet.map/Scripts/Hotfix/Client/Unit/UnitClickHelper.cs" />
-    <Compile Include="Packages/cn.etetet.excel/CodeMode/Hotfix/ClientServer/Config/MapUnitConfigCategory.cs" />
     <Compile Include="Packages/cn.etetet.login/Scripts/Hotfix/Server/Gate/PlayerSystem.cs" />
-    <Compile Include="Packages/cn.etetet.excel/CodeMode/Hotfix/ClientServer/Config/SpellConfigCategoryFactory.cs" />
     <Compile Include="Packages/cn.etetet.servicediscovery/Scripts/Hotfix/Server/ServiceDiscoveryHeartbeatCheckerSystem.cs" />
     <Compile Include="Packages/cn.etetet.actorlocation/Scripts/Hotfix/Server/ObjectLockRequestHandler.cs" />
     <Compile Include="Packages/cn.etetet.loader/Scripts/Hotfix/Server/AddressHelper.cs" />
@@ -344,7 +333,6 @@
     <Compile Include="Packages/cn.etetet.router/Scripts/Hotfix/Server/RouterNodeSystem.cs" />
     <Compile Include="Packages/cn.etetet.login/Scripts/Hotfix/Client/NetClient/Router/RouterAddressComponentSystem.cs" />
     <Compile Include="Packages/cn.etetet.servicediscovery/Scripts/Hotfix/Share/ServiceDiscoveryFiberHelper.cs" />
-    <Compile Include="Packages/cn.etetet.excel/CodeMode/Hotfix/ClientServer/Config/QuestObjectiveConfigCategory.cs" />
     <Compile Include="Packages/cn.etetet.mapmanager/Scripts/Hotfix/Server/MergeLinesComponentSystem.cs" />
     <Compile Include="Packages/cn.etetet.login/Scripts/Hotfix/Server/Realm/FiberInit_Realm.cs" />
     <Compile Include="Packages/cn.etetet.spell/Scripts/Hotfix/Client/SpellHelper.cs" />
@@ -385,7 +373,6 @@
     <None Include="Packages/cn.etetet.loader/Scripts/Hotfix/Server/AssemblyReference.asmref" />
     <None Include="Packages/cn.etetet.core/Scripts/Hotfix/Client/AssemblyReference.asmref" />
     <None Include="Packages/cn.etetet.item/Scripts/Hotfix/Client/AssemblyReference.asmref" />
-    <None Include="Packages/cn.etetet.excel/CodeMode/Hotfix/ClientServer/AssemblyReference.asmref" />
     <None Include="Packages/cn.etetet.test/Scripts/Hotfix/Server/AssemblyReference.asmref" />
     <None Include="Packages/cn.etetet.mapmanager/Scripts/Hotfix/Client/AssemblyReference.asmref" />
     <None Include="Packages/cn.etetet.behaviortree/Scripts/Hotfix/Share/AssemblyReference.asmref" />

@@ -60,8 +60,8 @@
         <Reference Include="ET.Mathematics">
             <HintPath>$(ProjectDir)../../../Bin/ET.Mathematics.dll</HintPath>
         </Reference>
-        <Reference Include="ET.Recast">
-            <HintPath>$(ProjectDir)../../../Bin/ET.Recast.dll</HintPath>
+        <Reference Include="ET.Config">
+            <HintPath>$(ProjectDir)../../../Bin/ET.Config.dll</HintPath>
         </Reference>
         
     </ItemGroup>

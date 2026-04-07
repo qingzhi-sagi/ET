@@ -45,6 +45,7 @@ namespace ET
                 "ET.Core",
                 "ET.Loader",
 #if UNITY_EDITOR     
+                "ET.Config",
                 "ET.Model",
                 "ET.ModelView",
                 "ET.BehaviorTree.Editor",
@@ -63,11 +64,15 @@ namespace ET
             List<Assembly> list = new(this.assemblies);
             
 #if !UNITY_EDITOR
+            byte[] configAssBytes = this.dlls["ET.Config.dll"].bytes;
+            byte[] configPdbBytes = this.dlls["ET.Config.pdb"].bytes;
             byte[] modelAssBytes = this.dlls["ET.Model.dll"].bytes;
             byte[] modelPdbBytes = this.dlls["ET.Model.pdb"].bytes;
             byte[] modelViewAssBytes = this.dlls["ET.ModelView.dll"].bytes;
             byte[] modelViewPdbBytes = this.dlls["ET.ModelView.pdb"].bytes;
 
+            //byte[] configAssBytes = File.ReadAllBytes(Path.Combine(Define.CodeDir, "ET.Config.dll.bytes"));
+            //byte[] configPdbBytes = File.ReadAllBytes(Path.Combine(Define.CodeDir, "ET.Config.pdb.bytes"));
             // 如果需要测试，可替换成下面注释的代码直接加载Packages/cn.etetet.loader/Code/ET.Model.dll.bytes，但真正打包时必须使用上面的代码
             //byte[] modelAssBytes = File.ReadAllBytes(Path.Combine(Define.CodeDir, "ET.Model.dll.bytes"));
             //byte[] modelPdbBytes = File.ReadAllBytes(Path.Combine(Define.CodeDir, "ET.Model.pdb.bytes"));
@@ -80,8 +85,10 @@ namespace ET
                 HybridCLR.RuntimeApi.LoadMetadataForAOTAssembly(textAsset.bytes, HybridCLR.HomologousImageMode.SuperSet);
             }
             
+            Assembly configAssembly = Assembly.Load(configAssBytes, configPdbBytes);
             Assembly modelAssembly = Assembly.Load(modelAssBytes, modelPdbBytes);
             Assembly modelViewAssembly = Assembly.Load(modelViewAssBytes, modelViewPdbBytes);
+            list.Add(configAssembly);
             list.Add(modelAssembly);
             list.Add(modelViewAssembly);
 #endif
