@@ -73,7 +73,6 @@
     <Compile Include="Packages/cn.etetet.btnode/Scripts/Hotfix/Server/Root/BTTargetSelectorPositionHandler.cs" />
     <Compile Include="Packages/cn.etetet.servicediscovery/Scripts/Hotfix/Server/ServiceDiscoveryAgent_UnregisterForwardHandler.cs" />
     <Compile Include="Packages/cn.etetet.btnode/Scripts/Hotfix/Server/Root/BTTargetSelectorCasterHandler.cs" />
-    <Compile Include="Packages/cn.etetet.map/Scripts/Hotfix/Server/ConfigGetAllConfigBytesServer.cs" />
     <Compile Include="Packages/cn.etetet.servicediscovery/Scripts/Hotfix/Server/ServiceDiscoveryProxyHeartbeatSystem.cs" />
     <Compile Include="Packages/cn.etetet.recast/Scripts/Hotfix/Share/PathfindingComponentSystem.cs" />
     <Compile Include="Packages/cn.etetet.btnode/Scripts/Hotfix/Server/AI/AI_MonsterXunLuoHandler.cs" />
@@ -232,7 +231,6 @@
     <Compile Include="Packages/cn.etetet.map/Scripts/Hotfix/Server/Map/NumericChange_Stun_StartOrStopAI.cs" />
     <Compile Include="Packages/cn.etetet.robot/Scripts/Hotfix/Server/Console2Robot_LogoutRequestHandler.cs" />
     <Compile Include="Packages/cn.etetet.actorlocation/Scripts/Hotfix/Server/ObjectAddRequestHandler.cs" />
-    <Compile Include="Packages/cn.etetet.statesync/Scripts/Hotfix/Share/ConfigDeserialize.cs" />
     <Compile Include="Packages/cn.etetet.core/Scripts/Hotfix/Share/Message/SessionIdleCheckerComponentSystem.cs" />
     <Compile Include="Packages/cn.etetet.map/Scripts/Hotfix/Server/Map/M2M_UnitTransferRequestHandler.cs" />
     <Compile Include="Packages/cn.etetet.actorlocation/Scripts/Hotfix/Server/ObjectUnLockRequestHandler.cs" />

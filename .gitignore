@@ -58,3 +58,4 @@ AssemblyReference.asmref.meta
 MainPackage.txt
 /ET.sln
 .omx
+.omx/
