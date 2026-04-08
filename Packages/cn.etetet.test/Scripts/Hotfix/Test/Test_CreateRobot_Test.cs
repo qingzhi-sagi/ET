@@ -115,7 +115,7 @@ namespace ET.Test
             StartZoneConfig config = category.GetOrDefault(0);
             if (config == null || string.IsNullOrEmpty(config.DBConnection))
             {
-                foreach (StartZoneConfig item in category.DataList)
+                foreach (StartZoneConfig item in category.GetAll().Values)
                 {
                     if (item != null && !string.IsNullOrEmpty(item.DBConnection))
                     {

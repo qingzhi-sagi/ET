@@ -45,7 +45,7 @@ function Invoke-ConfigExport
         [string]$OutputDataDir
     )
 
-    & $DotNet $GEN_CLIENT --customTemplateDir $CUSTOM -t $TargetName -c cs-code -d cs-code-data --conf $PACKAGE/Luban/$CONFIG_NAME/luban.conf -x outputCodeDir=$OutputCodeDir -x outputDataDir=$OutputDataDir
+    & $DotNet $GEN_CLIENT --customTemplateDir $CUSTOM -t $TargetName -c cs-code -d cs-code-data --conf $PACKAGE/Luban/$CONFIG_NAME/luban.conf -x outputCodeDir=$OutputCodeDir -x outputDataDir=$OutputDataDir -x configGroup=$CONFIG_NAME
     Write-Host "==================== $TargetName 完成 ===================="
 }
 

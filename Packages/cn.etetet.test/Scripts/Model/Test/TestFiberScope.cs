@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using ET.Server;
-using SimpleJSON;
 
 namespace ET.Test
 {
@@ -66,7 +65,7 @@ namespace ET.Test
             StartZoneConfig template = category.GetOrDefault(0);
             if (template == null)
             {
-                foreach (StartZoneConfig item in category.DataList)
+                foreach (StartZoneConfig item in category.GetAll().Values)
                 {
                     if (item != null && !string.IsNullOrEmpty(item.DBConnection))
                     {
@@ -81,17 +80,9 @@ namespace ET.Test
                 throw new Exception($"cannot synthesize start zone config for test zone: {zone}");
             }
 
-            StartZoneConfig generated = new(JSON.Parse($$"""
-            {
-              "Id": {{zone}},
-              "ZoneType": {{template.ZoneType}},
-              "DBConnection": "{{template.DBConnection}}",
-              "DBName": "{{template.DBName}}"
-            }
-            """));
+            StartZoneConfig generated = new(zone, template.ZoneType, template.DBConnection, template.DBName);
 
-            category.DataMap.Add(zone, generated);
-            category.DataList.Add(generated);
+            category.GetAll().Add(zone, generated);
         }
 
         private static TestZoneAllocatorComponent GetAllocator(Fiber fiber)

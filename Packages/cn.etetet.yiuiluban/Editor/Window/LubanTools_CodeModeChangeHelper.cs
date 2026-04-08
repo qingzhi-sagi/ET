@@ -11,7 +11,7 @@ namespace YIUI.Luban.Editor
 
         private static readonly string[] scriptDirs = { "Scripts", "CodeMode" };
 
-        private static readonly string[] modelDirs = { "Model", "Hotfix", "ModelView", "HotfixView", "Core", "Loader" };
+        private static readonly string[] modelDirs = { "Model", "Hotfix", "ModelView", "HotfixView", "Core", "Loader", "Config" };
 
         private static readonly string[] serverDirs = { "Server", "Client", "Share", "ClientServer" };
 
@@ -20,6 +20,7 @@ namespace YIUI.Luban.Editor
             "Client/Scripts/Model/Client",
             "Client/Scripts/Model/Share",
             "Client/CodeMode/Model/Client",
+            "Client/CodeMode/Config/Client",
             "Client/Scripts/ModelView/Client",
             "Client/Scripts/ModelView/Share",
             "Client/CodeMode/ModelView/Client",
@@ -39,6 +40,7 @@ namespace YIUI.Luban.Editor
             "Server/Scripts/Model/Server",
             "Server/Scripts/Model/Share",
             "Server/CodeMode/Model/Server",
+            "Server/CodeMode/Config/Server",
             "Server/Scripts/Hotfix/Server",
             "Server/Scripts/Hotfix/Share",
             "Server/CodeMode/Hotfix/Server",
@@ -53,6 +55,7 @@ namespace YIUI.Luban.Editor
             "ClientServer/Scripts/Model/Server",
             "ClientServer/Scripts/Model/Share",
             "ClientServer/CodeMode/Model/ClientServer",
+            "ClientServer/CodeMode/Config/ClientServer",
             "ClientServer/Scripts/ModelView/Client",
             "ClientServer/Scripts/ModelView/Server",
             "ClientServer/Scripts/ModelView/Share",

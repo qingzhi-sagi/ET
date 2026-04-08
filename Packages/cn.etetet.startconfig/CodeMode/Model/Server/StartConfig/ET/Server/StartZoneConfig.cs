@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 
 namespace ET.Server
@@ -16,19 +15,13 @@ namespace ET.Server
     [EnableClass]
     public sealed partial class StartZoneConfig : Luban.BeanBase
     {
-        public StartZoneConfig(JSONNode _buf) 
+        public StartZoneConfig(int Id, int ZoneType, string DBConnection, string DBName) 
         {
-            { if(!_buf["Id"].IsNumber) { throw new SerializationException(); }  Id = _buf["Id"]; }
-            { if(!_buf["ZoneType"].IsNumber) { throw new SerializationException(); }  ZoneType = _buf["ZoneType"]; }
-            { if(!_buf["DBConnection"].IsString) { throw new SerializationException(); }  DBConnection = _buf["DBConnection"]; }
-            { if(!_buf["DBName"].IsString) { throw new SerializationException(); }  DBName = _buf["DBName"]; }
-
+            this.Id = Id;
+            this.ZoneType = ZoneType;
+            this.DBConnection = DBConnection;
+            this.DBName = DBName;
             EndInit();
-        }
-
-        public static StartZoneConfig DeserializeStartZoneConfig(JSONNode _buf)
-        {
-            return new ET.Server.StartZoneConfig(_buf);
         }
 
         /// <summary>

@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using Aspire.Hosting;
-using SimpleJSON;
 
 namespace ET.Server
 {
@@ -22,19 +22,12 @@ namespace ET.Server
             string workDir = Path.Combine(currentDirectory, "../../..");
             Console.WriteLine($"Current working directory: {workDir}");
 
+            Console.WriteLine($"Loading ET configs from config group: {Options.Instance.StartConfig}");
 
-            string configBasePath = Path.Combine(workDir, $"Packages/cn.etetet.startconfig/Bundles/Luban/{Options.Instance.StartConfig}/Server/Json");
-            string processConfigPath = Path.Combine(configBasePath, "StartProcessConfigCategory.json");
-            string sceneConfigPath = Path.Combine(configBasePath, "StartSceneConfigCategory.json");
-            string machineConfigPath = Path.Combine(configBasePath, "StartMachineConfigCategory.json");
-            string zoneConfigPath = Path.Combine(configBasePath, "StartZoneConfigCategory.json");
-
-            Console.WriteLine($"Reading ET configs from: {configBasePath}");
-
-            World.Instance.AddSingleton(new StartProcessConfigCategory(JSON.Parse(File.ReadAllText(processConfigPath))));
-            World.Instance.AddSingleton(new StartSceneConfigCategory(JSON.Parse(File.ReadAllText(sceneConfigPath))));
-            World.Instance.AddSingleton(new StartMachineConfigCategory(JSON.Parse(File.ReadAllText(machineConfigPath))));
-            World.Instance.AddSingleton(new StartZoneConfigCategory(JSON.Parse(File.ReadAllText(zoneConfigPath))));
+            World.Instance.AddSingleton(CreateStartConfigCategory<StartProcessConfigCategory>(Options.Instance.StartConfig));
+            World.Instance.AddSingleton(CreateStartConfigCategory<StartSceneConfigCategory>(Options.Instance.StartConfig));
+            World.Instance.AddSingleton(CreateStartConfigCategory<StartMachineConfigCategory>(Options.Instance.StartConfig));
+            World.Instance.AddSingleton(CreateStartConfigCategory<StartZoneConfigCategory>(Options.Instance.StartConfig));
 
             // 为每个进程创建Aspire服务
             foreach ((int processId, StartProcessConfig startProcessConfig) in StartProcessConfigCategory.Instance.GetAll())
@@ -84,6 +77,47 @@ namespace ET.Server
             }
 
             builder.Build().Run();
+        }
+
+        private static TCategory CreateStartConfigCategory<TCategory>(string configGroup) where TCategory : ASingleton
+        {
+            Assembly configAssembly = GetConfigAssembly();
+            foreach (Type type in configAssembly.GetTypes())
+            {
+                if (type.IsAbstract || type.IsInterface || !typeof(IConfigFactory).IsAssignableFrom(type))
+                {
+                    continue;
+                }
+
+                ConfigGroupAttribute configGroupAttribute = type.GetCustomAttribute<ConfigGroupAttribute>();
+                if (!string.Equals(configGroupAttribute?.Name, configGroup, StringComparison.Ordinal))
+                {
+                    continue;
+                }
+
+                IConfigFactory factory = Activator.CreateInstance(type) as IConfigFactory;
+                if (factory?.ConfigType != typeof(TCategory))
+                {
+                    continue;
+                }
+
+                return (TCategory)factory.Create();
+            }
+
+            throw new Exception($"start config factory not found: category={typeof(TCategory).FullName}, group={configGroup}");
+        }
+
+        private static Assembly GetConfigAssembly()
+        {
+            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                if (assembly.GetName().Name == "ET.Config")
+                {
+                    return assembly;
+                }
+            }
+
+            throw new Exception("ET.Config assembly is not loaded");
         }
     }
 }

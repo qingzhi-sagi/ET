@@ -102,7 +102,7 @@ public class CsharpCodeDataTarget : DataTargetBase
 
     private static string GetOutputFileName(DefTable table, string content)
     {
-        Match factoryMatch = Regex.Match(content, @"class\s+([A-Za-z0-9_]+Factory)\s*:\s*IConfigFactory");
+        Match factoryMatch = Regex.Match(content, @"class\s+([A-Za-z0-9_]+)\s*:\s*IConfigFactory");
         if (factoryMatch.Success)
         {
             return factoryMatch.Groups[1].Value;

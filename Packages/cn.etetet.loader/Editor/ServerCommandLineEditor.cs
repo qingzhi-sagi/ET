@@ -27,8 +27,9 @@ namespace ET
 
         public void OnEnable()
         {
-            DirectoryInfo directoryInfo = new DirectoryInfo("Packages/cn.etetet.startconfig/Bundles/Luban");
-            this.startConfigs = directoryInfo.GetDirectories().Select(x => x.Name).ToArray();
+            DirectoryInfo directoryInfo = new DirectoryInfo("Packages/cn.etetet.startconfig/Luban");
+            this.startConfigs = directoryInfo.GetDirectories().Select(x => x.Name).OrderBy(x => x).ToArray();
+            this.selectStartConfigIndex = Mathf.Clamp(this.selectStartConfigIndex, 0, Mathf.Max(this.startConfigs.Length - 1, 0));
         }
 
         public void OnGUI()

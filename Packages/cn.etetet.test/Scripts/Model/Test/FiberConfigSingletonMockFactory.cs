@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using ET.Server;
-using SimpleJSON;
 
 namespace ET.Test
 {
@@ -41,60 +40,34 @@ namespace ET.Test
 
         public static StartMachineConfigCategory CreateStartMachineConfigCategory(int id, string innerIp, string outerIp)
         {
-            return new StartMachineConfigCategory(JSON.Parse($$"""
-            [
-              {
-                "Id": {{id}},
-                "InnerIP": "{{innerIp}}",
-                "OuterIP": "{{outerIp}}"
-              }
-            ]
-            """));
+            return new StartMachineConfigCategory(new Dictionary<int, StartMachineConfig>
+            {
+                [id] = new StartMachineConfig(id, innerIp, outerIp),
+            });
         }
 
         public static StartProcessConfigCategory CreateStartProcessConfigCategory(int id, int machineId, int port, string name)
         {
-            return new StartProcessConfigCategory(JSON.Parse($$"""
-            [
-              {
-                "Id": {{id}},
-                "MachineId": {{machineId}},
-                "Port": {{port}},
-                "Num": 1,
-                "Name": "{{name}}"
-              }
-            ]
-            """));
+            return new StartProcessConfigCategory(new Dictionary<int, StartProcessConfig>
+            {
+                [id] = new StartProcessConfig(id, machineId, port, 1, name),
+            });
         }
 
         public static StartSceneConfigCategory CreateStartSceneConfigCategory(int id, int processId, int zone, int port, string name, string sceneType)
         {
-            return new StartSceneConfigCategory(JSON.Parse($$"""
-            [
-              {
-                "Id": {{id}},
-                "Process": {{processId}},
-                "Zone": {{zone}},
-                "SceneType": "{{sceneType}}",
-                "Name": "{{name}}",
-                "Port": {{port}}
-              }
-            ]
-            """));
+            return new StartSceneConfigCategory(new Dictionary<int, StartSceneConfig>
+            {
+                [id] = new StartSceneConfig(id, processId, zone, sceneType, name, port),
+            });
         }
 
         public static StartZoneConfigCategory CreateStartZoneConfigCategory(int id, int zoneType, string dbConnection, string dbName)
         {
-            return new StartZoneConfigCategory(JSON.Parse($$"""
-            [
-              {
-                "Id": {{id}},
-                "ZoneType": {{zoneType}},
-                "DBConnection": "{{dbConnection}}",
-                "DBName": "{{dbName}}"
-              }
-            ]
-            """));
+            return new StartZoneConfigCategory(new Dictionary<int, StartZoneConfig>
+            {
+                [id] = new StartZoneConfig(id, zoneType, dbConnection, dbName),
+            });
         }
     }
 }

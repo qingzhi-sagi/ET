@@ -113,7 +113,7 @@ namespace ET.Test
         /// </summary>
         public static List<StartSceneConfig> GetServiceDiscoveryConfigs()
         {
-            return World.Instance.GetSingleton<StartSceneConfigCategory>().DataList
+            return World.Instance.GetSingleton<StartSceneConfigCategory>().GetAll().Values
                 .Where(c => c.SceneType == nameof(SceneType.ServiceDiscovery))
                 .OrderBy(c => c.Id)
                 .ToList();

@@ -3,6 +3,8 @@ using Luban;
 {{
     key_type = __table.key_ttype
     value_type = __table.value_ttype
+    config_group = get_option_or_default 'configGroup' 'Config'
+    factory_type_name = __name + 'Factory_' + config_group
 
     func table_data_list
         dataList = __records |array.each do; ret (apply_value $0); end
@@ -20,7 +22,8 @@ using Luban;
 /// {{escape_comment __table.comment}}
 /// </summary>
 {{~end~}}
-public sealed class {{__name}}Factory : IConfigFactory
+[ConfigGroup("{{config_group}}")]
+public sealed class {{factory_type_name}} : IConfigFactory
 {
     public System.Type ConfigType => typeof({{__name}});
 

@@ -16,17 +16,16 @@ namespace ET
         public async ETTask LoadAsync()
         {
             List<Type> configTypes = ConfigLoaderHelper.GetConfigTypes();
-            Dictionary<Type, object> configBytes = await this.LoadConfigBytesAsync(configTypes);
             AssemblyLoadContext loadContext = null;
             try
             {
-                Dictionary<Type, IConfigFactory> configFactories = this.LoadConfigFactories(configTypes, out loadContext);
+                ConfigFactoryGroupCollection configFactories = this.LoadConfigFactories(configTypes, out loadContext);
                 Dictionary<Type, IConfig> loadedConfigs = new(configTypes.Count);
                 List<ASingleton> loadedSingletons = new(configTypes.Count);
 
                 foreach (Type configType in configTypes)
                 {
-                    ASingleton singleton = ConfigLoaderHelper.LoadOneConfig(configType, configBytes, configFactories, loadedConfigs);
+                    ASingleton singleton = ConfigLoaderHelper.LoadOneConfig(configType, configFactories, loadedConfigs);
                     loadedSingletons.Add(singleton);
                 }
 
@@ -44,46 +43,12 @@ namespace ET
             }
         }
 
-        private async ETTask<Dictionary<Type, object>> LoadConfigBytesAsync(List<Type> configTypes)
-        {
-            Dictionary<Type, object> output = new(configTypes.Count);
-
-            foreach (Type configType in configTypes)
-            {
-                ConfigProcessAttribute configProcessAttribute = configType.GetCustomAttributes(typeof(ConfigProcessAttribute), false)[0] as ConfigProcessAttribute;
-                switch (configProcessAttribute.ConfigType)
-                {
-                    case ConfigType.Luban:
-                        output[configType] = File.ReadAllBytes($"Packages/cn.etetet.excel/Bundles/Luban/Config/Server/Binary/{configType.Name}.bytes");
-                        break;
-                    case ConfigType.Json:
-                        if (ConfigLoaderHelper.IsStartConfig(configType.Name))
-                        {
-                            output[configType] = File.ReadAllText($"Packages/cn.etetet.startconfig/Bundles/Luban/{Options.Instance.StartConfig}/Server/Json/{configType.Name}.txt");
-                        }
-                        else
-                        {
-                            output[configType] = File.ReadAllText($"Packages/cn.etetet.excel/Bundles/Luban/Config/Server/Json/{configType.Name}.txt");
-                        }
-                        break;
-                    case ConfigType.Bson:
-                        output[configType] = File.ReadAllText($"Packages/cn.etetet.map/Bundles/Json/{configType.Name}.txt");
-                        break;
-                    case ConfigType.Code:
-                        break;
-                }
-            }
-
-            await ETTask.CompletedTask;
-            return output;
-        }
-
-        private Dictionary<Type, IConfigFactory> LoadConfigFactories(List<Type> configTypes, out AssemblyLoadContext loadContext)
+        private ConfigFactoryGroupCollection LoadConfigFactories(List<Type> configTypes, out AssemblyLoadContext loadContext)
         {
             loadContext = null;
             if (!ConfigLoaderHelper.HasCodeConfig(configTypes))
             {
-                return new Dictionary<Type, IConfigFactory>();
+                return new ConfigFactoryGroupCollection();
             }
 
             byte[] dllBytes = File.ReadAllBytes("./Bin/ET.Config.dll");

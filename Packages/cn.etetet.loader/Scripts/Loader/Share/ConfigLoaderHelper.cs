@@ -1,11 +1,43 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Luban;
-using SimpleJSON;
 
 namespace ET
 {
+    public sealed class ConfigFactoryGroupCollection
+    {
+        private readonly Dictionary<Type, Dictionary<string, IConfigFactory>> factories = new();
+
+        public void Add(string configGroup, IConfigFactory factory)
+        {
+            if (factory.ConfigType == null)
+            {
+                throw new Exception($"config factory target is null: {factory.GetType().FullName}");
+            }
+
+            if (string.IsNullOrWhiteSpace(configGroup))
+            {
+                throw new Exception($"config group is empty: {factory.GetType().FullName}");
+            }
+
+            if (!this.factories.TryGetValue(factory.ConfigType, out Dictionary<string, IConfigFactory> groupFactories))
+            {
+                groupFactories = new Dictionary<string, IConfigFactory>(StringComparer.Ordinal);
+                this.factories.Add(factory.ConfigType, groupFactories);
+            }
+
+            if (!groupFactories.TryAdd(configGroup, factory))
+            {
+                throw new Exception($"duplicate config factory: {factory.ConfigType.FullName} group={configGroup}");
+            }
+        }
+
+        public bool TryGetFactories(Type configType, out Dictionary<string, IConfigFactory> groupFactories)
+        {
+            return this.factories.TryGetValue(configType, out groupFactories);
+        }
+    }
+
     internal static class ConfigLoaderHelper
     {
         public static List<Type> GetConfigTypes()
@@ -42,20 +74,6 @@ namespace ET
             return false;
         }
 
-        public static bool IsStartConfig(string configName)
-        {
-            switch (configName)
-            {
-                case "StartMachineConfigCategory":
-                case "StartProcessConfigCategory":
-                case "StartSceneConfigCategory":
-                case "StartZoneConfigCategory":
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
         public static Assembly GetLoadedConfigAssembly()
         {
             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
@@ -69,22 +87,7 @@ namespace ET
             return null;
         }
 
-        public static object DeserializeConfig(Type configType, int configDataType, object configData)
-        {
-            switch (configDataType)
-            {
-                case ConfigType.Luban:
-                    return Activator.CreateInstance(configType, new ByteBuf((byte[])configData));
-                case ConfigType.Json:
-                    return Activator.CreateInstance(configType, (object)JSON.Parse((string)configData));
-                case ConfigType.Bson:
-                    return MongoHelper.FromJson(configType, (string)configData);
-                default:
-                    throw new Exception($"unsupported config type: {configDataType} {configType.FullName}");
-            }
-        }
-
-        public static Dictionary<Type, IConfigFactory> CreateConfigFactories(IEnumerable<Type> allTypes)
+        public static ConfigFactoryGroupCollection CreateConfigFactories(IEnumerable<Type> allTypes)
         {
             List<Type> factoryTypes = new();
             foreach (Type type in allTypes)
@@ -103,7 +106,7 @@ namespace ET
             }
 
             factoryTypes.Sort((left, right) => string.CompareOrdinal(left.FullName, right.FullName));
-            Dictionary<Type, IConfigFactory> factories = new();
+            ConfigFactoryGroupCollection factories = new();
             foreach (Type factoryType in factoryTypes)
             {
                 if (Activator.CreateInstance(factoryType) is not IConfigFactory factory)
@@ -111,44 +114,22 @@ namespace ET
                     throw new Exception($"create config factory failed: {factoryType.FullName}");
                 }
 
-                if (factory.ConfigType == null)
-                {
-                    throw new Exception($"config factory target is null: {factoryType.FullName}");
-                }
-
-                if (!factories.TryAdd(factory.ConfigType, factory))
-                {
-                    throw new Exception($"duplicate config factory: {factory.ConfigType.FullName}");
-                }
+                factories.Add(GetConfigGroup(factoryType), factory);
             }
 
             return factories;
         }
 
-        public static ASingleton LoadOneConfig(Type configType, Dictionary<Type, object> configBytes, Dictionary<Type, IConfigFactory> configFactories, Dictionary<Type, IConfig> loadedConfigs)
+        public static ASingleton LoadOneConfig(Type configType, ConfigFactoryGroupCollection configFactories, Dictionary<Type, IConfig> loadedConfigs)
         {
-            object category;
             ConfigProcessAttribute configProcessAttribute = configType.GetCustomAttributes(typeof(ConfigProcessAttribute), false)[0] as ConfigProcessAttribute;
-
-            if (configProcessAttribute.ConfigType == ConfigType.Code)
+            if (configProcessAttribute.ConfigType != ConfigType.Code)
             {
-                if (!configFactories.TryGetValue(configType, out IConfigFactory factory))
-                {
-                    throw new Exception($"config factory not found: {configType.FullName}");
-                }
-
-                category = factory.Create();
-            }
-            else
-            {
-                if (!configBytes.TryGetValue(configType, out object oneConfigBytes))
-                {
-                    throw new Exception($"config bytes not found: {configType.FullName}");
-                }
-
-                category = DeserializeConfig(configType, configProcessAttribute.ConfigType, oneConfigBytes);
+                throw new Exception($"unsupported config type: {configProcessAttribute.ConfigType} {configType.FullName}");
             }
 
+            IConfigFactory factory = GetConfigFactory(configType, configFactories);
+            object category = factory.Create();
             if (category == null)
             {
                 throw new Exception($"config create failed: {configType.FullName}");
@@ -171,6 +152,60 @@ namespace ET
 
             loadedConfigs.Add(configType, iConfig);
             return singleton;
+        }
+
+        private static string GetConfigGroup(MemberInfo factoryType)
+        {
+            ConfigGroupAttribute configGroupAttribute = factoryType.GetCustomAttribute<ConfigGroupAttribute>();
+            return string.IsNullOrWhiteSpace(configGroupAttribute?.Name) ? ConfigGroupNames.Config : configGroupAttribute.Name;
+        }
+
+        private static IConfigFactory GetConfigFactory(Type configType, ConfigFactoryGroupCollection configFactories)
+        {
+            if (!configFactories.TryGetFactories(configType, out Dictionary<string, IConfigFactory> groupFactories))
+            {
+                throw new Exception($"config factory not found: {configType.FullName}");
+            }
+
+            List<string> activeGroups = GetActiveConfigGroups();
+            IConfigFactory match = null;
+            string matchedGroup = null;
+            foreach (string activeGroup in activeGroups)
+            {
+                if (!groupFactories.TryGetValue(activeGroup, out IConfigFactory factory))
+                {
+                    continue;
+                }
+
+                if (match != null)
+                {
+                    throw new Exception(
+                        $"config factory group ambiguous: {configType.FullName}, matched groups: {matchedGroup}, {activeGroup}");
+                }
+
+                match = factory;
+                matchedGroup = activeGroup;
+            }
+
+            if (match != null)
+            {
+                return match;
+            }
+
+            throw new Exception(
+                $"config factory group not found: {configType.FullName}, active groups: {string.Join(", ", activeGroups)}, available groups: {string.Join(", ", groupFactories.Keys)}");
+        }
+
+        private static List<string> GetActiveConfigGroups()
+        {
+            List<string> groups = new() { ConfigGroupNames.Config };
+            string startConfig = Options.Instance?.StartConfig;
+            if (!string.IsNullOrWhiteSpace(startConfig) && !string.Equals(startConfig, ConfigGroupNames.Config, StringComparison.Ordinal))
+            {
+                groups.Add(startConfig);
+            }
+
+            return groups;
         }
     }
 }

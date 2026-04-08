@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 
 namespace ET.Server
@@ -16,20 +15,14 @@ namespace ET.Server
     [EnableClass]
     public sealed partial class StartProcessConfig : Luban.BeanBase
     {
-        public StartProcessConfig(JSONNode _buf) 
+        public StartProcessConfig(int Id, int MachineId, int Port, int Num, string Name) 
         {
-            { if(!_buf["Id"].IsNumber) { throw new SerializationException(); }  Id = _buf["Id"]; }
-            { if(!_buf["MachineId"].IsNumber) { throw new SerializationException(); }  MachineId = _buf["MachineId"]; }
-            { if(!_buf["Port"].IsNumber) { throw new SerializationException(); }  Port = _buf["Port"]; }
-            { if(!_buf["Num"].IsNumber) { throw new SerializationException(); }  Num = _buf["Num"]; }
-            { if(!_buf["Name"].IsString) { throw new SerializationException(); }  Name = _buf["Name"]; }
-
+            this.Id = Id;
+            this.MachineId = MachineId;
+            this.Port = Port;
+            this.Num = Num;
+            this.Name = Name;
             EndInit();
-        }
-
-        public static StartProcessConfig DeserializeStartProcessConfig(JSONNode _buf)
-        {
-            return new ET.Server.StartProcessConfig(_buf);
         }
 
         /// <summary>

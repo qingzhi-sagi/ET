@@ -8,64 +8,37 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using System.Collections.Generic;
-using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson.Serialization.Options;
-using SimpleJSON;
+
 
 namespace ET.Server
 {
+[ConfigProcess(ConfigType.Code)]
+public partial class StartProcessConfigCategory : Singleton<StartProcessConfigCategory>, IConfig
+{
+    private readonly System.Collections.Generic.Dictionary<int, ET.Server.StartProcessConfig> _dataMap;
 
-    [ConfigProcess(ConfigType.Json)]
-    public partial class StartProcessConfigCategory : Singleton<StartProcessConfigCategory>, IConfig
+    public StartProcessConfigCategory(System.Collections.Generic.Dictionary<int, ET.Server.StartProcessConfig> dataMap)
     {
-        [BsonElement]
-        [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
-        private readonly Dictionary<int, ET.Server.StartProcessConfig> _dataMap;
-        private readonly List<ET.Server.StartProcessConfig> _dataList;
-
-        public StartProcessConfigCategory(JSONNode _buf)
-        {
-            _dataMap = new Dictionary<int, ET.Server.StartProcessConfig>();
-            _dataList = new List<ET.Server.StartProcessConfig>();
-
-            foreach(JSONNode _ele in _buf.Children)
-            {
-                ET.Server.StartProcessConfig _v;
-                { if(!_ele.IsObject) { throw new SerializationException(); }  _v = global::ET.Server.StartProcessConfig.DeserializeStartProcessConfig(_ele);  }
-                _dataList.Add(_v);
-                _dataMap.Add(_v.Id, _v);
-            }
-            EndInit();
-        }
-
-        public Dictionary<int, ET.Server.StartProcessConfig> GetAll() => _dataMap;
-        public Dictionary<int, ET.Server.StartProcessConfig> DataMap => _dataMap;
-        public List<ET.Server.StartProcessConfig> DataList => _dataList;
-
-        public ET.Server.StartProcessConfig GetOrDefault(int key) => _dataMap.GetValueOrDefault(key);
-
-        public ET.Server.StartProcessConfig Get(int key)
-        {
-            if (_dataMap.TryGetValue(key,out var v))
-            {
-                return v;
-            }
-            throw new System.Exception($"not found config: {this.GetType().FullName}, key: {key}");
-        }
-
-        public void ResolveRef()
-        {
-            foreach(var _v in _dataList)
-            {
-                _v.ResolveRef();
-            }
-            EndRef();
-        }
-
-
-        partial void EndRef();
+        _dataMap = dataMap;
+        EndInit();
     }
 
+    public System.Collections.Generic.Dictionary<int, ET.Server.StartProcessConfig> GetAll() => _dataMap;
+    public System.Collections.Generic.IReadOnlyDictionary<int, ET.Server.StartProcessConfig> DataMap => _dataMap;
+    public ET.Server.StartProcessConfig GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
+    public ET.Server.StartProcessConfig Get(int key) => _dataMap[key];
+    public ET.Server.StartProcessConfig this[int key] => _dataMap[key];
+
+    public void ResolveRef()
+    {
+        foreach (var _v in _dataMap.Values)
+        {
+            _v.ResolveRef();
+        }
+        EndRef();
+    }
+
+    partial void EndRef();
+}
 }
 

@@ -8,64 +8,37 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using System.Collections.Generic;
-using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson.Serialization.Options;
-using SimpleJSON;
+
 
 namespace ET.Server
 {
+[ConfigProcess(ConfigType.Code)]
+public partial class StartSceneConfigCategory : Singleton<StartSceneConfigCategory>, IConfig
+{
+    private readonly System.Collections.Generic.Dictionary<int, ET.Server.StartSceneConfig> _dataMap;
 
-    [ConfigProcess(ConfigType.Json)]
-    public partial class StartSceneConfigCategory : Singleton<StartSceneConfigCategory>, IConfig
+    public StartSceneConfigCategory(System.Collections.Generic.Dictionary<int, ET.Server.StartSceneConfig> dataMap)
     {
-        [BsonElement]
-        [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
-        private readonly Dictionary<int, ET.Server.StartSceneConfig> _dataMap;
-        private readonly List<ET.Server.StartSceneConfig> _dataList;
-
-        public StartSceneConfigCategory(JSONNode _buf)
-        {
-            _dataMap = new Dictionary<int, ET.Server.StartSceneConfig>();
-            _dataList = new List<ET.Server.StartSceneConfig>();
-
-            foreach(JSONNode _ele in _buf.Children)
-            {
-                ET.Server.StartSceneConfig _v;
-                { if(!_ele.IsObject) { throw new SerializationException(); }  _v = global::ET.Server.StartSceneConfig.DeserializeStartSceneConfig(_ele);  }
-                _dataList.Add(_v);
-                _dataMap.Add(_v.Id, _v);
-            }
-            EndInit();
-        }
-
-        public Dictionary<int, ET.Server.StartSceneConfig> GetAll() => _dataMap;
-        public Dictionary<int, ET.Server.StartSceneConfig> DataMap => _dataMap;
-        public List<ET.Server.StartSceneConfig> DataList => _dataList;
-
-        public ET.Server.StartSceneConfig GetOrDefault(int key) => _dataMap.GetValueOrDefault(key);
-
-        public ET.Server.StartSceneConfig Get(int key)
-        {
-            if (_dataMap.TryGetValue(key,out var v))
-            {
-                return v;
-            }
-            throw new System.Exception($"not found config: {this.GetType().FullName}, key: {key}");
-        }
-
-        public void ResolveRef()
-        {
-            foreach(var _v in _dataList)
-            {
-                _v.ResolveRef();
-            }
-            EndRef();
-        }
-
-
-        partial void EndRef();
+        _dataMap = dataMap;
+        EndInit();
     }
 
+    public System.Collections.Generic.Dictionary<int, ET.Server.StartSceneConfig> GetAll() => _dataMap;
+    public System.Collections.Generic.IReadOnlyDictionary<int, ET.Server.StartSceneConfig> DataMap => _dataMap;
+    public ET.Server.StartSceneConfig GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : default;
+    public ET.Server.StartSceneConfig Get(int key) => _dataMap[key];
+    public ET.Server.StartSceneConfig this[int key] => _dataMap[key];
+
+    public void ResolveRef()
+    {
+        foreach (var _v in _dataMap.Values)
+        {
+            _v.ResolveRef();
+        }
+        EndRef();
+    }
+
+    partial void EndRef();
+}
 }
 

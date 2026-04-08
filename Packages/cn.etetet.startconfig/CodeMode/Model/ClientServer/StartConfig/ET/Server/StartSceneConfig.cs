@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 
 namespace ET.Server
@@ -16,21 +15,15 @@ namespace ET.Server
     [EnableClass]
     public sealed partial class StartSceneConfig : Luban.BeanBase
     {
-        public StartSceneConfig(JSONNode _buf) 
+        public StartSceneConfig(int Id, int Process, int Zone, string SceneType, string Name, int Port) 
         {
-            { if(!_buf["Id"].IsNumber) { throw new SerializationException(); }  Id = _buf["Id"]; }
-            { if(!_buf["Process"].IsNumber) { throw new SerializationException(); }  Process = _buf["Process"]; }
-            { if(!_buf["Zone"].IsNumber) { throw new SerializationException(); }  Zone = _buf["Zone"]; }
-            { if(!_buf["SceneType"].IsString) { throw new SerializationException(); }  SceneType = _buf["SceneType"]; }
-            { if(!_buf["Name"].IsString) { throw new SerializationException(); }  Name = _buf["Name"]; }
-            { if(!_buf["Port"].IsNumber) { throw new SerializationException(); }  Port = _buf["Port"]; }
-
+            this.Id = Id;
+            this.Process = Process;
+            this.Zone = Zone;
+            this.SceneType = SceneType;
+            this.Name = Name;
+            this.Port = Port;
             EndInit();
-        }
-
-        public static StartSceneConfig DeserializeStartSceneConfig(JSONNode _buf)
-        {
-            return new ET.Server.StartSceneConfig(_buf);
         }
 
         /// <summary>

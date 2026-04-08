@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 
 using Luban;
-using SimpleJSON;
 
 
 namespace ET.Server
@@ -16,18 +15,12 @@ namespace ET.Server
     [EnableClass]
     public sealed partial class StartMachineConfig : Luban.BeanBase
     {
-        public StartMachineConfig(JSONNode _buf) 
+        public StartMachineConfig(int Id, string InnerIP, string OuterIP) 
         {
-            { if(!_buf["Id"].IsNumber) { throw new SerializationException(); }  Id = _buf["Id"]; }
-            { if(!_buf["InnerIP"].IsString) { throw new SerializationException(); }  InnerIP = _buf["InnerIP"]; }
-            { if(!_buf["OuterIP"].IsString) { throw new SerializationException(); }  OuterIP = _buf["OuterIP"]; }
-
+            this.Id = Id;
+            this.InnerIP = InnerIP;
+            this.OuterIP = OuterIP;
             EndInit();
-        }
-
-        public static StartMachineConfig DeserializeStartMachineConfig(JSONNode _buf)
-        {
-            return new ET.Server.StartMachineConfig(_buf);
         }
 
         /// <summary>

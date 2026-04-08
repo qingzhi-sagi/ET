@@ -2,6 +2,22 @@
 
 namespace ET
 {
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
+    public sealed class ConfigGroupAttribute : Attribute
+    {
+        public string Name { get; }
+
+        public ConfigGroupAttribute(string name)
+        {
+            this.Name = name;
+        }
+    }
+
+    public static class ConfigGroupNames
+    {
+        public const string Config = "Config";
+    }
+
     /// <summary>
     /// 每个XXConfigCategory单例的接口
     /// </summary>
