@@ -7,7 +7,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using Luban;
 
 
 namespace ET
@@ -26,22 +25,13 @@ namespace ET
         /// </summary>
         public readonly int MonsterId;
 
-        public const int __ID__ = -933968487;
-        public override int GetTypeId() => __ID__;
-
         public override void ResolveRef()
         {
             base.ResolveRef();
             EndRef();
         }
 
-        public override string ToString()
-        {
-            return "{ "
-            + "MonsterId:" + MonsterId + ","
-            + "}";
-        }
-
+        partial void EndInit();
         partial void EndRef();
     }
 

@@ -25,9 +25,9 @@ namespace ET.Client
 
         private static readonly string[] HotfixConfigDirs =
         {
-            "Packages/cn.etetet.excel/CodeMode/Config/Client/Config",
-            "Packages/cn.etetet.excel/CodeMode/Config/ClientServer/Config",
-            "Packages/cn.etetet.excel/CodeMode/Config/Server/Config",
+            "Packages/cn.etetet.spell/CodeMode/Config/Client/Config",
+            "Packages/cn.etetet.spell/CodeMode/Config/ClientServer/Config",
+            "Packages/cn.etetet.spell/CodeMode/Config/Server/Config",
         };
 
         private static readonly Dictionary<string, Type> RuntimeTypes = LoadRuntimeTypes();
@@ -86,6 +86,7 @@ namespace ET.Client
                     }
                     writer.AppendLine("}");
                 }
+                writer.AppendLine("}");
             }
             writer.AppendLine("}");
             return writer.ToString();

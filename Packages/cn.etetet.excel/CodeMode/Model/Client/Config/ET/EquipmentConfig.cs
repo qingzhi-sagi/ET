@@ -7,13 +7,12 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using Luban;
 
 
 namespace ET
 {
     [EnableClass]
-    public sealed partial class EquipmentConfig : Luban.BeanBase
+    public sealed partial class EquipmentConfig
     {
         public EquipmentConfig(int Id, int EquipSlot) 
         {
@@ -31,22 +30,12 @@ namespace ET
         /// </summary>
         public readonly int EquipSlot;
 
-        public const int __ID__ = -904342767;
-        public override int GetTypeId() => __ID__;
-
         public  void ResolveRef()
         {
             EndRef();
         }
 
-        public override string ToString()
-        {
-            return "{ "
-            + "id:" + Id + ","
-            + "EquipSlot:" + EquipSlot + ","
-            + "}";
-        }
-
+        partial void EndInit();
         partial void EndRef();
     }
 

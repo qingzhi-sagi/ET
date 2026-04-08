@@ -7,7 +7,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using Luban;
 
 
 namespace ET
@@ -26,22 +25,13 @@ namespace ET
         /// </summary>
         public readonly int ItemId;
 
-        public const int __ID__ = -1136348582;
-        public override int GetTypeId() => __ID__;
-
         public override void ResolveRef()
         {
             base.ResolveRef();
             EndRef();
         }
 
-        public override string ToString()
-        {
-            return "{ "
-            + "ItemId:" + ItemId + ","
-            + "}";
-        }
-
+        partial void EndInit();
         partial void EndRef();
     }
 

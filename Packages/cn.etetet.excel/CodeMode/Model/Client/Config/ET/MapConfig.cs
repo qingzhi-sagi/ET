@@ -7,13 +7,12 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using Luban;
 
 
 namespace ET
 {
     [EnableClass]
-    public sealed partial class MapConfig : Luban.BeanBase
+    public sealed partial class MapConfig
     {
         public MapConfig(int Id, string Name, string Desc, ET.CopyType CopyType, string MapResName) 
         {
@@ -46,25 +45,12 @@ namespace ET
         /// </summary>
         public readonly string MapResName;
 
-        public const int __ID__ = 1701072159;
-        public override int GetTypeId() => __ID__;
-
         public  void ResolveRef()
         {
             EndRef();
         }
 
-        public override string ToString()
-        {
-            return "{ "
-            + "Id:" + Id + ","
-            + "Name:" + Name + ","
-            + "Desc:" + Desc + ","
-            + "CopyType:" + CopyType + ","
-            + "MapResName:" + MapResName + ","
-            + "}";
-        }
-
+        partial void EndInit();
         partial void EndRef();
     }
 

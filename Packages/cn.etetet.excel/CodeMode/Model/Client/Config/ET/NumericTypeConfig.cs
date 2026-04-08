@@ -7,13 +7,12 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using Luban;
 
 
 namespace ET
 {
     [EnableClass]
-    public sealed partial class NumericTypeConfig : Luban.BeanBase
+    public sealed partial class NumericTypeConfig
     {
         public NumericTypeConfig(int Id, string Name, int MaxNumericType, System.Collections.Generic.Dictionary<int, long> AffectNumeric) 
         {
@@ -41,24 +40,12 @@ namespace ET
         /// </summary>
         public readonly System.Collections.Generic.Dictionary<int, long> AffectNumeric;
 
-        public const int __ID__ = 1076638314;
-        public override int GetTypeId() => __ID__;
-
         public  void ResolveRef()
         {
             EndRef();
         }
 
-        public override string ToString()
-        {
-            return "{ "
-            + "Id:" + Id + ","
-            + "Name:" + Name + ","
-            + "MaxNumericType:" + MaxNumericType + ","
-            + "AffectNumeric:" + Luban.StringUtil.CollectionToString(AffectNumeric) + ","
-            + "}";
-        }
-
+        partial void EndInit();
         partial void EndRef();
     }
 

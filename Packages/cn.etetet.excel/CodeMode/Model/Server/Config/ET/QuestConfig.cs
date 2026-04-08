@@ -7,13 +7,12 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using Luban;
 
 
 namespace ET
 {
     [EnableClass]
-    public sealed partial class QuestConfig : Luban.BeanBase
+    public sealed partial class QuestConfig
     {
         public QuestConfig(int Id, string Name, string Desc, int[] ObjectiveIds, int[] PreQuestIds, int[] NextQuestId, string Title, string Content, string AcceptedContent, string FinishContent, int AcceptNPC, string AcceptNPCMap, int SubmitNPC, string SubmitNPCMap) 
         {
@@ -91,34 +90,12 @@ namespace ET
         /// </summary>
         public readonly string SubmitNPCMap;
 
-        public const int __ID__ = -507727899;
-        public override int GetTypeId() => __ID__;
-
         public  void ResolveRef()
         {
             EndRef();
         }
 
-        public override string ToString()
-        {
-            return "{ "
-            + "Id:" + Id + ","
-            + "Name:" + Name + ","
-            + "Desc:" + Desc + ","
-            + "ObjectiveIds:" + Luban.StringUtil.CollectionToString(ObjectiveIds) + ","
-            + "PreQuestIds:" + Luban.StringUtil.CollectionToString(PreQuestIds) + ","
-            + "NextQuestId:" + Luban.StringUtil.CollectionToString(NextQuestId) + ","
-            + "Title:" + Title + ","
-            + "Content:" + Content + ","
-            + "AcceptedContent:" + AcceptedContent + ","
-            + "FinishContent:" + FinishContent + ","
-            + "AcceptNPC:" + AcceptNPC + ","
-            + "AcceptNPCMap:" + AcceptNPCMap + ","
-            + "SubmitNPC:" + SubmitNPC + ","
-            + "SubmitNPCMap:" + SubmitNPCMap + ","
-            + "}";
-        }
-
+        partial void EndInit();
         partial void EndRef();
     }
 

@@ -7,13 +7,12 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using Luban;
 
 
 namespace ET
 {
     [EnableClass]
-    public sealed partial class TextConfig : Luban.BeanBase
+    public sealed partial class TextConfig
     {
         public TextConfig(int Id, string Name, string CN, string EN) 
         {
@@ -41,24 +40,12 @@ namespace ET
         /// </summary>
         public readonly string EN;
 
-        public const int __ID__ = 1515216270;
-        public override int GetTypeId() => __ID__;
-
         public  void ResolveRef()
         {
             EndRef();
         }
 
-        public override string ToString()
-        {
-            return "{ "
-            + "Id:" + Id + ","
-            + "Name:" + Name + ","
-            + "CN:" + CN + ","
-            + "EN:" + EN + ","
-            + "}";
-        }
-
+        partial void EndInit();
         partial void EndRef();
     }
 

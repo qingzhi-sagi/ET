@@ -7,13 +7,12 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using Luban;
 
 
 namespace ET.Server
 {
     [EnableClass]
-    public sealed partial class StartProcessConfig : Luban.BeanBase
+    public sealed partial class StartProcessConfig
     {
         public StartProcessConfig(int Id, int MachineId, int Port, int Num, string Name) 
         {
@@ -46,25 +45,12 @@ namespace ET.Server
         /// </summary>
         public readonly string Name;
 
-        public const int __ID__ = -224756389;
-        public override int GetTypeId() => __ID__;
-
         public  void ResolveRef()
         {
             EndRef();
         }
 
-        public override string ToString()
-        {
-            return "{ "
-            + "Id:" + Id + ","
-            + "MachineId:" + MachineId + ","
-            + "Port:" + Port + ","
-            + "Num:" + Num + ","
-            + "Name:" + Name + ","
-            + "}";
-        }
-
+        partial void EndInit();
         partial void EndRef();
     }
 

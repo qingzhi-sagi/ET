@@ -1,5 +1,3 @@
-using Luban;
-
 {{
     key_type = __table.key_ttype
     value_type = __table.value_ttype

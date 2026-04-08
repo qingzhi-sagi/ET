@@ -7,13 +7,12 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using Luban;
 
 
 namespace ET
 {
     [EnableClass]
-    public sealed partial class UnitConfig : Luban.BeanBase
+    public sealed partial class UnitConfig
     {
         public UnitConfig(int Id, ET.UnitType UnitType, string Name, ET.EClassType ClassType, System.Collections.Generic.Dictionary<int, long> KV) 
         {
@@ -46,25 +45,12 @@ namespace ET
         /// </summary>
         public readonly System.Collections.Generic.Dictionary<int, long> KV;
 
-        public const int __ID__ = 1859130533;
-        public override int GetTypeId() => __ID__;
-
         public  void ResolveRef()
         {
             EndRef();
         }
 
-        public override string ToString()
-        {
-            return "{ "
-            + "Id:" + Id + ","
-            + "UnitType:" + UnitType + ","
-            + "Name:" + Name + ","
-            + "classType:" + ClassType + ","
-            + "KV:" + Luban.StringUtil.CollectionToString(KV) + ","
-            + "}";
-        }
-
+        partial void EndInit();
         partial void EndRef();
     }
 

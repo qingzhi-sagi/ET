@@ -7,13 +7,12 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using Luban;
 
 
 namespace ET
 {
     [EnableClass]
-    public sealed partial class QuestObjectiveConfig : Luban.BeanBase
+    public sealed partial class QuestObjectiveConfig
     {
         public QuestObjectiveConfig(int Id, string Name, string Desc, ET.QuestObjectiveType Type, int NeedCount, ET.QuestObjectiveParams Params) 
         {
@@ -51,27 +50,13 @@ namespace ET
         /// </summary>
         public readonly ET.QuestObjectiveParams Params;
 
-        public const int __ID__ = -70847336;
-        public override int GetTypeId() => __ID__;
-
         public  void ResolveRef()
         {
             Params?.ResolveRef();
             EndRef();
         }
 
-        public override string ToString()
-        {
-            return "{ "
-            + "Id:" + Id + ","
-            + "Name:" + Name + ","
-            + "Desc:" + Desc + ","
-            + "Type:" + Type + ","
-            + "NeedCount:" + NeedCount + ","
-            + "Params:" + Params + ","
-            + "}";
-        }
-
+        partial void EndInit();
         partial void EndRef();
     }
 

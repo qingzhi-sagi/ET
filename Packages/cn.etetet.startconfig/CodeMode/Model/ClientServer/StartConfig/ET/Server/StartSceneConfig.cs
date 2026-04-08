@@ -7,13 +7,12 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using Luban;
 
 
 namespace ET.Server
 {
     [EnableClass]
-    public sealed partial class StartSceneConfig : Luban.BeanBase
+    public sealed partial class StartSceneConfig
     {
         public StartSceneConfig(int Id, int Process, int Zone, string SceneType, string Name, int Port) 
         {
@@ -51,26 +50,12 @@ namespace ET.Server
         /// </summary>
         public readonly int Port;
 
-        public const int __ID__ = 777443384;
-        public override int GetTypeId() => __ID__;
-
         public  void ResolveRef()
         {
             EndRef();
         }
 
-        public override string ToString()
-        {
-            return "{ "
-            + "Id:" + Id + ","
-            + "Process:" + Process + ","
-            + "Zone:" + Zone + ","
-            + "SceneType:" + SceneType + ","
-            + "Name:" + Name + ","
-            + "Port:" + Port + ","
-            + "}";
-        }
-
+        partial void EndInit();
         partial void EndRef();
     }
 

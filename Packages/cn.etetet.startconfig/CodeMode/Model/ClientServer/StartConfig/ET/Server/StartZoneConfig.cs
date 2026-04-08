@@ -7,13 +7,12 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using Luban;
 
 
 namespace ET.Server
 {
     [EnableClass]
-    public sealed partial class StartZoneConfig : Luban.BeanBase
+    public sealed partial class StartZoneConfig
     {
         public StartZoneConfig(int Id, int ZoneType, string DBConnection, string DBName) 
         {
@@ -41,24 +40,12 @@ namespace ET.Server
         /// </summary>
         public readonly string DBName;
 
-        public const int __ID__ = 350676868;
-        public override int GetTypeId() => __ID__;
-
         public  void ResolveRef()
         {
             EndRef();
         }
 
-        public override string ToString()
-        {
-            return "{ "
-            + "Id:" + Id + ","
-            + "ZoneType:" + ZoneType + ","
-            + "DBConnection:" + DBConnection + ","
-            + "DBName:" + DBName + ","
-            + "}";
-        }
-
+        partial void EndInit();
         partial void EndRef();
     }
 

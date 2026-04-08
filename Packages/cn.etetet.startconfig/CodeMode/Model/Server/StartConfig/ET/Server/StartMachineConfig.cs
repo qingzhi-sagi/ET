@@ -7,13 +7,12 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using Luban;
 
 
 namespace ET.Server
 {
     [EnableClass]
-    public sealed partial class StartMachineConfig : Luban.BeanBase
+    public sealed partial class StartMachineConfig
     {
         public StartMachineConfig(int Id, string InnerIP, string OuterIP) 
         {
@@ -36,23 +35,12 @@ namespace ET.Server
         /// </summary>
         public readonly string OuterIP;
 
-        public const int __ID__ = -737091277;
-        public override int GetTypeId() => __ID__;
-
         public  void ResolveRef()
         {
             EndRef();
         }
 
-        public override string ToString()
-        {
-            return "{ "
-            + "Id:" + Id + ","
-            + "InnerIP:" + InnerIP + ","
-            + "OuterIP:" + OuterIP + ","
-            + "}";
-        }
-
+        partial void EndInit();
         partial void EndRef();
     }
 

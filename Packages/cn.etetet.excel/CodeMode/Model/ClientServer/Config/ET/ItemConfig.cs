@@ -7,13 +7,12 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using Luban;
 
 
 namespace ET
 {
     [EnableClass]
-    public sealed partial class ItemConfig : Luban.BeanBase
+    public sealed partial class ItemConfig
     {
         public ItemConfig(int Id, string Name, string Desc, int Type, int MaxStack, string Icon, int Quality, int UseType, int Level) 
         {
@@ -66,29 +65,12 @@ namespace ET
         /// </summary>
         public readonly int Level;
 
-        public const int __ID__ = 1663635188;
-        public override int GetTypeId() => __ID__;
-
         public  void ResolveRef()
         {
             EndRef();
         }
 
-        public override string ToString()
-        {
-            return "{ "
-            + "Id:" + Id + ","
-            + "Name:" + Name + ","
-            + "Desc:" + Desc + ","
-            + "Type:" + Type + ","
-            + "MaxStack:" + MaxStack + ","
-            + "Icon:" + Icon + ","
-            + "Quality:" + Quality + ","
-            + "UseType:" + UseType + ","
-            + "Level:" + Level + ","
-            + "}";
-        }
-
+        partial void EndInit();
         partial void EndRef();
     }
 

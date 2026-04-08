@@ -7,13 +7,12 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using Luban;
 
 
 namespace ET
 {
     [EnableClass]
-    public sealed partial class MapTransferRuleConfig : Luban.BeanBase
+    public sealed partial class MapTransferRuleConfig
     {
         public MapTransferRuleConfig(int Id, string ToMap, float[] Pos) 
         {
@@ -36,23 +35,12 @@ namespace ET
         /// </summary>
         public readonly float[] Pos;
 
-        public const int __ID__ = 2092018182;
-        public override int GetTypeId() => __ID__;
-
         public  void ResolveRef()
         {
             EndRef();
         }
 
-        public override string ToString()
-        {
-            return "{ "
-            + "Id:" + Id + ","
-            + "ToMap:" + ToMap + ","
-            + "Pos:" + Luban.StringUtil.CollectionToString(Pos) + ","
-            + "}";
-        }
-
+        partial void EndInit();
         partial void EndRef();
     }
 

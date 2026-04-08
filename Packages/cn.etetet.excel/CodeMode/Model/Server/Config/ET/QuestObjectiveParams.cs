@@ -7,13 +7,12 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using Luban;
 
 
 namespace ET
 {
     [EnableClass]
-    public abstract partial class QuestObjectiveParams : Luban.BeanBase
+    public abstract partial class QuestObjectiveParams
     {
         public QuestObjectiveParams() 
         {
@@ -21,18 +20,12 @@ namespace ET
         }
 
 
-
         public virtual void ResolveRef()
         {
             EndRef();
         }
 
-        public override string ToString()
-        {
-            return "{ "
-            + "}";
-        }
-
+        partial void EndInit();
         partial void EndRef();
     }
 

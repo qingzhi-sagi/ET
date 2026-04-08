@@ -1,13 +1,6 @@
-# 参数定义
 param(
-    [string]$ConfigType = "Luban"
+    [string]$ConfigType = "Code"
 )
-
-# 验证参数
-if ($ConfigType -notin @("Luban", "Json")) {
-    Write-Error "Invalid ConfigType: $ConfigType. Must be 'Luban' or 'Json'"
-    exit 1
-}
 
 # 设置变量
 $PACKAGE = "Packages/cn.etetet.excel"
@@ -22,14 +15,6 @@ $CUSTOM = "Packages/cn.etetet.yiuiluban/.ToolsGen/Custom"
 $DotNet = "dotnet.exe"
 if ($null -ne $IsMacOS) {
     $DotNet = "/usr/local/share/dotnet/dotnet"
-}
-
-# 根据ConfigType选择输出格式
-$OutputFormats
-if ($ConfigType -eq "Luban") {
-    $OutputFormats = "cs-bin"
-} else {
-    $OutputFormats = "cs-code"
 }
 
 function Invoke-ConfigExport

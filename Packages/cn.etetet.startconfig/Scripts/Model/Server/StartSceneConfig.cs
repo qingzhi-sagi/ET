@@ -60,7 +60,7 @@ namespace ET.Server
     
     public partial class StartSceneConfig
     {
-        public override void EndInit()
+        partial void EndInit()
         {
         }
     }

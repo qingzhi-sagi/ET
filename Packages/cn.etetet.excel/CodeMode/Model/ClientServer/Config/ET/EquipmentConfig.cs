@@ -7,13 +7,12 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using Luban;
 
 
 namespace ET
 {
     [EnableClass]
-    public sealed partial class EquipmentConfig : Luban.BeanBase
+    public sealed partial class EquipmentConfig
     {
         public EquipmentConfig(int Id, int EquipSlot, System.Collections.Generic.Dictionary<int, long> KV) 
         {
@@ -36,23 +35,12 @@ namespace ET
         /// </summary>
         public readonly System.Collections.Generic.Dictionary<int, long> KV;
 
-        public const int __ID__ = -904342767;
-        public override int GetTypeId() => __ID__;
-
         public  void ResolveRef()
         {
             EndRef();
         }
 
-        public override string ToString()
-        {
-            return "{ "
-            + "id:" + Id + ","
-            + "EquipSlot:" + EquipSlot + ","
-            + "KV:" + Luban.StringUtil.CollectionToString(KV) + ","
-            + "}";
-        }
-
+        partial void EndInit();
         partial void EndRef();
     }
 

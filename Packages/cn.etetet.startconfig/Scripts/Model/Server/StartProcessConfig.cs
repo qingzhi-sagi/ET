@@ -14,7 +14,7 @@ namespace ET.Server
 
     public partial class StartProcessConfig
     {
-        public override void EndInit()
+        partial void EndInit()
         {
         }
     }
