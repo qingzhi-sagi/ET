@@ -87,6 +87,15 @@ WOW/
 **使用场景**：
 - 使用tdd测试驱动编写代码
 
+### et-unitybridge - UnityBridge 命令调用专家
+
+**使用场景**：
+- 查询 UnityBridge 宿主是否在线
+- 实时轮询 Unity 心跳与宿主状态
+- 查询 Unity 编译状态、PlayMode 状态、CodeMode、Unity 版本
+- 执行 UnityBridge 命令（Ping / HostState / Compile / Refresh / RegenProject / EnterPlay / ExitPlay / Reload）
+- 排查 UnityBridge 返回的错误信息
+
 
 ## 包的依赖规范
 

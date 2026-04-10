@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+        <RootNamespace>ET</RootNamespace>
+        <LangVersion>default</LangVersion>
+        <AssemblyName>ET.UnityBridge</AssemblyName>
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>AnyCPU</Platforms>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <ETRootDir>$([MSBuild]::EnsureTrailingSlash($([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\..\..\' ))))</ETRootDir>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <OutputPath>$(ETRootDir)Bin</OutputPath>
+      <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+      <DefineConstants>DOTNET</DefineConstants>
+      <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <OutputPath>$(ETRootDir)Bin</OutputPath>
+      <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+      <DefineConstants>DOTNET</DefineConstants>
+      <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="CommandLineParser" Version="2.9.1" />
+      <ProjectReference Include="..\..\cn.etetet.core\DotNet~\ET.Core.csproj" />
+      <ProjectReference Include="..\..\cn.etetet.statesync\DotNet~\Model\ET.Model.csproj" />
+    </ItemGroup>
+
+</Project>

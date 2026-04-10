@@ -1,0 +1,20 @@
+{
+    "name": "ET.UnityBridge.Editor",
+    "rootNamespace": "ET",
+    "references": [
+        "ET.Core",
+        "ET.Model",
+        "ET.Hotfix"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -92,4 +92,10 @@
     <ItemGroup>
         <CompilerVisibleProperty Include="DotNetAssembly" />
     </ItemGroup>
+    
+    <ItemGroup>
+      <Folder Include="..\..\..\cn.etetet.test\Scripts\Hotfix\Share\">
+        <Link>Packages\cn.etetet.test\Scripts\Hotfix\Share</Link>
+      </Folder>
+    </ItemGroup>
 </Project>

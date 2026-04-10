@@ -384,7 +384,9 @@
       "version": "file:cn.etetet.test",
       "depth": 0,
       "source": "embedded",
-      "dependencies": {}
+      "dependencies": {
+        "cn.etetet.unitybridge": "2.0.0"
+      }
     },
     "cn.etetet.truesync": {
       "version": "file:cn.etetet.truesync",
@@ -400,6 +402,14 @@
         "cn.etetet.core": "4.0.0",
         "cn.etetet.excel": "4.0.0",
         "cn.etetet.proto": "4.0.0"
+      }
+    },
+    "cn.etetet.unitybridge": {
+      "version": "file:cn.etetet.unitybridge",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "cn.etetet.core": "2.0.8"
       }
     },
     "cn.etetet.yiui": {

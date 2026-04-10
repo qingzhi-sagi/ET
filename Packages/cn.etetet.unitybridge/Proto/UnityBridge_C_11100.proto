@@ -1,0 +1,124 @@
+syntax = "proto3";
+package ET;
+
+// ResponseType PingResponse
+message Ping // IRequest
+{
+	int32 RpcId = 1;
+}
+
+message PingResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	int64 Time = 4;
+}
+
+// ResponseType HostStateResponse
+message HostState // IRequest
+{
+	int32 RpcId = 1;
+}
+
+message HostStateResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	bool IsCompiling = 4;
+	bool IsPlaying = 5;
+	bool IsPlayingOrWillChangePlaymode = 6;
+	string CodeMode = 7;
+	string UnityVersion = 8;
+	string AvailableCommands = 9;
+}
+
+// ResponseType CompileResponse
+message Compile // IRequest
+{
+	int32 RpcId = 1;
+}
+
+message CompileResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	int64 DurationMs = 4;
+}
+
+// ResponseType ReloadResponse
+message Reload // IRequest
+{
+	int32 RpcId = 1;
+}
+
+message ReloadResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+}
+
+// ResponseType EnterPlayResponse
+message EnterPlay // IRequest
+{
+	int32 RpcId = 1;
+}
+
+message EnterPlayResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	bool IsPlaying = 4;
+}
+
+// ResponseType ExitPlayResponse
+message ExitPlay // IRequest
+{
+	int32 RpcId = 1;
+}
+
+message ExitPlayResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	bool IsPlaying = 4;
+}
+
+// ResponseType RegenProjectResponse
+message RegenProject // IRequest
+{
+	int32 RpcId = 1;
+}
+
+message RegenProjectResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+}
+
+message ErrorResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string Command = 4;
+}
+
+// ResponseType RefreshResponse
+message Refresh // IRequest
+{
+	int32 RpcId = 1;
+}
+
+message RefreshResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+}
