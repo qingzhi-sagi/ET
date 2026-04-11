@@ -9,22 +9,21 @@ namespace ET
             await ETTask.CompletedTask;
             if (!EditorApplication.isPlaying)
             {
-                ReloadResponse response = ReloadResponse.Create();
-                response.Error = UnityBridgeErrorCode.NotInPlayMode;
-                response.Message = "reload hotfix requires playmode";
-                return response;
+                ReloadResponse notPlayingResponse = ReloadResponse.Create();
+                notPlayingResponse.Error = UnityBridgeErrorCode.NotInPlayMode;
+                notPlayingResponse.Message = "unity not in playmode";
+                return notPlayingResponse;
             }
 
-            bool success = EditorApplication.ExecuteMenuItem("ET/Scripts/Reload");
-            if (!success)
+            if (EditorApplication.ExecuteMenuItem("ET/Scripts/Reload"))
             {
-                ReloadResponse response = ReloadResponse.Create();
-                response.Error = UnityBridgeErrorCode.HandlerFail;
-                response.Message = "execute menu item failed: ET/Scripts/Reload";
-                return response;
+                return ReloadResponse.Create();
             }
 
-            return ReloadResponse.Create();
+            ReloadResponse response = ReloadResponse.Create();
+            response.Error = UnityBridgeErrorCode.HandlerFail;
+            response.Message = "execute menu item failed: ET/Scripts/Reload";
+            return response;
         }
     }
 }
