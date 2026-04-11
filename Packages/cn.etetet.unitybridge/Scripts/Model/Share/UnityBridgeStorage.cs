@@ -184,6 +184,15 @@ namespace ET
             return true;
         }
 
+        public static void DeleteResponse(string root, int rpcId)
+        {
+            string responsePath = GetResponsePath(root, rpcId);
+            if (File.Exists(responsePath))
+            {
+                File.Delete(responsePath);
+            }
+        }
+
         public static bool TryReadCachedResponse(string root, string idempotencyKey, out string responseJson)
         {
             responseJson = null;
@@ -343,9 +352,10 @@ namespace ET
                 return string.Empty;
             }
 
-            BsonDocument document = string.IsNullOrWhiteSpace(ToJson(request))
+            string json = ToJson(request);
+            BsonDocument document = string.IsNullOrWhiteSpace(json)
                     ? new BsonDocument()
-                    : BsonDocument.Parse(ToJson(request));
+                    : BsonDocument.Parse(json);
             document["_t"] = request.GetType().FullName;
             return document.ToJson();
         }

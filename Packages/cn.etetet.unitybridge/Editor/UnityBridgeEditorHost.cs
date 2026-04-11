@@ -14,10 +14,12 @@ namespace ET
         private static double nextPollTime;
         private static double nextHeartbeatTime;
         private static bool isProcessingRequest;
+        private static readonly string cachedRoot;
 
         static UnityBridgeEditorHost()
         {
             MongoRegister.Init();
+            cachedRoot = UnityBridgePathHelper.ResolveRoot();
             EditorApplication.update -= Update;
             EditorApplication.update += Update;
             nextPollTime = 0d;
@@ -26,7 +28,7 @@ namespace ET
 
         private static void Update()
         {
-            string root = UnityBridgePathHelper.ResolveRoot();
+            string root = cachedRoot;
             double now = EditorApplication.timeSinceStartup;
 
             if (now >= nextHeartbeatTime)
@@ -193,8 +195,9 @@ namespace ET
                     return true;
                 }
             }
-            catch
+            catch (Exception e)
             {
+                Debug.LogWarning($"unity bridge cached response deserialize as {responseType?.Name} failed: {e.Message}");
             }
 
             try
@@ -205,8 +208,9 @@ namespace ET
                     return true;
                 }
             }
-            catch
+            catch (Exception e)
             {
+                Debug.LogWarning($"unity bridge cached response deserialize as ErrorResponse failed: {e.Message}");
             }
 
             return false;

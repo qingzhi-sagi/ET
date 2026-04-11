@@ -11,8 +11,7 @@ namespace ET
     {
         private static readonly HashSet<string> ReservedCommands = new(StringComparer.OrdinalIgnoreCase)
         {
-            "heartBeat",
-            "heartbeat"
+            "heartBeat"
         };
 
         private static readonly HashSet<string> TransportOptions = new(StringComparer.OrdinalIgnoreCase)
@@ -157,6 +156,7 @@ namespace ET
             {
                 if (UnityBridgeFileStore.TryReadResponse(root, request.RpcId, out string responseJson))
                 {
+                    UnityBridgeFileStore.DeleteResponse(root, request.RpcId);
                     Console.WriteLine(responseJson);
                     BsonDocument responseDocument = BsonDocument.Parse(responseJson);
                     if (responseDocument.TryGetValue("Error", out BsonValue errorValue))
@@ -186,9 +186,31 @@ namespace ET
             return 1;
         }
 
+        private const int HeartbeatFreshnessMs = 3000;
+
         private static bool HasActiveHeartbeat(string root)
         {
-            return File.Exists(UnityBridgeFileStore.GetHeartbeatPath(root));
+            string heartbeatPath = UnityBridgeFileStore.GetHeartbeatPath(root);
+            if (!File.Exists(heartbeatPath))
+            {
+                return false;
+            }
+
+            try
+            {
+                UnityBridgeHeartbeat heartbeat = MongoHelper.FromJson<UnityBridgeHeartbeat>(File.ReadAllText(heartbeatPath, Encoding.UTF8));
+                if (heartbeat == null)
+                {
+                    return false;
+                }
+
+                long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                return now - heartbeat.Time <= HeartbeatFreshnessMs;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         private static bool HasPendingDeferredRequest(string root, int rpcId)
