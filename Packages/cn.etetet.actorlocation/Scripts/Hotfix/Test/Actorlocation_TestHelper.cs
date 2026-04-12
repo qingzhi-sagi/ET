@@ -9,7 +9,7 @@ namespace ET.Test
     {
         public static ActorId CreateActorId(Fiber fiber, int fiberId, int instanceId)
         {
-            Address address = EnsureAddressReady(fiber);
+            Address address = fiber.GetSingleton<AddressSingleton>().InnerAddress;
             return new ActorId(address, new FiberInstanceId(fiberId, instanceId));
         }
 
@@ -77,11 +77,6 @@ namespace ET.Test
             }
 
             proxy.OnServiceChangeNotification(changeType, new List<ServiceInfoProto> { serviceInfoProto });
-        }
-
-        public static Address EnsureAddressSingletonReady(Fiber fiber)
-        {
-            return EnsureAddressReady(fiber);
         }
 
         public static LocationOneType GetLocationOneType(Scene scene, int locationType)
@@ -162,29 +157,6 @@ namespace ET.Test
             }
 
             throw new Exception($"{scenario}: timeout in {timeoutMs}ms");
-        }
-
-        private static Address EnsureAddressReady(Fiber fiber)
-        {
-            AddressSingleton addressSingleton = fiber.GetSingleton<AddressSingleton>();
-            if (addressSingleton == null)
-            {
-                addressSingleton = World.Instance.AddSingleton<AddressSingleton>();
-            }
-
-            if (string.IsNullOrEmpty(addressSingleton.InnerIP)
-                || string.IsNullOrEmpty(addressSingleton.OuterIP)
-                || addressSingleton.InnerPort <= 0)
-            {
-                StartProcessConfig processConfig = fiber.GetSingleton<StartProcessConfigCategory>().Get(Options.Instance.Process);
-                StartMachineConfig startMachineConfig =
-                        fiber.GetSingleton<StartMachineConfigCategory>()?.Get(processConfig.MachineId);
-                addressSingleton.InnerIP ??= startMachineConfig?.InnerIP;
-                addressSingleton.OuterIP ??= startMachineConfig?.OuterIP;
-                addressSingleton.InnerPort = addressSingleton.InnerPort > 0 ? addressSingleton.InnerPort : processConfig.Port;
-            }
-
-            return addressSingleton.InnerAddress;
         }
     }
 }

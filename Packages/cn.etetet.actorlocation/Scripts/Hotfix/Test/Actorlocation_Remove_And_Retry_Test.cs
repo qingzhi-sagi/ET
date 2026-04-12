@@ -15,7 +15,6 @@ namespace ET.Test
             try
             {
                 Scene scene = Actorlocation_TestHelper.PrepareProxyScene(scope.TestFiber);
-                _ = Actorlocation_TestHelper.EnsureAddressSingletonReady(scope.TestFiber);
 
                 ServiceDiscoveryProxy serviceDiscoveryProxy = scene.GetComponent<ServiceDiscoveryProxy>();
                 LocationProxyComponent locationProxy = scene.GetComponent<LocationProxyComponent>();
@@ -94,7 +93,6 @@ namespace ET.Test
             try
             {
                 Scene scene = Actorlocation_TestHelper.PrepareProxyScene(scope.TestFiber);
-                _ = Actorlocation_TestHelper.EnsureAddressSingletonReady(scope.TestFiber);
 
                 ServiceDiscoveryProxy serviceDiscoveryProxy = scene.GetComponent<ServiceDiscoveryProxy>();
                 LocationProxyComponent locationProxy = scene.GetComponent<LocationProxyComponent>();
@@ -170,7 +168,6 @@ namespace ET.Test
             try
             {
                 Scene scene = Actorlocation_TestHelper.PrepareProxyScene(scope.TestFiber);
-                _ = Actorlocation_TestHelper.EnsureAddressSingletonReady(scope.TestFiber);
 
                 ServiceDiscoveryProxy serviceDiscoveryProxy = scene.GetComponent<ServiceDiscoveryProxy>();
                 LocationProxyComponent locationProxy = scene.GetComponent<LocationProxyComponent>();
