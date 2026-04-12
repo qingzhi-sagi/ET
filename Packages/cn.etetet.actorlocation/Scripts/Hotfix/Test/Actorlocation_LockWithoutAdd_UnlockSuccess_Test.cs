@@ -19,8 +19,8 @@ namespace ET.Test
                 EntityRef<LocationOneType> locationRef = location;
 
                 long key = IdGenerater.Instance.GenerateId();
-                ActorId oldActor = Actorlocation_TestHelper.CreateActorId(300012, 1);
-                ActorId newActor = Actorlocation_TestHelper.CreateActorId(300013, 1);
+                ActorId oldActor = Actorlocation_TestHelper.CreateActorId(scope.TestFiber, 300012, 1);
+                ActorId newActor = Actorlocation_TestHelper.CreateActorId(scope.TestFiber, 300013, 1);
 
                 long lockToken = await location.Lock(key, oldActor, 0);
                 location = Actorlocation_TestHelper.EnsureLocation(locationRef, "lock-without-add/lock");

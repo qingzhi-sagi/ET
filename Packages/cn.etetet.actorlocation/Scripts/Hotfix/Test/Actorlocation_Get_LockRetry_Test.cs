@@ -32,8 +32,8 @@ namespace ET.Test
                 locationProxy.locationRequestRetryIntervalMs = 10;
 
                 long key = IdGenerater.Instance.GenerateId();
-                ActorId oldActor = Actorlocation_TestHelper.CreateActorId(301005, 1);
-                ActorId newActor = Actorlocation_TestHelper.CreateActorId(301006, 1);
+                ActorId oldActor = Actorlocation_TestHelper.CreateActorId(scope.TestFiber, 301005, 1);
+                ActorId newActor = Actorlocation_TestHelper.CreateActorId(scope.TestFiber, 301006, 1);
                 TimerComponent timerComponent = scene.TimerComponent;
                 EntityRef<TimerComponent> timerRef = timerComponent;
 

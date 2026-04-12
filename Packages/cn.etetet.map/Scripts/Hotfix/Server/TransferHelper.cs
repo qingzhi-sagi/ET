@@ -88,7 +88,8 @@ namespace ET.Server
             request.ChangeScene = changeScene;
             
             // 同一个进程
-            if (mapActorId.Address == AddressSingleton.Instance.InnerAddress)
+            root = rootRef;
+            if (mapActorId.Address == root.GetSingleton<AddressSingleton>().InnerAddress)
             {
                 foreach (Entity entity in unit.Components.Values.ToArray())
                 {

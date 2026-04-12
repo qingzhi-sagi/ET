@@ -5,7 +5,7 @@ namespace ET.Server
         public static ActorId GetActorId(this Entity self)
         {
             Fiber root = self.Fiber();
-            return new ActorId(AddressSingleton.Instance.InnerAddress, new FiberInstanceId(root.Id, self.InstanceId));
+            return new ActorId(self.GetSingleton<AddressSingleton>().InnerAddress, new FiberInstanceId(root.Id, self.InstanceId));
         }
     }
 }

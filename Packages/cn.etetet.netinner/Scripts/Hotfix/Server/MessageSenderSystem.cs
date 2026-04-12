@@ -16,7 +16,7 @@ namespace ET.Server
         {
             Fiber fiber = self.Fiber();
             // 如果发向同一个进程，则扔到消息队列中
-            if (actorId.Address == AddressSingleton.Instance.InnerAddress)
+            if (actorId.Address == self.GetSingleton<AddressSingleton>().InnerAddress)
             {
                 self.ProcessInnerSender.Send(actorId.FiberInstanceId, message);
                 return;
@@ -45,7 +45,7 @@ namespace ET.Server
             }
             
             IResponse response;
-            if (actorId.Address == AddressSingleton.Instance.InnerAddress)
+            if (actorId.Address == self.GetSingleton<AddressSingleton>().InnerAddress)
             {
                 response = await self.ProcessInnerSender.Call(actorId.FiberInstanceId, request, timeout, needException);
             }

@@ -107,7 +107,7 @@ namespace ET.Server
         {
             long now = ServiceDiscoveryHelper.GetMonotonicNow(self.Root(), "ServiceDiscoveryAgent proxy-heartbeat",
                 ref self.LastRawNow, ref self.MonotonicNow);
-            Address innerAddress = AddressSingleton.Instance.InnerAddress;
+            Address innerAddress = self.GetSingleton<AddressSingleton>().InnerAddress;
             foreach ((string sceneName, EntityRef<ServiceInfo> serviceRef) in agent.SceneNameServices)
             {
                 ServiceInfo serviceInfo = serviceRef;
@@ -135,7 +135,7 @@ namespace ET.Server
                 return false;
             }
 
-            Address innerAddress = AddressSingleton.Instance.InnerAddress;
+            Address innerAddress = self.GetSingleton<AddressSingleton>().InnerAddress;
             return localService.ActorId != default && localService.ActorId.Address == innerAddress;
         }
 

@@ -40,7 +40,7 @@ namespace ET
             foreach (InvocationExpressionSyntax invocationExpressionSyntax in
                      context.SemanticModel.SyntaxTree.GetRoot().DescendantNodes<InvocationExpressionSyntax>())
             {
-                this.AnalyzeWorldGetSingletonInvocation(context, invocationExpressionSyntax);
+                this.AnalyzeWorldSingletonInvocation(context, invocationExpressionSyntax);
             }
         }
 
@@ -83,7 +83,7 @@ namespace ET
             context.ReportDiagnostic(diagnostic);
         }
 
-        private void AnalyzeWorldGetSingletonInvocation(
+        private void AnalyzeWorldSingletonInvocation(
             SemanticModelAnalysisContext context,
             InvocationExpressionSyntax invocationExpressionSyntax)
         {
@@ -92,7 +92,8 @@ namespace ET
                 return;
             }
 
-            if (memberAccessExpressionSyntax.Name.Identifier.Text != "GetSingleton")
+            string methodName = memberAccessExpressionSyntax.Name.Identifier.Text;
+            if (methodName != "GetSingleton" && methodName != "TryGetSingleton")
             {
                 return;
             }
@@ -102,7 +103,8 @@ namespace ET
                 return;
             }
 
-            if (methodSymbol.Name != "GetSingleton" || methodSymbol.ContainingType.ToDisplayString() != "ET.World")
+            if ((methodSymbol.Name != "GetSingleton" && methodSymbol.Name != "TryGetSingleton")
+                || methodSymbol.ContainingType.ToDisplayString() != "ET.World")
             {
                 return;
             }

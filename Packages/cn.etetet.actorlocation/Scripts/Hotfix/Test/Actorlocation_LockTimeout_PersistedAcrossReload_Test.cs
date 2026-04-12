@@ -22,7 +22,7 @@ namespace ET.Test
                 EntityRef<TimerComponent> timerRef = timerComponent;
 
                 long key = IdGenerater.Instance.GenerateId();
-                ActorId actorA = Actorlocation_TestHelper.CreateActorId(301007, 1);
+                ActorId actorA = Actorlocation_TestHelper.CreateActorId(scope.TestFiber, 301007, 1);
 
                 await location.Add(key, actorA);
                 location = Actorlocation_TestHelper.EnsureLocation(locationRef, "persist-timeout/add");

@@ -33,8 +33,8 @@ namespace ET.Test
                 locationProxy.locationRequestRetryIntervalMs = 1;
 
                 long key = IdGenerater.Instance.GenerateId();
-                ActorId oldActor = Actorlocation_TestHelper.CreateActorId(301001, 1);
-                ActorId newActor = Actorlocation_TestHelper.CreateActorId(301002, 1);
+                ActorId oldActor = Actorlocation_TestHelper.CreateActorId(scope.TestFiber, 301001, 1);
+                ActorId newActor = Actorlocation_TestHelper.CreateActorId(scope.TestFiber, 301002, 1);
 
                 await locationProxy.Add(LocationType, key, oldActor);
                 locationProxy = locationProxyRef;
@@ -145,7 +145,7 @@ namespace ET.Test
                     zone);
 
                 long entityId = IdGenerater.Instance.GenerateId();
-                ActorId missingActorId = Actorlocation_TestHelper.CreateActorId(scope.TestFiber.Id, int.MaxValue);
+                ActorId missingActorId = Actorlocation_TestHelper.CreateActorId(scope.TestFiber, scope.TestFiber.Id, int.MaxValue);
                 await location.Add(entityId, missingActorId);
                 location = Actorlocation_TestHelper.EnsureLocation(locationRef, "sender/add-missing-route");
 

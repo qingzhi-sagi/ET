@@ -31,7 +31,7 @@ namespace ET.Test
                 ActorId serviceActorId = scene.GetActorId();
                 int zone = scene.Zone();
                 long key = IdGenerater.Instance.GenerateId();
-                ActorId actorId = Actorlocation_TestHelper.CreateActorId(401001, 1);
+                ActorId actorId = Actorlocation_TestHelper.CreateActorId(scope.TestFiber, 401001, 1);
 
                 async ETTask RegisterPrimaryLater()
                 {
@@ -186,7 +186,7 @@ namespace ET.Test
                     scene.GetActorId(), scene.Zone(), 100);
 
                 long key = IdGenerater.Instance.GenerateId();
-                ActorId oldActor = Actorlocation_TestHelper.CreateActorId(401002, 1);
+                ActorId oldActor = Actorlocation_TestHelper.CreateActorId(scope.TestFiber, 401002, 1);
                 ActorId newActor = scene.GetActorId();
 
                 await locationProxy.Add(LocationType, key, oldActor);

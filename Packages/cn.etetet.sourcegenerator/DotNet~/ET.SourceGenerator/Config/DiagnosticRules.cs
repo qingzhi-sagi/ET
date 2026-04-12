@@ -151,7 +151,7 @@ namespace ET
     {
         private const string Title = "禁止通过全局入口访问 Singleton";
 
-        private const string MessageFormat = "类型: {0} 未标记 [AllowInstance]，禁止通过 .Instance 或 World.GetSingleton<{0}>() 访问，请改用 Entity.GetSingleton<{0}>() 或 Fiber.GetSingleton<{0}>()";
+        private const string MessageFormat = "类型: {0} 未标记 [AllowInstance]，禁止通过 .Instance、World.GetSingleton<{0}>() 或 World.TryGetSingleton<{0}>() 访问，请改用 Entity.GetSingleton<{0}>() 或 Fiber.GetSingleton<{0}>()";
 
         private const string Description = "在 Model/ModelView/Hotfix/HotfixView 程序集中，未标记 [AllowInstance] 的 Singleton 禁止通过全局入口访问.";
 

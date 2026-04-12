@@ -7,9 +7,9 @@ namespace ET.Test
     [SkipAwaitEntityCheck]
     internal static class Actorlocation_TestHelper
     {
-        public static ActorId CreateActorId(int fiberId, int instanceId)
+        public static ActorId CreateActorId(Fiber fiber, int fiberId, int instanceId)
         {
-            Address address = EnsureAddressReady();
+            Address address = EnsureAddressReady(fiber);
             return new ActorId(address, new FiberInstanceId(fiberId, instanceId));
         }
 
@@ -166,7 +166,7 @@ namespace ET.Test
 
         private static Address EnsureAddressReady(Fiber fiber)
         {
-            AddressSingleton addressSingleton = AddressSingleton.Instance;
+            AddressSingleton addressSingleton = fiber.GetSingleton<AddressSingleton>();
             if (addressSingleton == null)
             {
                 addressSingleton = World.Instance.AddSingleton<AddressSingleton>();
@@ -182,24 +182,6 @@ namespace ET.Test
                 addressSingleton.InnerIP ??= startMachineConfig?.InnerIP;
                 addressSingleton.OuterIP ??= startMachineConfig?.OuterIP;
                 addressSingleton.InnerPort = addressSingleton.InnerPort > 0 ? addressSingleton.InnerPort : processConfig.Port;
-            }
-
-            return addressSingleton.InnerAddress;
-        }
-
-        private static Address EnsureAddressReady()
-        {
-            AddressSingleton addressSingleton = AddressSingleton.Instance;
-            if (addressSingleton == null)
-            {
-                addressSingleton = World.Instance.AddSingleton<AddressSingleton>();
-            }
-
-            if (string.IsNullOrEmpty(addressSingleton.InnerIP)
-                || string.IsNullOrEmpty(addressSingleton.OuterIP)
-                || addressSingleton.InnerPort <= 0)
-            {
-                throw new Exception("AddressSingleton is not initialized, please call EnsureAddressSingletonReady(fiber) first.");
             }
 
             return addressSingleton.InnerAddress;

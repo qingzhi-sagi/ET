@@ -21,8 +21,8 @@ namespace ET.Test
                 EntityRef<LocationOneType> locationRef = location;
 
                 long key = IdGenerater.Instance.GenerateId();
-                ActorId actorA = Actorlocation_TestHelper.CreateActorId(300007, 1);
-                ActorId actorC = Actorlocation_TestHelper.CreateActorId(300009, 1);
+                ActorId actorA = Actorlocation_TestHelper.CreateActorId(scope.TestFiber, 300007, 1);
+                ActorId actorC = Actorlocation_TestHelper.CreateActorId(scope.TestFiber, 300009, 1);
 
                 await location.Add(key, actorA);
                 location = Actorlocation_TestHelper.EnsureLocation(locationRef, "timeout/add");

@@ -29,8 +29,8 @@ namespace ET.Test
                 Actorlocation_TestHelper.AddLocalLocationService(serviceDiscoveryProxy, "a_add_exists_mock", serviceActorId, zone);
 
                 long key = IdGenerater.Instance.GenerateId();
-                ActorId actorA = Actorlocation_TestHelper.CreateActorId(301020, 1);
-                ActorId actorB = Actorlocation_TestHelper.CreateActorId(301021, 1);
+                ActorId actorA = Actorlocation_TestHelper.CreateActorId(scope.TestFiber, 301020, 1);
+                ActorId actorB = Actorlocation_TestHelper.CreateActorId(scope.TestFiber, 301021, 1);
 
                 await locationProxy.Add(LocationType, key, actorA);
                 locationProxy = locationProxyRef;
@@ -115,7 +115,7 @@ namespace ET.Test
                     "become-backup/become-primary");
 
                 long key = IdGenerater.Instance.GenerateId();
-                ActorId routeActorId = Actorlocation_TestHelper.CreateActorId(301022, 1);
+                ActorId routeActorId = Actorlocation_TestHelper.CreateActorId(scope.TestFiber, 301022, 1);
 
                 await location.Add(key, routeActorId);
                 location = Actorlocation_TestHelper.EnsureLocation(locationRef, "become-backup/add-route");
@@ -136,7 +136,7 @@ namespace ET.Test
                 Actorlocation_TestHelper.AddLocalLocationService(
                     serviceDiscoveryProxy,
                     "0_location_primary",
-                    Actorlocation_TestHelper.CreateActorId(301023, 1),
+                    Actorlocation_TestHelper.CreateActorId(scope.TestFiber, 301023, 1),
                     zone,
                     100);
 
@@ -190,7 +190,7 @@ namespace ET.Test
                 int zone = scene.Zone();
                 Actorlocation_TestHelper.AddLocalLocationService(serviceDiscoveryProxy, scene.Name, selfActorId, zone, 200);
                 Actorlocation_TestHelper.AddLocalLocationService(serviceDiscoveryProxy, "0_location_primary",
-                    Actorlocation_TestHelper.CreateActorId(301024, 1), zone, 100);
+                    Actorlocation_TestHelper.CreateActorId(scope.TestFiber, 301024, 1), zone, 100);
 
                 await Actorlocation_TestHelper.WaitUntil(
                     timerComponent,

@@ -15,10 +15,11 @@ namespace ET.Server
             root.AddComponent<CoroutineLockComponent>();
             root.AddComponent<ProcessInnerSender>();
             root.AddComponent<MessageSender>();
-            
-            int outerPort = AddressSingleton.Instance.GetSceneOuterPort(root.Fiber(), root.Name.GetSceneConfigName());
-            string innerIP = AddressSingleton.Instance.InnerIP;
-            IPEndPoint outerIPOutPort = new Address(AddressSingleton.Instance.OuterIP, outerPort);
+
+            AddressSingleton addressSingleton = root.GetSingleton<AddressSingleton>();
+            int outerPort = addressSingleton.GetSceneOuterPort(root.Fiber(), root.Name.GetSceneConfigName());
+            string innerIP = addressSingleton.InnerIP;
+            IPEndPoint outerIPOutPort = new Address(addressSingleton.OuterIP, outerPort);
             
             // 开发期间使用OuterIPPort，云服务器因为本机没有OuterIP，所以要改成InnerIPPort，然后在云防火墙中端口映射到InnerIPPort
             RouterComponent routerComponent = root.AddComponent<RouterComponent, IPEndPoint, string>(outerIPOutPort, innerIP);

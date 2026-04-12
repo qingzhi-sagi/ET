@@ -144,7 +144,7 @@ namespace ET.Test
         /// </summary>
         public static int EnsureAddressSingletonReady(Fiber fiber)
         {
-            AddressSingleton addressSingleton = AddressSingleton.Instance;
+            AddressSingleton addressSingleton = fiber.GetSingleton<AddressSingleton>();
             if (addressSingleton == null)
             {
                 addressSingleton = World.Instance.AddSingleton<AddressSingleton>();
