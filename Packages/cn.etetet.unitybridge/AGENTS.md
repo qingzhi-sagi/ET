@@ -10,7 +10,7 @@ Unity 本地文件桥接包，提供：
 
 ## 详细文档
 
-- **架构规范**：请查看 `/et-arch` skill
+- **架构规范**：请查看 `/et-code` skill
 - **编译构建**：请查看 `/et-build` skill
 - **UnityBridge 命令调用**：请查看 `/et-unitybridge` skill
 

@@ -1,160 +1,82 @@
-# et-test-run - 测试执行专家
+# et-test-run - 测试执行入口
 
-这个skill专门负责执行测试、查看日志和分析失败原因。
+## 何时使用
 
-## 使用场景
+- 执行测试（全部 / 指定用例）
+- 查看测试日志、分析失败原因
+- 验证修改后的代码是否通过测试
 
-- 执行测试（最常用）
-- 查看测试日志
-- 调试测试失败
-- 验证修改是否正确
+## 不要加载
 
-## 命令参数
+- 只是编写测试用例（用 `et-test-write`）
+- 只是编译项目（用 `et-build`）
 
-- `--Name`：处理器类名正则，默认 `.*`，匹配所有测试用例
-- `--Console=1`：启用Console输出（可选）
-- 解析与分发：控制台命令由 `TestConsoleHandler` 解析，按正则从 `TestDispatcher` 获取匹配的处理器并逐一运行
+## 执行流程
 
-## 快速执行测试
+1. 先用 `et-build` 执行 `dotnet build ET.sln`
+2. 删除 `Logs/`
+3. 启动测试场景并发送测试命令
+4. 先看控制台，再看 `Logs/All.log`
 
-### 编译测试场景,注意,必须用Debug模式
-```bash
+## 命令速查
+
+### 编译（必须 Debug 模式）
+
+```powershell
 dotnet build ET.sln
 ```
 
-### 启动测试场景
+### 删除旧日志
 
-```bash
+```powershell
+Remove-Item ./Logs -Recurse -Force -ErrorAction SilentlyContinue
+```
+
+### 单命令执行（推荐）
+
+```powershell
+# 执行所有测试
+"Test" | dotnet ./Bin/ET.App.dll --SceneName=Test
+
+# 执行指定测试（支持正则）
+"Test --Name=CreateRobot" | dotnet ./Bin/ET.App.dll --SceneName=Test
+"Test --Name=Quest.*" | dotnet ./Bin/ET.App.dll --SceneName=Test
+```
+
+### 交互式执行
+
+```powershell
 dotnet ./Bin/ET.App.dll --SceneName=Test
-```
-
-进程会输出 `>` 等待输入
-
-### 执行测试命令
-
-#### 执行所有测试
-
-输入：`Test`
-
-#### 执行指定测试（支持正则匹配）
-
-输入：`Test --Name=CreateRobot`
-输入：`Test --Name=Quest.*`
-
-### 完整单命令执行
-
-```bash
-printf "Test\n" | pwsh -Command "dotnet ./Bin/ET.App.dll --SceneName=Test"
-```
-
-或执行指定测试：
-
-```bash
-printf "Test --Name=CreateRobot\n" | pwsh -Command "dotnet ./Bin/ET.App.dll --SceneName=Test"
+# 等待 > 提示符后输入：
+# Test
+# Test --Name=CreateRobot
+# Test --Name=Quest.*
 ```
 
 ## 重要提醒
 
-1. **测试前删除Logs目录**，方便查找问题
-
-## 示例输出
-
-### 启动并执行
-
-```bash
-dotnet ./Bin/ET.App.dll --SceneName=Test
-> Test
-Test.Test_CreateRobot start
-Test.Test_CreateRobot success
-```
-
-### 执行指定测试
-
-```bash
-> Test --Name=CreateRobot
-Test.Test_CreateRobot start
-Test.Test_CreateRobot success
-```
-
-### 未找到测试
-
-```bash
-> Test --Name=CreateRobot2
-not found test! package: .* name: CreateRobot2
-```
-
-### 成功输出
-
-```
-Test.Test_XXX_Test success
-```
-
-### 失败输出
-
-```
-Test.Test_XXX_Test fail
-[详细错误信息]
-```
+- **运行前必须删除 `Logs/` 目录**，否则旧日志会干扰排查
 
 ## 日志分析
 
-### 日志位置
+- 日志位置：`Logs/All.log`
+- 失败时先看控制台输出，再查 `All.log`
 
-- 日志目录：`Logs/`
-- 完整日志：`Logs/All.log`
+### 常见失败原因
 
-### 查看日志
+| 现象 | 原因 |
+|---|---|
+| Entity 已失效 | `await` 后未通过 `EntityRef` 重新获取 |
+| 数据不一致 | 测试数据准备逻辑有误 |
+| 消息超时 | 网络消息发送有误 |
+| Fiber 未找到 | 场景或 Fiber 名称错误 |
 
-```bash
-cat Logs/All.log
-```
-
-### 日志规范
-
-- 测试日志应使用英文
-- 普通日志用Log.Debug
-- 错误日志用Log.Error
-- Console输出用Log.Console（需要启动参数Console=1）
-
-## 调试失败用例
-
-### 1. 查看输出错误信息
-
-测试失败时会输出详细错误，先看控制台输出
-
-### 2. 检查All.log
-
-```bash
-cat Logs/All.log | grep -i error
-```
-
-### 3. 常见失败原因
-
-- **Entity已失效**：检查await后是否用EntityRef重新获取
-- **数据不一致**：检查测试数据准备逻辑
-- **消息超时**：检查网络消息是否正确发送
-- **Fiber未找到**：检查场景和Fiber名称
-
-### 4. 重新执行测试
-
-修复代码后：
-1. 编译项目（使用et-build skill）
-2. 删除Logs目录
-3. 重新执行测试
-
-## 测试工作流
+## 结果格式
 
 ```
-修改代码 → 编译(et-build) → 删除Logs → 执行测试 → 查看结果 → 检查日志
+Test.Test_CreateRobot_Test start
+Test.Test_CreateRobot_Test success   ← 成功
+
+Test.Test_XXX_Test fail              ← 失败，后面跟错误详情
+not found test! package: .* name: X ← 未找到匹配用例
 ```
-
-## 优势
-
-- **支持正则匹配**：灵活筛选测试用例
-- **一次启动多次测试**：提高效率
-- **保持进程状态**：减少启动开销
-- **实时查看结果**：快速反馈
-
-## 需要编写测试用例？
-
-如果需要编写新的测试用例，请使用 `/et-test-write` skill。

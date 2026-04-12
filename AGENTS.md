@@ -37,9 +37,34 @@ WOW/
 
 ## 重要: Skill使用指南
 
-1. 重要: 请阅读一下./Agents/skills目录，所有skills都放在这里
-2. 重要: 在遇到下面描写的使用场景的时候，请自动加载对应的skills
+1. 重要: 请先读取 `./Agents/skills/index.md`，它是所有 skills 的路由索引，读完即可知道该加载哪个 skill
+2. 重要: 所有 skills 都放在 `./Agents/skills/` 目录下
+3. 重要: 在遇到下面描写的使用场景的时候，请自动加载对应的 skills
 
+
+### et-code - 代码编写入口（新增）
+
+**使用场景**：
+- 新建或修改 Entity、Component、System、Helper
+- 新建或移动 C# 文件，检查 .meta 与包内落点
+- 新增消息、模块、包依赖
+- 处理 ECS 分层、组件存在性契约、Module分析器、分析器报错
+
+### et-async - Async 异步专家（新增）
+
+**使用场景**：
+- 新增、修改或 review async / await / ETTask / ETTask<T>
+- 判断某段逻辑是否应该异步化
+- await 后 Entity 访问、EntityRef<T> 安全
+- 设计并发等待、ETCancellationToken、NewContext(...)
+
+### et-git - Git 工作流（新增）
+
+**使用场景**：
+- 准备提交本次改动
+- 检查 git status / git diff，筛除无关文件
+- 编写中文提交信息
+- 与远端同步（禁止 merge，使用 rebase）
 
 ### et-excel - Excel 操作专家
 
@@ -49,16 +74,6 @@ WOW/
 - 设置样式、公式、图表
 - 工作表管理、合并单元格
 - Luban 配置表操作
-
-### et-arch - 架构和规范守护者
-
-**使用场景**：
-- 创建新的Entity或Component
-- 编写System类
-- 检查代码是否符合ECS规范
-- EntityRef使用问题
-- await后Entity访问问题
-- Module分析器相关问题
 
 ### et-build - 编译构建专家
 

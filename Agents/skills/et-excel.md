@@ -1,8 +1,8 @@
 # et-excel - Excel 操作专家
 
-这个 skill 专门负责 Excel 文件的读写、格式化、图表等操作。使用 CLI 模式调用 ET.ExcelMcp 工具。
+这个 skill 负责通过 `ET.ExcelMcp` 的 CLI 入口读写 Excel、维护 Luban 配置表、做批量表格处理。
 
-## 使用场景
+## 何时使用
 
 - 创建/读取 Excel 文件
 - 单元格读写操作
@@ -13,169 +13,115 @@
 - 合并单元格
 - 添加数据验证
 
+## 不要加载
+
+- 只是编译、跑测试、做 Unity 编辑器操作
+- 只是讨论表结构，不需要实际读写 Excel
+
+## 默认动作
+
+1. 所有命令使用 **`pwsh`（PowerShell 7）**，不要混用 Windows 自带的 `powershell.exe`。
+2. 先用 `cli list` 看工具，再用 `cli help <工具名>` 确认参数，不要硬背全部工具。
+3. JSON 参数用单引号包裹，内部统一双引号。
+4. 写操作优先使用绝对路径；覆盖原文件前先确认目标文件。
+5. Luban 表操作优先先读再写，避免误覆盖。
+
 ## 命令行调用格式
 
-```bash
-dotnet Bin/ET.ExcelMcp.dll cli <工具名> '<JSON参数>'
+```powershell
+dotnet ./Bin/ET.ExcelMcp.dll cli <工具名> '<JSON参数>'
 ```
 
 ### 查看所有可用工具
 
-```bash
-dotnet Bin/ET.ExcelMcp.dll cli list
+```powershell
+dotnet ./Bin/ET.ExcelMcp.dll cli list
 ```
 
 ### 查看某个工具的详细帮助
 
-```bash
-dotnet Bin/ET.ExcelMcp.dll cli help <工具名>
+```powershell
+dotnet ./Bin/ET.ExcelMcp.dll cli help <工具名>
 ```
 
-## 常用工具和示例
+## 常用入口
 
-### 1. 文件操作 (excel_file_operations)
+### 先做工具发现
 
-```bash
+```powershell
+dotnet ./Bin/ET.ExcelMcp.dll cli list
+dotnet ./Bin/ET.ExcelMcp.dll cli help excel_cell
+```
+
+### 文件操作 (`excel_file_operations`)
+
+```powershell
 # 创建新 Excel 文件
-dotnet Bin/ET.ExcelMcp.dll cli excel_file_operations '{"operation":"create","path":"output.xlsx"}'
+dotnet ./Bin/ET.ExcelMcp.dll cli excel_file_operations '{"operation":"create","path":"C:/Temp/output.xlsx"}'
 
 # 转换为 CSV
-dotnet Bin/ET.ExcelMcp.dll cli excel_file_operations '{"operation":"convert","inputPath":"input.xlsx","outputPath":"output.csv","format":"csv"}'
+dotnet ./Bin/ET.ExcelMcp.dll cli excel_file_operations '{"operation":"convert","inputPath":"C:/Temp/input.xlsx","outputPath":"C:/Temp/output.csv","format":"csv"}'
 ```
 
-### 2. 单元格操作 (excel_cell)
+### 单元格操作 (`excel_cell`)
 
-```bash
+```powershell
 # 写入单元格
-dotnet Bin/ET.ExcelMcp.dll cli excel_cell '{"operation":"write","path":"test.xlsx","cell":"A1","value":"Hello"}'
+dotnet ./Bin/ET.ExcelMcp.dll cli excel_cell '{"operation":"write","path":"C:/Temp/test.xlsx","cell":"A1","value":"Hello"}'
 
 # 读取单元格
-dotnet Bin/ET.ExcelMcp.dll cli excel_cell '{"operation":"get","path":"test.xlsx","cell":"A1"}'
-
-# 清空单元格
-dotnet Bin/ET.ExcelMcp.dll cli excel_cell '{"operation":"clear","path":"test.xlsx","cell":"A1"}'
+dotnet ./Bin/ET.ExcelMcp.dll cli excel_cell '{"operation":"get","path":"C:/Temp/test.xlsx","cell":"A1"}'
 ```
 
-### 3. 批量数据操作 (excel_data_operations)
+### 范围与批量数据 (`excel_range` / `excel_data_operations`)
 
-```bash
-# 批量写入
-dotnet Bin/ET.ExcelMcp.dll cli excel_data_operations '{"operation":"batch_write","path":"test.xlsx","data":[{"cell":"A1","value":"姓名"},{"cell":"B1","value":"年龄"}]}'
+```powershell
+# 批量写入二维数据
+dotnet ./Bin/ET.ExcelMcp.dll cli excel_range '{"operation":"write","path":"C:/Temp/test.xlsx","range":"A1:B2","data":[["姓名","年龄"],["Alice",18]]}'
 
 # 读取范围内容
-dotnet Bin/ET.ExcelMcp.dll cli excel_data_operations '{"operation":"get_content","path":"test.xlsx","range":"A1:C10"}'
-
-# 排序
-dotnet Bin/ET.ExcelMcp.dll cli excel_data_operations '{"operation":"sort","path":"test.xlsx","range":"A1:C10","sortColumn":0,"ascending":true}'
+dotnet ./Bin/ET.ExcelMcp.dll cli excel_data_operations '{"operation":"get_content","path":"C:/Temp/test.xlsx","range":"A1:C10"}'
 ```
 
-### 4. 范围操作 (excel_range)
+### 工作表操作 (`excel_sheet`)
 
-```bash
-# 批量写入二维数据
-dotnet Bin/ET.ExcelMcp.dll cli excel_range '{"operation":"write","path":"test.xlsx","range":"A1:B2","data":[["A","B"],["C","D"]]}'
+```powershell
+# 创建工作表
+dotnet ./Bin/ET.ExcelMcp.dll cli excel_sheet '{"operation":"create","path":"C:/Temp/test.xlsx","sheetName":"Config"}'
 
-# 复制范围
-dotnet Bin/ET.ExcelMcp.dll cli excel_range '{"operation":"copy","path":"test.xlsx","sourceRange":"A1:B2","destRange":"D1"}'
+# 列出工作表
+dotnet ./Bin/ET.ExcelMcp.dll cli excel_sheet '{"operation":"list","path":"C:/Temp/test.xlsx"}'
 ```
 
-### 5. 样式操作 (excel_style)
+### 样式与公式 (`excel_style` / `excel_formula`)
 
-```bash
-# 设置样式（加粗、背景色、字体颜色）
-dotnet Bin/ET.ExcelMcp.dll cli excel_style '{"operation":"format","path":"test.xlsx","range":"A1:C1","bold":true,"backgroundColor":"#4472C4","fontColor":"#FFFFFF"}'
-
-# 获取样式
-dotnet Bin/ET.ExcelMcp.dll cli excel_style '{"operation":"get_format","path":"test.xlsx","range":"A1"}'
-```
-
-### 6. 公式操作 (excel_formula)
-
-```bash
+```powershell
 # 添加公式
-dotnet Bin/ET.ExcelMcp.dll cli excel_formula '{"operation":"add","path":"test.xlsx","cell":"B5","formula":"=SUM(B1:B4)"}'
+dotnet ./Bin/ET.ExcelMcp.dll cli excel_formula '{"operation":"add","path":"C:/Temp/test.xlsx","cell":"B5","formula":"=SUM(B1:B4)"}'
 
-# 获取公式计算结果
-dotnet Bin/ET.ExcelMcp.dll cli excel_formula '{"operation":"get_result","path":"test.xlsx","cell":"B5"}'
+# 设置标题样式
+dotnet ./Bin/ET.ExcelMcp.dll cli excel_style '{"operation":"format","path":"C:/Temp/test.xlsx","range":"A1:C1","bold":true,"backgroundColor":"#4472C4","fontColor":"#FFFFFF"}'
 ```
 
-### 7. 图表操作 (excel_chart)
+## 常用工具速查
 
-```bash
-# 添加柱状图
-dotnet Bin/ET.ExcelMcp.dll cli excel_chart '{"operation":"add","path":"test.xlsx","chartType":"Column","dataRange":"B1:B10","categoryAxisDataRange":"A1:A10","title":"销售数据"}'
-```
+- `excel_file_operations`：创建、转换文件
+- `excel_cell`：单元格读写
+- `excel_range`：二维范围写入、复制
+- `excel_data_operations`：批量数据、排序、读取范围内容
+- `excel_sheet`：工作表管理
+- `excel_style`：样式格式化
+- `excel_formula`：公式处理
+- `excel_merge_cells`：合并/取消合并
+- `excel_row_column`：行列插入、尺寸调整
+- `excel_chart`：图表
 
-### 8. 工作表操作 (excel_sheet)
-
-```bash
-# 创建新工作表
-dotnet Bin/ET.ExcelMcp.dll cli excel_sheet '{"operation":"create","path":"test.xlsx","sheetName":"NewSheet"}'
-
-# 列出所有工作表
-dotnet Bin/ET.ExcelMcp.dll cli excel_sheet '{"operation":"list","path":"test.xlsx"}'
-
-# 重命名工作表
-dotnet Bin/ET.ExcelMcp.dll cli excel_sheet '{"operation":"rename","path":"test.xlsx","sheetIndex":0,"newName":"Summary"}'
-```
-
-### 9. 合并单元格 (excel_merge_cells)
-
-```bash
-# 合并单元格
-dotnet Bin/ET.ExcelMcp.dll cli excel_merge_cells '{"operation":"merge","path":"test.xlsx","range":"A1:C1"}'
-
-# 取消合并
-dotnet Bin/ET.ExcelMcp.dll cli excel_merge_cells '{"operation":"unmerge","path":"test.xlsx","range":"A1:C1"}'
-```
-
-### 10. 行列操作 (excel_row_column)
-
-```bash
-# 插入行
-dotnet Bin/ET.ExcelMcp.dll cli excel_row_column '{"operation":"insert_rows","path":"test.xlsx","startRow":2,"count":3}'
-
-# 设置行高列宽
-dotnet Bin/ET.ExcelMcp.dll cli excel_row_column '{"operation":"set_size","path":"test.xlsx","rowIndex":1,"rowHeight":30,"columnIndex":1,"columnWidth":20}'
-
-# 自动调整列宽
-dotnet Bin/ET.ExcelMcp.dll cli excel_row_column '{"operation":"auto_fit","path":"test.xlsx","columns":[1,2,3]}'
-```
-
-## 完整工具列表
-
-| 工具名 | 功能 |
-|--------|------|
-| excel_file_operations | 文件创建、转换 |
-| excel_cell | 单元格读写 |
-| excel_data_operations | 批量数据、排序、统计 |
-| excel_range | 范围操作、复制移动 |
-| excel_style | 样式格式化 |
-| excel_formula | 公式管理 |
-| excel_chart | 图表操作 |
-| excel_sheet | 工作表管理 |
-| excel_merge_cells | 合并单元格 |
-| excel_row_column | 行列插入删除 |
-| excel_filter | 数据筛选 |
-| excel_data_validation | 数据验证 |
-| excel_conditional_formatting | 条件格式 |
-| excel_hyperlink | 超链接 |
-| excel_comment | 批注 |
-| excel_image | 图片 |
-| excel_named_range | 命名范围 |
-| excel_pivot_table | 数据透视表 |
-| excel_freeze_panes | 冻结窗格 |
-| excel_group | 行列分组 |
-| excel_protect | 保护设置 |
-| excel_properties | 文档属性 |
-| excel_print_settings | 打印设置 |
-| excel_view_settings | 视图设置 |
-| excel_get_cell_address | 地址转换 |
+其余工具以 `dotnet ./Bin/ET.ExcelMcp.dll cli list` 实时查询，避免文档过时。
 
 ## 注意事项
 
-1. **路径**：建议使用绝对路径，避免相对路径问题
-2. **JSON 转义**：在 shell 中使用单引号包裹 JSON，内部使用双引号
+1. **路径**：优先绝对路径，避免 Unity 根目录切换导致读错文件
+2. **JSON 转义**：在 `pwsh` 中用单引号包裹 JSON，内部用双引号
 3. **中文支持**：完全支持中文内容读写
 4. **sheetIndex**：工作表索引从 0 开始
 5. **outputPath**：写操作可指定输出路径，默认覆盖原文件
@@ -185,7 +131,7 @@ dotnet Bin/ET.ExcelMcp.dll cli excel_row_column '{"operation":"auto_fit","path":
 当用户需要操作 Excel 时：
 
 1. 确认操作类型（读/写/格式化/图表等）
-2. 选择合适的工具
+2. 先 `cli list` / `cli help` 确认工具和参数
 3. 构建 JSON 参数
 4. 执行 CLI 命令
 5. 检查输出结果

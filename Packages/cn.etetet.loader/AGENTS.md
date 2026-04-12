@@ -7,7 +7,7 @@
 ## 详细文档
 
 - **编译构建**：请查看 `/et-build` skill
-- **架构规范**：请查看 `/et-arch` skill
+- **架构规范**：请查看 `/et-code` skill
 
 ## 核心目录
 

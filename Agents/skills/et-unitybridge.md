@@ -17,7 +17,7 @@
 
 ## 命令执行规范
 
-**重要：本项目所有命令都必须使用 PowerShell。**
+**重要：本项目所有命令都必须在 `pwsh`（PowerShell 7）中执行，不要混用 Windows 自带的 `powershell.exe`。**
 
 - CLI 入口：`dotnet ./Bin/ET.UnityBridge.dll`
 - 默认桥接根目录：优先读取环境变量 `ET_UNITY_BRIDGE_ROOT`
