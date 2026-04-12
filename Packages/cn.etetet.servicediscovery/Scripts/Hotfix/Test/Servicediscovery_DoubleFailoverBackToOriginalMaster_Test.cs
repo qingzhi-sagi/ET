@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using ET.Server;
 
 namespace ET.Test
@@ -161,7 +161,7 @@ namespace ET.Test
                 return 620;
             }
 
-            if (finalLeaseExpireTime <= TimeInfo.Instance.ServerNow())
+            if (finalLeaseExpireTime <= sdARecovered.GetSingleton<TimeInfo>().ServerNow())
             {
                 Log.Console($"double failover final lease expired: {finalLeaseExpireTime}");
                 return 621;

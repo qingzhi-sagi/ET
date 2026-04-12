@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace ET
 {
@@ -24,7 +24,7 @@ namespace ET
         [EntitySystem]
         private static void Awake(this SessionAcceptTimeoutComponent self)
         {
-            self.Timer = self.Root().TimerComponent.NewOnceTimer(TimeInfo.Instance.ServerNow() + 5000, TimerInvokeType.SessionAcceptTimeout, self);
+            self.Timer = self.Root().TimerComponent.NewOnceTimer(self.GetSingleton<TimeInfo>().ServerNow() + 5000, TimerInvokeType.SessionAcceptTimeout, self);
         }
         
         [EntitySystem]

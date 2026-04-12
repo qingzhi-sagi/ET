@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 
 namespace ET
@@ -10,7 +10,7 @@ namespace ET
         private static void Awake(this Session self, AService aService)
         {
             self.AService = aService;
-            long timeNow = TimeInfo.Instance.ClientNow();
+            long timeNow = self.GetSingleton<TimeInfo>().ClientNow();
             self.LastRecvTime = timeNow;
             self.LastSendTime = timeNow;
 
@@ -35,7 +35,7 @@ namespace ET
                 responseCallback.SetException(new RpcException(self.Error, $"session dispose: {self.Id} {self.RemoteAddress}"));
             }
 
-            Log.Info($"session dispose: {self.RemoteAddress} id: {self.Id} ErrorCode: {self.Error}, please see ErrorCode.cs! {TimeInfo.Instance.ClientNow()}");
+            Log.Info($"session dispose: {self.RemoteAddress} id: {self.Id} ErrorCode: {self.Error}, please see ErrorCode.cs! {self.GetSingleton<TimeInfo>().ClientNow()}");
             
             self.requestCallbacks.Clear();
         }
@@ -101,7 +101,7 @@ namespace ET
         {
             LogMsg.Instance.Send(self.Fiber(), message);
             
-            self.LastSendTime = TimeInfo.Instance.ClientNow();
+            self.LastSendTime = self.GetSingleton<TimeInfo>().ClientNow();
 
             (ushort opcode, MemoryBuffer memoryBuffer) = MessageSerializeHelper.ToMemoryBuffer(self.AService, fiberInstanceId, message);
             

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net;
 
 namespace ET.Client
@@ -61,13 +61,20 @@ namespace ET.Client
             byte[] addressBytes = realAddress.ToString().ToByteArray();
             Array.Copy(addressBytes, 0, sendCache, 13, addressBytes.Length);
             TimerComponent timerComponent = netComponent.Root().TimerComponent;
+            EntityRef<TimerComponent> timerComponentRef = timerComponent;
             Log.Info($"router connect: {localConn} {remoteConn} {routerAddress} {realAddress}");
 
             long lastSendTimer = 0;
 
             while (true)
             {
-                long timeNow = TimeInfo.Instance.ClientNow();
+                timerComponent = timerComponentRef;
+                if (timerComponent == null)
+                {
+                    return 0;
+                }
+
+                long timeNow = timerComponent.GetSingleton<TimeInfo>().ClientNow();
                 if (timeNow - lastSendTimer > 300)
                 {
                     if (--count < 0)

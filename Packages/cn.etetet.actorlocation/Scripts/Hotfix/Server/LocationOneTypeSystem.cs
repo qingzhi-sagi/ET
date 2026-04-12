@@ -45,7 +45,7 @@ namespace ET.Server
         {
             return IsLocked(locationInfo)
                    && locationInfo.LockExpireTime > 0
-                   && TimeInfo.Instance.ServerNow() >= locationInfo.LockExpireTime;
+                   && locationInfo.GetSingleton<TimeInfo>().ServerNow() >= locationInfo.LockExpireTime;
         }
 
         private static bool TryGetCachedInfo(this LocationOneType self, long key, out LocationInfo locationInfo)
@@ -525,7 +525,7 @@ namespace ET.Server
                 }
 
                 long lockToken = IdGenerater.Instance.GenerateId();
-                long lockExpireTime = time > 0 ? TimeInfo.Instance.ServerNow() + time : 0;
+                long lockExpireTime = time > 0 ? self.GetSingleton<TimeInfo>().ServerNow() + time : 0;
                 currentInfo.LockToken = lockToken;
                 currentInfo.LockExpireTime = lockExpireTime;
                 EntityRef<LocationInfo> lockInfoRef = currentInfo;

@@ -1,4 +1,4 @@
-﻿using ET.Server;
+using ET.Server;
 
 namespace ET.Test
 {
@@ -116,7 +116,7 @@ namespace ET.Test
 
             sd.GetOrAddAgentHeartbeat().HeartbeatTimeout = 120;
             sd.GetOrAddAgentHeartbeat().HeartbeatCheckInterval = 40;
-            sd.GetOrAddAgentHeartbeat().AgentHeartbeatTimes[address] = TimeInfo.Instance.ServerNow() - 10_000;
+            sd.GetOrAddAgentHeartbeat().AgentHeartbeatTimes[address] = sd.GetSingleton<TimeInfo>().ServerNow() - 10_000;
 
             bool timeoutRemoved = await ServiceDiscovery_HA_TestHelper.WaitForMasterNotHasService(sd, timer, timeoutScene, 6000);
             if (!timeoutRemoved)

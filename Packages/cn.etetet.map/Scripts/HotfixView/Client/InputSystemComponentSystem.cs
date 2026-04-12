@@ -1,4 +1,4 @@
-﻿using Unity.Mathematics;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
@@ -35,9 +35,9 @@ namespace ET.Client
         {
             if (self.InputSystem.Player.Move.IsPressed())
             {
-                if (TimeInfo.Instance.ClientNow() - self.PressTime > 100)
+                if (self.GetSingleton<TimeInfo>().ClientNow() - self.PressTime > 100)
                 {
-                    self.PressTime = TimeInfo.Instance.ClientNow();
+                    self.PressTime = self.GetSingleton<TimeInfo>().ClientNow();
                     Vector2 v = self.InputSystem.Player.Move.ReadValue<Vector2>();
                     self.Move(v);
                 }

@@ -217,8 +217,8 @@ namespace ET.Test
         {
             EntityRef<ServiceDiscoveryAgent> agentRef = agent;
             EntityRef<TimerComponent> timerRef = timer;
-            long deadline = TimeInfo.Instance.ServerNow() + timeoutMs;
-            while (TimeInfo.Instance.ServerNow() <= deadline)
+            long deadline = timer.GetSingleton<TimeInfo>().ServerNow() + timeoutMs;
+            while (timer.GetSingleton<TimeInfo>().ServerNow() <= deadline)
             {
                 agent = agentRef;
                 if (agent == null)
@@ -327,8 +327,8 @@ namespace ET.Test
             }
 
             EntityRef<TimerComponent> timerRef = timer;
-            long deadline = TimeInfo.Instance.ServerNow() + timeoutMs;
-            while (TimeInfo.Instance.ServerNow() <= deadline)
+            long deadline = timer.GetSingleton<TimeInfo>().ServerNow() + timeoutMs;
+            while (timer.GetSingleton<TimeInfo>().ServerNow() <= deadline)
             {
                 int count = 0;
                 string masterSceneName = string.Empty;
@@ -396,8 +396,8 @@ namespace ET.Test
 
             EntityRef<ServiceDiscovery> sdRef = serviceDiscovery;
             EntityRef<TimerComponent> timerRef = timer;
-            long deadline = TimeInfo.Instance.ServerNow() + timeoutMs;
-            while (TimeInfo.Instance.ServerNow() <= deadline)
+            long deadline = timer.GetSingleton<TimeInfo>().ServerNow() + timeoutMs;
+            while (timer.GetSingleton<TimeInfo>().ServerNow() <= deadline)
             {
                 serviceDiscovery = sdRef;
                 if (serviceDiscovery == null)
@@ -512,7 +512,7 @@ namespace ET.Test
                 return 0;
             }
 
-            long now = TimeInfo.Instance.ServerNow();
+            long now = serviceDiscovery.GetSingleton<TimeInfo>().ServerNow();
             masterRecord.LeaseExpireTime = now - 1;
             masterRecord.UpdateTime = now;
             await db.Save(masterRecord, ServiceDiscoveryPersistenceConst.MasterCollection);
@@ -629,8 +629,8 @@ namespace ET.Test
 
             EntityRef<ServiceDiscoveryProxy> proxyRef = proxy;
             EntityRef<TimerComponent> timerRef = timer;
-            long deadline = TimeInfo.Instance.ServerNow() + timeoutMs;
-            while (TimeInfo.Instance.ServerNow() <= deadline)
+            long deadline = timer.GetSingleton<TimeInfo>().ServerNow() + timeoutMs;
+            while (timer.GetSingleton<TimeInfo>().ServerNow() <= deadline)
             {
                 proxy = proxyRef;
                 if (proxy == null)
@@ -672,8 +672,8 @@ namespace ET.Test
 
             EntityRef<ServiceDiscovery> masterRef = master;
             EntityRef<TimerComponent> timerRef = timer;
-            long deadline = TimeInfo.Instance.ServerNow() + timeoutMs;
-            while (TimeInfo.Instance.ServerNow() <= deadline)
+            long deadline = timer.GetSingleton<TimeInfo>().ServerNow() + timeoutMs;
+            while (timer.GetSingleton<TimeInfo>().ServerNow() <= deadline)
             {
                 master = masterRef;
                 if (master == null)
@@ -729,8 +729,8 @@ namespace ET.Test
 
             EntityRef<ServiceDiscovery> masterRef = master;
             EntityRef<TimerComponent> timerRef = timer;
-            long deadline = TimeInfo.Instance.ServerNow() + timeoutMs;
-            while (TimeInfo.Instance.ServerNow() <= deadline)
+            long deadline = timer.GetSingleton<TimeInfo>().ServerNow() + timeoutMs;
+            while (timer.GetSingleton<TimeInfo>().ServerNow() <= deadline)
             {
                 master = masterRef;
                 if (master == null)
@@ -801,8 +801,8 @@ namespace ET.Test
 
             EntityRef<ServiceDiscovery> masterRef = master;
             EntityRef<TimerComponent> timerRef = timer;
-            long deadline = TimeInfo.Instance.ServerNow() + timeoutMs;
-            while (TimeInfo.Instance.ServerNow() <= deadline)
+            long deadline = timer.GetSingleton<TimeInfo>().ServerNow() + timeoutMs;
+            while (timer.GetSingleton<TimeInfo>().ServerNow() <= deadline)
             {
                 master = masterRef;
                 if (master == null)
@@ -861,8 +861,8 @@ namespace ET.Test
 
             EntityRef<ServiceDiscoveryProxy> proxyRef = proxy;
             EntityRef<TimerComponent> timerRef = timer;
-            long deadline = TimeInfo.Instance.ServerNow() + timeoutMs;
-            while (TimeInfo.Instance.ServerNow() <= deadline)
+            long deadline = timer.GetSingleton<TimeInfo>().ServerNow() + timeoutMs;
+            while (timer.GetSingleton<TimeInfo>().ServerNow() <= deadline)
             {
                 proxy = proxyRef;
                 if (proxy == null)

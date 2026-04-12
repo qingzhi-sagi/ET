@@ -150,12 +150,12 @@ namespace ET.Server
             // 这里不管是否检查，都会更新cd
             if (spellConfig.CD > 0)
             {
-                UpdateCD(unit, spellConfig.Id, TimeInfo.Instance.ServerNow());
+                UpdateCD(unit, spellConfig.Id, unit.GetSingleton<TimeInfo>().ServerNow());
             }
             
             BuffHelper.InitBuff(buff);
             
-            if (buff.ExpireTime < TimeInfo.Instance.ServerNow())
+            if (buff.ExpireTime < unit.GetSingleton<TimeInfo>().ServerNow())
             {
                 BuffHelper.RemoveBuff(buff, BuffFlags.NoDurationRemove);
             }

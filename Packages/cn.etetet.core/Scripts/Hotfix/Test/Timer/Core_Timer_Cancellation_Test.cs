@@ -9,8 +9,9 @@ namespace ET.Test
         {
             await using TestFiberScope scope = await TestFiberScope.Create(
                 context.Fiber, SceneType.TestEmpty, nameof(Core_Timer_Cancellation_Test));
+            Fiber testFiber = scope.TestFiber;
 
-            Scene scene = scope.TestFiber.Root;
+            Scene scene = testFiber.Root;
             scene.AddComponent<TimerComponent>();
             TimerComponent timerComponent = scene.TimerComponent;
 
@@ -51,7 +52,7 @@ namespace ET.Test
 
                 async ETTask WaitTask()
                 {
-                    long tillTime = TimeInfo.Instance.ServerNow() + 5000;
+                    long tillTime = testFiber.GetSingleton<TimeInfo>().ServerNow() + 5000;
                     await timerComponent.WaitTillAsync(tillTime).NewContext(cancellationToken);
                     waitCompleted = true;
                 }

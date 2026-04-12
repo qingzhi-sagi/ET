@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using ET.Server;
 
 namespace ET.Test
@@ -85,7 +85,7 @@ public class Servicediscovery_FailureRecoveryAndClientState_Test : ATestHandler
             }
 
             // 4. 模拟主故障，验证备机接管时长
-            long switchBegin = TimeInfo.Instance.ServerNow();
+            long switchBegin = testFiber.GetSingleton<TimeInfo>().ServerNow();
             await testFiber.RemoveFiber(nodeA.Id);
             bool bTakeover = await ServiceDiscovery_HA_TestHelper.WaitUntilMaster(sdB, timerB, 10000);
             if (!bTakeover)
@@ -94,7 +94,7 @@ public class Servicediscovery_FailureRecoveryAndClientState_Test : ATestHandler
                 return 508;
             }
 
-            long switchCost = TimeInfo.Instance.ServerNow() - switchBegin;
+            long switchCost = testFiber.GetSingleton<TimeInfo>().ServerNow() - switchBegin;
             if (switchCost > 6000)
             {
                 Log.Console($"recovery switch too slow, cost: {switchCost}ms");
@@ -300,8 +300,8 @@ public class Servicediscovery_FailureRecoveryAndClientState_Test : ATestHandler
 
             EntityRef<ServiceDiscoveryProxy> proxyRef = proxy;
             EntityRef<TimerComponent> timerRef = timer;
-            long deadline = TimeInfo.Instance.ServerNow() + timeoutMs;
-            while (TimeInfo.Instance.ServerNow() <= deadline)
+            long deadline = timer.GetSingleton<TimeInfo>().ServerNow() + timeoutMs;
+            while (timer.GetSingleton<TimeInfo>().ServerNow() <= deadline)
             {
                 proxy = proxyRef;
                 if (proxy == null)

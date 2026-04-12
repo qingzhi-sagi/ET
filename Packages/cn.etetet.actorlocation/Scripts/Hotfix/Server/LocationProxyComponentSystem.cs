@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace ET.Server
@@ -204,7 +204,7 @@ namespace ET.Server
 
         public static async ETTask Add(this LocationProxyComponent self, int type, long key, ActorId actorId)
         {
-            Log.Info($"location proxy add {key}, {actorId} {TimeInfo.Instance.ServerNow()}");
+            Log.Info($"location proxy add {key}, {actorId} {self.GetSingleton<TimeInfo>().ServerNow()}");
             ObjectAddRequest request = ObjectAddRequest.Create();
             request.Type = type;
             request.Key = key;
@@ -221,7 +221,7 @@ namespace ET.Server
         public static async ETTask<LocationLockTokenInfo> LockWithToken(this LocationProxyComponent self, int type, long key, ActorId actorId,
             int time = 60000)
         {
-            Log.Info($"location proxy lock {key}, {actorId} {TimeInfo.Instance.ServerNow()}");
+            Log.Info($"location proxy lock {key}, {actorId} {self.GetSingleton<TimeInfo>().ServerNow()}");
 
             ObjectLockRequest request = ObjectLockRequest.Create();
             request.Type = type;
@@ -258,7 +258,7 @@ namespace ET.Server
             ActorId newActorId, long lockToken)
         {
             Log.Info(
-                $"location proxy unlock {key}, {newActorId} lockToken: {lockToken} {TimeInfo.Instance.ServerNow()}");
+                $"location proxy unlock {key}, {newActorId} lockToken: {lockToken} {self.GetSingleton<TimeInfo>().ServerNow()}");
 
             ObjectUnLockRequest request = ObjectUnLockRequest.Create();
             request.Type = type;
@@ -344,7 +344,7 @@ namespace ET.Server
 
         public static async ETTask Remove(this LocationProxyComponent self, int type, long key, ActorId expectedActorId)
         {
-            Log.Info($"location proxy remove {key}, {TimeInfo.Instance.ServerNow()}");
+            Log.Info($"location proxy remove {key}, {self.GetSingleton<TimeInfo>().ServerNow()}");
 
             ObjectRemoveRequest request = ObjectRemoveRequest.Create();
             request.Type = type;

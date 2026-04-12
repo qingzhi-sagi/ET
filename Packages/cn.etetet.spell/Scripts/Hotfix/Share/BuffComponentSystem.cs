@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -35,7 +35,7 @@ namespace ET
             {
                 Buff buff = self.AddChildWithId<Buff, int>(buffId, buffConfigId);
                 buff.Caster = casterId;
-                buff.CreateTime = TimeInfo.Instance.ServerNow();
+                buff.CreateTime = self.GetSingleton<TimeInfo>().ServerNow();
                 BuffConfig buffConfig = buff.GetConfig();
                 buff.Stack = buffConfig.Stack;
                 foreach (BuffFlags buffFlag in buffConfig.Flags)
@@ -56,7 +56,7 @@ namespace ET
                 }
                 if (buffConfig.Duration >= 0)
                 {
-                    buff.ExpireTime = TimeInfo.Instance.ServerNow() + buffConfig.Duration;
+                    buff.ExpireTime = self.GetSingleton<TimeInfo>().ServerNow() + buffConfig.Duration;
                 }
                 else
                 {

@@ -41,7 +41,7 @@ namespace ET.Client
                     return;
                 }
 
-                long time = TimeInfo.Instance.ClientNow();
+                long time = self.GetSingleton<TimeInfo>().ClientNow();
 
                 if (time - session.LastRecvTime < 7 * 1000)
                 {
@@ -70,7 +70,7 @@ namespace ET.Client
                     
                     Log.Info($"get recvLocalConn ok: {root.Id} {routerAddress} {realAddress} {recvLocalConn} {localConn} {remoteConn}");
                     
-                    session.LastRecvTime = TimeInfo.Instance.ClientNow();
+                    session.LastRecvTime = session.GetSingleton<TimeInfo>().ClientNow();
                     
                     session.AService.ChangeAddress(sessionId, routerAddress);
                 }

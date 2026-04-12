@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using ET.Server;
 
 namespace ET.Test
@@ -112,8 +112,8 @@ namespace ET.Test
             StringKV filter, int expectedCount, long timeoutMs)
         {
             EntityRef<TimerComponent> timerRef = timer;
-            long deadline = TimeInfo.Instance.ServerNow() + timeoutMs;
-            while (TimeInfo.Instance.ServerNow() <= deadline)
+            long deadline = timer.GetSingleton<TimeInfo>().ServerNow() + timeoutMs;
+            while (timer.GetSingleton<TimeInfo>().ServerNow() <= deadline)
             {
                 List<ServiceInfoProto> services = await QueryServicesByFilter(sender, agentActorId, filter);
                 if (services.Count == expectedCount)

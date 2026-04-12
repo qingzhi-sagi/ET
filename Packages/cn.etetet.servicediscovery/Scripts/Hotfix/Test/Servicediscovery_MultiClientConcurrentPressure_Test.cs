@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using ET.Server;
 
@@ -66,7 +66,7 @@ namespace ET.Test
             const int clientCount = 300;
             const int removeCount = 120;
 
-            long registerBegin = TimeInfo.Instance.ServerNow();
+            long registerBegin = testFiber.GetSingleton<TimeInfo>().ServerNow();
             List<ETTask> registerTasks = new(clientCount);
             for (int i = 0; i < clientCount; ++i)
             {
@@ -76,7 +76,7 @@ namespace ET.Test
             }
 
             await ETTask.WaitAll(registerTasks);
-            long registerCost = TimeInfo.Instance.ServerNow() - registerBegin;
+            long registerCost = testFiber.GetSingleton<TimeInfo>().ServerNow() - registerBegin;
             if (registerCost > 15000)
             {
                 Log.Console($"pressure register cost too high: {registerCost}ms");
@@ -98,7 +98,7 @@ namespace ET.Test
             }
 
             // 3. 并发注销压力：批量删除前 120 个服务
-            long unregisterBegin = TimeInfo.Instance.ServerNow();
+            long unregisterBegin = testFiber.GetSingleton<TimeInfo>().ServerNow();
             List<ETTask> unregisterTasks = new(removeCount);
             for (int i = 0; i < removeCount; ++i)
             {
@@ -107,7 +107,7 @@ namespace ET.Test
             }
 
             await ETTask.WaitAll(unregisterTasks);
-            long unregisterCost = TimeInfo.Instance.ServerNow() - unregisterBegin;
+            long unregisterCost = testFiber.GetSingleton<TimeInfo>().ServerNow() - unregisterBegin;
             if (unregisterCost > 10000)
             {
                 Log.Console($"pressure unregister cost too high: {unregisterCost}ms");
@@ -189,8 +189,8 @@ namespace ET.Test
             long timeoutMs)
         {
             EntityRef<TimerComponent> timerRef = timer;
-            long deadline = TimeInfo.Instance.ServerNow() + timeoutMs;
-            while (TimeInfo.Instance.ServerNow() <= deadline)
+            long deadline = timer.GetSingleton<TimeInfo>().ServerNow() + timeoutMs;
+            while (timer.GetSingleton<TimeInfo>().ServerNow() <= deadline)
             {
                 int count = await QueryAgentFilterCount(sender, agentActorId, filter);
                 if (count == expected)
@@ -238,8 +238,8 @@ namespace ET.Test
         {
             EntityRef<ServiceDiscoveryProxy> proxyRef = proxy;
             EntityRef<TimerComponent> timerRef = timer;
-            long deadline = TimeInfo.Instance.ServerNow() + timeoutMs;
-            while (TimeInfo.Instance.ServerNow() <= deadline)
+            long deadline = timer.GetSingleton<TimeInfo>().ServerNow() + timeoutMs;
+            while (timer.GetSingleton<TimeInfo>().ServerNow() <= deadline)
             {
                 proxy = proxyRef;
                 if (proxy == null)

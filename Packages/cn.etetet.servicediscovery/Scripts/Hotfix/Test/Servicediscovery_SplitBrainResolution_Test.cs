@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using ET.Server;
 
 namespace ET.Test
@@ -63,7 +63,7 @@ namespace ET.Test
             }
 
             // 3. 手工注入“双主”状态并触发主租约校验
-            long now = TimeInfo.Instance.ServerNow();
+            long now = testFiber.GetSingleton<TimeInfo>().ServerNow();
             sdA.GetOrAddLease().IsActiveMaster = true;
             sdA.GetOrAddLease().CurrentMasterSceneName = nodeA.Root.Name;
             sdA.GetOrAddLease().CurrentMasterActorId = nodeA.Root.GetActorId();

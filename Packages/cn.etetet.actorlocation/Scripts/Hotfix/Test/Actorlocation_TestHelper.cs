@@ -144,8 +144,8 @@ namespace ET.Test
             string scenario)
         {
             EntityRef<TimerComponent> timerRef = timerComponent;
-            long deadline = TimeInfo.Instance.ServerNow() + timeoutMs;
-            while (TimeInfo.Instance.ServerNow() <= deadline)
+            long deadline = timerComponent.GetSingleton<TimeInfo>().ServerNow() + timeoutMs;
+            while (timerComponent.GetSingleton<TimeInfo>().ServerNow() <= deadline)
             {
                 if (predicate())
                 {

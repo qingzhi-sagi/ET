@@ -48,7 +48,7 @@ namespace ET
         private static void Check(this SessionIdleCheckerComponent self)
         {
             Session session = self.GetParent<Session>();
-            long timeNow = TimeInfo.Instance.ClientNow();
+            long timeNow = self.GetSingleton<TimeInfo>().ClientNow();
 
             if (timeNow - session.LastRecvTime < SessionTimeoutTime && timeNow - session.LastSendTime < SessionTimeoutTime)
             {

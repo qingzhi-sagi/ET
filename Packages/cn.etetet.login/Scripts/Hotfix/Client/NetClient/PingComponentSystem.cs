@@ -39,7 +39,7 @@ namespace ET.Client
                     {
                         return;
                     }
-                    long time1 = TimeInfo.Instance.ClientNow();
+                    long time1 = self.GetSingleton<TimeInfo>().ClientNow();
                     // C2G_Ping不需要调用dispose，Call中会判断，如果用了对象池会自动回收
                     C2G_Ping c2GPing = C2G_Ping.Create(true);
                     // 这里response要用using才能回收到池，默认不回收
@@ -50,10 +50,10 @@ namespace ET.Client
                         return;
                     }
 
-                    long time2 = TimeInfo.Instance.ClientNow();
+                    long time2 = self.GetSingleton<TimeInfo>().ClientNow();
                     self.Ping = time2 - time1;
                     
-                    TimeInfo.Instance.ServerMinusClientTime = response.Time + (time2 - time1) / 2 - time2;
+                    self.GetSingleton<TimeInfo>().ServerMinusClientTime = response.Time + (time2 - time1) / 2 - time2;
                 }
                 catch (RpcException e)
                 {

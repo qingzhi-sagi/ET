@@ -169,11 +169,11 @@ namespace ET
             
             Timeout().Coroutine();
             
-            long beginTime = TimeInfo.Instance.ServerNow();
+            long beginTime = fiber.GetSingleton<TimeInfo>().ServerNow();
 
             response = await messageSenderStruct.Wait();
             
-            long endTime = TimeInfo.Instance.ServerNow();
+            long endTime = fiber.GetSingleton<TimeInfo>().ServerNow();
 
             long costTime = endTime - beginTime;
             if (costTime > 200)

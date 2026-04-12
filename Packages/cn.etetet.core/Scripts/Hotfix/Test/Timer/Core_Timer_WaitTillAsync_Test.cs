@@ -9,18 +9,19 @@ namespace ET.Test
         {
             await using TestFiberScope scope = await TestFiberScope.Create(
                 context.Fiber, SceneType.TestEmpty, nameof(Core_Timer_WaitTillAsync_Test));
+            Fiber testFiber = scope.TestFiber;
 
-            Scene scene = scope.TestFiber.Root;
+            Scene scene = testFiber.Root;
             scene.AddComponent<TimerComponent>();
             TimerComponent timerComponent = scene.TimerComponent;
 
             // Test 1: WaitTillAsync to future time
             {
-                long now = TimeInfo.Instance.ServerNow();
+                long now = testFiber.GetSingleton<TimeInfo>().ServerNow();
                 long targetTime = now + 100;
-                long before = TimeInfo.Instance.ServerNow();
+                long before = testFiber.GetSingleton<TimeInfo>().ServerNow();
                 await timerComponent.WaitTillAsync(targetTime);
-                long after = TimeInfo.Instance.ServerNow();
+                long after = testFiber.GetSingleton<TimeInfo>().ServerNow();
 
                 if (after < targetTime)
                 {
@@ -33,11 +34,11 @@ namespace ET.Test
 
             // Test 2: WaitTillAsync to past time should return immediately
             {
-                long now = TimeInfo.Instance.ServerNow();
+                long now = testFiber.GetSingleton<TimeInfo>().ServerNow();
                 long pastTime = now - 1000;
-                long before = TimeInfo.Instance.ServerNow();
+                long before = testFiber.GetSingleton<TimeInfo>().ServerNow();
                 await timerComponent.WaitTillAsync(pastTime);
-                long after = TimeInfo.Instance.ServerNow();
+                long after = testFiber.GetSingleton<TimeInfo>().ServerNow();
                 long elapsed = after - before;
 
                 if (elapsed > 50)
@@ -51,10 +52,10 @@ namespace ET.Test
 
             // Test 3: WaitTillAsync to current time should return immediately
             {
-                long now = TimeInfo.Instance.ServerNow();
-                long before = TimeInfo.Instance.ServerNow();
+                long now = testFiber.GetSingleton<TimeInfo>().ServerNow();
+                long before = testFiber.GetSingleton<TimeInfo>().ServerNow();
                 await timerComponent.WaitTillAsync(now);
-                long after = TimeInfo.Instance.ServerNow();
+                long after = testFiber.GetSingleton<TimeInfo>().ServerNow();
                 long elapsed = after - before;
 
                 if (elapsed > 50)

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -80,7 +80,7 @@ namespace ET.Server
                         case OverLayRuleType.AddTime:
                         {
                             Buff oldBuff = oldBuffs.First();
-                            long expireTime = TimeInfo.Instance.ServerNow() + buffConfig.Duration;
+                            long expireTime = unit.GetSingleton<TimeInfo>().ServerNow() + buffConfig.Duration;
                             if (expireTime < oldBuff.ExpireTime)
                             {
                                 return oldBuff;
@@ -172,7 +172,7 @@ namespace ET.Server
         {
             buff.ExpireTime = expireTime;
             
-            if (buff.ExpireTime < TimeInfo.Instance.ServerNow())
+            if (buff.ExpireTime < buff.GetSingleton<TimeInfo>().ServerNow())
             {
                 BuffHelper.RemoveBuff(buff, BuffFlags.TimeoutRemove);
                 return;

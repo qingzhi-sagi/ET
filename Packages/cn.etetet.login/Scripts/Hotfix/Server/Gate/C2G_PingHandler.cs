@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 
 namespace ET.Server
@@ -10,7 +10,7 @@ namespace ET.Server
 		{
 			using C2G_Ping _ = request; // 这里用完调用Dispose可以回收到池，不调用的话GC会回收
 			
-			response.Time = TimeInfo.Instance.ClientNow();
+			response.Time = session.GetSingleton<TimeInfo>().ClientNow();
 			await ETTask.CompletedTask;
 			
 			//response会在函数返回发送完消息回收到池

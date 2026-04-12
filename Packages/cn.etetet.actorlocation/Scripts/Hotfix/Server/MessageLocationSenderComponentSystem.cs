@@ -43,7 +43,7 @@ namespace ET.Server
         {
             using ListComponent<long> list = ListComponent<long>.Create();
             
-            long timeNow = TimeInfo.Instance.ServerNow();
+            long timeNow = self.GetSingleton<TimeInfo>().ServerNow();
             foreach ((long key, Entity value) in self.Children)
             {
                 MessageLocationSender messageLocationMessageSender = (MessageLocationSender) value;
@@ -133,7 +133,7 @@ namespace ET.Server
                 }
                 
                 messageLocationSender = messageLocationSenderRef;
-                messageLocationSender.LastSendOrRecvTime = TimeInfo.Instance.ServerNow();
+                messageLocationSender.LastSendOrRecvTime = messageLocationSender.GetSingleton<TimeInfo>().ServerNow();
                 root = rootRef;
                 root.GetComponent<MessageSender>().Send(messageLocationSender.ActorId, message);
             }
@@ -173,7 +173,7 @@ namespace ET.Server
             }
 
             messageLocationSender = messageLocationSenderRef;
-            messageLocationSender.LastSendOrRecvTime = TimeInfo.Instance.ServerNow();
+            messageLocationSender.LastSendOrRecvTime = messageLocationSender.GetSingleton<TimeInfo>().ServerNow();
             root = rootRef;
             return await root.GetComponent<MessageSender>().Call(messageLocationSender.ActorId, request);
         }
@@ -224,7 +224,7 @@ namespace ET.Server
             int failTimes = 0;
             EntityRef<MessageLocationSender> messageLocationSenderRef = messageLocationSender;
             EntityRef<MessageLocationSenderOneType> selfRef = self;
-            messageLocationSender.LastSendOrRecvTime = TimeInfo.Instance.ServerNow();
+            messageLocationSender.LastSendOrRecvTime = self.GetSingleton<TimeInfo>().ServerNow();
             
             Scene root = self.Root();
             EntityRef<Scene> rootRef = root;

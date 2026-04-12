@@ -1,4 +1,4 @@
-﻿using ET.Server;
+using ET.Server;
 
 namespace ET.Test
 {
@@ -119,8 +119,8 @@ namespace ET.Test
 
             EntityRef<ServiceDiscovery> masterRef = master;
             EntityRef<TimerComponent> timerRef = timer;
-            long deadline = TimeInfo.Instance.ServerNow() + timeoutMs;
-            while (TimeInfo.Instance.ServerNow() <= deadline)
+            long deadline = timer.GetSingleton<TimeInfo>().ServerNow() + timeoutMs;
+            while (timer.GetSingleton<TimeInfo>().ServerNow() <= deadline)
             {
                 master = masterRef;
                 if (master == null)
@@ -155,8 +155,8 @@ namespace ET.Test
 
             EntityRef<ServiceDiscoveryAgent> agentRef = agent;
             EntityRef<TimerComponent> timerRef = timer;
-            long deadline = TimeInfo.Instance.ServerNow() + timeoutMs;
-            while (TimeInfo.Instance.ServerNow() <= deadline)
+            long deadline = timer.GetSingleton<TimeInfo>().ServerNow() + timeoutMs;
+            while (timer.GetSingleton<TimeInfo>().ServerNow() <= deadline)
             {
                 agent = agentRef;
                 if (agent == null)

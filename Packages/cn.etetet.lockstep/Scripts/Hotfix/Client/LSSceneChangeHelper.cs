@@ -44,7 +44,7 @@ namespace ET.Client
             room.IsReplay = true;
             room.Replay = replay;
             room.LSWorld = new LSWorld(SceneType.LockStepClient);
-            room.Init(replay.UnitInfos, TimeInfo.Instance.ServerNow());
+            room.Init(replay.UnitInfos, root.GetSingleton<TimeInfo>().ServerNow());
 
             EntityRef<Scene> rootRef = root;
             EntityRef<Room> roomRef = room;

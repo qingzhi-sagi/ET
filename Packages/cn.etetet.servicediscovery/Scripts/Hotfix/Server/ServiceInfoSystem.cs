@@ -15,7 +15,7 @@ namespace ET.Server
             self.SceneName = sceneName;
             self.ActorId = actorId;
             self.Metadata.Clear();
-            self.RegisterTime = TimeInfo.Instance.ServerNow();
+            self.RegisterTime = self.GetSingleton<TimeInfo>().ServerNow();
             self.LastHeartbeatTime = self.RegisterTime;
         }
 

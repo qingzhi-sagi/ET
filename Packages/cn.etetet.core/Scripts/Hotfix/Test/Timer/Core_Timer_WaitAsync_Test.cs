@@ -9,16 +9,17 @@ namespace ET.Test
         {
             await using TestFiberScope scope = await TestFiberScope.Create(
                 context.Fiber, SceneType.TestEmpty, nameof(Core_Timer_WaitAsync_Test));
+            Fiber testFiber = scope.TestFiber;
 
-            Scene scene = scope.TestFiber.Root;
+            Scene scene = testFiber.Root;
             scene.AddComponent<TimerComponent>();
             TimerComponent timerComponent = scene.TimerComponent;
 
             // Test 1: WaitAsync 100ms should wait at least 100ms
             {
-                long before = TimeInfo.Instance.ServerNow();
+                long before = testFiber.GetSingleton<TimeInfo>().ServerNow();
                 await timerComponent.WaitAsync(100);
-                long after = TimeInfo.Instance.ServerNow();
+                long after = testFiber.GetSingleton<TimeInfo>().ServerNow();
                 long elapsed = after - before;
 
                 if (elapsed < 100)
@@ -32,9 +33,9 @@ namespace ET.Test
 
             // Test 2: WaitAsync 0ms should return immediately
             {
-                long before = TimeInfo.Instance.ServerNow();
+                long before = testFiber.GetSingleton<TimeInfo>().ServerNow();
                 await timerComponent.WaitAsync(0);
-                long after = TimeInfo.Instance.ServerNow();
+                long after = testFiber.GetSingleton<TimeInfo>().ServerNow();
                 long elapsed = after - before;
 
                 if (elapsed > 50)
@@ -48,11 +49,11 @@ namespace ET.Test
 
             // Test 3: Multiple WaitAsync in sequence
             {
-                long before = TimeInfo.Instance.ServerNow();
+                long before = testFiber.GetSingleton<TimeInfo>().ServerNow();
                 await timerComponent.WaitAsync(50);
                 await timerComponent.WaitAsync(50);
                 await timerComponent.WaitAsync(50);
-                long after = TimeInfo.Instance.ServerNow();
+                long after = testFiber.GetSingleton<TimeInfo>().ServerNow();
                 long elapsed = after - before;
 
                 if (elapsed < 150)

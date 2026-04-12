@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace ET
 {
@@ -13,7 +13,7 @@ namespace ET
 
         public static bool CheckCD(this SpellComponent self, SpellConfig spellConfig)
         {
-            long timeNow = TimeInfo.Instance.ServerNow();
+            long timeNow = self.GetSingleton<TimeInfo>().ServerNow();
             if (self.CDTime + 500 > timeNow)  // 公共CD
             {
                 return false;

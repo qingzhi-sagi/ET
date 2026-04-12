@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using ET.Server;
 
 namespace ET.Test
@@ -98,7 +98,7 @@ namespace ET.Test
                 return 804;
             }
 
-            long now = TimeInfo.Instance.ServerNow();
+            long now = testFiber.GetSingleton<TimeInfo>().ServerNow();
             await ServiceDiscovery_HA_TestHelper.SaveMasterRecordAsync(context.Fiber.Root, db, slowMasterRoot.Name,
                 slowMasterRoot.GetActorId(), 1, now + 10 * 1000, 10 * 1000, now);
 
@@ -206,7 +206,7 @@ namespace ET.Test
                 return 824;
             }
 
-            long now = TimeInfo.Instance.ServerNow();
+            long now = testFiber.GetSingleton<TimeInfo>().ServerNow();
             await ServiceDiscovery_HA_TestHelper.SaveMasterRecordAsync(context.Fiber.Root, db, slowMasterRoot.Name,
                 slowMasterRoot.GetActorId(), 1, now + 10 * 1000, 10 * 1000, now);
 
@@ -252,7 +252,7 @@ namespace ET.Test
 
             endpoint.RegisterRequestCount = 0;
 
-            long beginTime = TimeInfo.Instance.ServerNow();
+            long beginTime = testFiber.GetSingleton<TimeInfo>().ServerNow();
             ETTask heartbeatTask = sendMethod.Invoke(null, new object[] { heartbeat }) as ETTask;
             if (heartbeatTask == null)
             {
@@ -261,7 +261,7 @@ namespace ET.Test
             }
 
             await heartbeatTask;
-            long costTime = TimeInfo.Instance.ServerNow() - beginTime;
+            long costTime = testFiber.GetSingleton<TimeInfo>().ServerNow() - beginTime;
 
             if (costTime >= 7 * 1000)
             {

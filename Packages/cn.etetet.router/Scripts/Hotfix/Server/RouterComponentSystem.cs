@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
@@ -36,7 +36,7 @@ namespace ET.Server
             self.OuterUdp?.Update();
             self.OuterTcp?.Update();
             self.InnerSocket.Update();
-            long timeNow = TimeInfo.Instance.ClientNow();
+            long timeNow = self.GetSingleton<TimeInfo>().ClientNow();
             self.RecvOuterUdp(timeNow);
             self.RecvOuterTcp(timeNow);
             self.RecvInner(timeNow);
@@ -581,7 +581,7 @@ namespace ET.Server
             routerNode.InnerIpEndPoint = NetworkHelper.ToIPEndPoint(innerAddress);
             routerNode.OuterIpEndPoint = outerIpEndPoint;
             routerNode.InnerAddress = innerAddress;
-            routerNode.LastRecvInnerTime = TimeInfo.Instance.ClientNow();
+            routerNode.LastRecvInnerTime = self.GetSingleton<TimeInfo>().ClientNow();
             
             self.checkTimeout.Enqueue(outerConn);
 

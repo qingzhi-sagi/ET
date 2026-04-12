@@ -480,7 +480,7 @@ namespace ET.Server
                     return;
                 }
 
-                long now = TimeInfo.Instance.ServerNow();
+                long now = self.GetSingleton<TimeInfo>().ServerNow();
                 if (masterRecord.LeaseExpireTime <= now)
                 {
                     return;

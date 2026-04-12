@@ -9,15 +9,16 @@ namespace ET.Test
         {
             await using TestFiberScope scope = await TestFiberScope.Create(
                 context.Fiber, SceneType.TestEmpty, nameof(Core_Timer_Remove_Test));
+            Fiber testFiber = scope.TestFiber;
 
-            Scene scene = scope.TestFiber.Root;
+            Scene scene = testFiber.Root;
             scene.AddComponent<TimerComponent>();
             TimerComponent timerComponent = scene.TimerComponent;
 
             // Test 1: Remove existing timer returns true
             {
                 TestTimerEntity testEntity = scene.AddChild<TestTimerEntity>();
-                long tillTime = TimeInfo.Instance.ServerNow() + 1000;
+                long tillTime = testFiber.GetSingleton<TimeInfo>().ServerNow() + 1000;
                 long timerId = timerComponent.NewOnceTimer(tillTime, TimerInvokeType.TestOnceTimer, testEntity);
 
                 bool removed = timerComponent.Remove(ref timerId);
@@ -61,7 +62,7 @@ namespace ET.Test
             // Test 3: Remove same timer twice
             {
                 TestTimerEntity testEntity = scene.AddChild<TestTimerEntity>();
-                long tillTime = TimeInfo.Instance.ServerNow() + 1000;
+                long tillTime = testFiber.GetSingleton<TimeInfo>().ServerNow() + 1000;
                 long timerId = timerComponent.NewOnceTimer(tillTime, TimerInvokeType.TestOnceTimer, testEntity);
                 long originalId = timerId;
 
@@ -89,7 +90,7 @@ namespace ET.Test
             {
                 TestTimerEntity testEntity = scene.AddChild<TestTimerEntity>();
                 EntityRef<TestTimerEntity> testEntityRef = testEntity;
-                long tillTime = TimeInfo.Instance.ServerNow() + 50;
+                long tillTime = testFiber.GetSingleton<TimeInfo>().ServerNow() + 50;
                 long timerId = timerComponent.NewOnceTimer(tillTime, TimerInvokeType.TestOnceTimer, testEntity);
 
                 // Wait for timer to trigger

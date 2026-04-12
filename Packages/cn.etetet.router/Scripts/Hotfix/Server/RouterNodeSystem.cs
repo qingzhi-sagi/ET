@@ -1,4 +1,4 @@
-﻿namespace ET.Server
+namespace ET.Server
 {
     [EntitySystemOf(typeof(RouterNode))]
     public static partial class RouterNodeSystem
@@ -6,7 +6,7 @@
         [EntitySystem]
         private static void Awake(this RouterNode self)
         {
-            long timeNow = TimeInfo.Instance.ServerNow();
+            long timeNow = self.GetSingleton<TimeInfo>().ServerNow();
             self.LastRecvInnerTime = timeNow;
             self.LastRecvOuterTime = timeNow;
             self.OuterIpEndPoint = null;

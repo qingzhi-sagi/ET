@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using ET.Server;
 
@@ -128,7 +128,7 @@ namespace ET.Test
                 return 108;
             }
 
-            if (leaseExpireTime <= TimeInfo.Instance.ServerNow())
+            if (leaseExpireTime <= anyNodeSd.GetSingleton<TimeInfo>().ServerNow())
             {
                 Log.Console($"concurrent election master lease expired: {leaseExpireTime}");
                 return 109;

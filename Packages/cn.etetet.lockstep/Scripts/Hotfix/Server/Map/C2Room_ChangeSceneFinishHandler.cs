@@ -22,10 +22,10 @@ namespace ET.Server
             EntityRef<Room> roomRef = room;
             await room.Fiber.Root.TimerComponent.WaitAsync(1000);
 
-            Room2C_Start room2CStart = Room2C_Start.Create();
-            room2CStart.StartTime = TimeInfo.Instance.ServerNow();
-
             room = roomRef;
+            Room2C_Start room2CStart = Room2C_Start.Create();
+            room2CStart.StartTime = room.GetSingleton<TimeInfo>().ServerNow();
+
             roomServerComponent = room.GetComponent<RoomServerComponent>();
             foreach (RoomPlayer rp in roomServerComponent.Children.Values)
             {

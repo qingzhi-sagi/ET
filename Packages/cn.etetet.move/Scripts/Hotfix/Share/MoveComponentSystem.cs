@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
 
@@ -112,7 +112,7 @@ namespace ET
         {
             Unit unit = self.GetParent<Unit>();
             
-            long timeNow = TimeInfo.Instance.ClientNow();
+            long timeNow = self.GetSingleton<TimeInfo>().ClientNow();
             long moveTime = timeNow - self.StartTime;
 
             while (true)
@@ -183,7 +183,7 @@ namespace ET
 
         private static void StartMove(this MoveComponent self)
         {
-            self.BeginTime = TimeInfo.Instance.ClientNow();
+            self.BeginTime = self.GetSingleton<TimeInfo>().ClientNow();
             self.StartTime = self.BeginTime;
             self.SetNextTarget();
 

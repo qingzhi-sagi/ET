@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using YIUIFramework;
 using System.Collections.Generic;
@@ -80,7 +80,7 @@ namespace ET.Client
                 return;
             }
 
-            long serverNow  = TimeInfo.Instance.ServerNow();
+            long serverNow  = self.GetSingleton<TimeInfo>().ServerNow();
             long passedTime = serverNow - startTime;
             if (passedTime < 0)
             {

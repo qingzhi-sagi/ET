@@ -241,7 +241,7 @@ namespace ET.Server
 
         public static long GetMonotonicNow(Scene scene, string traceName, ref long lastRawNow, ref long monotonicNow)
         {
-            long rawNow = TimeInfo.Instance.ServerNow();
+            long rawNow = scene.GetSingleton<TimeInfo>().ServerNow();
             if (rawNow < lastRawNow)
             {
                 long rollback = lastRawNow - rawNow;

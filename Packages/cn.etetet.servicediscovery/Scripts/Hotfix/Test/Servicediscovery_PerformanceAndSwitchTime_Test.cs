@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using ET.Server;
 
@@ -81,7 +81,7 @@ namespace ET.Test
                 { "Category", "Performance" },
             };
 
-            long registerBegin = TimeInfo.Instance.ServerNow();
+            long registerBegin = testFiber.GetSingleton<TimeInfo>().ServerNow();
             for (int i = 0; i < serviceCount; ++i)
             {
                 string sceneName = $"{perfPrefix}{i}";
@@ -89,7 +89,7 @@ namespace ET.Test
                 await sdA.RegisterServiceAsync(sceneName, actorId, perfMetadata);
             }
 
-            long registerCost = TimeInfo.Instance.ServerNow() - registerBegin;
+            long registerCost = testFiber.GetSingleton<TimeInfo>().ServerNow() - registerBegin;
             int perfServiceCount = 0;
             foreach ((string sceneName, EntityRef<ServiceInfo> serviceRef) in sdA.Services)
             {
@@ -123,14 +123,14 @@ namespace ET.Test
 
             long heartbeatServiceTimeBefore = sampleBefore.LastHeartbeatTime;
 
-            long heartbeatBegin = TimeInfo.Instance.ServerNow();
+            long heartbeatBegin = testFiber.GetSingleton<TimeInfo>().ServerNow();
             for (int i = 0; i < serviceCount; ++i)
             {
                 ActorId actorId = new(address, new FiberInstanceId(700000 + i));
                 await sdA.UpdateAgentHeartbeatAsync(actorId);
             }
 
-            long heartbeatCost = TimeInfo.Instance.ServerNow() - heartbeatBegin;
+            long heartbeatCost = testFiber.GetSingleton<TimeInfo>().ServerNow() - heartbeatBegin;
             ServiceInfo sampleAfter = sampleRef;
             if (sampleAfter == null)
             {
@@ -152,11 +152,11 @@ namespace ET.Test
             }
 
             // 5. 模拟主节点故障并验证接管耗时
-            long removeBegin = TimeInfo.Instance.ServerNow();
+            long removeBegin = testFiber.GetSingleton<TimeInfo>().ServerNow();
             await testFiber.RemoveFiber(nodeA.Id);
-            long removeCost = TimeInfo.Instance.ServerNow() - removeBegin;
+            long removeCost = testFiber.GetSingleton<TimeInfo>().ServerNow() - removeBegin;
 
-            long switchBegin = TimeInfo.Instance.ServerNow();
+            long switchBegin = testFiber.GetSingleton<TimeInfo>().ServerNow();
 
             bool bTakeover = await ServiceDiscovery_HA_TestHelper.WaitUntilMaster(sdB, timerB, 10000);
             if (!bTakeover)
@@ -174,7 +174,7 @@ namespace ET.Test
                 }
             }
 
-            long switchCost = TimeInfo.Instance.ServerNow() - switchBegin;
+            long switchCost = testFiber.GetSingleton<TimeInfo>().ServerNow() - switchBegin;
             if (switchCost > 6000)
             {
                 Log.Console($"performance switch too slow, cost: {switchCost}ms");

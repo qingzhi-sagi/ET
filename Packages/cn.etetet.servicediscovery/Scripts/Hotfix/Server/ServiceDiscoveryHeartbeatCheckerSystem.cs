@@ -7,7 +7,7 @@ namespace ET.Server
         private static void Awake(this ServiceDiscoveryHeartbeatChecker self)
         {
             ServiceDiscovery serviceDiscovery = self.GetParent<ServiceDiscovery>();
-            self.LastCheckTime = serviceDiscovery != null ? serviceDiscovery.GetMonotonicServerNow() : TimeInfo.Instance.ServerNow();
+            self.LastCheckTime = serviceDiscovery != null ? serviceDiscovery.GetMonotonicServerNow() : self.GetSingleton<TimeInfo>().ServerNow();
         }
 
         [EntitySystem]

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Unity.Mathematics;
 
 namespace ET
@@ -30,7 +30,7 @@ namespace ET
 
         private static void UpdateTurn(this TurnComponent self)
         {
-            long runTime = TimeInfo.Instance.ServerNow() - self.StartTime;
+            long runTime = self.GetSingleton<TimeInfo>().ServerNow() - self.StartTime;
             self.GetParent<Unit>().Rotation = math.slerp(self.From, self.To, runTime * 1f / self.TurnTime);
             if (runTime < self.TurnTime)
             {
@@ -43,7 +43,7 @@ namespace ET
         
         public static void Turn(this TurnComponent self, quaternion to, int turnTime)
         {
-            self.StartTime = TimeInfo.Instance.ServerNow();
+            self.StartTime = self.GetSingleton<TimeInfo>().ServerNow();
             self.From = self.GetParent<Unit>().Rotation;
             self.To = to;
             self.TurnTime = turnTime;

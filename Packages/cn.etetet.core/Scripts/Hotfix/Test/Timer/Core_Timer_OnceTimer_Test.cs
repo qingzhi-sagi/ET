@@ -9,8 +9,9 @@ namespace ET.Test
         {
             await using TestFiberScope scope = await TestFiberScope.Create(
                 context.Fiber, SceneType.TestEmpty, nameof(Core_Timer_OnceTimer_Test));
+            Fiber testFiber = scope.TestFiber;
 
-            Scene scene = scope.TestFiber.Root;
+            Scene scene = testFiber.Root;
             scene.AddComponent<TimerComponent>();
             TimerComponent timerComponent = scene.TimerComponent;
 
@@ -18,7 +19,7 @@ namespace ET.Test
             {
                 TestTimerEntity testEntity = scene.AddChild<TestTimerEntity>();
                 EntityRef<TestTimerEntity> testEntityRef = testEntity;
-                long tillTime = TimeInfo.Instance.ServerNow() + 100;
+                long tillTime = testFiber.GetSingleton<TimeInfo>().ServerNow() + 100;
                 long timerId = timerComponent.NewOnceTimer(tillTime, TimerInvokeType.TestOnceTimer, testEntity);
 
                 if (timerId == 0)
@@ -54,7 +55,7 @@ namespace ET.Test
             {
                 TestTimerEntity testEntity = scene.AddChild<TestTimerEntity>();
                 EntityRef<TestTimerEntity> testEntityRef = testEntity;
-                long tillTime = TimeInfo.Instance.ServerNow() + 200;
+                long tillTime = testFiber.GetSingleton<TimeInfo>().ServerNow() + 200;
                 long timerId = timerComponent.NewOnceTimer(tillTime, TimerInvokeType.TestOnceTimer, testEntity);
 
                 // Remove before trigger
@@ -89,7 +90,7 @@ namespace ET.Test
             {
                 TestTimerEntity testEntity = scene.AddChild<TestTimerEntity>();
                 EntityRef<TestTimerEntity> testEntityRef = testEntity;
-                long tillTime = TimeInfo.Instance.ServerNow() - 100; // past time
+                long tillTime = testFiber.GetSingleton<TimeInfo>().ServerNow() - 100; // past time
                 timerComponent.NewOnceTimer(tillTime, TimerInvokeType.TestOnceTimer, testEntity);
 
                 // Need to wait for next update cycle

@@ -101,7 +101,7 @@ namespace ET.Server
             }
 
             achievement.Status = AchievementStatus.Completed;
-            achievement.CompleteTime = TimeInfo.Instance.ServerNow();
+            achievement.CompleteTime = self.GetSingleton<TimeInfo>().ServerNow();
             self.CompletedAchievements.Add(achievementId);
 
             // 添加到最近完成列表
@@ -134,7 +134,7 @@ namespace ET.Server
             }
 
             achievement.Status = AchievementStatus.Claimed;
-            achievement.ClaimTime = TimeInfo.Instance.ServerNow();
+            achievement.ClaimTime = self.GetSingleton<TimeInfo>().ServerNow();
             self.ClaimedAchievements.Add(achievementId);
             self.EarnedPoints += achievement.Points;
 

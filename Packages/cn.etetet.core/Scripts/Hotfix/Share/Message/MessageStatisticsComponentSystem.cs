@@ -15,7 +15,7 @@ namespace ET
         [EntitySystem]
         private static void Awake(this MessageStatisticsComponent self)
         {
-            self.CurrentSecondStart = TimeInfo.Instance.ClientNow();
+            self.CurrentSecondStart = self.GetSingleton<TimeInfo>().ClientNow();
         }
 
         [EntitySystem]
@@ -37,7 +37,7 @@ namespace ET
         /// <returns>true: 正常, false: 超过阈值</returns>
         public static bool Check(this MessageStatisticsComponent self, Type messageType, int maxMessageCount)
         {
-            long now = TimeInfo.Instance.ClientNow();
+            long now = self.GetSingleton<TimeInfo>().ClientNow();
 
             // 检查是否超过统计周期，超过则清空重新统计
             if (now - self.CurrentSecondStart >= self.WindowSize)

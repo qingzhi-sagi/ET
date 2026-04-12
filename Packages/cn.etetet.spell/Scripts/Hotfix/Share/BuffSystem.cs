@@ -65,7 +65,7 @@ namespace ET
 
         public static bool IsExpired(this Buff self)
         {
-            return self.ExpireTime <= TimeInfo.Instance.ServerNow() + 1;
+            return self.ExpireTime <= self.GetSingleton<TimeInfo>().ServerNow() + 1;
         }
     }
 }

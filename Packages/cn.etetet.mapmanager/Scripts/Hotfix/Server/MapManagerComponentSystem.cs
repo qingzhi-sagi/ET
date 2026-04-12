@@ -29,7 +29,7 @@ namespace ET.Server
 
         public static void AddWaitPlayer(this MapCopy self, long playerId)
         {
-            self.WaitEnterPlayer.Add(playerId, TimeInfo.Instance.ServerNow());
+            self.WaitEnterPlayer.Add(playerId, self.GetSingleton<TimeInfo>().ServerNow());
         }
     }
 

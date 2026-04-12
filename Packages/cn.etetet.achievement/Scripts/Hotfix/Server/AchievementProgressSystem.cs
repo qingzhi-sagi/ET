@@ -11,7 +11,7 @@ namespace ET.Server
             self.AchievementId = achievementId;
             self.MaxProgress = maxProgress;
             self.Progress = 0;
-            self.LastUpdateTime = TimeInfo.Instance.ServerNow();
+            self.LastUpdateTime = self.GetSingleton<TimeInfo>().ServerNow();
         }
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace ET.Server
         {
             int oldProgress = self.Progress;
             self.Progress = Math.Min(progress, self.MaxProgress);
-            self.LastUpdateTime = TimeInfo.Instance.ServerNow();
+            self.LastUpdateTime = self.GetSingleton<TimeInfo>().ServerNow();
 
             // 如果进度有变化，记录日志
             if (oldProgress != self.Progress)
@@ -44,7 +44,7 @@ namespace ET.Server
         public static void Reset(this AchievementProgress self)
         {
             self.Progress = 0;
-            self.LastUpdateTime = TimeInfo.Instance.ServerNow();
+            self.LastUpdateTime = self.GetSingleton<TimeInfo>().ServerNow();
         }
 
         /// <summary>

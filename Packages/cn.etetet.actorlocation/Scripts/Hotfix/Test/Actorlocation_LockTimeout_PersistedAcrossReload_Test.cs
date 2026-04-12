@@ -34,7 +34,7 @@ namespace ET.Test
                 LocationInfo lockInfo = location.GetChild<LocationInfo>(key);
                 Actorlocation_TestHelper.AssertTrue(lockInfo != null, "persist-timeout/lock-info-exists");
                 Actorlocation_TestHelper.AssertTrue(lockInfo.LockToken == lockToken, "persist-timeout/lock-token-match");
-                Actorlocation_TestHelper.AssertTrue(lockInfo.LockExpireTime > TimeInfo.Instance.ServerNow(),
+                Actorlocation_TestHelper.AssertTrue(lockInfo.LockExpireTime > lockInfo.GetSingleton<TimeInfo>().ServerNow(),
                     "persist-timeout/lock-expire-time");
 
                 // 清理内存缓存模拟主备切换，仅靠 DB 恢复状态。

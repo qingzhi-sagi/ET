@@ -18,7 +18,7 @@ namespace ET.Client
         private static void Update(this LSClientUpdater self)
         {
             Room room = self.GetParent<Room>();
-            long timeNow = TimeInfo.Instance.ServerNow();
+            long timeNow = self.GetSingleton<TimeInfo>().ServerNow();
             Scene root = room.Root();
 
             int i = 0;
@@ -48,7 +48,7 @@ namespace ET.Client
                 frameMessage.Input = self.Input;
                 root.GetComponent<ClientSenderComponent>().Send(frameMessage);
                 
-                long timeNow2 = TimeInfo.Instance.ServerNow();
+                long timeNow2 = self.GetSingleton<TimeInfo>().ServerNow();
                 if (timeNow2 - timeNow > 5)
                 {
                     break;
