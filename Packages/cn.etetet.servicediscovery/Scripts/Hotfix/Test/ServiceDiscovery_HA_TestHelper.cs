@@ -111,9 +111,9 @@ namespace ET.Test
         /// <summary>
         /// 获取配置中的 ServiceDiscovery 场景，按 Id 升序返回（通常第一个为主）。
         /// </summary>
-        public static List<StartSceneConfig> GetServiceDiscoveryConfigs()
+        public static List<StartSceneConfig> GetServiceDiscoveryConfigs(Fiber fiber)
         {
-            return World.Instance.GetSingleton<StartSceneConfigCategory>().GetAll().Values
+            return fiber.GetSingleton<StartSceneConfigCategory>().GetAll().Values
                 .Where(c => c.SceneType == nameof(SceneType.ServiceDiscovery))
                 .OrderBy(c => c.Id)
                 .ToList();
@@ -126,7 +126,7 @@ namespace ET.Test
                 return null;
             }
 
-            foreach (StartSceneConfig config in GetServiceDiscoveryConfigs())
+            foreach (StartSceneConfig config in GetServiceDiscoveryConfigs(parent))
             {
                 Fiber fiber = parent.GetFiber(GetFiberId(parent.Zone, config.Id));
                 ServiceDiscovery serviceDiscovery = fiber?.Root?.GetComponent<ServiceDiscovery>();
@@ -142,7 +142,7 @@ namespace ET.Test
         /// <summary>
         /// 确保 AddressSingleton 可用，避免测试场景中 ActorId 构造失败。
         /// </summary>
-        public static int EnsureAddressSingletonReady()
+        public static int EnsureAddressSingletonReady(Fiber fiber)
         {
             AddressSingleton addressSingleton = AddressSingleton.Instance;
             if (addressSingleton == null)
@@ -157,13 +157,13 @@ namespace ET.Test
                 return 0;
             }
 
-            StartProcessConfig startProcessConfig = World.Instance.GetSingleton<StartProcessConfigCategory>().Get(Options.Instance.Process);
+            StartProcessConfig startProcessConfig = fiber.GetSingleton<StartProcessConfigCategory>().Get(Options.Instance.Process);
             if (startProcessConfig == null)
             {
                 return 2;
             }
 
-            StartMachineConfig startMachineConfig = World.Instance.GetSingleton<StartMachineConfigCategory>()?.Get(startProcessConfig.MachineId);
+            StartMachineConfig startMachineConfig = fiber.GetSingleton<StartMachineConfigCategory>()?.Get(startProcessConfig.MachineId);
             addressSingleton.InnerIP ??= startMachineConfig?.InnerIP;
             addressSingleton.OuterIP ??= startMachineConfig?.OuterIP;
             addressSingleton.InnerPort = addressSingleton.InnerPort > 0 ? addressSingleton.InnerPort : startProcessConfig.Port;
@@ -778,7 +778,7 @@ namespace ET.Test
         /// </summary>
         public static async ETTask<Fiber> CreateServiceDiscoveryNodeByConfig(Fiber parent, int configIndex, string fallbackName)
         {
-            List<StartSceneConfig> configs = GetServiceDiscoveryConfigs();
+            List<StartSceneConfig> configs = GetServiceDiscoveryConfigs(parent);
             if (configs.Count > configIndex)
             {
                 StartSceneConfig config = configs[configIndex];

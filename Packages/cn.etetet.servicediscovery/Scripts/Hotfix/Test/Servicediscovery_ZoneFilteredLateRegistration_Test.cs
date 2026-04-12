@@ -10,7 +10,7 @@ namespace ET.Test
     {
         public override async ETTask<int> Handle(TestContext context)
         {
-            int addressError = ServiceDiscovery_HA_TestHelper.EnsureAddressSingletonReady();
+            int addressError = ServiceDiscovery_HA_TestHelper.EnsureAddressSingletonReady(context.Fiber);
             if (addressError != 0)
             {
                 Log.Console($"zone filtered late registration ensure address singleton failed: {addressError}");

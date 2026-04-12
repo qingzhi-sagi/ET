@@ -22,7 +22,7 @@ namespace ET.Test
             World.Instance.AddSingleton<AddressSingleton>();
             World.Instance.AddSingleton<TestDispatcher>();
             root.AddComponent<TestZoneAllocatorComponent>();
-            EnsureAddressSingletonReady();
+            EnsureAddressSingletonReady(fiber);
 
             await ETTask.CompletedTask;
         }
@@ -37,7 +37,7 @@ namespace ET.Test
 
         private static void EnsureStartMachineConfigCategory(Fiber fiber)
         {
-            if (World.Instance.GetSingleton<StartMachineConfigCategory>() != null)
+            if (World.Instance.TryGetSingleton<StartMachineConfigCategory>(out _))
             {
                 return;
             }
@@ -54,7 +54,7 @@ namespace ET.Test
 
         private static void EnsureStartProcessConfigCategory(Fiber fiber)
         {
-            if (World.Instance.GetSingleton<StartProcessConfigCategory>() != null)
+            if (World.Instance.TryGetSingleton<StartProcessConfigCategory>(out _))
             {
                 return;
             }
@@ -71,7 +71,7 @@ namespace ET.Test
 
         private static void EnsureStartSceneConfigCategory(Fiber fiber)
         {
-            if (World.Instance.GetSingleton<StartSceneConfigCategory>() != null)
+            if (World.Instance.TryGetSingleton<StartSceneConfigCategory>(out _))
             {
                 return;
             }
@@ -88,7 +88,7 @@ namespace ET.Test
 
         private static void EnsureStartZoneConfigCategory(Fiber fiber)
         {
-            if (World.Instance.GetSingleton<StartZoneConfigCategory>() != null)
+            if (World.Instance.TryGetSingleton<StartZoneConfigCategory>(out _))
             {
                 return;
             }
@@ -103,7 +103,7 @@ namespace ET.Test
             throw new Exception("StartZoneConfigCategory is not initialized before Test scene start.");
         }
 
-        private static void EnsureAddressSingletonReady()
+        private static void EnsureAddressSingletonReady(Fiber fiber)
         {
             AddressSingleton addressSingleton = AddressSingleton.Instance;
             if (!string.IsNullOrEmpty(addressSingleton.InnerIP) &&
@@ -113,13 +113,13 @@ namespace ET.Test
                 return;
             }
 
-            StartProcessConfig startProcessConfig = World.Instance.GetSingleton<StartProcessConfigCategory>()?.Get(Options.Instance.Process);
+            StartProcessConfig startProcessConfig = fiber.GetSingleton<StartProcessConfigCategory>()?.Get(Options.Instance.Process);
             if (startProcessConfig == null)
             {
                 throw new Exception($"test address init failed: process={Options.Instance.Process}");
             }
 
-            StartMachineConfig startMachineConfig = World.Instance.GetSingleton<StartMachineConfigCategory>()?.Get(startProcessConfig.MachineId);
+            StartMachineConfig startMachineConfig = fiber.GetSingleton<StartMachineConfigCategory>()?.Get(startProcessConfig.MachineId);
             addressSingleton.InnerIP ??= startMachineConfig?.InnerIP;
             addressSingleton.OuterIP ??= startMachineConfig?.OuterIP;
             addressSingleton.InnerPort = addressSingleton.InnerPort > 0 ? addressSingleton.InnerPort : startProcessConfig.Port;

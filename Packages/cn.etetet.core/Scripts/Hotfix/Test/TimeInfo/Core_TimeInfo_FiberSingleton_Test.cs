@@ -11,7 +11,7 @@ namespace ET.Test
                 context.Fiber, SceneType.TestEmpty, nameof(Core_TimeInfo_FiberSingleton_Test));
 
             bool createdGlobal = false;
-            TimeInfo globalTimeInfo = World.Instance.GetSingleton<TimeInfo>();
+            TimeInfo globalTimeInfo = scope.TestFiber.GetSingleton<TimeInfo>();
             if (globalTimeInfo == null)
             {
                 globalTimeInfo = CreateTimeInfo(0);

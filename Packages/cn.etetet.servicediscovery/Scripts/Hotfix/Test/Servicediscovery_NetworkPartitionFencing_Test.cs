@@ -15,7 +15,7 @@ namespace ET.Test
         {
             // 1. 准备测试环境
 
-            int addressError = ServiceDiscovery_HA_TestHelper.EnsureAddressSingletonReady();
+            int addressError = ServiceDiscovery_HA_TestHelper.EnsureAddressSingletonReady(context.Fiber);
             if (addressError != 0)
             {
                 Log.Console($"network partition ensure address singleton failed: {addressError}");
@@ -33,7 +33,7 @@ namespace ET.Test
                 return 200;
             }
 
-            List<StartSceneConfig> serviceDiscoveryConfigs = ServiceDiscovery_HA_TestHelper.GetServiceDiscoveryConfigs();
+            List<StartSceneConfig> serviceDiscoveryConfigs = ServiceDiscovery_HA_TestHelper.GetServiceDiscoveryConfigs(context.Fiber);
             if (serviceDiscoveryConfigs.Count == 0)
             {
                 Log.Console("network partition no service discovery config found");

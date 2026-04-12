@@ -15,7 +15,7 @@ namespace ET.Test
             try
             {
                 Scene scene = Actorlocation_TestHelper.PrepareProxyScene(scope.TestFiber);
-                _ = Actorlocation_TestHelper.EnsureAddressSingletonReady();
+                _ = Actorlocation_TestHelper.EnsureAddressSingletonReady(scope.TestFiber);
 
                 LocationProxyComponent locationProxy = scene.GetComponent<LocationProxyComponent>();
                 ServiceDiscoveryProxy serviceDiscoveryProxy = scene.GetComponent<ServiceDiscoveryProxy>();
@@ -123,7 +123,7 @@ namespace ET.Test
             try
             {
                 Scene scene = Actorlocation_TestHelper.PrepareProxyScene(scope.TestFiber);
-                _ = Actorlocation_TestHelper.EnsureAddressSingletonReady();
+                _ = Actorlocation_TestHelper.EnsureAddressSingletonReady(scope.TestFiber);
 
                 ServiceDiscoveryProxy serviceDiscoveryProxy = scene.GetComponent<ServiceDiscoveryProxy>();
                 LocationProxyComponent locationProxy = scene.GetComponent<LocationProxyComponent>();
@@ -257,7 +257,7 @@ namespace ET.Test
             try
             {
                 Scene scene = Actorlocation_TestHelper.PrepareProxyScene(scope.TestFiber);
-                _ = Actorlocation_TestHelper.EnsureAddressSingletonReady();
+                _ = Actorlocation_TestHelper.EnsureAddressSingletonReady(scope.TestFiber);
 
                 ServiceDiscoveryProxy serviceDiscoveryProxy = scene.GetComponent<ServiceDiscoveryProxy>();
                 LocationProxyComponent locationProxy = scene.GetComponent<LocationProxyComponent>();
@@ -409,7 +409,7 @@ namespace ET.Test
             try
             {
                 Scene sceneB = Actorlocation_TestHelper.PrepareProxyScene(scope.TestFiber);
-                _ = Actorlocation_TestHelper.EnsureAddressSingletonReady();
+                _ = Actorlocation_TestHelper.EnsureAddressSingletonReady(scope.TestFiber);
 
                 ServiceDiscoveryProxy serviceDiscoveryProxyB = sceneB.GetComponent<ServiceDiscoveryProxy>();
                 LocationProxyComponent locationProxyB = sceneB.GetComponent<LocationProxyComponent>();

@@ -14,7 +14,7 @@ namespace ET.Test
         public override async ETTask<int> Handle(TestContext context)
         {
 
-            int addressError = ServiceDiscovery_HA_TestHelper.EnsureAddressSingletonReady();
+            int addressError = ServiceDiscovery_HA_TestHelper.EnsureAddressSingletonReady(context.Fiber);
             if (addressError != 0)
             {
                 Log.Console($"agent bootstrap ensure address singleton failed: {addressError}");
@@ -110,7 +110,7 @@ namespace ET.Test
         public override async ETTask<int> Handle(TestContext context)
         {
 
-            int addressError = ServiceDiscovery_HA_TestHelper.EnsureAddressSingletonReady();
+            int addressError = ServiceDiscovery_HA_TestHelper.EnsureAddressSingletonReady(context.Fiber);
             if (addressError != 0)
             {
                 Log.Console($"agent fiber by zone ensure address singleton failed: {addressError}");

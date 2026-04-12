@@ -149,11 +149,11 @@ namespace ET
 
     public static class DisableSingletonInstanceAccessAnalyzerRule
     {
-        private const string Title = "禁止直接访问 Singleton.Instance";
+        private const string Title = "禁止通过全局入口访问 Singleton";
 
-        private const string MessageFormat = "类型: {0} 未标记 [AllowInstance]，禁止直接访问 .Instance，请改用 Fiber.GetSingleton<{0}>()";
+        private const string MessageFormat = "类型: {0} 未标记 [AllowInstance]，禁止通过 .Instance 或 World.GetSingleton<{0}>() 访问，请改用 Entity.GetSingleton<{0}>() 或 Fiber.GetSingleton<{0}>()";
 
-        private const string Description = "在 Model/ModelView/Hotfix/HotfixView 程序集中，未标记 [AllowInstance] 的 Singleton 禁止直接访问 .Instance.";
+        private const string Description = "在 Model/ModelView/Hotfix/HotfixView 程序集中，未标记 [AllowInstance] 的 Singleton 禁止通过全局入口访问.";
 
         public static readonly DiagnosticDescriptor Rule =
                 new DiagnosticDescriptor(DiagnosticIds.DisableSingletonInstanceAccessAnalyzerRuleId,

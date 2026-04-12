@@ -11,7 +11,7 @@ namespace ET.Test
                     await TestFiberScope.Create(context.Fiber, SceneType.TestEmpty, nameof(Test_ConfigLoader_CodeConfigReload_Test));
             Fiber testFiber = scope.TestFiber;
 
-            SpellConfigCategory beforeSpellCategory = World.Instance.GetSingleton<SpellConfigCategory>();
+            SpellConfigCategory beforeSpellCategory = testFiber.GetSingleton<SpellConfigCategory>();
             if (beforeSpellCategory == null)
             {
                 return Fail(1, "spell config category should be initialized before reload");
@@ -23,7 +23,7 @@ namespace ET.Test
                 return Fail(2, "spell config 100100 should exist before reload");
             }
 
-            BuffConfigCategory beforeBuffCategory = World.Instance.GetSingleton<BuffConfigCategory>();
+            BuffConfigCategory beforeBuffCategory = testFiber.GetSingleton<BuffConfigCategory>();
             if (beforeBuffCategory == null)
             {
                 return Fail(3, "buff config category should be initialized before reload");
@@ -35,7 +35,7 @@ namespace ET.Test
                 return Fail(4, "buff config referenced by spell should exist before reload");
             }
 
-            StartSceneConfigCategory beforeStartSceneCategory = World.Instance.GetSingleton<StartSceneConfigCategory>();
+            StartSceneConfigCategory beforeStartSceneCategory = testFiber.GetSingleton<StartSceneConfigCategory>();
             if (beforeStartSceneCategory == null)
             {
                 return Fail(5, "start scene config category should be initialized before reload");
@@ -49,7 +49,7 @@ namespace ET.Test
 
             await ConfigLoader.Instance.LoadAsync();
 
-            SpellConfigCategory afterSpellCategory = World.Instance.GetSingleton<SpellConfigCategory>();
+            SpellConfigCategory afterSpellCategory = testFiber.GetSingleton<SpellConfigCategory>();
             if (afterSpellCategory == null)
             {
                 return Fail(7, "spell config category should still exist after reload");

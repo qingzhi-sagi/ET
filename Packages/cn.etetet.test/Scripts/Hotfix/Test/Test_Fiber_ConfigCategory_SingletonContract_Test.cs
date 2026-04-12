@@ -71,6 +71,7 @@ namespace ET.Test
         private static int VerifyUnitConfigCategory(Fiber fiber, List<Action> cleanup)
         {
             UnitConfigCategory global = EnsureWorldSingleton(
+                fiber,
                 cleanup,
                 () => FiberConfigSingletonMockFactory.CreateUnitConfigCategory(1001, "global-unit"));
             UnitConfigCategory mock = FiberConfigSingletonMockFactory.CreateUnitConfigCategory(1001, "fiber-unit");
@@ -102,6 +103,7 @@ namespace ET.Test
         private static int VerifyBuffConfigCategory(Fiber fiber, List<Action> cleanup)
         {
             BuffConfigCategory global = EnsureWorldSingleton(
+                fiber,
                 cleanup,
                 () => FiberConfigSingletonMockFactory.CreateBuffConfigCategory(2001, "global-buff"));
             BuffConfigCategory mock = FiberConfigSingletonMockFactory.CreateBuffConfigCategory(2001, "fiber-buff");
@@ -133,6 +135,7 @@ namespace ET.Test
         private static int VerifySpellConfigCategory(Fiber fiber, List<Action> cleanup)
         {
             SpellConfigCategory global = EnsureWorldSingleton(
+                fiber,
                 cleanup,
                 () => FiberConfigSingletonMockFactory.CreateSpellConfigCategory(3001, 2001, "global-spell"));
             SpellConfigCategory mock = FiberConfigSingletonMockFactory.CreateSpellConfigCategory(3001, 2001, "fiber-spell");
@@ -164,6 +167,7 @@ namespace ET.Test
         private static int VerifyStartMachineConfigCategory(Fiber fiber, List<Action> cleanup)
         {
             StartMachineConfigCategory global = EnsureWorldSingleton(
+                fiber,
                 cleanup,
                 () => FiberConfigSingletonMockFactory.CreateStartMachineConfigCategory(4001, "10.0.0.1", "20.0.0.1"));
             StartMachineConfigCategory mock = FiberConfigSingletonMockFactory.CreateStartMachineConfigCategory(4001, "10.1.0.1", "20.1.0.1");
@@ -195,6 +199,7 @@ namespace ET.Test
         private static int VerifyStartProcessConfigCategory(Fiber fiber, List<Action> cleanup)
         {
             StartProcessConfigCategory global = EnsureWorldSingleton(
+                fiber,
                 cleanup,
                 () => FiberConfigSingletonMockFactory.CreateStartProcessConfigCategory(5001, 4001, 10001, "global-process"));
             StartProcessConfigCategory mock = FiberConfigSingletonMockFactory.CreateStartProcessConfigCategory(5001, 4001, 11001, "fiber-process");
@@ -226,6 +231,7 @@ namespace ET.Test
         private static int VerifyStartSceneConfigCategory(Fiber fiber, List<Action> cleanup)
         {
             StartSceneConfigCategory global = EnsureWorldSingleton(
+                fiber,
                 cleanup,
                 () => FiberConfigSingletonMockFactory.CreateStartSceneConfigCategory(
                     6001,
@@ -280,6 +286,7 @@ namespace ET.Test
         private static int VerifyStartZoneConfigCategory(Fiber fiber, List<Action> cleanup)
         {
             StartZoneConfigCategory global = EnsureWorldSingleton(
+                fiber,
                 cleanup,
                 () => FiberConfigSingletonMockFactory.CreateStartZoneConfigCategory(7001, 1, "mongodb://global", "global-db"));
             StartZoneConfigCategory mock = FiberConfigSingletonMockFactory.CreateStartZoneConfigCategory(7001, 2, "mongodb://fiber", "fiber-db");
@@ -309,9 +316,9 @@ namespace ET.Test
             return ErrorCode.ERR_Success;
         }
 
-        private static T EnsureWorldSingleton<T>(List<Action> cleanup, Func<T> factory) where T : Singleton<T>
+        private static T EnsureWorldSingleton<T>(Fiber fiber, List<Action> cleanup, Func<T> factory) where T : Singleton<T>
         {
-            T singleton = World.Instance.GetSingleton<T>();
+            T singleton = fiber.GetSingleton<T>();
             if (singleton != null)
             {
                 return singleton;

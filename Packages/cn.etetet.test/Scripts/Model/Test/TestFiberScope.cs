@@ -50,8 +50,7 @@ namespace ET.Test
 
         private static void EnsureStartZoneConfigExists(Fiber fiber, int zone)
         {
-            StartZoneConfigCategory category = fiber?.GetSingleton<StartZoneConfigCategory>()
-                    ?? World.Instance.GetSingleton<StartZoneConfigCategory>();
+            StartZoneConfigCategory category = fiber.GetSingleton<StartZoneConfigCategory>();
             if (category == null)
             {
                 throw new Exception("StartZoneConfigCategory is not initialized");

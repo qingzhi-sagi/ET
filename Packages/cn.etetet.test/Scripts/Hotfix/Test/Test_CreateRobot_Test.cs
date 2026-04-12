@@ -76,7 +76,7 @@ namespace ET.Test
                 return false;
             }
 
-            IMongoClient mongoClient = CreateMongoClientForTest();
+            IMongoClient mongoClient = CreateMongoClientForTest(scene);
             if (mongoClient == null)
             {
                 return false;
@@ -104,9 +104,9 @@ namespace ET.Test
             return false;
         }
 
-        private static IMongoClient CreateMongoClientForTest()
+        private static IMongoClient CreateMongoClientForTest(Scene scene)
         {
-            StartZoneConfigCategory category = World.Instance.GetSingleton<StartZoneConfigCategory>();
+            StartZoneConfigCategory category = scene.GetSingleton<StartZoneConfigCategory>();
             if (category == null)
             {
                 return null;

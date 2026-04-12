@@ -14,7 +14,7 @@ namespace ET.Test
         {
             // 1. 准备测试环境（清库 + 地址初始化）
 
-            int addressError = ServiceDiscovery_HA_TestHelper.EnsureAddressSingletonReady();
+            int addressError = ServiceDiscovery_HA_TestHelper.EnsureAddressSingletonReady(context.Fiber);
             if (addressError != 0)
             {
                 Log.Console($"double failover ensure address singleton failed: {addressError}");

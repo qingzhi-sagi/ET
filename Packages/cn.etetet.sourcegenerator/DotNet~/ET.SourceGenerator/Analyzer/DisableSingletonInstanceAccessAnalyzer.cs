@@ -36,6 +36,12 @@ namespace ET
             {
                 this.AnalyzeMemberAccess(context, memberAccessExpressionSyntax);
             }
+
+            foreach (InvocationExpressionSyntax invocationExpressionSyntax in
+                     context.SemanticModel.SyntaxTree.GetRoot().DescendantNodes<InvocationExpressionSyntax>())
+            {
+                this.AnalyzeWorldGetSingletonInvocation(context, invocationExpressionSyntax);
+            }
         }
 
         private void AnalyzeMemberAccess(SemanticModelAnalysisContext context, MemberAccessExpressionSyntax memberAccessExpressionSyntax)
@@ -56,6 +62,52 @@ namespace ET
             }
 
             if (context.SemanticModel.GetTypeInfo(memberAccessExpressionSyntax.Expression).Type is not INamedTypeSymbol targetTypeSymbol)
+            {
+                return;
+            }
+
+            if (!IsSingletonType(targetTypeSymbol))
+            {
+                return;
+            }
+
+            if (targetTypeSymbol.HasAttributeInTypeAndBaseTyes(Definition.AllowInstanceAttribute))
+            {
+                return;
+            }
+
+            Diagnostic diagnostic = Diagnostic.Create(
+                DisableSingletonInstanceAccessAnalyzerRule.Rule,
+                memberAccessExpressionSyntax.Name.Identifier.GetLocation(),
+                targetTypeSymbol.Name);
+            context.ReportDiagnostic(diagnostic);
+        }
+
+        private void AnalyzeWorldGetSingletonInvocation(
+            SemanticModelAnalysisContext context,
+            InvocationExpressionSyntax invocationExpressionSyntax)
+        {
+            if (invocationExpressionSyntax.Expression is not MemberAccessExpressionSyntax memberAccessExpressionSyntax)
+            {
+                return;
+            }
+
+            if (memberAccessExpressionSyntax.Name.Identifier.Text != "GetSingleton")
+            {
+                return;
+            }
+
+            if (context.SemanticModel.GetSymbolInfo(invocationExpressionSyntax).Symbol is not IMethodSymbol methodSymbol)
+            {
+                return;
+            }
+
+            if (methodSymbol.Name != "GetSingleton" || methodSymbol.ContainingType.ToDisplayString() != "ET.World")
+            {
+                return;
+            }
+
+            if (methodSymbol.TypeArguments.Length != 1 || methodSymbol.TypeArguments[0] is not INamedTypeSymbol targetTypeSymbol)
             {
                 return;
             }

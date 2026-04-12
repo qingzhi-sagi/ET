@@ -15,7 +15,7 @@ namespace ET.Test
             try
             {
                 Scene scene = Actorlocation_TestHelper.PrepareProxyScene(scope.TestFiber);
-                _ = Actorlocation_TestHelper.EnsureAddressSingletonReady();
+                _ = Actorlocation_TestHelper.EnsureAddressSingletonReady(scope.TestFiber);
 
                 LocationOneType location = Actorlocation_TestHelper.GetLocationOneType(scene, LocationType);
                 EntityRef<LocationOneType> locationRef = location;
