@@ -74,6 +74,8 @@ namespace ET
         public string Account { get; set; }
         [MemoryPackOrder(2)]
         public string Password { get; set; }
+        [MemoryPackOrder(3)]
+        public string Address { get; set; }
         public override void Dispose()
         {
             if (!this.IsFromPool)
@@ -84,6 +86,7 @@ namespace ET
             this.RpcId = default;
             this.Account = default;
             this.Password = default;
+            this.Address = default;
 
             ObjectPool.Recycle(this);
         }

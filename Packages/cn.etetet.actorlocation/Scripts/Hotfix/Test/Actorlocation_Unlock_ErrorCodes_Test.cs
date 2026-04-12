@@ -28,55 +28,85 @@ namespace ET.Test
 
                 long fakeToken = 999001;
 
-                await Actorlocation_TestHelper.ExpectRpcError(
-                    async () =>
-                    {
-                        LocationOneType current = Actorlocation_TestHelper.EnsureLocation(locationRef, "errors/lock-owner-mismatch-before-lock");
-                        await current.Lock(key, otherActor, 0);
-                    },
-                    ErrorCode.ERR_LocationLockOwnerMismatch,
-                    "errors/lock-owner-mismatch-before-lock");
+                try
+                {
+                    LocationOneType current = Actorlocation_TestHelper.EnsureLocation(locationRef, "errors/lock-owner-mismatch-before-lock");
+                    await current.Lock(key, otherActor, 0);
+                    throw new Exception(
+                        $"errors/lock-owner-mismatch-before-lock: expected RpcException({ErrorCode.ERR_LocationLockOwnerMismatch}), but no exception");
+                }
+                catch (RpcException e)
+                {
+                    Actorlocation_TestHelper.AssertRpcError(
+                        e,
+                        ErrorCode.ERR_LocationLockOwnerMismatch,
+                        "errors/lock-owner-mismatch-before-lock");
+                }
 
-                await Actorlocation_TestHelper.ExpectRpcError(
-                    async () =>
-                    {
-                        LocationOneType current = Actorlocation_TestHelper.EnsureLocation(locationRef, "errors/unlock-without-lock");
-                        await current.UnLock(key, oldActor, newActor, fakeToken);
-                    },
-                    ErrorCode.ERR_LocationLockNotFound,
-                    "errors/unlock-without-lock");
+                try
+                {
+                    LocationOneType current = Actorlocation_TestHelper.EnsureLocation(locationRef, "errors/unlock-without-lock");
+                    await current.UnLock(key, oldActor, newActor, fakeToken);
+                    throw new Exception(
+                        $"errors/unlock-without-lock: expected RpcException({ErrorCode.ERR_LocationLockNotFound}), but no exception");
+                }
+                catch (RpcException e)
+                {
+                    Actorlocation_TestHelper.AssertRpcError(
+                        e,
+                        ErrorCode.ERR_LocationLockNotFound,
+                        "errors/unlock-without-lock");
+                }
 
                 location = Actorlocation_TestHelper.EnsureLocation(locationRef, "errors/lock-for-next-cases");
                 long lockToken = await location.Lock(key, oldActor, 0);
                 location = Actorlocation_TestHelper.EnsureLocation(locationRef, "errors/lock-created");
 
-                await Actorlocation_TestHelper.ExpectRpcError(
-                    async () =>
-                    {
-                        LocationOneType current = Actorlocation_TestHelper.EnsureLocation(locationRef, "errors/lock-already-locked");
-                        await current.Lock(key, otherActor, 0);
-                    },
-                    ErrorCode.ERR_LocationAlreadyLocked,
-                    "errors/lock-already-locked");
+                try
+                {
+                    LocationOneType current = Actorlocation_TestHelper.EnsureLocation(locationRef, "errors/lock-already-locked");
+                    await current.Lock(key, otherActor, 0);
+                    throw new Exception(
+                        $"errors/lock-already-locked: expected RpcException({ErrorCode.ERR_LocationAlreadyLocked}), but no exception");
+                }
+                catch (RpcException e)
+                {
+                    Actorlocation_TestHelper.AssertRpcError(
+                        e,
+                        ErrorCode.ERR_LocationAlreadyLocked,
+                        "errors/lock-already-locked");
+                }
 
-                await Actorlocation_TestHelper.ExpectRpcError(
-                    async () =>
-                    {
-                        LocationOneType current = Actorlocation_TestHelper.EnsureLocation(locationRef, "errors/unlock-owner-mismatch");
-                        await current.UnLock(key, otherActor, newActor, lockToken);
-                    },
-                    ErrorCode.ERR_LocationLockOwnerMismatch,
-                    "errors/unlock-owner-mismatch");
+                try
+                {
+                    LocationOneType current = Actorlocation_TestHelper.EnsureLocation(locationRef, "errors/unlock-owner-mismatch");
+                    await current.UnLock(key, otherActor, newActor, lockToken);
+                    throw new Exception(
+                        $"errors/unlock-owner-mismatch: expected RpcException({ErrorCode.ERR_LocationLockOwnerMismatch}), but no exception");
+                }
+                catch (RpcException e)
+                {
+                    Actorlocation_TestHelper.AssertRpcError(
+                        e,
+                        ErrorCode.ERR_LocationLockOwnerMismatch,
+                        "errors/unlock-owner-mismatch");
+                }
 
                 long wrongToken = lockToken == long.MaxValue ? lockToken - 1 : lockToken + 1;
-                await Actorlocation_TestHelper.ExpectRpcError(
-                    async () =>
-                    {
-                        LocationOneType current = Actorlocation_TestHelper.EnsureLocation(locationRef, "errors/unlock-token-mismatch");
-                        await current.UnLock(key, oldActor, newActor, wrongToken);
-                    },
-                    ErrorCode.ERR_LocationLockTokenMismatch,
-                    "errors/unlock-token-mismatch");
+                try
+                {
+                    LocationOneType current = Actorlocation_TestHelper.EnsureLocation(locationRef, "errors/unlock-token-mismatch");
+                    await current.UnLock(key, oldActor, newActor, wrongToken);
+                    throw new Exception(
+                        $"errors/unlock-token-mismatch: expected RpcException({ErrorCode.ERR_LocationLockTokenMismatch}), but no exception");
+                }
+                catch (RpcException e)
+                {
+                    Actorlocation_TestHelper.AssertRpcError(
+                        e,
+                        ErrorCode.ERR_LocationLockTokenMismatch,
+                        "errors/unlock-token-mismatch");
+                }
 
                 location = Actorlocation_TestHelper.EnsureLocation(locationRef, "errors/unlock-final");
                 await location.UnLock(key, oldActor, newActor, lockToken);

@@ -1,4 +1,6 @@
+using System;
 using ET.Client;
+using ET.Server;
 
 namespace ET.Test
 {
@@ -6,14 +8,31 @@ namespace ET.Test
     {
         public static async ETTask<Fiber> CreateRobot(Fiber fiber, string robotName)
         {
+            string routerManagerAddress = GetRouterManagerAddress(fiber);
             Fiber robot = await fiber.CreateFiber(IdGenerater.Instance.GenerateId(), SceneType.Client, robotName);
             Scene root = robot.Root;
             EntityRef<Scene> rootRef = root;
-            root = rootRef;
-            await LoginHelper.Login(root, "127.0.0.1:10101", robotName, "");
+            await LoginHelper.Login(root, routerManagerAddress, robotName, "");
             root = rootRef;
             await EnterMapHelper.EnterMapAsync(root);
             return robot;
+        }
+
+        public static string GetRouterManagerAddress(Fiber fiber)
+        {
+            Fiber routerManagerFiber = fiber.GetFiber("RouterManager");
+            if (routerManagerFiber == null)
+            {
+                throw new Exception($"RouterManager fiber not found under fiber: {fiber?.Name}");
+            }
+
+            string address = routerManagerFiber.Root.GetComponent<RouterManagerAddressComponent>()?.Address;
+            if (string.IsNullOrWhiteSpace(address))
+            {
+                throw new Exception("RouterManagerAddressComponent is missing on RouterManager scene.");
+            }
+
+            return address;
         }
         
         public static Fiber GetMap(Fiber testFiber, Fiber robotFiber)

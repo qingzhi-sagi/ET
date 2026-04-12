@@ -43,28 +43,40 @@ namespace ET.Test
                 location = Actorlocation_TestHelper.EnsureLocation(locationRef, "get-lock-retry/lock");
                 Actorlocation_TestHelper.AssertTrue(lockToken != 0, "get-lock-retry/lock-token");
 
-                await Actorlocation_TestHelper.ExpectRpcError(
-                    async () =>
-                    {
-                        LocationOneType current = Actorlocation_TestHelper.EnsureLocation(locationRef,
-                            "get-lock-retry/direct-get");
-                        await current.Get(key);
-                    },
-                    ErrorCode.ERR_LocationGetRetry,
-                    "get-lock-retry/direct-get");
+                try
+                {
+                    LocationOneType current = Actorlocation_TestHelper.EnsureLocation(locationRef,
+                        "get-lock-retry/direct-get");
+                    await current.Get(key);
+                    throw new Exception(
+                        $"get-lock-retry/direct-get: expected RpcException({ErrorCode.ERR_LocationGetRetry}), but no exception");
+                }
+                catch (RpcException e)
+                {
+                    Actorlocation_TestHelper.AssertRpcError(
+                        e,
+                        ErrorCode.ERR_LocationGetRetry,
+                        "get-lock-retry/direct-get");
+                }
 
                 location = Actorlocation_TestHelper.EnsureLocation(locationRef, "get-lock-retry/clear-cache");
                 location.RemoveChild(key);
 
-                await Actorlocation_TestHelper.ExpectRpcError(
-                    async () =>
-                    {
-                        LocationOneType current = Actorlocation_TestHelper.EnsureLocation(locationRef,
-                            "get-lock-retry/direct-get-after-cache-clear");
-                        await current.Get(key);
-                    },
-                    ErrorCode.ERR_LocationGetRetry,
-                    "get-lock-retry/direct-get-after-cache-clear");
+                try
+                {
+                    LocationOneType current = Actorlocation_TestHelper.EnsureLocation(locationRef,
+                        "get-lock-retry/direct-get-after-cache-clear");
+                    await current.Get(key);
+                    throw new Exception(
+                        $"get-lock-retry/direct-get-after-cache-clear: expected RpcException({ErrorCode.ERR_LocationGetRetry}), but no exception");
+                }
+                catch (RpcException e)
+                {
+                    Actorlocation_TestHelper.AssertRpcError(
+                        e,
+                        ErrorCode.ERR_LocationGetRetry,
+                        "get-lock-retry/direct-get-after-cache-clear");
+                }
 
                 async ETTask UnlockLater()
                 {

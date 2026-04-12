@@ -274,7 +274,9 @@
       "version": "file:cn.etetet.robot",
       "depth": 0,
       "source": "embedded",
-      "dependencies": {}
+      "dependencies": {
+        "cn.etetet.router": "2.0.1"
+      }
     },
     "cn.etetet.router": {
       "version": "file:cn.etetet.router",
@@ -386,6 +388,8 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
+        "cn.etetet.loader": "2.0.7",
+        "cn.etetet.router": "2.0.1",
         "cn.etetet.unitybridge": "2.0.0"
       }
     },

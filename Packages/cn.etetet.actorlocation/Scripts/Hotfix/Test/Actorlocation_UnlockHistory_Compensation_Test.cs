@@ -30,14 +30,20 @@ namespace ET.Test
                 await location.UnLock(key, oldActor, newActor, lockToken);
                 location = Actorlocation_TestHelper.EnsureLocation(locationRef, "compensate/unlock-first");
 
-                await Actorlocation_TestHelper.ExpectRpcError(
-                    async () =>
-                    {
-                        LocationOneType current = Actorlocation_TestHelper.EnsureLocation(locationRef, "compensate/unlock-second");
-                        await current.UnLock(key, oldActor, newActor, lockToken);
-                    },
-                    ErrorCode.ERR_LocationLockNotFound,
-                    "compensate/unlock-second");
+                try
+                {
+                    LocationOneType current = Actorlocation_TestHelper.EnsureLocation(locationRef, "compensate/unlock-second");
+                    await current.UnLock(key, oldActor, newActor, lockToken);
+                    throw new Exception(
+                        $"compensate/unlock-second: expected RpcException({ErrorCode.ERR_LocationLockNotFound}), but no exception");
+                }
+                catch (RpcException e)
+                {
+                    Actorlocation_TestHelper.AssertRpcError(
+                        e,
+                        ErrorCode.ERR_LocationLockNotFound,
+                        "compensate/unlock-second");
+                }
 
                 location.RemoveChild(key);
                 ActorId persistedActor = await location.Get(key);

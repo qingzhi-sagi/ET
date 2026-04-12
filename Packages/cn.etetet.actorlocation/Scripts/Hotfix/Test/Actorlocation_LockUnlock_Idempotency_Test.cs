@@ -35,14 +35,20 @@ namespace ET.Test
                 await location.UnLock(key, oldActor, newActor, firstToken);
                 location = Actorlocation_TestHelper.EnsureLocation(locationRef, "idempotency/unlock-first");
 
-                await Actorlocation_TestHelper.ExpectRpcError(
-                    async () =>
-                    {
-                        LocationOneType current = Actorlocation_TestHelper.EnsureLocation(locationRef, "idempotency/unlock-second");
-                        await current.UnLock(key, oldActor, newActor, firstToken);
-                    },
-                    ErrorCode.ERR_LocationLockNotFound,
-                    "idempotency/unlock-second");
+                try
+                {
+                    LocationOneType current = Actorlocation_TestHelper.EnsureLocation(locationRef, "idempotency/unlock-second");
+                    await current.UnLock(key, oldActor, newActor, firstToken);
+                    throw new Exception(
+                        $"idempotency/unlock-second: expected RpcException({ErrorCode.ERR_LocationLockNotFound}), but no exception");
+                }
+                catch (RpcException e)
+                {
+                    Actorlocation_TestHelper.AssertRpcError(
+                        e,
+                        ErrorCode.ERR_LocationLockNotFound,
+                        "idempotency/unlock-second");
+                }
 
                 ActorId finalActor = await location.Get(key);
                 location = Actorlocation_TestHelper.EnsureLocation(locationRef, "idempotency/get-final");

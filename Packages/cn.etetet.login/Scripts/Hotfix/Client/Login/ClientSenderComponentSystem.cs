@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+using System;
+using System.Threading.Tasks;
 
 namespace ET.Client
 {
@@ -40,6 +41,11 @@ namespace ET.Client
         public static async ETTask<long> LoginAsync(this ClientSenderComponent self, string address, string account, string password)
         {
             EntityRef<ClientSenderComponent> selfRef = self;
+            if (string.IsNullOrWhiteSpace(address))
+            {
+                throw new Exception("router manager address is empty.");
+            }
+
             self.fiberId = await self.Fiber().CreateFiber(SchedulerType.ThreadPool, IdGenerater.Instance.GenerateId(), SceneType.NetClient, "NetClient");
             self = selfRef;
             self.FiberInstanceId = new FiberInstanceId(self.fiberId);

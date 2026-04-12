@@ -91,27 +91,16 @@ namespace ET.Test
                 ServiceDiscoveryProxy serviceDiscoveryProxy = scene.GetComponent<ServiceDiscoveryProxy>();
                 LocationManagerComponent locationManagerComponent = scene.GetComponent<LocationManagerComponent>();
                 LocationOneType location = Actorlocation_TestHelper.GetLocationOneType(scene, LocationType);
-                TimerComponent timerComponent = scene.TimerComponent;
 
                 EntityRef<ServiceDiscoveryProxy> serviceDiscoveryProxyRef = serviceDiscoveryProxy;
                 EntityRef<LocationManagerComponent> locationManagerRef = locationManagerComponent;
                 EntityRef<LocationOneType> locationRef = location;
-                EntityRef<TimerComponent> timerRef = timerComponent;
 
                 ActorId selfActorId = scene.GetActorId();
                 int zone = scene.Zone();
                 Actorlocation_TestHelper.AddLocalLocationService(serviceDiscoveryProxy, scene.Name, selfActorId, zone, 200);
-
-                await Actorlocation_TestHelper.WaitUntil(
-                    timerComponent,
-                    () =>
-                    {
-                        LocationManagerComponent current = locationManagerRef;
-                        return current != null && current.IsPrimaryLocation;
-                    },
-                    1000,
-                    10,
-                    "become-backup/become-primary");
+                locationManagerComponent.RefreshPrimaryState();
+                Actorlocation_TestHelper.AssertTrue(locationManagerComponent.IsPrimaryLocation, "become-backup/become-primary");
 
                 long key = IdGenerater.Instance.GenerateId();
                 ActorId routeActorId = Actorlocation_TestHelper.CreateActorId(scope.TestFiber, 301022, 1);
@@ -119,12 +108,6 @@ namespace ET.Test
                 await location.Add(key, routeActorId);
                 location = Actorlocation_TestHelper.EnsureLocation(locationRef, "become-backup/add-route");
                 Actorlocation_TestHelper.AssertTrue(location.GetChild<LocationInfo>(key) != null, "become-backup/cache-before-demote");
-
-                timerComponent = timerRef;
-                if (timerComponent == null)
-                {
-                    throw new Exception("become-backup: timer disposed before demote");
-                }
 
                 serviceDiscoveryProxy = serviceDiscoveryProxyRef;
                 if (serviceDiscoveryProxy == null)
@@ -138,21 +121,17 @@ namespace ET.Test
                     Actorlocation_TestHelper.CreateActorId(scope.TestFiber, 301023, 1),
                     zone,
                     100);
-
-                await Actorlocation_TestHelper.WaitUntil(
-                    timerComponent,
-                    () =>
-                    {
-                        LocationManagerComponent currentManager = locationManagerRef;
-                        LocationOneType currentLocation = locationRef;
-                        return currentManager != null
-                               && currentLocation != null
-                               && !currentManager.IsPrimaryLocation
-                               && currentManager.PrimaryLocationSceneName == "0_location_primary"
-                               && currentLocation.GetChild<LocationInfo>(key) == null;
-                    },
-                    1000,
-                    10,
+                locationManagerComponent = locationManagerRef;
+                if (locationManagerComponent == null)
+                {
+                    throw new Exception("become-backup: location manager disposed before refresh");
+                }
+                locationManagerComponent.RefreshPrimaryState();
+                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "become-backup/cache-cleared-after-demote");
+                Actorlocation_TestHelper.AssertTrue(!locationManagerComponent.IsPrimaryLocation, "become-backup/demoted");
+                Actorlocation_TestHelper.AssertEqual("0_location_primary", locationManagerComponent.PrimaryLocationSceneName,
+                    "become-backup/new-primary");
+                Actorlocation_TestHelper.AssertTrue(location.GetChild<LocationInfo>(key) == null,
                     "become-backup/cache-cleared-after-demote");
 
                 return ErrorCode.ERR_Success;
@@ -179,42 +158,23 @@ namespace ET.Test
                 Scene scene = Actorlocation_TestHelper.PrepareProxyScene(scope.TestFiber);
                 ServiceDiscoveryProxy serviceDiscoveryProxy = scene.GetComponent<ServiceDiscoveryProxy>();
                 LocationManagerComponent locationManagerComponent = scene.GetComponent<LocationManagerComponent>();
-                TimerComponent timerComponent = scene.TimerComponent;
                 MessageSender messageSender = scene.GetComponent<MessageSender>();
-
-                EntityRef<LocationManagerComponent> locationManagerRef = locationManagerComponent;
-                EntityRef<TimerComponent> timerRef = timerComponent;
 
                 ActorId selfActorId = scene.GetActorId();
                 int zone = scene.Zone();
                 Actorlocation_TestHelper.AddLocalLocationService(serviceDiscoveryProxy, scene.Name, selfActorId, zone, 200);
                 Actorlocation_TestHelper.AddLocalLocationService(serviceDiscoveryProxy, "0_location_primary",
                     Actorlocation_TestHelper.CreateActorId(scope.TestFiber, 301024, 1), zone, 100);
-
-                await Actorlocation_TestHelper.WaitUntil(
-                    timerComponent,
-                    () =>
-                    {
-                        LocationManagerComponent current = locationManagerRef;
-                        return current != null
-                               && !current.IsPrimaryLocation
-                               && current.PrimaryLocationSceneName == "0_location_primary";
-                    },
-                    1000,
-                    10,
-                    "backup-rejects/become-backup");
+                locationManagerComponent.RefreshPrimaryState();
+                Actorlocation_TestHelper.AssertTrue(!locationManagerComponent.IsPrimaryLocation, "backup-rejects/become-backup");
+                Actorlocation_TestHelper.AssertEqual("0_location_primary", locationManagerComponent.PrimaryLocationSceneName,
+                    "backup-rejects/primary-name");
 
                 using ObjectGetRequest request = ObjectGetRequest.Create();
                 request.Type = LocationType;
                 request.Key = IdGenerater.Instance.GenerateId();
 
                 using ObjectGetResponse response = await messageSender.Call(selfActorId, request) as ObjectGetResponse;
-
-                timerComponent = timerRef;
-                if (timerComponent == null)
-                {
-                    throw new Exception("backup-rejects: timer disposed after call");
-                }
 
                 Actorlocation_TestHelper.AssertTrue(response != null, "backup-rejects/response-null");
                 Actorlocation_TestHelper.AssertEqual(ErrorCode.ERR_LocationFollowerRejected, response.Error,

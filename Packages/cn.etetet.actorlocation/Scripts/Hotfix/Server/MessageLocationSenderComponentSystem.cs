@@ -94,6 +94,11 @@ namespace ET.Server
         {
             self.SendInner(entityId, message).Coroutine();
         }
+
+        public static async ETTask SendAsync(this MessageLocationSenderOneType self, long entityId, IMessage message)
+        {
+            await self.SendInner(entityId, message);
+        }
         
         private static async ETTask SendInner(this MessageLocationSenderOneType self, long entityId, IMessage message)
         {

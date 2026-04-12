@@ -14,6 +14,8 @@
   },
   "relatedPackages": {},
   "dependencies": {
+    "cn.etetet.loader": "2.0.7",
+    "cn.etetet.router": "2.0.1",
     "cn.etetet.unitybridge": "2.0.0"
   },
   "publishConfig": {

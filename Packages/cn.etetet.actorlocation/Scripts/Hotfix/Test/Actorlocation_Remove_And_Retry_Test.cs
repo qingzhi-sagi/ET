@@ -97,11 +97,8 @@ namespace ET.Test
                 ServiceDiscoveryProxy serviceDiscoveryProxy = scene.GetComponent<ServiceDiscoveryProxy>();
                 LocationProxyComponent locationProxy = scene.GetComponent<LocationProxyComponent>();
                 MessageLocationSenderComponent senderComponent = scene.GetComponent<MessageLocationSenderComponent>();
-                TimerComponent timerComponent = scene.TimerComponent;
-
                 EntityRef<LocationProxyComponent> locationProxyRef = locationProxy;
                 EntityRef<MessageLocationSenderComponent> senderComponentRef = senderComponent;
-                EntityRef<TimerComponent> timerRef = timerComponent;
 
                 locationProxy.locationRequestRetryTimes = 3;
                 locationProxy.locationRequestRetryIntervalMs = 5;
@@ -122,15 +119,17 @@ namespace ET.Test
                 M2C_TestResponse message = M2C_TestResponse.Create();
                 try
                 {
-                    senderOneType.Send(entityId, message);
-
-                    timerComponent = timerRef;
-                    if (timerComponent == null)
+                    bool sendFailed = false;
+                    try
                     {
-                        throw new Exception("send-missing-route: timer disposed after send");
+                        await senderOneType.SendAsync(entityId, message);
+                    }
+                    catch (RpcException)
+                    {
+                        sendFailed = true;
                     }
 
-                    await timerComponent.WaitAsync(50);
+                    Actorlocation_TestHelper.AssertTrue(sendFailed, "send-missing-route/send-async-no-failure");
 
                     senderOneType = senderOneTypeRef;
                     if (senderOneType == null)
@@ -223,19 +222,25 @@ namespace ET.Test
                 long activeLockToken = await location.Lock(key, newActor, 0);
                 location = Actorlocation_TestHelper.EnsureLocation(locationRef, "remove-actor-match/lock-before-remove");
 
-                await Actorlocation_TestHelper.ExpectRpcError(
-                    async () =>
+                try
+                {
+                    LocationProxyComponent currentLocationProxy = locationProxyRef;
+                    if (currentLocationProxy == null)
                     {
-                        LocationProxyComponent currentLocationProxy = locationProxyRef;
-                        if (currentLocationProxy == null)
-                        {
-                            throw new Exception("remove-actor-match: location proxy disposed during locked remove");
-                        }
+                        throw new Exception("remove-actor-match: location proxy disposed during locked remove");
+                    }
 
-                        await currentLocationProxy.Remove(LocationType, key);
-                    },
-                    ErrorCode.ERR_LocationAlreadyLocked,
-                    "remove-actor-match/locked-remove-rejected");
+                    await currentLocationProxy.Remove(LocationType, key);
+                    throw new Exception(
+                        $"remove-actor-match/locked-remove-rejected: expected RpcException({ErrorCode.ERR_LocationAlreadyLocked}), but no exception");
+                }
+                catch (RpcException e)
+                {
+                    Actorlocation_TestHelper.AssertRpcError(
+                        e,
+                        ErrorCode.ERR_LocationAlreadyLocked,
+                        "remove-actor-match/locked-remove-rejected");
+                }
 
                 locationProxy = locationProxyRef;
                 location = Actorlocation_TestHelper.EnsureLocation(locationRef, "remove-actor-match/unlock-after-reject");

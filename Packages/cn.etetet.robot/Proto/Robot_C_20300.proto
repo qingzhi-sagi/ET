@@ -21,6 +21,7 @@ message Robot_LoginRequest // IRequest
 	int32 RpcId = 1;
 	string Account = 2;
 	string Password = 3;
+	string Address = 4;
 }
 
 message Robot_LoginResponse // IResponse

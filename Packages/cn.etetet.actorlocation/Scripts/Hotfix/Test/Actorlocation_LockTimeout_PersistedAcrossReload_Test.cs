@@ -40,15 +40,21 @@ namespace ET.Test
                 // 清理内存缓存模拟主备切换，仅靠 DB 恢复状态。
                 location.RemoveChild(key);
 
-                await Actorlocation_TestHelper.ExpectRpcError(
-                    async () =>
-                    {
-                        LocationOneType current = Actorlocation_TestHelper.EnsureLocation(locationRef,
-                            "persist-timeout/get-retry-before-expire");
-                        await current.Get(key);
-                    },
-                    ErrorCode.ERR_LocationGetRetry,
-                    "persist-timeout/get-retry-before-expire");
+                try
+                {
+                    LocationOneType current = Actorlocation_TestHelper.EnsureLocation(locationRef,
+                        "persist-timeout/get-retry-before-expire");
+                    await current.Get(key);
+                    throw new Exception(
+                        $"persist-timeout/get-retry-before-expire: expected RpcException({ErrorCode.ERR_LocationGetRetry}), but no exception");
+                }
+                catch (RpcException e)
+                {
+                    Actorlocation_TestHelper.AssertRpcError(
+                        e,
+                        ErrorCode.ERR_LocationGetRetry,
+                        "persist-timeout/get-retry-before-expire");
+                }
 
                 location = Actorlocation_TestHelper.EnsureLocation(locationRef, "persist-timeout/clear-cache-before-expire");
                 location.RemoveChild(key);

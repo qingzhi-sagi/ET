@@ -115,48 +115,18 @@ namespace ET.Test
             }
         }
 
-        public static async ETTask ExpectRpcError(Func<ETTask> action, int expectedError, string scenario)
+        public static void AssertRpcError(RpcException exception, int expectedError, string scenario)
         {
-            try
+            if (exception == null)
             {
-                await action();
-                throw new Exception($"{scenario}: expected RpcException({expectedError}), but no exception");
+                throw new Exception($"{scenario}: expected RpcException({expectedError}), but exception is null");
             }
-            catch (RpcException e)
+
+            if (exception.Error != expectedError)
             {
-                if (e.Error != expectedError)
-                {
-                    throw new Exception($"{scenario}: expected RpcException({expectedError}), actual RpcException({e.Error})");
-                }
+                throw new Exception($"{scenario}: expected RpcException({expectedError}), actual RpcException({exception.Error})");
             }
         }
 
-        public static async ETTask WaitUntil(
-            TimerComponent timerComponent,
-            Func<bool> predicate,
-            int timeoutMs,
-            int intervalMs,
-            string scenario)
-        {
-            EntityRef<TimerComponent> timerRef = timerComponent;
-            long deadline = timerComponent.GetSingleton<TimeInfo>().ServerNow() + timeoutMs;
-            while (timerComponent.GetSingleton<TimeInfo>().ServerNow() <= deadline)
-            {
-                if (predicate())
-                {
-                    return;
-                }
-
-                timerComponent = timerRef;
-                if (timerComponent == null)
-                {
-                    throw new Exception($"{scenario}: timer disposed");
-                }
-
-                await timerComponent.WaitAsync(intervalMs);
-            }
-
-            throw new Exception($"{scenario}: timeout in {timeoutMs}ms");
-        }
     }
 }

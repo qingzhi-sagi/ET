@@ -56,6 +56,20 @@ namespace ET
 			return ToIPEndPoint(host, port);
 		}
 
+		public static int GetFreeTcpPort()
+		{
+			TcpListener tcpListener = new TcpListener(IPAddress.Loopback, 0);
+			try
+			{
+				tcpListener.Start();
+				return ((IPEndPoint)tcpListener.LocalEndpoint).Port;
+			}
+			finally
+			{
+				tcpListener.Stop();
+			}
+		}
+
 		public static int IPStringToInt(string ipString)
 		{
 			IPAddress ipAddress = IPAddress.Parse(ipString);

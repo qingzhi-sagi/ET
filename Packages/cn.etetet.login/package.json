@@ -16,6 +16,5 @@
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/@ET-Packages"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }

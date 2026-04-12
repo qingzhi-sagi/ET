@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using YIUIFramework;
 using System.Collections.Generic;
@@ -31,10 +31,7 @@ namespace ET.Client
         {
             Log.Info($"登录");
             GlobalComponent globalComponent = self.Root().GetComponent<GlobalComponent>();
-            await LoginHelper.Login(self.Root(),
-                globalComponent.GlobalConfig.Address,
-                self.u_ComAccount.text,
-                self.u_ComPassword.text);
+            await LoginHelper.Login(self.Root(), globalComponent.GlobalConfig.Address, self.u_ComAccount.text, self.u_ComPassword.text);
         }
 
         #endregion YIUIEvent结束
