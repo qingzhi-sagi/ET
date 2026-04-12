@@ -54,6 +54,7 @@
     "cn.etetet.robot": "4.0.0",
     "cn.etetet.sourcegenerator": "4.0.0",
     "cn.etetet.yiuiinvoke": "4.0.0",
-    "cn.etetet.db": "4.0.0"
+    "cn.etetet.db": "4.0.0",
+    "cn.etetet.unitybridge": "4.0.0"
   }
 }
