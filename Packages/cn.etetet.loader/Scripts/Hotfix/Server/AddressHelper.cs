@@ -2,8 +2,9 @@ namespace ET.Server
 {
     public static class AddressHelper
     {
-        public static void SetInnerIPInnerPortOuterIP(this AddressSingleton addressSingleton, Fiber fiber, StartProcessConfig startProcessConfig)
+        public static void SetInnerIPInnerPortOuterIP(Fiber fiber, StartProcessConfig startProcessConfig)
         {
+            AddressSingleton addressSingleton = fiber.GetSingleton<AddressSingleton>();
             addressSingleton.InnerIP ??= startProcessConfig.GetInnerIP(fiber);
             addressSingleton.OuterIP ??= startProcessConfig.GetOuterIP(fiber);
             addressSingleton.InnerPort = addressSingleton.InnerPort > 0 ? addressSingleton.InnerPort : startProcessConfig.Port;
@@ -12,8 +13,9 @@ namespace ET.Server
         // 注意一个进程中会有多个OuterPort,所以不能只使用 addressSingleton.OuterPort
         // 如果 addressSingleton.OuterPort 大于0，说明aspire有传入port，那么说明进程中只有一个Scene,并且配置了具体的port，可以直接使用
         // 否则，必须从sceneconfig中获取
-        public static int GetSceneOuterPort(this AddressSingleton addressSingleton, Fiber fiber, string sceneName)
+        public static int GetSceneOuterPort(Fiber fiber, string sceneName)
         {
+            AddressSingleton addressSingleton = fiber.GetSingleton<AddressSingleton>();
             int outerPort = addressSingleton.OuterPort;
 
             if (outerPort > 0)

@@ -26,9 +26,10 @@ namespace ET.Test
             int process = Options.Instance.Process;
             
             StartProcessConfig startProcessConfig = fiber.GetSingleton<StartProcessConfigCategory>().Get(process);
+            
+            World.Instance.AddSingleton<AddressSingleton>();
             // 先看环境变量是否有地址传过来，如果没有，则使用StartProcessConfig的地址跟端口
-            AddressSingleton addressSingleton = World.Instance.AddSingleton<AddressSingleton>();
-            addressSingleton.SetInnerIPInnerPortOuterIP(fiber, startProcessConfig);
+            AddressHelper.SetInnerIPInnerPortOuterIP(fiber, startProcessConfig);
 
             await fiber.CreateFiber(IdGenerater.Instance.GenerateId(), SceneType.ServiceDiscovery, nameof(SceneType.ServiceDiscovery));
 

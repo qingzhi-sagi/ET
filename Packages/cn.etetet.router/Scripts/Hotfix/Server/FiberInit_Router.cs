@@ -17,7 +17,7 @@ namespace ET.Server
             root.AddComponent<MessageSender>();
 
             AddressSingleton addressSingleton = root.GetSingleton<AddressSingleton>();
-            int outerPort = addressSingleton.GetSceneOuterPort(root.Fiber(), root.Name.GetSceneConfigName());
+            int outerPort = AddressHelper.GetSceneOuterPort(root.Fiber(), root.Name.GetSceneConfigName());
             string innerIP = addressSingleton.InnerIP;
             IPEndPoint outerIPOutPort = new Address(addressSingleton.OuterIP, outerPort);
             
