@@ -1,4 +1,24 @@
-﻿using Luban.DataLoader.Builtin.Excel;
+// Copyright 2025 Code Philosophy
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+using Luban.DataLoader.Builtin.Excel;
 using Luban.DataLoader.Builtin.Excel.DataParser;
 using Luban.DataLoader.Builtin.Utils;
 using Luban.Datas;
@@ -61,7 +81,11 @@ class SheetDataCreator : ITypeFuncVisitor<RowColumnSheet, TitleRow, DType>
         {
             return DByte.Default;
         }
-        return DByte.ValueOf(byte.Parse(x.ToString()));
+        if (!LoadDataUtil.TryParseExcelByteFromNumberOrConstAlias(x.ToString(), out byte v))
+        {
+            throw new InvalidExcelDataException($"{x} 不是 byte 类型值");
+        }
+        return DByte.ValueOf(v);
     }
 
     public DType Accept(TShort type, RowColumnSheet sheet, TitleRow row)
@@ -76,7 +100,11 @@ class SheetDataCreator : ITypeFuncVisitor<RowColumnSheet, TitleRow, DType>
             ThrowIfNonEmpty(row);
             return DShort.Default;
         }
-        return DShort.ValueOf(short.Parse(x.ToString()));
+        if (!LoadDataUtil.TryParseExcelShortFromNumberOrConstAlias(x.ToString(), out short v))
+        {
+            throw new InvalidExcelDataException($"{x} 不是 short 类型值");
+        }
+        return DShort.ValueOf(v);
     }
     public DType Accept(TInt type, RowColumnSheet sheet, TitleRow row)
     {
@@ -90,7 +118,11 @@ class SheetDataCreator : ITypeFuncVisitor<RowColumnSheet, TitleRow, DType>
             ThrowIfNonEmpty(row);
             return DInt.Default;
         }
-        return DInt.ValueOf(int.Parse(x.ToString()));
+        if (!LoadDataUtil.TryParseExcelIntFromNumberOrConstAlias(x.ToString(), out var v))
+        {
+            throw new InvalidExcelDataException($"{x} 不是 int 类型值");
+        }
+        return DInt.ValueOf(v);
     }
 
     public DType Accept(TLong type, RowColumnSheet sheet, TitleRow row)
@@ -105,7 +137,11 @@ class SheetDataCreator : ITypeFuncVisitor<RowColumnSheet, TitleRow, DType>
             ThrowIfNonEmpty(row);
             return DLong.Default;
         }
-        return DLong.ValueOf(long.Parse(x.ToString()));
+        if (!LoadDataUtil.TryParseExcelLongFromNumberOrConstAlias(x.ToString(), out var v))
+        {
+            throw new InvalidExcelDataException($"{x} 不是 long 类型值");
+        }
+        return DLong.ValueOf(v);
     }
 
     public DType Accept(TFloat type, RowColumnSheet sheet, TitleRow row)
@@ -120,7 +156,11 @@ class SheetDataCreator : ITypeFuncVisitor<RowColumnSheet, TitleRow, DType>
             ThrowIfNonEmpty(row);
             return DFloat.Default;
         }
-        return DFloat.ValueOf(float.Parse(x.ToString()));
+        if (!LoadDataUtil.TryParseExcelFloatFromNumberOrConstAlias(x.ToString(), out var v))
+        {
+            throw new InvalidExcelDataException($"{x} 不是 float 类型值");
+        }
+        return DFloat.ValueOf(v);
     }
 
     public DType Accept(TDouble type, RowColumnSheet sheet, TitleRow row)
@@ -135,7 +175,11 @@ class SheetDataCreator : ITypeFuncVisitor<RowColumnSheet, TitleRow, DType>
             ThrowIfNonEmpty(row);
             return DDouble.Default;
         }
-        return DDouble.ValueOf(double.Parse(x.ToString()));
+        if (!LoadDataUtil.TryParseExcelDoubleFromNumberOrConstAlias(x.ToString(), out var v))
+        {
+            throw new InvalidExcelDataException($"{x} 不是 double 类型值");
+        }
+        return DDouble.ValueOf(v);
     }
 
     public DType Accept(TEnum type, RowColumnSheet sheet, TitleRow row)
@@ -220,11 +264,11 @@ class SheetDataCreator : ITypeFuncVisitor<RowColumnSheet, TitleRow, DType>
 
         string s = d is string str ? str : d.ToString();
 
-        if (nullable && (string.IsNullOrEmpty(s) || s == "null"))
+        if (nullable && string.IsNullOrEmpty(s))
         {
             return null;
         }
-        return DataUtil.RemoveStringQuote(s);
+        return DataUtil.UnEscapeRawString(s);
     }
 
     public DType Accept(TString type, RowColumnSheet sheet, TitleRow row)
