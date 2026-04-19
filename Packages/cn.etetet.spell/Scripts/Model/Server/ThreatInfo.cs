@@ -1,5 +1,3 @@
-﻿using System.Collections.Generic;
-
 namespace ET.Server
 {
     [ChildOf(typeof(ThreatComponent))]
@@ -7,10 +5,5 @@ namespace ET.Server
     {
         public EntityRef<Unit> Unit { get; set; }
         public int Threat { get; set; }
-    }
-    
-    [ComponentOf(typeof(Unit))]
-    public class ThreatComponent: Entity, IAwake
-    {
     }
 }

@@ -1,5 +1,3 @@
-﻿using System;
-
 namespace ET.Client
 {
     public static class SpellHelper

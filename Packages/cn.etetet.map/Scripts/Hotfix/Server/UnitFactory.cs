@@ -68,9 +68,14 @@ namespace ET.Server
                     break;
                 }
             }
+
+            int ai = numericComponent.GetAsInt(NumericType.AI);
+            if (ai != 0)
+            {
+                BuffHelper.CreateBuff(unit, unit.Id, IdGenerater.Instance.GenerateId(), ai, null);
+            }
             
             unitComponent.Add(unit);
-            EventSystem.Instance.Publish(scene, new AfterServerUnitCreate() { Unit = unit });
             return unit;
         }
 

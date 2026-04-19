@@ -21,9 +21,14 @@
     "cn.etetet.move": "2.0.0",
     "cn.etetet.netinner": "2.0.1",
     "cn.etetet.numeric": "2.0.0",
+    "cn.etetet.item": "4.0.0",
+    "cn.etetet.proto": "4.0.0",
+    "cn.etetet.quest": "4.0.0",
     "cn.etetet.recast": "2.0.0",
     "cn.etetet.servicediscovery": "4.0.0",
+    "cn.etetet.spell": "4.0.0",
     "cn.etetet.unit": "2.0.0",
+    "cn.etetet.yooassets": "2.3.14",
     "cn.etetet.yiuiframework": "3.1.0"
   },
   "publishConfig": {

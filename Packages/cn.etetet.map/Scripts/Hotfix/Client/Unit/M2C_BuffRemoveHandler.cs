@@ -1,14 +1,13 @@
-﻿namespace ET.Client
+namespace ET.Client
 {
     [MessageHandler(SceneType.Client)]
-    public class M2C_BuffAddHandler: MessageHandler<Scene, M2C_BuffAdd>
+    public class M2C_BuffRemoveHandler: MessageHandler<Scene, M2C_BuffRemove>
     {
-        protected override async ETTask Run(Scene root, M2C_BuffAdd message)
+        protected override async ETTask Run(Scene root, M2C_BuffRemove message)
         {
             Scene currentScene = root.GetComponent<CurrentScenesComponent>().Scene;
             Unit unit = currentScene.GetComponent<UnitComponent>().Get(message.UnitId);
-
-            BuffHelper.CreateBuff(unit, message);
+            BuffHelper.RemoveBuff(unit, message.BuffId, (BuffFlags)message.RemoveType);
             await ETTask.CompletedTask;
         }
     }

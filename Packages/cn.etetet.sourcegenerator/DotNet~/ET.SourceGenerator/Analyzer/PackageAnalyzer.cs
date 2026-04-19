@@ -232,8 +232,20 @@ namespace ET
 
             var snapshot = CreateSnapshot();
             context.RegisterSyntaxNodeAction(ctx => AnalyzeInvocationExpression(ctx, snapshot), SyntaxKind.InvocationExpression);
-            context.RegisterSyntaxNodeAction(ctx => AnalyzeObjectCreationExpression(ctx, snapshot), SyntaxKind.ObjectCreationExpression);
-            context.RegisterSyntaxNodeAction(ctx => AnalyzeVariableDeclaration(ctx, snapshot), SyntaxKind.VariableDeclaration);
+            context.RegisterSyntaxNodeAction(ctx => AnalyzeTypeReferenceContainer(ctx, snapshot),
+                SyntaxKind.ObjectCreationExpression,
+                SyntaxKind.VariableDeclaration,
+                SyntaxKind.PropertyDeclaration,
+                SyntaxKind.Parameter,
+                SyntaxKind.MethodDeclaration,
+                SyntaxKind.BaseList,
+                SyntaxKind.TypeArgumentList,
+                SyntaxKind.CastExpression,
+                SyntaxKind.TypeOfExpression,
+                SyntaxKind.DefaultExpression,
+                SyntaxKind.ForEachStatement,
+                SyntaxKind.DeclarationPattern,
+                SyntaxKind.CatchDeclaration);
         }
 
         // 【修复重复处理】：记录已处理的文件路径，避免重复处理
@@ -1045,26 +1057,141 @@ namespace ET
             }
         }
 
-        private void AnalyzeObjectCreationExpression(SyntaxNodeAnalysisContext context, AnalysisSnapshot snapshot)
+        private void AnalyzeTypeReferenceContainer(SyntaxNodeAnalysisContext context, AnalysisSnapshot snapshot)
         {
-            var objectCreation = (ObjectCreationExpressionSyntax)context.Node;
-            var symbolInfo = context.SemanticModel.GetSymbolInfo(objectCreation);
-            
-            if (symbolInfo.Symbol is IMethodSymbol constructorSymbol)
+            foreach (var typeSyntax in GetTypeSyntaxesToAnalyze(context.Node))
             {
-                CheckTypeAccess(context, objectCreation, constructorSymbol.ContainingType, snapshot);
+                AnalyzeTypeSyntax(context, typeSyntax, snapshot);
             }
         }
 
-        private void AnalyzeVariableDeclaration(SyntaxNodeAnalysisContext context, AnalysisSnapshot snapshot)
+        private void AnalyzeTypeSyntax(SyntaxNodeAnalysisContext context, TypeSyntax typeSyntax, AnalysisSnapshot snapshot)
         {
-            var variableDeclaration = (VariableDeclarationSyntax)context.Node;
-            var typeInfo = context.SemanticModel.GetTypeInfo(variableDeclaration.Type);
-            
-            if (typeInfo.Type != null)
+            foreach (var simpleName in typeSyntax.DescendantNodesAndSelf().OfType<SimpleNameSyntax>())
             {
-                CheckTypeAccess(context, variableDeclaration.Type, typeInfo.Type, snapshot);
+                if (!IsTypeReferenceName(simpleName))
+                {
+                    continue;
+                }
+
+                var typeSymbol = GetReferencedTypeSymbol(context.SemanticModel, simpleName);
+                if (typeSymbol != null)
+                {
+                    CheckTypeAccess(context, simpleName, typeSymbol, snapshot);
+                }
             }
+        }
+
+        private static IEnumerable<TypeSyntax> GetTypeSyntaxesToAnalyze(SyntaxNode node)
+        {
+            switch (node)
+            {
+                case ObjectCreationExpressionSyntax objectCreation:
+                    yield return objectCreation.Type;
+                    yield break;
+                case VariableDeclarationSyntax variableDeclaration:
+                    yield return variableDeclaration.Type;
+                    yield break;
+                case FieldDeclarationSyntax fieldDeclaration:
+                    yield return fieldDeclaration.Declaration.Type;
+                    yield break;
+                case PropertyDeclarationSyntax propertyDeclaration:
+                    yield return propertyDeclaration.Type;
+                    yield break;
+                case ParameterSyntax parameterSyntax when parameterSyntax.Type != null:
+                    yield return parameterSyntax.Type;
+                    yield break;
+                case MethodDeclarationSyntax methodDeclaration:
+                    yield return methodDeclaration.ReturnType;
+                    yield break;
+                case BaseListSyntax baseList:
+                    foreach (var baseType in baseList.Types)
+                    {
+                        yield return baseType.Type;
+                    }
+                    yield break;
+                case TypeArgumentListSyntax typeArgumentList:
+                    foreach (var typeArgument in typeArgumentList.Arguments)
+                    {
+                        yield return typeArgument;
+                    }
+                    yield break;
+                case CastExpressionSyntax castExpression:
+                    yield return castExpression.Type;
+                    yield break;
+                case TypeOfExpressionSyntax typeOfExpression:
+                    yield return typeOfExpression.Type;
+                    yield break;
+                case DefaultExpressionSyntax defaultExpression:
+                    yield return defaultExpression.Type;
+                    yield break;
+                case ForEachStatementSyntax forEachStatement:
+                    yield return forEachStatement.Type;
+                    yield break;
+                case DeclarationPatternSyntax declarationPattern:
+                    yield return declarationPattern.Type;
+                    yield break;
+                case CatchDeclarationSyntax catchDeclaration when catchDeclaration.Type != null:
+                    yield return catchDeclaration.Type;
+                    yield break;
+                default:
+                    yield break;
+            }
+        }
+
+        private static bool IsTypeReferenceName(SimpleNameSyntax simpleName)
+        {
+            if (simpleName.Parent is QualifiedNameSyntax qualifiedName && qualifiedName.Left == simpleName)
+            {
+                return false;
+            }
+
+            if (simpleName.Parent is AliasQualifiedNameSyntax aliasQualifiedName && aliasQualifiedName.Alias == simpleName)
+            {
+                return false;
+            }
+
+            if (simpleName.Parent is NamespaceDeclarationSyntax or FileScopedNamespaceDeclarationSyntax)
+            {
+                return false;
+            }
+
+            // 调用表达式继续走 MethodCallForbidden 诊断，避免对类型接收者重复报错。
+            if (simpleName.Parent is MemberAccessExpressionSyntax memberAccess &&
+                memberAccess.Expression == simpleName &&
+                memberAccess.Parent is InvocationExpressionSyntax)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private static ITypeSymbol? GetReferencedTypeSymbol(SemanticModel semanticModel, SyntaxNode node)
+        {
+            ISymbol? symbol = semanticModel.GetSymbolInfo(node).Symbol;
+            if (symbol is IAliasSymbol aliasSymbol)
+            {
+                symbol = aliasSymbol.Target;
+            }
+
+            if (symbol is INamespaceSymbol)
+            {
+                return null;
+            }
+
+            if (symbol is ITypeSymbol directTypeSymbol)
+            {
+                return directTypeSymbol;
+            }
+
+            var typeInfo = semanticModel.GetTypeInfo(node);
+            if (typeInfo.Type == null || typeInfo.Type.TypeKind == TypeKind.Error)
+            {
+                return null;
+            }
+
+            return typeInfo.Type;
         }
 
         private void CheckMethodCall(SyntaxNodeAnalysisContext context, SyntaxNode node, IMethodSymbol methodSymbol, AnalysisSnapshot snapshot)
@@ -1137,7 +1264,7 @@ namespace ET
                     return null;
                 }
 
-                if (!IsInHotfixAccessScope(node.SyntaxTree.FilePath))
+                if (!IsInPackageAccessScope(node.SyntaxTree.FilePath))
                 {
                     return null;
                 }
@@ -1158,7 +1285,7 @@ namespace ET
             return null;
         }
 
-        private static bool IsInHotfixAccessScope(string filePath)
+        private static bool IsInPackageAccessScope(string filePath)
         {
             if (string.IsNullOrEmpty(filePath))
             {
@@ -1166,8 +1293,12 @@ namespace ET
             }
 
             string normalizedPath = filePath.Replace("\\", "/");
-            return normalizedPath.Contains("/Scripts/Hotfix/") ||
-                   normalizedPath.Contains("/Scripts/HotfixView/");
+            bool isModelScope = normalizedPath.Contains("/Scripts/Model/") ||
+                                normalizedPath.Contains("/Scripts/ModelView/");
+            bool isHotfixScope = normalizedPath.Contains("/Scripts/Hotfix/") ||
+                                 normalizedPath.Contains("/Scripts/HotfixView/");
+
+            return isModelScope || isHotfixScope;
         }
 
         private string? ResolvePackageFromKey(string symbolKey, AnalysisSnapshot snapshot, string? currentPackage)
@@ -1319,15 +1450,6 @@ namespace ET
                 return true;
             }
             
-            // 【性能优化】：使用预计算的扁平化依赖关系，O(1)查找
-            if (snapshot.FlatDependencies.TryGetValue(currentPackage, out var dependencies))
-            {
-                if (dependencies.Contains(targetPackage))
-                {
-                    return true;
-                }
-            }
-
             // 新增：如果目标包设置了 AllowAnyPackageAccess，则允许任何包访问（但仍禁止循环依赖）
             if (targetInfo.AllowAnyPackageAccess)
             {

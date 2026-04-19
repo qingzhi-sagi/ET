@@ -82,7 +82,6 @@ namespace ET.Client
             unit.MoveToAsync(targetPos).Coroutine();
         }
 
-        // 鼠标左键点击目标，设置主角的目标
         private static void SelectTarget(this InputSystemComponent self, InputAction.CallbackContext context)
         {
             Vector2 mousePosition = Mouse.current.position.ReadValue();
@@ -111,19 +110,15 @@ namespace ET.Client
 
         private static void ChangeTarget(this InputSystemComponent self, InputAction.CallbackContext context)
         {
-
         }
 
         private static void Jump(this InputSystemComponent self, InputAction.CallbackContext context)
         {
-
         }
 
         private static void PetAttack(this InputSystemComponent self, InputAction.CallbackContext context)
         {
-            C2M_PetAttack c2MPetAttack = C2M_PetAttack.Create();
-            c2MPetAttack.UnitId = self.GetParent<Unit>().GetComponent<TargetComponent>().Unit.Id;
-            self.Root().GetComponent<ClientSenderComponent>().Send(c2MPetAttack);
+            EventSystem.Instance.Publish(self.Scene(), new OnPetAttackTrigger() { Unit = self.GetParent<Unit>() });
         }
 
         private static void CastSpell(this InputSystemComponent self, InputAction.CallbackContext context)
@@ -134,7 +129,6 @@ namespace ET.Client
             }
 
             int spellConfigId = (keyControl.keyCode - Key.Digit1) * 10 + 100000;
-
             EventSystem.Instance.Publish(self.Scene(), new OnSpellTrigger() { Unit = self.GetParent<Unit>(), SpellConfigId = spellConfigId });
         }
     }

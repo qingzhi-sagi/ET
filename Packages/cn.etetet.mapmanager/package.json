@@ -16,6 +16,8 @@
     "cn.etetet.actorlocation": "2.0.1",
     "cn.etetet.loader": "2.0.7",
     "cn.etetet.map": "1.0.0",
+    "cn.etetet.netinner": "2.0.1",
+    "cn.etetet.proto": "4.0.0",
     "cn.etetet.servicediscovery": "4.0.0"
   },
   "publishConfig": {

@@ -7,6 +7,11 @@ namespace ET.Client
         public EntityRef<Unit> Unit;
         public int SpellConfigId;
     }
+
+    public struct OnPetAttackTrigger
+    {
+        public EntityRef<Unit> Unit;
+    }
     
     [ComponentOf(typeof(Unit))]
     public partial class InputSystemComponent: Entity, IAwake, IUpdate, IDestroy

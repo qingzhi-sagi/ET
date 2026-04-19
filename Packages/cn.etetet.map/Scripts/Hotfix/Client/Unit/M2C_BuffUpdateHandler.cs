@@ -1,4 +1,4 @@
-﻿namespace ET.Client
+namespace ET.Client
 {
     [MessageHandler(SceneType.Client)]
     public class M2C_BuffUpdateHandler: MessageHandler<Scene, M2C_BuffUpdate>

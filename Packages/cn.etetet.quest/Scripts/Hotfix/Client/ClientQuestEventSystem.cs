@@ -6,25 +6,6 @@ namespace ET.Client
     /// <summary>
     /// 客户端任务事件系统 - 处理场景初始化时添加任务组件等
     /// </summary>
-    
-    /// <summary>
-    /// 场景初始化后添加任务组件
-    /// </summary>
-    [Event(SceneType.Client)]
-    public class AfterCreateCurrentScene_AddQuestComponent : AEvent<Scene, AfterCreateCurrentScene>
-    {
-        protected override async ETTask Run(Scene scene, AfterCreateCurrentScene args)
-        {
-            // 为当前场景添加任务组件
-            scene.AddComponent<QuestComponent>();
-
-            Log.Info("QuestComponent added to scene");
-            
-            await ETTask.CompletedTask;
-        }
-    }
-
-
     /// <summary>
     /// 登录完成后初始化任务数据
     /// </summary>

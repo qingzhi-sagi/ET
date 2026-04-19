@@ -9,16 +9,16 @@ namespace ET.Client
     
     public interface ITargetSelectHandler
     {
-        ETTask<int> Handle(TargetSelector node, Unit unit, SpellConfig spellConfig);
+        ETTask<int> Handle(TargetSelector node, EntityRef<Unit> unit, SpellConfig spellConfig);
         Type GetNodeType();
     }
     
     [TargetSelectHandler]
     public abstract class TargetSelectHandler<Node>: HandlerObject, ITargetSelectHandler where Node : TargetSelector
     {
-        protected abstract ETTask<int> Run(Node node, Unit unit, SpellConfig spellConfig);
+        protected abstract ETTask<int> Run(Node node, EntityRef<Unit> unit, SpellConfig spellConfig);
 
-        public async ETTask<int> Handle(TargetSelector node, Unit unit, SpellConfig spellConfig)
+        public async ETTask<int> Handle(TargetSelector node, EntityRef<Unit> unit, SpellConfig spellConfig)
         {
             if (node is not Node c)
             {
@@ -68,13 +68,22 @@ namespace ET.Client
         }
         
         
-        public async ETTask<int> Handle(TargetSelector node, Unit unit, SpellConfig spellConfig)
+        public ETTask<int> Handle(TargetSelector node, EntityRef<Unit> unit, SpellConfig spellConfig)
         {
-            if (!this.handlers.TryGetValue(node.GetType(), out ITargetSelectHandler targetSelectHandler))
+            Type handlerType = node.GetType();
+            while (handlerType != null)
             {
-                return 0;
+                if (this.handlers.TryGetValue(handlerType, out ITargetSelectHandler targetSelectHandler))
+                {
+                    return targetSelectHandler.Handle(node, unit, spellConfig);
+                }
+
+                handlerType = handlerType.BaseType;
             }
-            return await targetSelectHandler.Handle(node, unit, spellConfig);
+
+            ETTask<int> task = ETTask<int>.Create();
+            task.SetResult(0);
+            return task;
         }
     }
 }

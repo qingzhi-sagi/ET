@@ -1,5 +1,3 @@
-using Unity.Mathematics;
-
 namespace ET.Client
 {
     [Event(SceneType.Current)]
@@ -15,8 +13,7 @@ namespace ET.Client
             
             Unit unit = args.Unit;
             EntityRef<Unit> unitRef = unit;
-            // 这里根据技能目标选择方式，等待客户端目标选择
-            await TargetSelectDispatcher.Instance.Handle(spellConfig.TargetSelector, unit, spellConfig);
+            await TargetSelectDispatcher.Instance.Handle(spellConfig.TargetSelector, unitRef, spellConfig);
 
             unit = unitRef;
             TargetComponent targetComponent = unit.GetComponent<TargetComponent>();

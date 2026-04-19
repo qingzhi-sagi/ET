@@ -33,7 +33,8 @@
 5. 涉及 `async` / `await` / `ETTask` / `ETCancellationToken` / `EntityRef` await 安全时，叠加 `Agents/skills/et-async.md`。
 6. 新建类或节点前优先复用现有结构，不要顺手扩散职责。
 7. **严禁 AI 手工生成 `.meta` 文件，也严禁手工修改 `.csproj`**；需要补齐 `.meta` 或刷新工程文件时，通过 `et-unitybridge` 的 `Refresh` 或 `RegenProject` 命令让 Unity 编辑器刷新生成。
-8. **移动 C# 文件时必须同步移动对应的 `.meta` 文件**，以保留 GUID；若 `.meta` 丢失，Unity 引用将断裂。
+8. **移动 C# 文件时必须同步移动对应 `.meta` 文件**，以保留 GUID；若 `.meta` 丢失，Unity 引用将断裂。
+9. **每个类一个文件**；除同文件内天然绑定的极小枚举/结构外，禁止把多个类写进同一个 `.cs`。
 
 ## 关键规范
 
@@ -45,6 +46,7 @@
 - Hotfix 层：`Scripts/Hotfix/` 或 `Scripts/HotfixView/`
 - 新建 C# 文件不需要手动创建 `.meta`，由 Unity 自动生成
 - 移动 C# 文件时必须同时移动对应 `.meta`，确保 GUID 不变
+- 默认一类一文件；主类型与文件名保持一致，避免一个文件里堆多个类
 
 ### ECS 分离
 
@@ -110,6 +112,7 @@
 - `await` 后直接访问旧 `Entity` 变量
 - 字段或集合中直接保存 `Entity`（应改为 `EntityRef<T>`）
 - 新类落到错误的程序集层
+- 把多个类写进同一个 `.cs`，导致职责混杂、后续移动困难
 - 未检查包依赖方向与 Module analyzer 约束
 - 复制出重复类或重复消息定义
 - 用 hard code 绕过现有配置、节点或流程
