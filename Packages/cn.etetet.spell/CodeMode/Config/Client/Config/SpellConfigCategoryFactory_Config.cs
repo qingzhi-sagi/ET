@@ -15,7 +15,7 @@ namespace ET
         public ASingleton Create()
         {
             global::ET.SpellConfigCategory category = new global::ET.SpellConfigCategory();
-            category.Add(new global::ET.SpellConfig
+            category.Add(new global::ET.SpellConfig()
             {
                 Id = 100000,
                 BuffId = 200000,
@@ -24,7 +24,7 @@ namespace ET
                 CD = 2000,
                 DamageMultiplier = 0,
                 Cost = null,
-                TargetSelector = new global::ET.TargetSelectorSingle
+                TargetSelector = new global::ET.TargetSelectorSingle()
             {
                     Id = 1,
                     Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
@@ -38,7 +38,7 @@ namespace ET
                     UnitType = (global::ET.UnitType)7,
                 },
             });
-            category.Add(new global::ET.SpellConfig
+            category.Add(new global::ET.SpellConfig()
             {
                 Id = 100001,
                 BuffId = 200001,
@@ -47,7 +47,7 @@ namespace ET
                 CD = 0,
                 DamageMultiplier = 0,
                 Cost = null,
-                TargetSelector = new global::ET.TargetSelectorSingle
+                TargetSelector = new global::ET.TargetSelectorSingle()
             {
                     Id = 1,
                     Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
@@ -61,7 +61,7 @@ namespace ET
                     UnitType = (global::ET.UnitType)7,
                 },
             });
-            category.Add(new global::ET.SpellConfig
+            category.Add(new global::ET.SpellConfig()
             {
                 Id = 100002,
                 BuffId = 200002,
@@ -70,7 +70,7 @@ namespace ET
                 CD = 0,
                 DamageMultiplier = 0,
                 Cost = null,
-                TargetSelector = new global::ET.TargetSelectorSingle
+                TargetSelector = new global::ET.TargetSelectorSingle()
             {
                     Id = 1,
                     Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
@@ -84,7 +84,7 @@ namespace ET
                     UnitType = (global::ET.UnitType)7,
                 },
             });
-            category.Add(new global::ET.SpellConfig
+            category.Add(new global::ET.SpellConfig()
             {
                 Id = 100010,
                 BuffId = 200010,
@@ -92,7 +92,7 @@ namespace ET
                 IconName = @"Spell_Frost_IceStorm",
                 CD = 5000,
                 DamageMultiplier = 0,
-                Cost = new global::ET.CostNode
+                Cost = new global::ET.CostNode()
             {
                     Id = 1,
                     Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
@@ -101,7 +101,7 @@ namespace ET
                     Unit = @"Unit",
                     Check = @"Check",
                 },
-                TargetSelector = new global::ET.TargetSelectorPosition
+                TargetSelector = new global::ET.TargetSelectorPosition()
             {
                     Id = 1,
                     Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
@@ -116,7 +116,7 @@ namespace ET
                     SpellIndicatorName = @"RoundIndicator",
                 },
             });
-            category.Add(new global::ET.SpellConfig
+            category.Add(new global::ET.SpellConfig()
             {
                 Id = 100011,
                 BuffId = 200011,
@@ -124,7 +124,7 @@ namespace ET
                 IconName = null,
                 CD = 0,
                 DamageMultiplier = 0,
-                Cost = new global::ET.CostNode
+                Cost = new global::ET.CostNode()
             {
                     Id = 1,
                     Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
@@ -133,7 +133,7 @@ namespace ET
                     Unit = @"Unit",
                     Check = @"Check",
                 },
-                TargetSelector = new global::ET.TargetSelectorCircle
+                TargetSelector = new global::ET.TargetSelectorCircle()
             {
                     Id = 1,
                     Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
@@ -150,7 +150,7 @@ namespace ET
                     SpellIndicatorName = @"RoundIndicator",
                 },
             });
-            category.Add(new global::ET.SpellConfig
+            category.Add(new global::ET.SpellConfig()
             {
                 Id = 100020,
                 BuffId = 200020,
@@ -158,7 +158,7 @@ namespace ET
                 IconName = @"Spell_Frost_FrostBolt02",
                 CD = 5000,
                 DamageMultiplier = 0,
-                Cost = new global::ET.CostNode
+                Cost = new global::ET.CostNode()
             {
                     Id = 1,
                     Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
@@ -167,7 +167,7 @@ namespace ET
                     Unit = @"Unit",
                     Check = @"Check",
                 },
-                TargetSelector = new global::ET.TargetSelectorSingle
+                TargetSelector = new global::ET.TargetSelectorSingle()
             {
                     Id = 1,
                     Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
@@ -181,7 +181,7 @@ namespace ET
                     UnitType = (global::ET.UnitType)15,
                 },
             });
-            category.Add(new global::ET.SpellConfig
+            category.Add(new global::ET.SpellConfig()
             {
                 Id = 100030,
                 BuffId = 200030,
@@ -190,7 +190,7 @@ namespace ET
                 CD = 5000,
                 DamageMultiplier = 0,
                 Cost = null,
-                TargetSelector = new global::ET.TargetSelectorSingle
+                TargetSelector = new global::ET.TargetSelectorSingle()
             {
                     Id = 1,
                     Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
@@ -204,7 +204,7 @@ namespace ET
                     UnitType = global::ET.UnitType.Monster,
                 },
             });
-            category.Add(new global::ET.SpellConfig
+            category.Add(new global::ET.SpellConfig()
             {
                 Id = 100040,
                 BuffId = 200040,
@@ -213,7 +213,7 @@ namespace ET
                 CD = 0,
                 DamageMultiplier = 0,
                 Cost = null,
-                TargetSelector = new global::ET.TargetSelectorCaster
+                TargetSelector = new global::ET.TargetSelectorCaster()
             {
                     Id = 1,
                     Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
@@ -225,7 +225,7 @@ namespace ET
                     MinDistance = 0,
                 },
             });
-            category.Add(new global::ET.SpellConfig
+            category.Add(new global::ET.SpellConfig()
             {
                 Id = 100050,
                 BuffId = 200050,
@@ -234,7 +234,7 @@ namespace ET
                 CD = 0,
                 DamageMultiplier = 0,
                 Cost = null,
-                TargetSelector = new global::ET.TargetSelectorCaster
+                TargetSelector = new global::ET.TargetSelectorCaster()
             {
                     Id = 1,
                     Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
@@ -246,7 +246,7 @@ namespace ET
                     MinDistance = 0,
                 },
             });
-            category.Add(new global::ET.SpellConfig
+            category.Add(new global::ET.SpellConfig()
             {
                 Id = 100100,
                 BuffId = 200100,
@@ -255,7 +255,7 @@ namespace ET
                 CD = 2000,
                 DamageMultiplier = 0,
                 Cost = null,
-                TargetSelector = new global::ET.TargetSelectorSingle
+                TargetSelector = new global::ET.TargetSelectorSingle()
             {
                     Id = 1,
                     Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
@@ -269,7 +269,7 @@ namespace ET
                     UnitType = (global::ET.UnitType)15,
                 },
             });
-            category.Add(new global::ET.SpellConfig
+            category.Add(new global::ET.SpellConfig()
             {
                 Id = 100101,
                 BuffId = 200101,
@@ -278,7 +278,7 @@ namespace ET
                 CD = 0,
                 DamageMultiplier = 0,
                 Cost = null,
-                TargetSelector = new global::ET.TargetSelectorSingle
+                TargetSelector = new global::ET.TargetSelectorSingle()
             {
                     Id = 1,
                     Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
@@ -292,7 +292,7 @@ namespace ET
                     UnitType = (global::ET.UnitType)15,
                 },
             });
-            category.Add(new global::ET.SpellConfig
+            category.Add(new global::ET.SpellConfig()
             {
                 Id = 100102,
                 BuffId = 200102,
@@ -301,7 +301,7 @@ namespace ET
                 CD = 0,
                 DamageMultiplier = 0,
                 Cost = null,
-                TargetSelector = new global::ET.TargetSelectorSingle
+                TargetSelector = new global::ET.TargetSelectorSingle()
             {
                     Id = 1,
                     Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
@@ -315,7 +315,7 @@ namespace ET
                     UnitType = (global::ET.UnitType)15,
                 },
             });
-            category.Add(new global::ET.SpellConfig
+            category.Add(new global::ET.SpellConfig()
             {
                 Id = 100110,
                 BuffId = 200110,
@@ -324,7 +324,7 @@ namespace ET
                 CD = 0,
                 DamageMultiplier = 0,
                 Cost = null,
-                TargetSelector = new global::ET.TargetSelectorCaster
+                TargetSelector = new global::ET.TargetSelectorCaster()
             {
                     Id = 1,
                     Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
@@ -336,7 +336,7 @@ namespace ET
                     MinDistance = 0,
                 },
             });
-            category.Add(new global::ET.SpellConfig
+            category.Add(new global::ET.SpellConfig()
             {
                 Id = 100120,
                 BuffId = 200120,
@@ -345,7 +345,7 @@ namespace ET
                 CD = 0,
                 DamageMultiplier = 0,
                 Cost = null,
-                TargetSelector = new global::ET.TargetSelectorRectangle
+                TargetSelector = new global::ET.TargetSelectorRectangle()
             {
                     Id = 1,
                     Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
@@ -361,7 +361,7 @@ namespace ET
                     UnitType = global::ET.UnitType.Player,
                 },
             });
-            category.Add(new global::ET.SpellConfig
+            category.Add(new global::ET.SpellConfig()
             {
                 Id = 100130,
                 BuffId = 200130,
@@ -370,7 +370,7 @@ namespace ET
                 CD = 0,
                 DamageMultiplier = 0,
                 Cost = null,
-                TargetSelector = new global::ET.TargetSelectorRectangle
+                TargetSelector = new global::ET.TargetSelectorRectangle()
             {
                     Id = 1,
                     Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
