@@ -18,9 +18,9 @@ function PublishLinux {
     if (!(Test-Path $dest3)) { New-Item -ItemType Directory -Path $dest3 -Force | Out-Null }
     Copy-Item Packages/cn.etetet.wow/Bundles/Bson/* -Destination $dest3 -Recurse -Force -ErrorAction Ignore
 
-    $dest4 = "Publish/Packages/cn.etetet.excel/Bundles/Luban/Config/Server"
+    $dest4 = "Publish/Packages/cn.etetet.config/Bundles/Luban/Config/Server"
     if (!(Test-Path $dest4)) { New-Item -ItemType Directory -Path $dest4 -Force | Out-Null }
-    Copy-Item ./Packages/cn.etetet.excel/Bundles/Luban/Config/Server/* -Destination $dest4 -Recurse -Force -ErrorAction Ignore
+    Copy-Item ./Packages/cn.etetet.config/Bundles/Luban/Config/Server/* -Destination $dest4 -Recurse -Force -ErrorAction Ignore
 
     $dest5 = "Publish/Packages/cn.etetet.startconfig/Bundles/Luban/Release"
     if (!(Test-Path $dest5)) { New-Item -ItemType Directory -Path $dest5 -Force | Out-Null }

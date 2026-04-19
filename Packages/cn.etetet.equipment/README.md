@@ -105,7 +105,7 @@ message.ConfigId = item.ConfigId;
 ## 依赖
 
 - cn.etetet.core
-- cn.etetet.excel
+- cn.etetet.config
 - cn.etetet.proto
 - cn.etetet.item（Item系统）
 - cn.etetet.unit（Unit系统）

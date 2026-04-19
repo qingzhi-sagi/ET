@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
@@ -52,9 +52,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ET.MemoryPack", "Packages\c
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ET.MemoryPack.Generator", "Packages\cn.etetet.memorypack\DotNet~\ET.MemoryPack.Generator\ET.MemoryPack.Generator.csproj", "{ED7866FB-29BE-48BB-9AA9-1C160EA30111}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ET.ExcelExporter", "Packages\cn.etetet.excel\DotNet~\ET.ExcelExporter\ET.ExcelExporter.csproj", "{6D1C3130-EC03-43D5-955E-36F0EBACAB70}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ET.ExcelExporter", "Packages\cn.etetet.config\DotNet~\ET.ExcelExporter\ET.ExcelExporter.csproj", "{6D1C3130-EC03-43D5-955E-36F0EBACAB70}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ET.ExcelMcp", "Packages\cn.etetet.excel\DotNet~\ET.ExcelMcp\ET.ExcelMcp.csproj", "{984D6790-93AB-43DD-8AFC-11495DA12716}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ET.ExcelMcp", "Packages\cn.etetet.config\DotNet~\ET.ExcelMcp\ET.ExcelMcp.csproj", "{984D6790-93AB-43DD-8AFC-11495DA12716}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ET.App", "Packages\cn.etetet.statesync\DotNet~\App\ET.App.csproj", "{2ED035D5-8A86-4686-97A1-70EB5CD08FCF}"
 EndProject

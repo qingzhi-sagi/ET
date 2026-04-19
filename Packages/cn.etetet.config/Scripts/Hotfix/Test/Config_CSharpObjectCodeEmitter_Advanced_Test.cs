@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ET.Test
 {
-    public class Excel_CSharpObjectCodeEmitter_Advanced_Test : ATestHandler
+    public class Config_CSharpObjectCodeEmitter_Advanced_Test : ATestHandler
     {
         public override async ETTask<int> Handle(TestContext context)
         {

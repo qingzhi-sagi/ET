@@ -13,7 +13,7 @@
       "dependencies": {
         "cn.etetet.core": "4.0.0",
         "cn.etetet.db": "4.0.0",
-        "cn.etetet.excel": "4.0.0",
+        "cn.etetet.config": "4.0.0",
         "cn.etetet.proto": "4.0.0",
         "cn.etetet.netinner": "4.0.0",
         "cn.etetet.startconfig": "4.0.0",
@@ -26,7 +26,7 @@
       "source": "embedded",
       "dependencies": {
         "cn.etetet.core": "4.0.0",
-        "cn.etetet.excel": "4.0.0",
+        "cn.etetet.config": "4.0.0",
         "cn.etetet.proto": "4.0.0",
         "cn.etetet.unit": "4.0.0",
         "cn.etetet.numeric": "4.0.0"
@@ -47,7 +47,7 @@
       "source": "embedded",
       "dependencies": {
         "cn.etetet.core": "4.0.0",
-        "cn.etetet.excel": "4.0.0",
+        "cn.etetet.config": "4.0.0",
         "cn.etetet.proto": "4.0.0"
       }
     },
@@ -63,7 +63,7 @@
       "source": "embedded",
       "dependencies": {
         "cn.etetet.core": "4.0.0",
-        "cn.etetet.excel": "4.0.0",
+        "cn.etetet.config": "4.0.0",
         "cn.etetet.proto": "4.0.0",
         "cn.etetet.loader": "4.0.0"
       }
@@ -91,13 +91,13 @@
       "source": "embedded",
       "dependencies": {
         "cn.etetet.core": "4.0.0",
-        "cn.etetet.excel": "4.0.0",
+        "cn.etetet.config": "4.0.0",
         "cn.etetet.proto": "4.0.0",
         "cn.etetet.unit": "4.0.0"
       }
     },
-    "cn.etetet.excel": {
-      "version": "file:cn.etetet.excel",
+    "cn.etetet.config": {
+      "version": "file:cn.etetet.config",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
@@ -108,7 +108,7 @@
       "source": "embedded",
       "dependencies": {
         "cn.etetet.core": "4.0.0",
-        "cn.etetet.excel": "4.0.0",
+        "cn.etetet.config": "4.0.0",
         "cn.etetet.proto": "4.0.0"
       }
     },
@@ -124,7 +124,7 @@
       "source": "embedded",
       "dependencies": {
         "cn.etetet.core": "4.0.0",
-        "cn.etetet.excel": "4.0.0",
+        "cn.etetet.config": "4.0.0",
         "cn.etetet.proto": "4.0.0",
         "cn.etetet.unit": "4.0.0"
       }
@@ -155,7 +155,7 @@
         "cn.etetet.login": "3.0.0",
         "cn.etetet.netinner": "3.0.0",
         "cn.etetet.hybridclr": "7.8.1",
-        "cn.etetet.excel": "3.0.0",
+        "cn.etetet.config": "3.0.0",
         "cn.etetet.proto": "3.0.2",
         "cn.etetet.sourcegenerator": "3.0.1",
         "cn.etetet.yooassets": "2.3.6",
@@ -216,7 +216,7 @@
       "source": "embedded",
       "dependencies": {
         "cn.etetet.core": "4.0.0",
-        "cn.etetet.excel": "4.0.0",
+        "cn.etetet.config": "4.0.0",
         "cn.etetet.proto": "4.0.0",
         "cn.etetet.unit": "4.0.0"
       }
@@ -227,7 +227,7 @@
       "source": "embedded",
       "dependencies": {
         "cn.etetet.core": "4.0.0",
-        "cn.etetet.excel": "4.0.0",
+        "cn.etetet.config": "4.0.0",
         "cn.etetet.proto": "2.0.1",
         "cn.etetet.startconfig": "4.0.0",
         "cn.etetet.sourcegenerator": "0.0.5"
@@ -239,7 +239,7 @@
       "source": "embedded",
       "dependencies": {
         "cn.etetet.core": "4.0.0",
-        "cn.etetet.excel": "4.0.0",
+        "cn.etetet.config": "4.0.0",
         "cn.etetet.proto": "4.0.0",
         "cn.etetet.unit": "4.0.0"
       }
@@ -284,7 +284,7 @@
       "source": "embedded",
       "dependencies": {
         "cn.etetet.core": "4.0.0",
-        "cn.etetet.excel": "4.0.0",
+        "cn.etetet.config": "4.0.0",
         "cn.etetet.proto": "4.0.0",
         "cn.etetet.startconfig": "4.0.0",
         "cn.etetet.http": "4.0.0"
@@ -312,7 +312,7 @@
       "source": "embedded",
       "dependencies": {
         "cn.etetet.core": "4.0.0",
-        "cn.etetet.excel": "4.0.0",
+        "cn.etetet.config": "4.0.0",
         "cn.etetet.proto": "4.0.0",
         "cn.etetet.unit": "4.0.0",
         "cn.etetet.behaviortree": "4.0.0",
@@ -334,7 +334,7 @@
       "source": "embedded",
       "dependencies": {
         "cn.etetet.core": "4.0.0",
-        "cn.etetet.excel": "4.0.0",
+        "cn.etetet.config": "4.0.0",
         "cn.etetet.proto": "4.0.0"
       }
     },
@@ -344,7 +344,7 @@
       "source": "embedded",
       "dependencies": {
         "cn.etetet.core": "4.0.0",
-        "cn.etetet.excel": "4.0.0",
+        "cn.etetet.config": "4.0.0",
         "cn.etetet.proto": "4.0.0",
         "cn.etetet.unit": "4.0.0",
         "cn.etetet.behaviortree": "4.0.0",
@@ -405,7 +405,7 @@
       "source": "embedded",
       "dependencies": {
         "cn.etetet.core": "4.0.0",
-        "cn.etetet.excel": "4.0.0",
+        "cn.etetet.config": "4.0.0",
         "cn.etetet.proto": "4.0.0"
       }
     },

@@ -3,7 +3,7 @@ param(
 )
 
 # 设置变量
-$PACKAGE = "Packages/cn.etetet.excel"
+$PACKAGE = "Packages/cn.etetet.config"
 $CONFIG_NAME = "Config"
 
 

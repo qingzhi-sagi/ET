@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -31,7 +31,7 @@ namespace YIUI.Luban.Editor
         {
             if (!DeleteExcelEditor()) return false;
 
-            string   directoryPath = $"{Application.dataPath}/../Packages/cn.etetet.excel";
+            string   directoryPath = $"{Application.dataPath}/../Packages/cn.etetet.config";
             string[] filesToKeep   = { "package.json", "packagegit.json" };
 
             return DeleteFilesRecursively(directoryPath, filesToKeep);
@@ -102,7 +102,7 @@ namespace YIUI.Luban.Editor
         static bool ReplaceServerCommand()
         {
             string filePath = $"{Application.dataPath}/../Packages/cn.etetet.loader/Editor/ServerCommandLineEditor/ServerCommandLineEditor.cs";
-            return ReplaceFile(filePath, "Packages/cn.etetet.excel/Config/Bytes/cs/StartConfig", "Packages/cn.etetet.yiuilubangen/Assets/Config/Binary/Server/StartConfig");
+            return ReplaceFile(filePath, "Packages/cn.etetet.config/Config/Bytes/cs/StartConfig", "Packages/cn.etetet.yiuilubangen/Assets/Config/Binary/Server/StartConfig");
         }
 
         static bool ReplaceFile(string filePath, string oldText, string newText, string checkString = "")

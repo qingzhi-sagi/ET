@@ -1,7 +1,7 @@
 {
 "Id": 13,
 "Level": 1,
-"Name": "Excel",
+"Name": "Config",
 "AllowAccessField": true,
 "GitDependencies": {
 }

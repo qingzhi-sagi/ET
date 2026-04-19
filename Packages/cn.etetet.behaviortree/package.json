@@ -5,7 +5,7 @@
   "unity": "2022.3",
   "dependencies": {
     "cn.etetet.core": "4.0.0",
-    "cn.etetet.excel": "4.0.0",
+    "cn.etetet.config": "4.0.0",
     "cn.etetet.proto": "4.0.0"
   },
   "description": "ET Framework Behavior Tree System Package"

@@ -71,7 +71,7 @@ namespace ET
                 {
                     ScanFileName = "Text.xlsx",
                     ScanSubPath = "Luban/Config/Datas",
-                    TargetTablesPath = "Packages/cn.etetet.excel/Luban/Config/Base/__tables__.xlsx",
+                    TargetTablesPath = "Packages/cn.etetet.config/Luban/Config/Base/__tables__.xlsx",
                     TargetRowName = "Text"
                 },
                 
@@ -80,7 +80,7 @@ namespace ET
                 // {
                 //     ScanFileName = "Item.xlsx",
                 //     ScanSubPath = "Luban/Config/Datas",
-                //     TargetTablesPath = "Packages/cn.etetet.excel/Luban/Config/Base/__tables__.xlsx",
+                //     TargetTablesPath = "Packages/cn.etetet.config/Luban/Config/Base/__tables__.xlsx",
                 //     TargetRowName = "Item"
                 // },
             };

@@ -1,6 +1,6 @@
 # ET.ExcelMcp (EPPlus)
 
-`ET.ExcelMcp` 位于 WOW 仓库 `Packages/cn.etetet.excel/DotNet~/ET.ExcelMcp` 目录，是一个基于 EPPlus 的 Excel 专用 MCP (Model Context Protocol) 服务器。该工程整体能力移植自 `../aspose-mcp-server`，并对 EPPlus 做了适配，以便在不依赖商业组件的情况下在 ET 框架内默认启用。
+`ET.ExcelMcp` 位于 WOW 仓库 `Packages/cn.etetet.config/DotNet~/ET.ExcelMcp` 目录，是一个基于 EPPlus 的 Excel 专用 MCP (Model Context Protocol) 服务器。该工程整体能力移植自 `../aspose-mcp-server`，并对 EPPlus 做了适配，以便在不依赖商业组件的情况下在 ET 框架内默认启用。
 
 ## 项目背景
 
@@ -13,7 +13,7 @@
 > ⚠️ 所有命令请在 PowerShell 中执行，默认当前工作目录为 WOW 仓库根目录。
 
 ```powershell
-$project = "Packages/cn.etetet.excel/DotNet~/ET.ExcelMcp/ET.ExcelMcp.csproj"
+$project = "Packages/cn.etetet.config/DotNet~/ET.ExcelMcp/ET.ExcelMcp.csproj"
 $serverDll = Join-Path $PWD "Bin/ET.ExcelMcp.dll"
 
 # 推荐直接构建 ET.sln，生成 WOW/Bin/ET.ExcelMcp.dll
@@ -46,7 +46,7 @@ dotnet $serverDll
 ## 构建和运行
 
 ```powershell
-$project = "Packages/cn.etetet.excel/DotNet~/ET.ExcelMcp/ET.ExcelMcp.csproj"
+$project = "Packages/cn.etetet.config/DotNet~/ET.ExcelMcp/ET.ExcelMcp.csproj"
 $serverDll = Join-Path $PWD "Bin/ET.ExcelMcp.dll"
 
 # 统一构建
@@ -688,7 +688,7 @@ ExcelPackage.LicenseContext = LicenseContext.Commercial;
 ## 与 aspose-mcp-server 的差异
 
 - **依赖替换**：核心由 Aspose.Cells 换成 EPPlus 7.5.2，API 层保持一致。遇到 Aspose 才支持的 API 时，可在 `ExcelHelper` 中补充等价封装后再调用。
-- **项目位置**：此实现位于 `Packages/cn.etetet.excel/DotNet~/ET.ExcelMcp` 并参与 `ET.sln`，无需单独仓库；所有输出统一写入 `Bin`。
+- **项目位置**：此实现位于 `Packages/cn.etetet.config/DotNet~/ET.ExcelMcp` 并参与 `ET.sln`，无需单独仓库；所有输出统一写入 `Bin`。
 - **安全策略**：新增 `SecurityHelper`、`ArgumentHelper` 等通用校验逻辑，防止路径穿越、过大数组/字符串导致的资源耗尽。
 - **测试体系**：使用 `Tests/ET.ExcelMcp.Tests.csproj` 覆盖 25 个工具，与原 aspose 仓库的脚本式测试不同。
 
@@ -817,7 +817,7 @@ ExcelPackage.LicenseContext = LicenseContext.Commercial;
 本项目提供 `Tests/ET.ExcelMcp.Tests.csproj`（MSTest）覆盖 25 个工具的核心读写路径与安全校验，可以直接在仓库根目录执行：
 
 ```powershell
-dotnet test Packages/cn.etetet.excel/DotNet~/ET.ExcelMcp/Tests/ET.ExcelMcp.Tests.csproj
+dotnet test Packages/cn.etetet.config/DotNet~/ET.ExcelMcp/Tests/ET.ExcelMcp.Tests.csproj
 ```
 
 测试会自动生成临时 Excel 文件并验证以下内容：

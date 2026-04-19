@@ -340,7 +340,7 @@ var response = await fiber.Root.GetComponent<ClientSenderComponent>().Call(reque
 ## 依赖
 
 - cn.etetet.core
-- cn.etetet.excel
+- cn.etetet.config
 - cn.etetet.proto
 - cn.etetet.unit
 

@@ -101,7 +101,7 @@ MonoBehaviour:
     Version: 7.8.1
   - Name: cn.etetet.http
     Version: 3.0.0
-  - Name: cn.etetet.excel
+  - Name: cn.etetet.config
     Version: 3.0.0
   - Name: cn.etetet.equipment
     Version: 

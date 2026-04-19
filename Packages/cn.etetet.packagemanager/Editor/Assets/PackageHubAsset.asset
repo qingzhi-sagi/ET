@@ -142,13 +142,13 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: cn.etetet.excel
+      Data: cn.etetet.config
     - Name: $v
       Entry: 7
       Data: 4|ET.PackageManager.Editor.PackageHubData, ET.PackageManager.Editor
     - Name: PackageName
       Entry: 1
-      Data: cn.etetet.excel
+      Data: cn.etetet.config
     - Name: PayInfo
       Entry: 6
       Data: 

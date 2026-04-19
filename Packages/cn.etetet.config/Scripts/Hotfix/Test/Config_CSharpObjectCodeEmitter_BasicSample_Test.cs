@@ -2,7 +2,7 @@ using System;
 
 namespace ET.Test
 {
-    public class Excel_CSharpObjectCodeEmitter_BasicSample_Test : ATestHandler
+    public class Config_CSharpObjectCodeEmitter_BasicSample_Test : ATestHandler
     {
         public override async ETTask<int> Handle(TestContext context)
         {
