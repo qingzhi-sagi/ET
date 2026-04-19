@@ -14,6 +14,13 @@
   },
   "relatedPackages": {},
   "dependencies": {
+    "cn.etetet.aoi": "4.0.0",
+    "cn.etetet.behaviortree": "4.0.0",
+    "cn.etetet.config": "2.0.0",
+    "cn.etetet.map": "1.0.0",
+    "cn.etetet.recast": "2.0.0",
+    "cn.etetet.spell": "4.0.0",
+    "cn.etetet.yooassets": "2.3.14"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/@ET-Packages"

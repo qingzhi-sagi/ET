@@ -65,14 +65,14 @@ namespace ET.Client
             var resName = args.ResName;
 
             #if UNITY_EDITOR
-            if (!loadRef.Entity.VerifyAssetValidity(resName))
+            if (!loadRef.Entity.VerifyAssetValidity("", resName))
             {
                 Log.Error($"验证资产有效性 没有这个资源 图片无法加载 请检查 {resName}");
                 return null;
             }
             #endif
 
-            var texture2D = loadRef.Entity.LoadAsset<Texture2D>(resName);
+            var texture2D = loadRef.Entity.LoadAsset<Texture2D>("", resName);
 
             if (texture2D == null)
             {
@@ -97,14 +97,14 @@ namespace ET.Client
             var resName = args.ResName;
 
             #if UNITY_EDITOR
-            if (!loadRef.Entity.VerifyAssetValidity(resName))
+            if (!loadRef.Entity.VerifyAssetValidity("", resName))
             {
                 Log.Error($"验证资产有效性 没有这个资源 图片无法加载 请检查 {resName}");
                 return null;
             }
             #endif
 
-            var texture2D = await loadRef.Entity.LoadAssetAsync<Texture2D>(resName);
+            var texture2D = await loadRef.Entity.LoadAssetAsync<Texture2D>("", resName);
 
             if (texture2D == null)
             {

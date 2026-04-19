@@ -16,5 +16,9 @@
     "registry": "https://npm.pkg.github.com/@ET-Packages"
   },
   "dependencies": {
+    "cn.etetet.config": "2.0.0",
+    "cn.etetet.login": "2.0.1",
+    "cn.etetet.map": "1.0.0",
+    "cn.etetet.unit": "2.0.0"
   }
 }

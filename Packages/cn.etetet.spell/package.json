@@ -18,6 +18,8 @@
     "cn.etetet.router": "4.0.0",
     "cn.etetet.actorlocation": "4.0.0",
     "cn.etetet.aoi": "4.0.0",
+    "cn.etetet.login": "2.0.1",
+    "cn.etetet.map": "1.0.0",
     "cn.etetet.yooassets": "4.0.0",
     "cn.etetet.yiuiframework": "4.0.0"
   }

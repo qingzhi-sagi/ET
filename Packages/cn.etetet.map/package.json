@@ -13,6 +13,18 @@
   },
   "relatedPackages": {},
   "dependencies": {
+    "cn.etetet.actorlocation": "2.0.1",
+    "cn.etetet.aoi": "4.0.0",
+    "cn.etetet.config": "2.0.0",
+    "cn.etetet.loader": "2.0.7",
+    "cn.etetet.login": "2.0.1",
+    "cn.etetet.move": "2.0.0",
+    "cn.etetet.netinner": "2.0.1",
+    "cn.etetet.numeric": "2.0.0",
+    "cn.etetet.recast": "2.0.0",
+    "cn.etetet.servicediscovery": "4.0.0",
+    "cn.etetet.unit": "2.0.0",
+    "cn.etetet.yiuiframework": "3.1.0"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/@ET-Packages"

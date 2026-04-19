@@ -12,6 +12,12 @@
     "url": "https://github.com/egametang/ET"
   },
   "relatedPackages": {},
+  "dependencies": {
+    "cn.etetet.actorlocation": "2.0.1",
+    "cn.etetet.loader": "2.0.7",
+    "cn.etetet.map": "1.0.0",
+    "cn.etetet.servicediscovery": "4.0.0"
+  },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/@ET-Packages"
   }

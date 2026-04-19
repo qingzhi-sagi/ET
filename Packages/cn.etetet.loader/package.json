@@ -15,6 +15,7 @@
   "relatedPackages": {},
   "dependencies": {
     "cn.etetet.core": "2.0.8",
+    "cn.etetet.startconfig": "2.0.1",
     "cn.etetet.yooassets": "2.3.14"
   },
   "publishConfig": {

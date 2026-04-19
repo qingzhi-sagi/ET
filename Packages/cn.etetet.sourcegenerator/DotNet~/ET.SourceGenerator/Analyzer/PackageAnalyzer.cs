@@ -56,7 +56,6 @@ namespace ET
         );
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(
-            FieldAccessForbiddenDescriptor,
             MethodCallForbiddenDescriptor,
             TypeAccessForbiddenDescriptor,
             DebugInfoDescriptor,
@@ -65,11 +64,12 @@ namespace ET
 
         // 每个分析器实例独立的符号表
         private readonly Dictionary<string, string> _symbolTable = new();
+        private readonly Dictionary<string, HashSet<string>> _symbolPackageCandidates = new();
+        private readonly HashSet<string> _partialTypeNames = new();
         private readonly Dictionary<string, PackageInfo> _packageInfos = new();
         
         // 初始化锁，确保符号表构建完成后再开始分析
         private readonly object _initLock = new object();
-        private volatile bool _isInitialized = false;
         
         // 【性能优化】：预计算的扁平化依赖关系，O(1)查找
         private readonly Dictionary<string, HashSet<string>> _flatDependencies = new();
@@ -202,7 +202,7 @@ namespace ET
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
-            //context.RegisterCompilationStartAction(InitializeCompilation);
+            context.RegisterCompilationStartAction(InitializeCompilation);
         }
 
         private void InitializeCompilation(CompilationStartAnalysisContext context)
@@ -217,36 +217,81 @@ namespace ET
             // 确保符号表完全构建完成后再注册分析动作
             lock (_initLock)
             {
-                if (!_isInitialized)
-                {
-                    LoadPackageInfos(context.Compilation, context);
-                    
-                    // 构建当前编译上下文的符号表
-                    BuildSymbolTable(context.Compilation);
-                    
-                    _isInitialized = true;
-                }
+                _symbolTable.Clear();
+                _symbolPackageCandidates.Clear();
+                _packageInfos.Clear();
+                _flatDependencies.Clear();
+                _processedFiles.Clear();
+                _partialTypeNames.Clear();
+
+                LoadPackageInfos(context.Compilation, context);
+                
+                // 构建当前编译上下文的符号表
+                BuildSymbolTable(context.Compilation);
             }
-            
-            context.RegisterSyntaxNodeAction(AnalyzeMemberAccess, SyntaxKind.SimpleMemberAccessExpression);
-            context.RegisterSyntaxNodeAction(AnalyzeInvocationExpression, SyntaxKind.InvocationExpression);
-            context.RegisterSyntaxNodeAction(AnalyzeIdentifierName, SyntaxKind.IdentifierName);
-            context.RegisterSyntaxNodeAction(AnalyzeObjectCreationExpression, SyntaxKind.ObjectCreationExpression);
-            context.RegisterSyntaxNodeAction(AnalyzeVariableDeclaration, SyntaxKind.VariableDeclaration);
+
+            var snapshot = CreateSnapshot();
+            context.RegisterSyntaxNodeAction(ctx => AnalyzeInvocationExpression(ctx, snapshot), SyntaxKind.InvocationExpression);
+            context.RegisterSyntaxNodeAction(ctx => AnalyzeObjectCreationExpression(ctx, snapshot), SyntaxKind.ObjectCreationExpression);
+            context.RegisterSyntaxNodeAction(ctx => AnalyzeVariableDeclaration(ctx, snapshot), SyntaxKind.VariableDeclaration);
         }
 
         // 【修复重复处理】：记录已处理的文件路径，避免重复处理
         private readonly HashSet<string> _processedFiles = new();
+
+        private sealed class AnalysisSnapshot
+        {
+            public Dictionary<string, string> SymbolTable { get; set; } = new Dictionary<string, string>();
+            public Dictionary<string, HashSet<string>> SymbolPackageCandidates { get; set; } = new Dictionary<string, HashSet<string>>();
+            public HashSet<string> PartialTypeNames { get; set; } = new HashSet<string>();
+            public Dictionary<string, PackageInfo> PackageInfos { get; set; } = new Dictionary<string, PackageInfo>();
+            public Dictionary<string, HashSet<string>> FlatDependencies { get; set; } = new Dictionary<string, HashSet<string>>();
+        }
+
+        private AnalysisSnapshot CreateSnapshot()
+        {
+            return new AnalysisSnapshot
+            {
+                SymbolTable = new Dictionary<string, string>(_symbolTable),
+                SymbolPackageCandidates = _symbolPackageCandidates.ToDictionary(
+                    kv => kv.Key,
+                    kv => new HashSet<string>(kv.Value)),
+                PartialTypeNames = new HashSet<string>(_partialTypeNames),
+                PackageInfos = new Dictionary<string, PackageInfo>(_packageInfos),
+                FlatDependencies = _flatDependencies.ToDictionary(
+                    kv => kv.Key,
+                    kv => new HashSet<string>(kv.Value))
+            };
+        }
+
+        private void RecordSymbolOwnership(string symbolKey, string packageName)
+        {
+            _symbolTable[symbolKey] = packageName;
+
+            if (!_symbolPackageCandidates.TryGetValue(symbolKey, out var candidatePackages))
+            {
+                candidatePackages = new HashSet<string>();
+                _symbolPackageCandidates[symbolKey] = candidatePackages;
+            }
+
+            candidatePackages.Add(packageName);
+        }
         
         private void BuildSymbolTable(Compilation compilation)
         {
             try
             {
+                _processedFiles.Clear();
+                _partialTypeNames.Clear();
                 // 处理当前编译的语法树
                 foreach (var syntaxTree in compilation.SyntaxTrees)
                 {
                     if (syntaxTree.FilePath != null)
                     {
+                        if (IsInTestScope(syntaxTree.FilePath))
+                        {
+                            continue;
+                        }
                         var packageName = ExtractPackageNameFromFilePath(syntaxTree.FilePath);
                         if (!string.IsNullOrEmpty(packageName))
                         {
@@ -254,6 +299,11 @@ namespace ET
                         }
                     }
                 }
+
+                // 处理仓库 Scripts/Model、Scripts/ModelView、CodeMode/Model 与 CodeMode/ModelView
+                // 中的类型和成员符号
+                // 覆盖 MetadataReference 场景下的类型/字段/属性/方法归属。
+                BuildModelMemberSymbolsFromRepositorySources(compilation);
                 
                 // 处理依赖程序集中的符号（通过ProjectReference可访问）
                 BuildSymbolsFromReferencedAssemblies(compilation);
@@ -266,6 +316,82 @@ namespace ET
                 LogToFile($"Stack trace: {ex.StackTrace}");
 #endif
             }
+        }
+
+        private void BuildModelMemberSymbolsFromRepositorySources(Compilation compilation)
+        {
+            try
+            {
+                string? repoRoot = GetRepositoryRoot(compilation);
+                if (string.IsNullOrEmpty(repoRoot))
+                {
+                    return;
+                }
+
+                string packagesRoot = Path.Combine(repoRoot, "Packages");
+                if (!Directory.Exists(packagesRoot))
+                {
+                    return;
+                }
+
+                foreach (string filePath in Directory.EnumerateFiles(packagesRoot, "*.cs", SearchOption.AllDirectories))
+                {
+                    string normalizedPath = filePath.Replace("\\", "/");
+                    if (!normalizedPath.Contains("/Packages/cn.etetet."))
+                    {
+                        continue;
+                    }
+
+                    bool isScriptsModel = normalizedPath.Contains("/Scripts/Model/");
+                    bool isScriptsModelView = normalizedPath.Contains("/Scripts/ModelView/");
+                    bool isCodeModeModel = normalizedPath.Contains("/CodeMode/Model/");
+                    bool isCodeModeModelView = normalizedPath.Contains("/CodeMode/ModelView/");
+                    if (!isScriptsModel && !isScriptsModelView && !isCodeModeModel && !isCodeModeModelView)
+                    {
+                        continue;
+                    }
+
+                    if (IsInTestScope(normalizedPath))
+                    {
+                        continue;
+                    }
+
+                    string? packageName = ExtractPackageNameFromFilePath(filePath);
+                    if (string.IsNullOrEmpty(packageName))
+                    {
+                        continue;
+                    }
+
+                    var syntaxTree = CSharpSyntaxTree.ParseText(File.ReadAllText(filePath), path: filePath);
+                    WriteSymbolsFromSyntaxTree(syntaxTree, packageName!);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogToFile($"BuildModelMemberSymbolsFromRepositorySources error: {ex.Message}");
+            }
+        }
+
+        private string? GetRepositoryRoot(Compilation compilation)
+        {
+            foreach (var syntaxTree in compilation.SyntaxTrees)
+            {
+                if (string.IsNullOrEmpty(syntaxTree.FilePath))
+                {
+                    continue;
+                }
+
+                string normalizedPath = syntaxTree.FilePath.Replace("\\", "/");
+                int packagesIndex = normalizedPath.IndexOf("/Packages/", StringComparison.Ordinal);
+                if (packagesIndex <= 0)
+                {
+                    continue;
+                }
+
+                return normalizedPath.Substring(0, packagesIndex);
+            }
+
+            return null;
         }
         
         private void BuildSymbolsFromReferencedAssemblies(Compilation compilation)
@@ -346,20 +472,18 @@ namespace ET
                             // 【修复partial类问题】：对于partial类，只有主要定义才记录到符号表
                             // 检查是否为partial类
                             bool isPartial = typeDecl.Modifiers.Any(m => m.IsKind(SyntaxKind.PartialKeyword));
-                            
+                            if (isPartial)
+                            {
+                                _partialTypeNames.Add(fullTypeName);
+                            }
+                             
                             if (isPartial)
                             {
                                 // 【特殊处理partial static class】：如PackageType, MailBoxType等
                                 // 这些类的成员（常量字段）应该归属到定义它们的包，而不是某个"主要"包
-                                bool isStaticClass = typeDecl.Modifiers.Any(m => m.IsKind(SyntaxKind.StaticKeyword));
-                                
-                                if (isStaticClass && (typeName == "PackageType" || typeName == "MailBoxType" || 
-                                                     typeName == "SceneType" || typeName == "TimerInvokeType" ||
-                                                     typeName == "ErrorCode"))
+                                if (IsSharedConstantContainer(typeName))
                                 {
-                                    // 对于partial static class，每个包都可以定义自己的成员
-                                    // 不记录类型本身到符号表，但记录成员到当前包
-                                    ProcessPartialStaticClassMembers(typeDecl, fullTypeName, packageName);
+                                    // 共享常量容器视为全局共享，不参与包成员归属检查
                                     continue;
                                 }
                                 
@@ -375,7 +499,7 @@ namespace ET
                             }
                             
                             // 记录完整类型名
-                            _symbolTable[fullTypeName] = packageName;
+                            RecordSymbolOwnership(fullTypeName, packageName);
                             
                             // 处理成员
                             foreach (var member in typeDecl.Members)
@@ -389,7 +513,7 @@ namespace ET
                                             if (!string.IsNullOrEmpty(fieldName))
                                             {
                                                 var fieldKey = $"{fullTypeName}.{fieldName}";
-                                                _symbolTable[fieldKey] = packageName;
+                                                RecordSymbolOwnership(fieldKey, packageName);
                                             }
                                         }
                                         break;
@@ -399,7 +523,7 @@ namespace ET
                                         {
                                             // 构建完整的方法签名，包含泛型参数和方法参数
                                             var methodSignature = GetMethodSignature(fullTypeName, methodDecl);
-                                            _symbolTable[methodSignature] = packageName;
+                                            RecordSymbolOwnership(methodSignature, packageName);
                                         }
                                         break;
                                     case PropertyDeclarationSyntax propertyDecl:
@@ -407,7 +531,7 @@ namespace ET
                                         if (!string.IsNullOrEmpty(propertyName))
                                         {
                                             var propertyKey = $"{fullTypeName}.{propertyName}";
-                                            _symbolTable[propertyKey] = packageName;
+                                            RecordSymbolOwnership(propertyKey, packageName);
                                         }
                                         break;
                                 }
@@ -427,7 +551,7 @@ namespace ET
                         
                         if (!string.IsNullOrEmpty(enumName))
                         {
-                            _symbolTable[fullEnumName] = packageName;
+                            RecordSymbolOwnership(fullEnumName, packageName);
                             
                             foreach (var enumMember in enumDecl.Members)
                             {
@@ -436,7 +560,7 @@ namespace ET
                                 {
                                     // 使用完整的枚举成员名（Namespace.EnumName.MemberName）
                                     var fullMemberName = $"{fullEnumName}.{memberName}";
-                                    _symbolTable[fullMemberName] = packageName;
+                                    RecordSymbolOwnership(fullMemberName, packageName);
                                 }
                             }
                         }
@@ -454,7 +578,7 @@ namespace ET
                         
                         if (!string.IsNullOrEmpty(delegateName))
                         {
-                            _symbolTable[fullDelegateName] = packageName;
+                            RecordSymbolOwnership(fullDelegateName, packageName);
                         }
                     }
                 }
@@ -464,6 +588,95 @@ namespace ET
                 // 【改进错误处理】：记录错误但继续执行
                 LogToFile($"WriteSymbolsFromSyntaxTree error in file {syntaxTree.FilePath}: {ex.Message}");
             }
+        }
+
+        private void WriteMemberSymbolsFromSyntaxTree(SyntaxTree syntaxTree, string packageName)
+        {
+            try
+            {
+                var root = syntaxTree.GetRoot();
+
+                foreach (var typeDecl in root.DescendantNodes().OfType<TypeDeclarationSyntax>())
+                {
+                    if (!IsInETNamespace(typeDecl))
+                    {
+                        continue;
+                    }
+
+                    var typeName = typeDecl.Identifier.ValueText;
+                    var namespaceName = GetNamespaceName(typeDecl);
+                    var fullTypeName = string.IsNullOrEmpty(namespaceName) ? typeName : $"{namespaceName}.{typeName}";
+                    bool isPartial = typeDecl.Modifiers.Any(m => m.IsKind(SyntaxKind.PartialKeyword));
+                    if (isPartial)
+                    {
+                        _partialTypeNames.Add(fullTypeName);
+                    }
+
+                    if (IsSharedConstantContainer(typeName))
+                    {
+                        continue;
+                    }
+
+                    foreach (var member in typeDecl.Members)
+                    {
+                        switch (member)
+                        {
+                            case FieldDeclarationSyntax fieldDecl:
+                                foreach (var variable in fieldDecl.Declaration.Variables)
+                                {
+                                    var fieldName = variable.Identifier.ValueText;
+                                    if (!string.IsNullOrEmpty(fieldName))
+                                    {
+                                        RecordSymbolOwnership($"{fullTypeName}.{fieldName}", packageName);
+                                    }
+                                }
+                                break;
+                            case PropertyDeclarationSyntax propertyDecl:
+                                var propertyName = propertyDecl.Identifier.ValueText;
+                                if (!string.IsNullOrEmpty(propertyName))
+                                {
+                                    RecordSymbolOwnership($"{fullTypeName}.{propertyName}", packageName);
+                                }
+                                break;
+                            case MethodDeclarationSyntax methodDecl:
+                                var methodName = methodDecl.Identifier.ValueText;
+                                if (!string.IsNullOrEmpty(methodName))
+                                {
+                                    var methodSignature = GetMethodSignature(fullTypeName, methodDecl);
+                                    RecordSymbolOwnership(methodSignature, packageName);
+                                }
+                                break;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogToFile($"WriteMemberSymbolsFromSyntaxTree error in file {syntaxTree.FilePath}: {ex.Message}");
+            }
+        }
+
+        private static bool IsSharedConstantContainer(string typeName)
+        {
+            return typeName == "PackageType" ||
+                   typeName == "MailBoxType" ||
+                   typeName == "SceneType" ||
+                   typeName == "LocationType" ||
+                   typeName == "TimerInvokeType" ||
+                   typeName == "ErrorCode" ||
+                   typeName == "ConsoleMode";
+        }
+
+        private static bool IsInTestScope(string filePath)
+        {
+            if (string.IsNullOrEmpty(filePath))
+            {
+                return false;
+            }
+
+            string normalizedPath = filePath.Replace("\\", "/");
+            return normalizedPath.Contains("/Scripts/Hotfix/Test/") ||
+                   normalizedPath.Contains("/Scripts/Model/Test/");
         }
 
 
@@ -513,7 +726,7 @@ namespace ET
                             if (!string.IsNullOrEmpty(fieldName))
                             {
                                 var fieldKey = $"{fullTypeName}.{fieldName}";
-                                _symbolTable[fieldKey] = currentPackage;
+                                RecordSymbolOwnership(fieldKey, currentPackage);
                             }
                         }
                         break;
@@ -522,7 +735,7 @@ namespace ET
                         if (!string.IsNullOrEmpty(propertyName))
                         {
                             var propertyKey = $"{fullTypeName}.{propertyName}";
-                            _symbolTable[propertyKey] = currentPackage;
+                            RecordSymbolOwnership(propertyKey, currentPackage);
                         }
                         break;
                     case MethodDeclarationSyntax methodDecl:
@@ -530,7 +743,7 @@ namespace ET
                         if (!string.IsNullOrEmpty(methodName))
                         {
                             var methodSignature = GetMethodSignature(fullTypeName, methodDecl);
-                            _symbolTable[methodSignature] = currentPackage;
+                            RecordSymbolOwnership(methodSignature, currentPackage);
                         }
                         break;
                 }
@@ -554,7 +767,7 @@ namespace ET
                             if (!string.IsNullOrEmpty(fieldName))
                             {
                                 var fieldKey = $"{fullTypeName}.{fieldName}";
-                                _symbolTable[fieldKey] = memberPackage;
+                                RecordSymbolOwnership(fieldKey, memberPackage);
                             }
                         }
                         break;
@@ -563,7 +776,7 @@ namespace ET
                         if (!string.IsNullOrEmpty(methodName))
                         {
                             var methodSignature = GetMethodSignature(fullTypeName, methodDecl);
-                            _symbolTable[methodSignature] = memberPackage;
+                            RecordSymbolOwnership(methodSignature, memberPackage);
                         }
                         break;
                     case PropertyDeclarationSyntax propertyDecl:
@@ -571,7 +784,7 @@ namespace ET
                         if (!string.IsNullOrEmpty(propertyName))
                         {
                             var propertyKey = $"{fullTypeName}.{propertyName}";
-                            _symbolTable[propertyKey] = memberPackage;
+                            RecordSymbolOwnership(propertyKey, memberPackage);
                         }
                         break;
                 }
@@ -724,8 +937,7 @@ namespace ET
                 {
                     Name = packageName,
                     Dependencies = new List<string>(),
-                    Level = 0,
-                    AllowSameLevelAccess = false
+                    Level = 0
                 };
 
                 var dependencies = ExtractJsonObjectKeys(packageJsonContent);
@@ -739,12 +951,6 @@ namespace ET
                     if (int.TryParse(levelStr, out int level))
                     {
                         packageInfo.Level = level;
-                    }
-                    
-                    var allowSameLevelStr = ExtractJsonStringValue(packageGitContent, "AllowSameLevelAccess");
-                    if (bool.TryParse(allowSameLevelStr, out bool allowSameLevel))
-                    {
-                        packageInfo.AllowSameLevelAccess = allowSameLevel;
                     }
                     
                     var allowAnyAccessStr = ExtractJsonStringValue(packageGitContent, "AllowAnyPackageAccess");
@@ -828,92 +1034,46 @@ namespace ET
             return keys;
         }
 
-        // 分析方法
-        private void AnalyzeMemberAccess(SyntaxNodeAnalysisContext context)
-        {
-            var memberAccess = (MemberAccessExpressionSyntax)context.Node;
-            var symbolInfo = context.SemanticModel.GetSymbolInfo(memberAccess);
-            
-            if (symbolInfo.Symbol is IFieldSymbol fieldSymbol)
-            {
-                CheckFieldAccess(context, memberAccess, fieldSymbol);
-            }
-        }
-
-        private void AnalyzeInvocationExpression(SyntaxNodeAnalysisContext context)
+        private void AnalyzeInvocationExpression(SyntaxNodeAnalysisContext context, AnalysisSnapshot snapshot)
         {
             var invocation = (InvocationExpressionSyntax)context.Node;
             var symbolInfo = context.SemanticModel.GetSymbolInfo(invocation);
             
             if (symbolInfo.Symbol is IMethodSymbol methodSymbol)
             {
-                CheckMethodCall(context, invocation, methodSymbol);
+                CheckMethodCall(context, invocation, methodSymbol, snapshot);
             }
         }
 
-        private void AnalyzeIdentifierName(SyntaxNodeAnalysisContext context)
-        {
-            var identifier = (IdentifierNameSyntax)context.Node;
-            var symbolInfo = context.SemanticModel.GetSymbolInfo(identifier);
-            
-            if (symbolInfo.Symbol is IFieldSymbol fieldSymbol)
-            {
-                CheckFieldAccess(context, identifier, fieldSymbol);
-            }
-        }
-
-        private void AnalyzeObjectCreationExpression(SyntaxNodeAnalysisContext context)
+        private void AnalyzeObjectCreationExpression(SyntaxNodeAnalysisContext context, AnalysisSnapshot snapshot)
         {
             var objectCreation = (ObjectCreationExpressionSyntax)context.Node;
             var symbolInfo = context.SemanticModel.GetSymbolInfo(objectCreation);
             
             if (symbolInfo.Symbol is IMethodSymbol constructorSymbol)
             {
-                CheckTypeAccess(context, objectCreation, constructorSymbol.ContainingType);
+                CheckTypeAccess(context, objectCreation, constructorSymbol.ContainingType, snapshot);
             }
         }
 
-        private void AnalyzeVariableDeclaration(SyntaxNodeAnalysisContext context)
+        private void AnalyzeVariableDeclaration(SyntaxNodeAnalysisContext context, AnalysisSnapshot snapshot)
         {
             var variableDeclaration = (VariableDeclarationSyntax)context.Node;
             var typeInfo = context.SemanticModel.GetTypeInfo(variableDeclaration.Type);
             
             if (typeInfo.Type != null)
             {
-                CheckTypeAccess(context, variableDeclaration.Type, typeInfo.Type);
+                CheckTypeAccess(context, variableDeclaration.Type, typeInfo.Type, snapshot);
             }
         }
 
-        private void CheckFieldAccess(SyntaxNodeAnalysisContext context, SyntaxNode node, IFieldSymbol fieldSymbol)
+        private void CheckMethodCall(SyntaxNodeAnalysisContext context, SyntaxNode node, IMethodSymbol methodSymbol, AnalysisSnapshot snapshot)
         {
             var currentPackage = GetPackageFromNamespace(node);
-            var targetPackage = GetPackageFromSymbol(fieldSymbol);
-            
-            if (fieldSymbol.ContainingType?.TypeKind == TypeKind.Enum)
-            {
-                targetPackage = GetPackageFromSymbol(fieldSymbol.ContainingType);
-            }
-            
-            if (currentPackage != null && targetPackage != null && !CanAccessSymbol(currentPackage, targetPackage))
-            {
-                var diagnostic = Diagnostic.Create(
-                    FieldAccessForbiddenDescriptor,
-                    node.GetLocation(),
-                    currentPackage,
-                    fieldSymbol.Name,
-                    targetPackage
-                );
-                context.ReportDiagnostic(diagnostic);
-            }
-        }
-
-        private void CheckMethodCall(SyntaxNodeAnalysisContext context, SyntaxNode node, IMethodSymbol methodSymbol)
-        {
-            var currentPackage = GetPackageFromNamespace(node);
-            var targetPackage = GetPackageFromSymbol(methodSymbol);
+            var targetPackage = GetPackageFromSymbol(methodSymbol, snapshot, currentPackage);
             
             
-            if (currentPackage != null && targetPackage != null && !CanAccessSymbol(currentPackage, targetPackage))
+            if (currentPackage != null && targetPackage != null && !CanAccessSymbol(currentPackage, targetPackage, snapshot))
             {
                 
                 var diagnostic = Diagnostic.Create(
@@ -927,15 +1087,20 @@ namespace ET
             }
         }
 
-        private void CheckTypeAccess(SyntaxNodeAnalysisContext context, SyntaxNode node, ITypeSymbol typeSymbol)
+        private void CheckTypeAccess(SyntaxNodeAnalysisContext context, SyntaxNode node, ITypeSymbol typeSymbol, AnalysisSnapshot snapshot)
         {
+            if (IsPartialType(typeSymbol, snapshot))
+            {
+                return;
+            }
+
             var currentPackage = GetPackageFromNamespace(node);
-            var targetPackage = GetPackageFromSymbol(typeSymbol);
-            
-            
+            var targetPackage = GetPackageFromSymbol(typeSymbol, snapshot, currentPackage);
+             
+             
             if (currentPackage != null && targetPackage != null && currentPackage != targetPackage)
             {
-                if (!CanAccessSymbol(currentPackage, targetPackage))
+                if (!CanAccessSymbol(currentPackage, targetPackage, snapshot))
                 {
                     
                     var diagnostic = Diagnostic.Create(
@@ -950,6 +1115,16 @@ namespace ET
             }
         }
 
+        private bool IsPartialType(ITypeSymbol typeSymbol, AnalysisSnapshot snapshot)
+        {
+            if (typeSymbol == null)
+            {
+                return false;
+            }
+
+            return snapshot.PartialTypeNames.Contains(typeSymbol.ToDisplayString());
+        }
+
         private string? GetPackageFromNamespace(SyntaxNode node)
         {
             // 【关键修复】：对于partial类，应该根据当前语法树文件的位置来确定包归属
@@ -957,6 +1132,16 @@ namespace ET
             
             if (node.SyntaxTree?.FilePath != null)
             {
+                if (IsInTestScope(node.SyntaxTree.FilePath))
+                {
+                    return null;
+                }
+
+                if (!IsInHotfixAccessScope(node.SyntaxTree.FilePath))
+                {
+                    return null;
+                }
+
                 var packageFromPath = ExtractPackageNameFromFilePath(node.SyntaxTree.FilePath);
                 if (!string.IsNullOrEmpty(packageFromPath))
                 {
@@ -973,7 +1158,66 @@ namespace ET
             return null;
         }
 
-        private string? GetPackageFromSymbol(ISymbol symbol)
+        private static bool IsInHotfixAccessScope(string filePath)
+        {
+            if (string.IsNullOrEmpty(filePath))
+            {
+                return false;
+            }
+
+            string normalizedPath = filePath.Replace("\\", "/");
+            return normalizedPath.Contains("/Scripts/Hotfix/") ||
+                   normalizedPath.Contains("/Scripts/HotfixView/");
+        }
+
+        private string? ResolvePackageFromKey(string symbolKey, AnalysisSnapshot snapshot, string? currentPackage)
+        {
+            if (snapshot.SymbolPackageCandidates.TryGetValue(symbolKey, out var candidatePackages) && candidatePackages.Count > 0)
+            {
+                if (candidatePackages.Count == 1)
+                {
+                    return candidatePackages.First();
+                }
+
+                if (!string.IsNullOrEmpty(currentPackage))
+                {
+                    string currentPackageName = currentPackage!;
+
+                    if (candidatePackages.Contains(currentPackageName))
+                    {
+                        return currentPackageName;
+                    }
+
+                    if (snapshot.PackageInfos.TryGetValue(currentPackageName, out var currentInfo) && currentInfo.Dependencies != null)
+                    {
+                        var directMatches = candidatePackages.Where(currentInfo.Dependencies.Contains).ToList();
+                        if (directMatches.Count == 1)
+                        {
+                            return directMatches[0];
+                        }
+                    }
+
+                    if (snapshot.FlatDependencies.TryGetValue(currentPackageName, out var dependencyPackages))
+                    {
+                        var flatMatches = candidatePackages.Where(dependencyPackages.Contains).ToList();
+                        if (flatMatches.Count == 1)
+                        {
+                            return flatMatches[0];
+                        }
+                    }
+
+                }
+            }
+
+            if (snapshot.SymbolTable.TryGetValue(symbolKey, out string? resolvedPackage))
+            {
+                return resolvedPackage;
+            }
+
+            return null;
+        }
+
+        private string? GetPackageFromSymbol(ISymbol symbol, AnalysisSnapshot snapshot, string? currentPackage = null)
         {
             if (symbol == null) return null;
             
@@ -997,13 +1241,15 @@ namespace ET
             {
                 return null;
             }
-            
-            // 使用FullName从符号表中查找
+
+            // 统一只依赖分析器自建符号表判定归属，避免 Rider 和 dotnet build
+            // 因 symbol.Locations 形态差异导致的包归属不一致。
             if (symbol is IFieldSymbol fieldSymbol && fieldSymbol.ContainingType != null)
             {
                 var fullTypeName = fieldSymbol.ContainingType.ToDisplayString();
                 var fieldKey = $"{fullTypeName}.{fieldSymbol.Name}";
-                if (_symbolTable.TryGetValue(fieldKey, out string? fieldPackage))
+                var fieldPackage = ResolvePackageFromKey(fieldKey, snapshot, currentPackage);
+                if (!string.IsNullOrEmpty(fieldPackage))
                 {
                     return fieldPackage;
                 }
@@ -1013,7 +1259,8 @@ namespace ET
             {
                 // 构建完整的方法签名进行查找
                 var methodSignature = GetMethodSignatureFromSymbol(methodSymbol);
-                if (_symbolTable.TryGetValue(methodSignature, out string? methodPackage))
+                var methodPackage = ResolvePackageFromKey(methodSignature, snapshot, currentPackage);
+                if (!string.IsNullOrEmpty(methodPackage))
                 {
                     return methodPackage;
                 }
@@ -1023,7 +1270,8 @@ namespace ET
             {
                 var fullTypeName = propertySymbol.ContainingType.ToDisplayString();
                 var propertyKey = $"{fullTypeName}.{propertySymbol.Name}";
-                if (_symbolTable.TryGetValue(propertyKey, out string? propertyPackage))
+                var propertyPackage = ResolvePackageFromKey(propertyKey, snapshot, currentPackage);
+                if (!string.IsNullOrEmpty(propertyPackage))
                 {
                     return propertyPackage;
                 }
@@ -1031,7 +1279,8 @@ namespace ET
             
             // 查询类型（使用FullName）
             var symbolFullName = symbol.ToDisplayString();
-            if (_symbolTable.TryGetValue(symbolFullName, out string? typePackage))
+            var typePackage = ResolvePackageFromKey(symbolFullName, snapshot, currentPackage);
+            if (!string.IsNullOrEmpty(typePackage))
             {
                 return typePackage;
             }
@@ -1046,43 +1295,32 @@ namespace ET
                 return null;
             }
             
-            // 【关键判断】：如果符号表中找不到，需要判断这个符号是否真的是ET框架中声明的
-            // 检查符号的定义位置是否在ET框架的源文件中
-            var locations = symbol.Locations;
-            foreach (var location in locations)
-            {
-                if (location.IsInSource && location.SourceTree?.FilePath != null)
-                {
-                    var packageFromPath = ExtractPackageNameFromFilePath(location.SourceTree.FilePath);
-                    if (!string.IsNullOrEmpty(packageFromPath))
-                    {
-                        // 找到符号的包归属，直接返回
-                        return packageFromPath;
-                    }
-                }
-            }
-            
             // 符号不是在ET框架中声明的，允许自由访问
             return null;
         }
 
-        private bool CanAccessSymbol(string currentPackage, string targetPackage)
+        private bool CanAccessSymbol(string currentPackage, string targetPackage, AnalysisSnapshot snapshot)
         {
             // 【包依赖规范】：包中只能访问自己包或者依赖包的符号
             if (currentPackage == targetPackage) return true;
             
-            if (!_packageInfos.TryGetValue(currentPackage, out var currentInfo))
+            if (!snapshot.PackageInfos.TryGetValue(currentPackage, out var currentInfo))
             {
                 return false;
             }
             
-            if (!_packageInfos.TryGetValue(targetPackage, out var targetInfo))
+            if (!snapshot.PackageInfos.TryGetValue(targetPackage, out var targetInfo))
             {
                 return false;
+            }
+
+            if (currentInfo.Dependencies != null && currentInfo.Dependencies.Contains(targetPackage))
+            {
+                return true;
             }
             
             // 【性能优化】：使用预计算的扁平化依赖关系，O(1)查找
-            if (_flatDependencies.TryGetValue(currentPackage, out var dependencies))
+            if (snapshot.FlatDependencies.TryGetValue(currentPackage, out var dependencies))
             {
                 if (dependencies.Contains(targetPackage))
                 {
@@ -1093,21 +1331,6 @@ namespace ET
             // 新增：如果目标包设置了 AllowAnyPackageAccess，则允许任何包访问（但仍禁止循环依赖）
             if (targetInfo.AllowAnyPackageAccess)
             {
-                return true;
-            }
-            
-            // 【新增同层访问规则】：检查同层访问权限
-            if (currentInfo.Level == targetInfo.Level && targetInfo.AllowSameLevelAccess)
-            {
-                // 修复：只检查直接依赖，而不是扁平化依赖
-                // 扁平化依赖可能包含传递依赖，导致误判
-                if (_packageInfos.TryGetValue(targetPackage, out var targetInfo2) && 
-                    targetInfo2.Dependencies != null)
-                {
-                    // 只检查直接依赖，不检查传递依赖
-                    bool hasDirectDependency = targetInfo2.Dependencies.Contains(currentPackage);
-                    return !hasDirectDependency;
-                }
                 return true;
             }
             
@@ -1276,7 +1499,6 @@ namespace ET
             public string Name { get; set; } = string.Empty;
             public List<string> Dependencies { get; set; } = new List<string>();
             public int Level { get; set; } = 0;
-            public bool AllowSameLevelAccess { get; set; } = false;
             public bool AllowAnyPackageAccess { get; set; } = false;
             
             /// <summary>

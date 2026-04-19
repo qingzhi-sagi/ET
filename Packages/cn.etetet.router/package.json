@@ -16,7 +16,9 @@
   "dependencies": {
     "cn.etetet.core": "4.0.0",
     "cn.etetet.config": "4.0.0",
+    "cn.etetet.loader": "2.0.7",
     "cn.etetet.proto": "4.0.0",
+    "cn.etetet.servicediscovery": "4.0.0",
     "cn.etetet.startconfig": "4.0.0",
     "cn.etetet.http": "4.0.0"
   },

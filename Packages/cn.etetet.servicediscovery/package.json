@@ -14,6 +14,8 @@
   "relatedPackages": {},
   "dependencies": {
     "cn.etetet.core": "4.0.0",
+    "cn.etetet.loader": "2.0.7",
+    "cn.etetet.netinner": "2.0.1",
     "cn.etetet.proto": "4.0.0",
     "cn.etetet.db": "4.0.0"
   },
