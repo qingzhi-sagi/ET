@@ -25,7 +25,6 @@ namespace ET
                     Options.Instance.SingleThread = 1;
                     Options.Instance.Console = 1;
                 }
-				
                 World.Instance.AddSingleton<Logger>().Log = new NLogger(Options.Instance.SceneName);
 				
                 ETTask.ExceptionHandler += Log.Error;
@@ -36,7 +35,7 @@ namespace ET
             }
             catch (Exception e)
             {
-                Log.Error(e);
+                Console.WriteLine(e);
             }
         }
 

@@ -5,10 +5,7 @@
         "ET.Core",
         "ET.Loader",
         "ET.Model",
-        "Unity.Mathematics",
-        "ET.HybridCLR",
-        "ET.Init",
-        "ET.YooAssets"
+        "Unity.Mathematics"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

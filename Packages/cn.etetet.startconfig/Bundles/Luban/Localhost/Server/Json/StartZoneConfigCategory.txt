@@ -1,8 +1,0 @@
-[
-  {
-    "Id": 0,
-    "ZoneType": 1,
-    "DBConnection": "mongodb://127.0.0.1",
-    "DBName": "ET0"
-  }
-]

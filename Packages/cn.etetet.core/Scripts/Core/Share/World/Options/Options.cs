@@ -5,7 +5,7 @@ namespace ET
     [AllowInstance]
     public class Options: Singleton<Options>, ISingletonAwake
     {
-        [Option("SceneName", Required = false, Default = "", HelpText = "define in SceneType class")]
+        [Option("SceneName", Required = true, HelpText = "define in SceneType class")]
         public string SceneName { get; set; }
         
         [Option("StartConfig", Required = false, Default = "Localhost")]
