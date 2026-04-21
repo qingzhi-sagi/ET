@@ -19,7 +19,8 @@
     "cn.etetet.login": "2.0.1",
     "cn.etetet.map": "1.0.0",
     "cn.etetet.proto": "4.0.0",
-    "cn.etetet.router": "2.0.1"
+    "cn.etetet.router": "2.0.1",
+    "cn.etetet.core": "4.0.0"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/@ET-Packages"

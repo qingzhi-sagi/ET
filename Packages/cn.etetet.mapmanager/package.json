@@ -18,7 +18,8 @@
     "cn.etetet.map": "1.0.0",
     "cn.etetet.netinner": "2.0.1",
     "cn.etetet.proto": "4.0.0",
-    "cn.etetet.servicediscovery": "4.0.0"
+    "cn.etetet.servicediscovery": "4.0.0",
+    "cn.etetet.core": "4.0.0"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/@ET-Packages"
