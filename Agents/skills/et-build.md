@@ -3,7 +3,6 @@
 ## 何时使用
 
 - 编译项目（`dotnet build ET.sln`）
-- 导出 Excel 配置（Luban 格式）
 - 导出 Proto 文件（.proto → C#）
 - 启动服务器
 - 发布 Linux 版本
@@ -11,6 +10,7 @@
 ## 不要加载
 
 - 只是改代码、写测试，还没到编译或导出环节
+- 只是导出 Luban 配置，此时改用 `et-luban`
 - 只是查询架构规范或包依赖
 
 ## 默认动作
@@ -27,12 +27,6 @@
 
 ```powershell
 dotnet build ET.sln
-```
-
-### Excel 配置导出
-
-```powershell
-dotnet Bin/ET.ExcelExporter.dll
 ```
 
 ### Proto 文件导出
@@ -63,6 +57,7 @@ pwsh -ExecutionPolicy Bypass -File Scripts/Publish.ps1
 
 - 需要全局代理才能下载 NuGet 包
 - 分析器编译也必须使用 `ET.sln`，不能单独编译包
+- Luban 配置导出已经独立到 `et-luban`，不要继续混在本 skill 里执行
 
 ## 常见问题
 

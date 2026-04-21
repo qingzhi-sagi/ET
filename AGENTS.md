@@ -75,11 +75,20 @@ WOW/
 - 工作表管理、合并单元格
 - Luban 配置表操作
 
+### et-luban - Luban 导出专家（新增）
+
+**使用场景**：
+- 导出Excel配置
+- 导出 Luban 生成的 C# 配置代码与 C# 数据代码
+- 修改 `Packages/cn.etetet.*/Luban/**` 下的表、`__tables__.xlsx`、`__beans__.xlsx`、`__enums__.xlsx`、`Defines/` 后重新导出
+- 刷新聚合后的 `luban.conf`
+- 排查 `ET.ExcelExporter` / `LubanGen.ps1` / `luban.conf` 导出失败
+- 核对导出后的 `CodeMode/Model/**` 与 `CodeMode/Config/**`
+
 ### et-build - 编译构建专家
 
 **使用场景**：
 - 编译项目（dotnet build ET.sln）
-- 导出Excel配置
 - 导出Proto文件
 - 启动服务器
 - 发布版本

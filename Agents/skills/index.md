@@ -30,7 +30,9 @@
 ### 构建与导出
 
 - `et-build`
-  - 场景：编译（`dotnet build ET.sln`）、刷新 `.csproj`、导出 Excel/Proto 配置、启动服务器、发布
+  - 场景：编译（`dotnet build ET.sln`）、刷新 `.csproj`、导出 Proto、启动服务器、发布
+- `et-luban`
+  - 场景：导出 Luban 生成的 C# 配置代码与 C# 数据代码、刷新聚合 `luban.conf`、核对 `CodeMode/Model` / `CodeMode/Config`、排查 `ET.ExcelExporter` / `LubanGen.ps1` / `luban.conf` 导出失败
 
 ### 提交整理
 
@@ -49,7 +51,7 @@
 ### 数据工具
 
 - `et-excel`
-  - 场景：通过 `ET.ExcelMcp` 读写 Excel、批量导入导出、样式 / 公式 / 图表 / 工作表操作
+  - 场景：通过 `ET.ExcelMcp` 读写 Excel、维护 Luban 配置表、批量导入导出、样式 / 公式 / 图表 / 工作表操作
 
 ## 组合场景
 
@@ -61,5 +63,7 @@
 - 写通用测试：`et-tdd` 或 `et-test-write` + `et-test-run`
 - 准备提交或审查 diff：`et-git`
 - 完成开发准备提交：对应开发 skill -> 必要时 `et-build` / `et-test-run` -> `et-git`
-- 只做导出或运行：`et-build`
+- 只做 Luban 导出：`et-luban`
+- 改配置表并导出：`et-excel` -> `et-luban`
+- 只做编译 / Proto / 运行 / 发布：`et-build`
 - 只处理 Excel：`et-excel`

@@ -128,7 +128,7 @@ namespace ET
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                RunProcess("powershell.exe", $"-ExecutionPolicy Bypass -File {Path.Combine(configCollectionPath, "LubanGen.ps1")} -ConfigType {configType}");
+                RunProcess("pwsh.exe", $"-ExecutionPolicy Bypass -File {Path.Combine(configCollectionPath, "LubanGen.ps1")} -ConfigType {configType}");
             }
             else
             {

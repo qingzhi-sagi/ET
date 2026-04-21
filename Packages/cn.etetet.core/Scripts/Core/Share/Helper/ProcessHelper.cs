@@ -11,7 +11,7 @@ namespace ET
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                return Run("powershell.exe", arguments, workingDirectory, waitExit);
+                return Run("pwsh.exe", arguments, workingDirectory, waitExit);
             }
 
             return Run("/usr/local/bin/pwsh", arguments, workingDirectory, waitExit);

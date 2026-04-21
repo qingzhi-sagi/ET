@@ -20,10 +20,8 @@ namespace ET
                 };
                 
                 // 命令行参数
-                Parser.Default.ParseArguments<Options>(Environment.GetCommandLineArgs())
-                        .WithNotParsed(error => throw new Exception($"命令行格式错误! {error}"))
-                        .WithParsed((o)=>World.Instance.AddSingleton(o));
-                Options.Instance.Console = 1;
+                Options options = World.Instance.AddSingleton<Options>();
+                options.Console = 1;
                 
                 World.Instance.AddSingleton<Logger>().Log = new NLogger("ExcelExporter");
                 
@@ -44,7 +42,7 @@ namespace ET
                     iExcelHandler.Run();
                 }
                 
-                LubanGen.CreateLubanConf(args[0]);
+                LubanGen.CreateLubanConf("Code");
             }
             catch (Exception e)
             {
