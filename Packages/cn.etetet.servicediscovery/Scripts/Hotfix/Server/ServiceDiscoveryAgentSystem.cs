@@ -694,6 +694,7 @@ namespace ET.Server
             ActorId targetActorId = self.ServiceDiscoveryActorId;
             ServiceAgentRegisterRequest request = ServiceAgentRegisterRequest.Create();
             request.AgentActorId = self.Root().GetActorId();
+            Address ownedAddress = request.AgentActorId.Address;
             if (!ServiceDiscoveryHelper.TryValidateRequiredActorId(request.AgentActorId, nameof(ServiceAgentRegisterRequest),
                     nameof(request.AgentActorId), out string errorMessage))
             {
@@ -751,6 +752,7 @@ namespace ET.Server
                         (serviceInfoProto.ActorId, ServiceDiscoveryHelper.CloneMetadata(serviceInfoProto.Metadata));
                 }
 
+                self.MergeCurrentOwnedLocalServicesIntoSnapshot(ownedAddress, newServices);
                 self.ClearLocalServices();
                 foreach ((string sceneName, (ActorId actorId, StringKV metadata)) in newServices)
                 {
@@ -1084,6 +1086,47 @@ namespace ET.Server
             }
 
             return snapshot;
+        }
+
+        private static void MergeCurrentOwnedLocalServicesIntoSnapshot(this ServiceDiscoveryAgent self, Address ownedAddress,
+            Dictionary<string, (ActorId ActorId, StringKV Metadata)> services)
+        {
+            if (self == null || services == null || ownedAddress == default)
+            {
+                return;
+            }
+
+            using ListComponent<string> staleSceneNames = ListComponent<string>.Create();
+            foreach ((string sceneName, (ActorId actorId, StringKV _)) in services)
+            {
+                if (string.IsNullOrEmpty(sceneName) || actorId == default || actorId.Address != ownedAddress)
+                {
+                    continue;
+                }
+
+                if (!self.LocalPublishedServices.TryGetValue(sceneName,
+                        out (ActorId ActorId, StringKV Metadata) localService) ||
+                    localService.ActorId == default ||
+                    localService.ActorId.Address != ownedAddress)
+                {
+                    staleSceneNames.Add(sceneName);
+                }
+            }
+
+            foreach (string staleSceneName in staleSceneNames)
+            {
+                services.Remove(staleSceneName);
+            }
+
+            foreach ((string sceneName, (ActorId actorId, StringKV metadata)) in self.LocalPublishedServices)
+            {
+                if (string.IsNullOrEmpty(sceneName) || actorId == default || actorId.Address != ownedAddress)
+                {
+                    continue;
+                }
+
+                services[sceneName] = (actorId, ServiceDiscoveryHelper.CloneMetadata(metadata));
+            }
         }
 
         private static Dictionary<string, int> CapturePublishedSceneVersions(this ServiceDiscoveryAgent self)
