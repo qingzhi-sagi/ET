@@ -1,11 +1,11 @@
 namespace ET.Client
 {
-    [MessageHandler(SceneType.Client)]
+    [MessageHandler(SceneType.Current)]
     public class M2C_UpdateCDHandler : MessageHandler<Scene, M2C_UpdateCD>
     {
-        protected override async ETTask Run(Scene root, M2C_UpdateCD message)
+        protected override async ETTask Run(Scene currentScene, M2C_UpdateCD message)
         {
-            Unit unit = root.CurrentScene()?.GetComponent<UnitComponent>().Get(message.UnitId);
+            Unit unit = currentScene.GetComponent<UnitComponent>().Get(message.UnitId);
             if (unit == null)
             {
                 return;

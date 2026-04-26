@@ -8,7 +8,7 @@
             Scene root = fiberInit.Fiber.Root;
             
             EntityRef<Scene> rootRef = root;
-            root.AddComponent<MailBoxComponent, int>(MailBoxType.UnOrderedMessage);
+            root.AddComponent<MailBoxComponent, int>(MailBoxType.ClientMessage);
             root.AddComponent<TimerComponent>();
             root.AddComponent<CoroutineLockComponent>();
             root.AddComponent<ProcessInnerSender>();

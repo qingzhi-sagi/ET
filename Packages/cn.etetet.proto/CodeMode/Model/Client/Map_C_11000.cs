@@ -167,7 +167,7 @@ namespace ET
 
     [MemoryPackable]
     [Message(Opcode.M2C_CreateUnits)]
-    public partial class M2C_CreateUnits : MessageObject, IMessage
+    public partial class M2C_CreateUnits : MessageObject, ICurrentMessage
     {
         public static M2C_CreateUnits Create(bool isFromPool = false)
         {
@@ -192,7 +192,7 @@ namespace ET
 
     [MemoryPackable]
     [Message(Opcode.M2C_CreateMyUnit)]
-    public partial class M2C_CreateMyUnit : MessageObject, IMessage
+    public partial class M2C_CreateMyUnit : MessageObject, ICurrentMessage
     {
         public static M2C_CreateMyUnit Create(bool isFromPool = false)
         {
@@ -243,7 +243,7 @@ namespace ET
 
     [MemoryPackable]
     [Message(Opcode.M2C_RemoveUnits)]
-    public partial class M2C_RemoveUnits : MessageObject, IMessage
+    public partial class M2C_RemoveUnits : MessageObject, ICurrentMessage
     {
         public static M2C_RemoveUnits Create(bool isFromPool = false)
         {
@@ -319,7 +319,7 @@ namespace ET
 
     [MemoryPackable]
     [Message(Opcode.M2C_PathfindingResult)]
-    public partial class M2C_PathfindingResult : MessageObject, IMessage
+    public partial class M2C_PathfindingResult : MessageObject, ICurrentMessage
     {
         public static M2C_PathfindingResult Create(bool isFromPool = false)
         {
@@ -350,7 +350,7 @@ namespace ET
 
     [MemoryPackable]
     [Message(Opcode.M2C_Stop)]
-    public partial class M2C_Stop : MessageObject, IMessage
+    public partial class M2C_Stop : MessageObject, ICurrentMessage
     {
         public static M2C_Stop Create(bool isFromPool = false)
         {
@@ -411,7 +411,7 @@ namespace ET
 
     [MemoryPackable]
     [Message(Opcode.M2C_NumericChange)]
-    public partial class M2C_NumericChange : MessageObject, IMessage
+    public partial class M2C_NumericChange : MessageObject, ICurrentMessage
     {
         public static M2C_NumericChange Create(bool isFromPool = false)
         {
@@ -441,7 +441,7 @@ namespace ET
 
     [MemoryPackable]
     [Message(Opcode.M2C_Turn)]
-    public partial class M2C_Turn : MessageObject, IMessage
+    public partial class M2C_Turn : MessageObject, ICurrentMessage
     {
         public static M2C_Turn Create(bool isFromPool = false)
         {

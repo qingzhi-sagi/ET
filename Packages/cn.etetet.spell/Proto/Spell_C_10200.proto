@@ -36,7 +36,7 @@ message SpellTarget
 
 // Buff相关消息定义
 
-message M2C_BuffAdd // IMessage
+message M2C_BuffAdd // ICurrentMessage
 {
 	int64 UnitId = 1;
 	int64 BuffId = 2;
@@ -49,7 +49,7 @@ message M2C_BuffAdd // IMessage
 	SpellTarget SpellTarget = 9;
 }
 
-message M2C_BuffUpdate // IMessage
+message M2C_BuffUpdate // ICurrentMessage
 {
 	int64 UnitId = 1;
 	int64 BuffId = 2;
@@ -58,7 +58,7 @@ message M2C_BuffUpdate // IMessage
 	int32 Stack = 7;
 }
 
-message M2C_BuffRemove // IMessage
+message M2C_BuffRemove // ICurrentMessage
 {
 	int64 UnitId = 1;
 	int64 BuffId = 2;
@@ -68,7 +68,7 @@ message M2C_BuffRemove // IMessage
 
 // CD相关消息定义
 
-message M2C_UpdateCD // IMessage
+message M2C_UpdateCD // ICurrentMessage
 {
 	int32 RpcId = 1;
 	int64 UnitId = 2;

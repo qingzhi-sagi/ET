@@ -2,12 +2,12 @@
 
 namespace ET.Client
 {
-	[MessageHandler(SceneType.Client)]
+	[MessageHandler(SceneType.Current)]
 	public class M2C_TurnHandler : MessageHandler<Scene, M2C_Turn>
 	{
-		protected override async ETTask Run(Scene root, M2C_Turn message)
+		protected override async ETTask Run(Scene currentScene, M2C_Turn message)
 		{
-			Unit unit = root.CurrentScene()?.GetComponent<UnitComponent>().Get(message.UnitId);
+			Unit unit = currentScene.GetComponent<UnitComponent>().Get(message.UnitId);
 			if (unit == null)
 			{
 				return;

@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace ET.Client
 {
-	[MessageHandler(SceneType.Client)]
+	[MessageHandler(SceneType.Current)]
 	public class M2C_StopHandler_ChangeMotionToIdel : MessageHandler<Scene, M2C_Stop>
 	{
-		protected override async ETTask Run(Scene root, M2C_Stop message)
+		protected override async ETTask Run(Scene currentScene, M2C_Stop message)
 		{
-			Unit unit = root.CurrentScene()?.GetComponent<UnitComponent>().Get(message.Id);
+			Unit unit = currentScene.GetComponent<UnitComponent>().Get(message.Id);
 			if (unit == null)
 			{
 				return;

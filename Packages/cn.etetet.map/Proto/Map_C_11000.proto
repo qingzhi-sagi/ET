@@ -41,12 +41,12 @@ message UnitInfo
 	PetInfo PetInfo = 8;
 }
 
-message M2C_CreateUnits // IMessage
+message M2C_CreateUnits // ICurrentMessage
 {
 	repeated UnitInfo Units = 1;
 }
 
-message M2C_CreateMyUnit // IMessage
+message M2C_CreateMyUnit // ICurrentMessage
 {
 	UnitInfo Unit = 1;
 }
@@ -57,7 +57,7 @@ message M2C_StartSceneChange // IMessage
 	string SceneName = 2;
 }
 
-message M2C_RemoveUnits // IMessage
+message M2C_RemoveUnits // ICurrentMessage
 {
 	repeated int64 Units = 1;
 }
@@ -73,14 +73,14 @@ message C2M_Stop // ILocationMessage
 	int32 RpcId = 1;
 }
 
-message M2C_PathfindingResult // IMessage
+message M2C_PathfindingResult // ICurrentMessage
 {
 	int64 Id = 1;
 	Unity.Mathematics.float3 Position = 2;
 	repeated Unity.Mathematics.float3 Points = 3;
 }
 
-message M2C_Stop // IMessage
+message M2C_Stop // ICurrentMessage
 {
 	int32 Error = 1;
 	int64 Id = 2;
@@ -95,14 +95,14 @@ message M2C_Error // IMessage
 	repeated string Values = 2;
 }
 
-message M2C_NumericChange // IMessage
+message M2C_NumericChange // ICurrentMessage
 {
 	int64 UnitId = 1;
 	int32 NumericType = 2;
 	int64 Value = 3;
 }
 
-message M2C_Turn // IMessage
+message M2C_Turn // ICurrentMessage
 {
 	int64 UnitId = 1;
 	Unity.Mathematics.quaternion Rotation = 2;

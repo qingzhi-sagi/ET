@@ -135,7 +135,7 @@ namespace ET
     // Buff相关消息定义
     [MemoryPackable]
     [Message(Opcode.M2C_BuffAdd)]
-    public partial class M2C_BuffAdd : MessageObject, IMessage
+    public partial class M2C_BuffAdd : MessageObject, ICurrentMessage
     {
         public static M2C_BuffAdd Create(bool isFromPool = false)
         {
@@ -183,7 +183,7 @@ namespace ET
 
     [MemoryPackable]
     [Message(Opcode.M2C_BuffUpdate)]
-    public partial class M2C_BuffUpdate : MessageObject, IMessage
+    public partial class M2C_BuffUpdate : MessageObject, ICurrentMessage
     {
         public static M2C_BuffUpdate Create(bool isFromPool = false)
         {
@@ -219,7 +219,7 @@ namespace ET
 
     [MemoryPackable]
     [Message(Opcode.M2C_BuffRemove)]
-    public partial class M2C_BuffRemove : MessageObject, IMessage
+    public partial class M2C_BuffRemove : MessageObject, ICurrentMessage
     {
         public static M2C_BuffRemove Create(bool isFromPool = false)
         {
@@ -253,7 +253,7 @@ namespace ET
     // CD相关消息定义
     [MemoryPackable]
     [Message(Opcode.M2C_UpdateCD)]
-    public partial class M2C_UpdateCD : MessageObject, IMessage
+    public partial class M2C_UpdateCD : MessageObject, ICurrentMessage
     {
         public static M2C_UpdateCD Create(bool isFromPool = false)
         {
