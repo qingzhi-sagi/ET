@@ -129,7 +129,7 @@ WOW/
 2. 包之间不能相互依赖，只能单向依赖
 3. 包中只能访问自己包或者依赖包的符号
 4. 请注意要递归依赖，修改依赖时要把依赖的依赖全部递归加上去
-5. 通常只能高层包依赖低层包，但如果A包的packagegit.json中加了"AllowSameLevelAccess": true，那么允许没有被A包依赖的同层包访问
+5. 通常只能高层包依赖低层包；跨包访问必须显式声明依赖，不存在同层访问例外
 6. 假如A包依赖了B包，那么B包永远不能访问A包，这样可以强制处理逻辑相互依赖问题
 
 ### 包层级关系
@@ -137,12 +137,12 @@ WOW/
 #### 第5层
 
 ```
-├── cn.etetet.wow           (游戏入口)          AllowSameLevelAccess
-├── cn.etetet.btnode        (btnode)           AllowSameLevelAccess
-├── cn.etetet.test          (测试系统)          AllowSameLevelAccess
-├── cn.etetet.robot         (机器人系统)        AllowSameLevelAccess 依赖console
-├── cn.etetet.login         (登录系统)          AllowSameLevelAccess
-├── cn.etetet.map           (地图系统)          AllowSameLevelAccess 依赖actorlocation
+├── cn.etetet.wow           (游戏入口)
+├── cn.etetet.btnode        (btnode)
+├── cn.etetet.test          (测试系统)
+├── cn.etetet.robot         (机器人系统)        依赖console
+├── cn.etetet.login         (登录系统)
+├── cn.etetet.mapplay       (地图玩法系统)      依赖map、spell、item、quest
 ```
 
 #### 第4层
@@ -150,6 +150,7 @@ WOW/
 ```
 ├── cn.etetet.actorlocation (location消息系统) 依赖netinner
 ├── cn.etetet.aoi           (数值系统) 依赖unit，numeric
+├── cn.etetet.map           (地图基础系统) 依赖aoi、unit、netinner、move、numeric
 ```
 
 #### 第3层

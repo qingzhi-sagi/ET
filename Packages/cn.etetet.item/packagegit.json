@@ -1,6 +1,5 @@
 {
   "Id": 46,
   "Name": "Item",
-  "Level": 5,
-  "AllowSameLevelAccess": true
+  "Level": 5
 }

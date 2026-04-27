@@ -7,22 +7,6 @@ message RouterSync
 	string Address = 2;
 }
 
-// ResponseType M2C_TestResponse
-message C2M_TestRequest // ILocationRequest
-{
-	int32 RpcId = 1;
-	string request = 2;
-}
-
-message M2C_TestResponse // IResponse
-{
-	int32 RpcId = 1;
-	int32 Error = 2;
-	string Message = 3;
-	string response = 4;
-}
-
-
 // ResponseType M2C_Reload
 message C2M_Reload // ISessionRequest
 {

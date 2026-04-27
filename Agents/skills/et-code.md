@@ -76,7 +76,7 @@
 
 - 包之间只能单向依赖，不能循环；A 依赖 B，B 永远不能反向访问 A
 - 依赖变更时递归补齐，不要只加一层
-- 同层访问只在 `"AllowSameLevelAccess": true` 时成立
+- 跨包访问必须显式声明依赖，不存在同层访问例外
 
 ### Module analyzer
 
@@ -91,8 +91,8 @@
 
 ### 包层级速查
 
-- 第 5 层：`cn.etetet.wow`、`cn.etetet.btnode`、`cn.etetet.test`、`cn.etetet.robot`（依赖 console）、`cn.etetet.login`、`cn.etetet.map`（依赖 actorlocation）
-- 第 4 层：`cn.etetet.actorlocation`（依赖 netinner）、`cn.etetet.aoi`（依赖 unit/numeric）
+- 第 5 层：`cn.etetet.wow`、`cn.etetet.btnode`、`cn.etetet.test`、`cn.etetet.robot`（依赖 console）、`cn.etetet.login`、`cn.etetet.mapplay`（依赖 map/spell/item/quest）
+- 第 4 层：`cn.etetet.actorlocation`（依赖 netinner）、`cn.etetet.aoi`（依赖 unit/numeric）、`cn.etetet.map`（地图基础系统）
 - 第 3 层：`cn.etetet.numeric`、`cn.etetet.move`、`cn.etetet.nav2d`（均依赖 unit）、`cn.etetet.netinner`（依赖 startconfig）、`cn.etetet.router`（依赖 startconfig/http）、`cn.etetet.item`（依赖 unit）
 - 第 2 层：`cn.etetet.unit`、`cn.etetet.behaviortree`、`cn.etetet.http`、`cn.etetet.startconfig`、`cn.etetet.console`、`cn.etetet.yooassets`、`cn.etetet.yiui*`（全系列）
 - 第 1 层：`cn.etetet.core`、`cn.etetet.excel`、`cn.etetet.proto`、`cn.etetet.loader`

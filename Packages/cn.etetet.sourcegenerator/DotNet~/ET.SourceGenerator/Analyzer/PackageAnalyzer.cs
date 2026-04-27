@@ -242,10 +242,10 @@ namespace ET
                     }
                 }
 
-                // 处理仓库 Scripts/Model、Scripts/ModelView、CodeMode/Model 与 CodeMode/ModelView
-                // 中的类型和成员符号
+                // 处理仓库源码中的类型和成员符号。
                 // 覆盖 MetadataReference 场景下的类型/字段/属性/方法归属。
-                BuildModelMemberSymbolsFromRepositorySources(compilation);
+                // Core/Loader 只作为被访问符号的归属来源，不作为包访问检查范围。
+                BuildRepositoryMemberSymbolsFromSources(compilation);
                 
                 // 处理依赖程序集中的符号（通过ProjectReference可访问）
                 BuildSymbolsFromReferencedAssemblies(compilation);
@@ -260,7 +260,7 @@ namespace ET
             }
         }
 
-        private void BuildModelMemberSymbolsFromRepositorySources(Compilation compilation)
+        private void BuildRepositoryMemberSymbolsFromSources(Compilation compilation)
         {
             try
             {
@@ -284,11 +284,7 @@ namespace ET
                         continue;
                     }
 
-                    bool isScriptsModel = normalizedPath.Contains("/Scripts/Model/");
-                    bool isScriptsModelView = normalizedPath.Contains("/Scripts/ModelView/");
-                    bool isCodeModeModel = normalizedPath.Contains("/CodeMode/Model/");
-                    bool isCodeModeModelView = normalizedPath.Contains("/CodeMode/ModelView/");
-                    if (!isScriptsModel && !isScriptsModelView && !isCodeModeModel && !isCodeModeModelView)
+                    if (!IsRepositorySymbolSourceScope(normalizedPath))
                     {
                         continue;
                     }
@@ -310,7 +306,7 @@ namespace ET
             }
             catch (Exception ex)
             {
-                LogToFile($"BuildModelMemberSymbolsFromRepositorySources error: {ex.Message}");
+                LogToFile($"BuildRepositoryMemberSymbolsFromSources error: {ex.Message}");
             }
         }
 
@@ -465,7 +461,7 @@ namespace ET
                                         {
                                             // 构建完整的方法签名，包含泛型参数和方法参数
                                             var methodSignature = GetMethodSignature(fullTypeName, methodDecl);
-                                            RecordSymbolOwnership(methodSignature, packageName);
+                                            RecordMethodOwnership(fullTypeName, methodName, methodSignature, packageName);
                                         }
                                         break;
                                     case PropertyDeclarationSyntax propertyDecl:
@@ -585,7 +581,7 @@ namespace ET
                                 if (!string.IsNullOrEmpty(methodName))
                                 {
                                     var methodSignature = GetMethodSignature(fullTypeName, methodDecl);
-                                    RecordSymbolOwnership(methodSignature, packageName);
+                                    RecordMethodOwnership(fullTypeName, methodName, methodSignature, packageName);
                                 }
                                 break;
                         }
@@ -685,7 +681,7 @@ namespace ET
                         if (!string.IsNullOrEmpty(methodName))
                         {
                             var methodSignature = GetMethodSignature(fullTypeName, methodDecl);
-                            RecordSymbolOwnership(methodSignature, currentPackage);
+                            RecordMethodOwnership(fullTypeName, methodName, methodSignature, currentPackage);
                         }
                         break;
                 }
@@ -718,7 +714,7 @@ namespace ET
                         if (!string.IsNullOrEmpty(methodName))
                         {
                             var methodSignature = GetMethodSignature(fullTypeName, methodDecl);
-                            RecordSymbolOwnership(methodSignature, memberPackage);
+                            RecordMethodOwnership(fullTypeName, methodName, methodSignature, memberPackage);
                         }
                         break;
                     case PropertyDeclarationSyntax propertyDecl:
@@ -761,6 +757,17 @@ namespace ET
             }
             
             return signature;
+        }
+
+        private void RecordMethodOwnership(string fullTypeName, string methodName, string methodSignature, string packageName)
+        {
+            RecordSymbolOwnership(methodSignature, packageName);
+            RecordSymbolOwnership(GetMethodNameKey(fullTypeName, methodName), packageName);
+        }
+
+        private static string GetMethodNameKey(string fullTypeName, string methodName)
+        {
+            return $"{fullTypeName}.{methodName}";
         }
 
         private string GetMethodSignatureFromSymbol(IMethodSymbol methodSymbol)
@@ -1192,6 +1199,11 @@ namespace ET
                 var packageFromPath = ExtractPackageNameFromFilePath(node.SyntaxTree.FilePath);
                 if (!string.IsNullOrEmpty(packageFromPath))
                 {
+                    if (!ShouldCheckPackageAccessForPackage(packageFromPath!))
+                    {
+                        return null;
+                    }
+
                     // 确保这确实是在ET命名空间中
                     var typeDeclaration = node.Ancestors().OfType<TypeDeclarationSyntax>().FirstOrDefault();
                     if (typeDeclaration != null && IsInETNamespace(typeDeclaration))
@@ -1213,12 +1225,32 @@ namespace ET
             }
 
             string normalizedPath = filePath.Replace("\\", "/");
-            bool isModelScope = normalizedPath.Contains("/Scripts/Model/") ||
-                                normalizedPath.Contains("/Scripts/ModelView/");
-            bool isHotfixScope = normalizedPath.Contains("/Scripts/Hotfix/") ||
-                                 normalizedPath.Contains("/Scripts/HotfixView/");
+            return IsPackageAccessCheckScope(normalizedPath);
+        }
 
-            return isModelScope || isHotfixScope;
+        private static bool IsRepositorySymbolSourceScope(string normalizedPath)
+        {
+            return normalizedPath.Contains("/Scripts/Core/") ||
+                   normalizedPath.Contains("/Scripts/Loader/") ||
+                   IsPackageAccessCheckScope(normalizedPath) ||
+                   normalizedPath.Contains("/CodeMode/Model/") ||
+                   normalizedPath.Contains("/CodeMode/ModelView/") ||
+                   normalizedPath.Contains("/CodeMode/Hotfix/") ||
+                   normalizedPath.Contains("/CodeMode/HotfixView/");
+        }
+
+        private static bool IsPackageAccessCheckScope(string normalizedPath)
+        {
+            return normalizedPath.Contains("/Scripts/Model/") ||
+                   normalizedPath.Contains("/Scripts/ModelView/") ||
+                   normalizedPath.Contains("/Scripts/Hotfix/") ||
+                   normalizedPath.Contains("/Scripts/HotfixView/");
+        }
+
+        private static bool ShouldCheckPackageAccessForPackage(string packageName)
+        {
+            return packageName != "cn.etetet.core" &&
+                   packageName != "cn.etetet.loader";
         }
 
         private string? ResolvePackageFromKey(string symbolKey, AnalysisSnapshot snapshot, string? currentPackage)
@@ -1268,6 +1300,50 @@ namespace ET
             return null;
         }
 
+        private string? ResolvePackageFromCandidateKey(string symbolKey, AnalysisSnapshot snapshot, string? currentPackage)
+        {
+            if (!snapshot.SymbolPackageCandidates.TryGetValue(symbolKey, out var candidatePackages) || candidatePackages.Count == 0)
+            {
+                return null;
+            }
+
+            if (candidatePackages.Count == 1)
+            {
+                return candidatePackages.First();
+            }
+
+            if (string.IsNullOrEmpty(currentPackage))
+            {
+                return null;
+            }
+
+            string currentPackageName = currentPackage!;
+            if (candidatePackages.Contains(currentPackageName))
+            {
+                return currentPackageName;
+            }
+
+            if (snapshot.PackageInfos.TryGetValue(currentPackageName, out var currentInfo) && currentInfo.Dependencies != null)
+            {
+                var directMatches = candidatePackages.Where(currentInfo.Dependencies.Contains).ToList();
+                if (directMatches.Count == 1)
+                {
+                    return directMatches[0];
+                }
+            }
+
+            if (snapshot.FlatDependencies.TryGetValue(currentPackageName, out var dependencyPackages))
+            {
+                var flatMatches = candidatePackages.Where(dependencyPackages.Contains).ToList();
+                if (flatMatches.Count == 1)
+                {
+                    return flatMatches[0];
+                }
+            }
+
+            return null;
+        }
+
         private string? GetPackageFromSymbol(ISymbol symbol, AnalysisSnapshot snapshot, string? currentPackage = null)
         {
             if (symbol == null) return null;
@@ -1311,6 +1387,14 @@ namespace ET
                 // 构建完整的方法签名进行查找
                 var methodSignature = GetMethodSignatureFromSymbol(methodSymbol);
                 var methodPackage = ResolvePackageFromKey(methodSignature, snapshot, currentPackage);
+                if (!string.IsNullOrEmpty(methodPackage))
+                {
+                    return methodPackage;
+                }
+
+                var fullTypeName = methodSymbol.ContainingType.ToDisplayString();
+                var methodNameKey = GetMethodNameKey(fullTypeName, methodSymbol.Name);
+                methodPackage = ResolvePackageFromCandidateKey(methodNameKey, snapshot, currentPackage);
                 if (!string.IsNullOrEmpty(methodPackage))
                 {
                     return methodPackage;

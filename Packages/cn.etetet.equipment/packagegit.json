@@ -1,6 +1,5 @@
 {
   "Id": 47,
   "Name": "Equipment",
-  "Level": 5,
-  "AllowSameLevelAccess": true
+  "Level": 5
 }

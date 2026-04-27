@@ -1,6 +1,5 @@
 {
-"Id": 9,
-"Name": "Login",
-"Level": 5,
-"AllowSameLevelAccess": true
+  "Id": 9,
+  "Name": "Login",
+  "Level": 5
 }

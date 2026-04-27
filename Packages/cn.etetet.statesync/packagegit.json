@@ -1,43 +1,41 @@
 {
-    "Id": 100,
-    "Name": "WOW",
-    "OtherPackageAccessField": true,
-    "Level": 5,
-    "AllowSameLevelAccess": true,
-
-    "ScriptsReferences": {
-        "ModelView": [
-            "Cinemachine",
-            "ET.Core",
-            "Unity.Mathematics",
-            "ET.Loader",
-            "ET.Model",
-            "Unity.InputSystem"
-        ],
-        "Model": [
-            "ET.Loader",
-            "ET.Core",
-            "Unity.Mathematics",
-            "ET.Recast"
-        ],
-        "HotfixView": [
-            "Cinemachine",
-            "ET.Core",
-            "Unity.Mathematics",
-            "ET.Loader",
-            "ET.Model",
-            "ET.Hotfix",
-            "ET.ModelView",
-            "ET.YooAssets",
-            "ET.ReferenceCollector",
-            "Unity.InputSystem"
-        ],
-        "Hotfix": [
-            "ET.Core",
-            "Unity.Mathematics",
-            "ET.Loader",
-            "ET.Model",
-            "ET.Recast"
-        ]
-    }
+  "Id": 100,
+  "Name": "WOW",
+  "OtherPackageAccessField": true,
+  "Level": 5,
+  "ScriptsReferences": {
+    "ModelView": [
+      "Cinemachine",
+      "ET.Core",
+      "Unity.Mathematics",
+      "ET.Loader",
+      "ET.Model",
+      "Unity.InputSystem"
+    ],
+    "Model": [
+      "ET.Loader",
+      "ET.Core",
+      "Unity.Mathematics",
+      "ET.Recast"
+    ],
+    "HotfixView": [
+      "Cinemachine",
+      "ET.Core",
+      "Unity.Mathematics",
+      "ET.Loader",
+      "ET.Model",
+      "ET.Hotfix",
+      "ET.ModelView",
+      "ET.YooAssets",
+      "ET.ReferenceCollector",
+      "Unity.InputSystem"
+    ],
+    "Hotfix": [
+      "ET.Core",
+      "Unity.Mathematics",
+      "ET.Loader",
+      "ET.Model",
+      "ET.Recast"
+    ]
+  }
 }

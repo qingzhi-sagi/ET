@@ -685,6 +685,71 @@ namespace ET
         }
     }
 
+    [MemoryPackable]
+    [Message(Opcode.C2M_ClickUnitRequest)]
+    [ResponseType(nameof(M2C_ClickUnitResponse))]
+    public partial class C2M_ClickUnitRequest : MessageObject, ILocationRequest
+    {
+        public static C2M_ClickUnitRequest Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<C2M_ClickUnitRequest>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+        [MemoryPackOrder(1)]
+        public long UnitId { get; set; }
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.UnitId = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(Opcode.M2C_ClickUnitResponse)]
+    public partial class M2C_ClickUnitResponse : MessageObject, ILocationResponse
+    {
+        public static M2C_ClickUnitResponse Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<M2C_ClickUnitResponse>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+        [MemoryPackOrder(1)]
+        public int Error { get; set; }
+        [MemoryPackOrder(2)]
+        public string Message { get; set; }
+        /// <summary>
+        /// 任务信息
+        /// </summary>
+        [MemoryPackOrder(4)]
+        public List<Show_QuestInfo> questInfo { get; set; } = new();
+
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.questInfo.Clear();
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
     public static partial class Opcode
     {
         public const ushort C2M_AcceptQuest = 10401;
@@ -707,5 +772,7 @@ namespace ET
         public const ushort QuestDetailInfo = 10418;
         public const ushort M2C_GetQuestDetail = 10419;
         public const ushort Show_QuestInfo = 10420;
+        public const ushort C2M_ClickUnitRequest = 10421;
+        public const ushort M2C_ClickUnitResponse = 10422;
     }
 }

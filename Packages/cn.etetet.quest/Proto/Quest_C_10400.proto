@@ -164,3 +164,19 @@ message Show_QuestInfo
 	int32 QuestId = 1;
 	int32 Status = 2; // 0: 可接, 1: 已接, 2: 可提交，3: 已提交
 }
+
+// ResponseType M2C_ClickUnitResponse
+message C2M_ClickUnitRequest // ILocationRequest
+{
+	int32 RpcId = 1;
+	int64 UnitId = 2;
+}
+
+message M2C_ClickUnitResponse // ILocationResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	// 任务信息	
+	repeated Show_QuestInfo questInfo = 5;
+}

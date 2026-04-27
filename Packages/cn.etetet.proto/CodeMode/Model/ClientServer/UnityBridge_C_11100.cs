@@ -592,7 +592,7 @@ namespace ET
         public const ushort ErrorResponse = 11115;
         public const ushort Refresh = 11116;
         public const ushort RefreshResponse = 11117;
-        public const ushort TestEcho = 11201;
-        public const ushort TestEchoResponse = 11202;
+        public const ushort TestEcho = 11118;
+        public const ushort TestEchoResponse = 11119;
     }
 }

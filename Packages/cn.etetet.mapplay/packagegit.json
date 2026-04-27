@@ -1,0 +1,10 @@
+{
+  "Id": 48,
+  "Name": "MapPlay",
+  "Level": 5,
+  "ScriptsReferences": {
+    "ModelView": [
+      "Cinemachine"
+    ]
+  }
+}

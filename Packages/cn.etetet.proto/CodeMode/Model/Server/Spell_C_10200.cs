@@ -287,34 +287,6 @@ namespace ET
         }
     }
 
-    // Pet攻击相关消息定义
-    [MemoryPackable]
-    [Message(Opcode.C2M_PetAttack)]
-    public partial class C2M_PetAttack : MessageObject, ILocationMessage
-    {
-        public static C2M_PetAttack Create(bool isFromPool = false)
-        {
-            return ObjectPool.Fetch<C2M_PetAttack>(isFromPool);
-        }
-
-        [MemoryPackOrder(0)]
-        public int RpcId { get; set; }
-        [MemoryPackOrder(1)]
-        public long UnitId { get; set; }
-        public override void Dispose()
-        {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.UnitId = default;
-
-            ObjectPool.Recycle(this);
-        }
-    }
-
     public static partial class Opcode
     {
         public const ushort C2M_SpellCast = 10201;
@@ -325,6 +297,5 @@ namespace ET
         public const ushort M2C_BuffUpdate = 10206;
         public const ushort M2C_BuffRemove = 10207;
         public const ushort M2C_UpdateCD = 10208;
-        public const ushort C2M_PetAttack = 10209;
     }
 }

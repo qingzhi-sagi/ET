@@ -1,6 +1,5 @@
 {
   "Id": 41,
   "Name": "Achievement",
-  "Level": 5,
-  "AllowSameLevelAccess": true
+  "Level": 5
 }

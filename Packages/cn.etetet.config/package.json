@@ -3,7 +3,7 @@
   "displayName": "ET.Config",
   "version": "2.0.0",
   "unity": "2022.3",
-  "description": "config包，内部保留ExcelExporter工具用于导出代码和配置数据",
+  "description": "config\u5305\uff0c\u5185\u90e8\u4fdd\u7559ExcelExporter\u5de5\u5177\u7528\u4e8e\u5bfc\u51fa\u4ee3\u7801\u548c\u914d\u7f6e\u6570\u636e",
   "author": {
     "name": "tanghai",
     "url": "https://github.com/egametang/ET"
@@ -13,7 +13,9 @@
     "url": "https://github.com/egametang/ET"
   },
   "relatedPackages": {},
-  "dependencies": {},
+  "dependencies": {
+    "cn.etetet.core": "4.0.0"
+  },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/@ET-Packages"
   }

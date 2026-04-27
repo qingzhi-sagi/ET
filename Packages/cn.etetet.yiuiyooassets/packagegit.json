@@ -1,6 +1,5 @@
 {
-    "Id": 1203,
-    "Name": "YIUI.YooAssets",
-    "Level": 2,
-    "AllowSameLevelAccess": true
+  "Id": 1203,
+  "Name": "YIUI.YooAssets",
+  "Level": 2
 }
