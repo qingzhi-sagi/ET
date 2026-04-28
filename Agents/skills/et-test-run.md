@@ -56,6 +56,8 @@ dotnet ./Bin/ET.App.dll --SceneName=Test
 ## 重要提醒
 
 - **运行前必须删除 `Logs/` 目录**，否则旧日志会干扰排查
+- 测试用例可以分布在各自功能包的 `Scripts/Hotfix/Test/` 下，不要默认认为都在 `cn.etetet.test`
+- 按名称过滤时优先使用被测包的 `PackageType` 前缀，例如 `ConditionExpr`、`Map`、`Robot`
 
 ## 日志分析
 
@@ -76,6 +78,7 @@ dotnet ./Bin/ET.App.dll --SceneName=Test
 ```
 Test.Test_CreateRobot_Test start
 Test.Test_CreateRobot_Test success   ← 成功
+ConditionExpr.ConditionExpr_Parse_Test success
 
 Test.Test_XXX_Test fail              ← 失败，后面跟错误详情
 not found test! package: .* name: X ← 未找到匹配用例

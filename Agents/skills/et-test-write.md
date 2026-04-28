@@ -12,6 +12,14 @@
 
 ## 规范速查
 
+### 测试落点
+
+- **测试必须优先放在被测功能自己的 package 内**，不要把所有测试都集中放到 `cn.etetet.test`
+- 测试文件位置固定为：`Packages/cn.etetet.{被测包}/Scripts/Hotfix/Test/`
+- `cn.etetet.test` 只作为测试框架、测试运行入口、公共测试基础设施或真正跨包集成测试的承载包
+- 如果测试只验证 `cn.etetet.map` 的逻辑，就放在 `cn.etetet.map`；只验证 `cn.etetet.conditionexpr`，就放在 `cn.etetet.conditionexpr`
+- 跨多个业务包的端到端测试，才允许放到更高层聚合包或 `cn.etetet.test`
+
 ### 命名（分析器 ET0036 强制）
 
 格式：`{PackageType}_{TestName}_Test`
@@ -20,9 +28,10 @@
 - 文件必须放在 `Scripts/Hotfix/Test/` 目录下
 
 ```
-cn.etetet.test   → Test_CreateRobot_Test
-cn.etetet.robot  → Robot_LoginFlow_Test
-cn.etetet.map    → Map_AOI_Test
+cn.etetet.robot          → Robot_LoginFlow_Test
+cn.etetet.map            → Map_AOI_Test
+cn.etetet.conditionexpr  → ConditionExpr_Parse_Test
+cn.etetet.test           → Test_CrossPackageFlow_Test
 ```
 
 ### 返回值
@@ -51,11 +60,11 @@ cn.etetet.map    → Map_AOI_Test
 ## 测试模板
 
 ```csharp
-// 位置：Packages/cn.etetet.{包名}/Scripts/Hotfix/Test/{PackageType}_{名称}_Test.cs
+// 位置：Packages/cn.etetet.{被测包}/Scripts/Hotfix/Test/{PackageType}_{名称}_Test.cs
 namespace ET
 {
     [Test]
-    public class Test_CreateRobot_Test : ATestHandler
+    public class Map_AOI_Test : ATestHandler
     {
         protected override async ETTask<int> Run(Fiber fiber, TestArgs args)
         {
@@ -87,6 +96,8 @@ namespace ET
 
 ## 常见错误
 
+- 把功能包自己的测试写到 `cn.etetet.test` 中，导致测试和被测代码分离
+- 测试类名前缀与所在包 `PackageType` 不一致
 - `await` 后直接访问旧 Entity 变量（应通过 `EntityRef` 重新获取）
 - 不同失败分支返回了相同的错误码
 - 用 `Log.Error` 代替 `Log.Console` 输出测试错误

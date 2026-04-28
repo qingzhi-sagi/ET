@@ -32,7 +32,7 @@ namespace ET
             World.Instance.AddSingleton<ObjectPool>();
             World.Instance.AddSingleton<IdGenerater>();
             World.Instance.AddSingleton<OpcodeType>();
-            
+            World.Instance.AddSingleton<NumericTypeEnum>();
             World.Instance.AddSingleton<MessageQueue>();
             
             LogMsg logMsg = World.Instance.AddSingleton<LogMsg>();

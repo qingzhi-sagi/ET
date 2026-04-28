@@ -6,11 +6,11 @@ namespace ET
         {
             if (node.Children == null || node.Children.Count == 0)
             {
-                return 1;
+                return node.ErrorCode;
             }
 
             int ret = BTDispatcher.Instance.Handle(node.Children[0], env);
-            return ret == 0 ? 1 : 0;
+            return ret == 0 ? node.ErrorCode : 0;
         }
     }
 }

@@ -4,6 +4,8 @@
     {
         protected override int Run(BTSelector node, BTEnv env)
         {
+            int firstFailRet = -1;
+            bool hasFailRet = false;
             foreach (BTNode subNode in node.Children)
             {
                 int ret = BTDispatcher.Instance.Handle(subNode, env);
@@ -11,8 +13,14 @@
                 {
                     return ret;
                 }
+
+                if (!hasFailRet)
+                {
+                    firstFailRet = ret;
+                    hasFailRet = true;
+                }
             }
-            return -1;
+            return firstFailRet;
         }
     }
 }
