@@ -3,9 +3,10 @@ using UnityEngine.SceneManagement;
 
 namespace ET.Client
 {
-    public static class MapPlaySceneChangeStartHelper
+    [Event(SceneType.Client)]
+    public class SceneChangeStart_CreateLoadingUI: AEvent<Scene, SceneChangeStart>
     {
-        public static async ETTask OnSceneChangeStart(Scene root, bool changeScene)
+        protected override async ETTask Run(Scene root, SceneChangeStart args)
         {
             try
             {
@@ -19,7 +20,7 @@ namespace ET.Client
                 Scene currentScene = currentScenesComponent.Scene;
                 EntityRef<Scene> currentSceneRef = currentScene;
                 // 地图资源相同,则不创建Loading界面,也不需要重新加载地图
-                if (changeScene)
+                if (args.ChangeScene)
                 {
                     await root.YIUIRoot().OpenPanelAsync<LoadingPanelComponent>();
 
@@ -31,7 +32,6 @@ namespace ET.Client
                     ResourcesLoaderComponent resourcesLoaderComponent = currentScene.GetComponent<ResourcesLoaderComponent>();
 
                     MapConfig mapConfig = root.Fiber().GetSingleton<MapConfigCategory>().GetByName(currentScene.Name.GetSceneConfigName());
-                    // 加载场景资源
                     await resourcesLoaderComponent.LoadSceneAsync(mapConfig.MapResName, LoadSceneMode.Single,
                         (progress) =>
                         {
@@ -44,7 +44,6 @@ namespace ET.Client
             {
                 Log.Error(e);
             }
-
         }
     }
 }
