@@ -1,9 +1,8 @@
 namespace ET.Client
 {
-    [Event(SceneType.Client)]
-    public class SceneChangeFinishEvent_CreateUIHelp : AEvent<Scene, SceneChangeFinish>
+    public static class MapPlaySceneChangeFinishHelper
     {
-        protected override async ETTask Run(Scene scene, SceneChangeFinish args)
+        public static async ETTask OnSceneChangeFinish(Scene scene)
         {
             var currentScene = scene.GetComponent<CurrentScenesComponent>().Scene;
             var yiuiRoot     = currentScene.GetComponent<YIUIRootComponent>();

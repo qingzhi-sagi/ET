@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package ET;
+
+// ResponseType Map2G_EnterMap
+message G2Map_EnterMap // IRequest
+{
+	int32 RpcId = 1;
+	int64 PlayerId = 2;
+	ActorId GateActorId = 3;
+	string MapName = 4;
+	int64 MapId = 5;
+	int32 UnitConfigId = 6;
+}
+
+message Map2G_EnterMap // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+}
+
+// ResponseType M2M_UnitTransferResponse
+message M2M_UnitTransferRequest // IRequest, IEntityMessage
+{
+	int32 RpcId = 1;
+	ActorId OldActorId = 2;
+	bytes UnitBytes = 3;
+	repeated bytes EntityBytes = 4;
+	bool ChangeScene = 5;
+}
+
+message M2M_UnitTransferResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	ActorId NewActorId = 4;
+}

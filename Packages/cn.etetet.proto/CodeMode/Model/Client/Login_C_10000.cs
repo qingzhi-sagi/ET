@@ -335,6 +335,67 @@ namespace ET
         }
     }
 
+    [MemoryPackable]
+    [Message(Opcode.C2G_EnterMap)]
+    [ResponseType(nameof(G2C_EnterMap))]
+    public partial class C2G_EnterMap : MessageObject, ISessionRequest
+    {
+        public static C2G_EnterMap Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<C2G_EnterMap>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
+    [MemoryPackable]
+    [Message(Opcode.G2C_EnterMap)]
+    public partial class G2C_EnterMap : MessageObject, ISessionResponse
+    {
+        public static G2C_EnterMap Create(bool isFromPool = false)
+        {
+            return ObjectPool.Fetch<G2C_EnterMap>(isFromPool);
+        }
+
+        [MemoryPackOrder(0)]
+        public int RpcId { get; set; }
+        [MemoryPackOrder(1)]
+        public int Error { get; set; }
+        [MemoryPackOrder(2)]
+        public string Message { get; set; }
+        /// <summary>
+        /// 自己的UnitId
+        /// </summary>
+        [MemoryPackOrder(3)]
+        public long MyId { get; set; }
+        public override void Dispose()
+        {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+
+            this.RpcId = default;
+            this.Error = default;
+            this.Message = default;
+            this.MyId = default;
+
+            ObjectPool.Recycle(this);
+        }
+    }
+
     public static partial class Opcode
     {
         public const ushort Main2NetClient_Login = 10001;
@@ -347,5 +408,7 @@ namespace ET
         public const ushort G2C_LoginGate = 10008;
         public const ushort C2G_Logout = 10009;
         public const ushort G2C_Logout = 10010;
+        public const ushort C2G_EnterMap = 10011;
+        public const ushort G2C_EnterMap = 10012;
     }
 }

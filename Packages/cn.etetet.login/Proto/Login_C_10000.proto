@@ -86,3 +86,18 @@ message G2C_Logout // ISessionResponse
 	int32 Error = 2;
 	string Message = 3;
 }
+
+// ResponseType G2C_EnterMap
+message C2G_EnterMap // ISessionRequest
+{
+	int32 RpcId = 1;
+}
+
+message G2C_EnterMap // ISessionResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	/// 自己的UnitId
+	int64 MyId = 4;
+}

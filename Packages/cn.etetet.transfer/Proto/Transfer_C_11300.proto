@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package ET;
+
+// ResponseType M2C_TransferMap
+message C2M_TransferMap // ILocationRequest
+{
+	int32 RpcId = 1;
+}
+
+message M2C_TransferMap // ILocationResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+}

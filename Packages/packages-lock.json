@@ -67,6 +67,7 @@
         "cn.etetet.numeric": "2.0.0",
         "cn.etetet.recast": "2.0.0",
         "cn.etetet.spell": "4.0.0",
+        "cn.etetet.transfer": "1.0.0",
         "cn.etetet.unit": "2.0.0",
         "cn.etetet.yooassets": "2.3.14",
         "cn.etetet.yiuiframework": "3.1.0",
@@ -256,6 +257,7 @@
         "cn.etetet.netinner": "2.0.1",
         "cn.etetet.proto": "4.0.0",
         "cn.etetet.servicediscovery": "4.0.0",
+        "cn.etetet.transfer": "1.0.0",
         "cn.etetet.core": "4.0.0"
       }
     },
@@ -512,6 +514,31 @@
         "cn.etetet.mapplay": "1.0.0",
         "cn.etetet.router": "2.0.1",
         "cn.etetet.unitybridge": "2.0.0"
+      }
+    },
+    "cn.etetet.transfer": {
+      "version": "file:cn.etetet.transfer",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "cn.etetet.actorlocation": "2.0.1",
+        "cn.etetet.aoi": "4.0.0",
+        "cn.etetet.config": "2.0.0",
+        "cn.etetet.core": "4.0.0",
+        "cn.etetet.item": "4.0.0",
+        "cn.etetet.loader": "2.0.7",
+        "cn.etetet.login": "2.0.1",
+        "cn.etetet.map": "1.0.0",
+        "cn.etetet.mapplay": "1.0.0",
+        "cn.etetet.move": "2.0.0",
+        "cn.etetet.netinner": "2.0.1",
+        "cn.etetet.numeric": "2.0.0",
+        "cn.etetet.proto": "4.0.0",
+        "cn.etetet.quest": "4.0.0",
+        "cn.etetet.recast": "2.0.0",
+        "cn.etetet.servicediscovery": "4.0.0",
+        "cn.etetet.spell": "4.0.0",
+        "cn.etetet.unit": "2.0.0"
       }
     },
     "cn.etetet.truesync": {

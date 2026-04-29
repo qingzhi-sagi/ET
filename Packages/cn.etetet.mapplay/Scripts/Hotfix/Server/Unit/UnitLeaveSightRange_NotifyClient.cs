@@ -12,8 +12,10 @@
             {
                 return;
             }
-
-            MapMessageHelper.NoticeUnitRemove(a, b);
+            
+            M2C_RemoveUnits removeUnits = M2C_RemoveUnits.Create();
+            removeUnits.Units.Add(b.Id);
+            MapMessageHelper.NoticeClient(a, removeUnits, NoticeType.Self);
             
             await ETTask.CompletedTask;
         }

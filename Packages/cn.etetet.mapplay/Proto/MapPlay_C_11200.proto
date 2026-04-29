@@ -1,22 +1,6 @@
 syntax = "proto3";
 package ET;
 
-
-// ResponseType G2C_EnterMap
-message C2G_EnterMap // ISessionRequest
-{
-	int32 RpcId = 1;
-}
-
-message G2C_EnterMap // ISessionResponse
-{
-	int32 RpcId = 1;
-	int32 Error = 2;
-	string Message = 3;
-	/// 自己的UnitId
-	int64 MyId = 4;
-}
-
 message PetInfo
 {
 	int64 OwnerId = 1;
@@ -66,19 +50,6 @@ message M2C_NumericChange // ICurrentMessage
 	int64 UnitId = 1;
 	int32 NumericType = 2;
 	int64 Value = 3;
-}
-
-// ResponseType M2C_TransferMap
-message C2M_TransferMap // ILocationRequest
-{
-	int32 RpcId = 1;
-}
-
-message M2C_TransferMap // ILocationResponse
-{
-	int32 RpcId = 1;
-	int32 Error = 2;
-	string Message = 3;
 }
 
 message C2M_PetAttack // ILocationMessage

@@ -1,4 +1,3 @@
-﻿using System;
 using Unity.Mathematics;
 
 namespace ET.Server
@@ -8,12 +7,12 @@ namespace ET.Server
         public static Unit Create(Scene scene, long id, int configId)
         {
             UnitComponent unitComponent = scene.GetComponent<UnitComponent>();
-            
+
             Unit unit = unitComponent.AddChildWithId<Unit, int>(id, configId);
             UnitConfig unitConfig = unit.Config();
-            
+
             unit.UnitType = unitConfig.UnitType;
-            
+
             NumericComponent numericComponent = unit.AddComponent<NumericComponent>();
             foreach ((int k, long v) in unitConfig.KV)
             {
@@ -22,7 +21,6 @@ namespace ET.Server
 
             if (unit.UnitType != UnitType.Player)
             {
-                // 地图配置数据覆盖UnitConfig中的数据
                 MapUnitConfig mapUnitConfig = scene.Fiber().GetSingleton<MapUnitConfigCategory>().Get((int)id);
                 if (mapUnitConfig != null)
                 {
@@ -33,18 +31,16 @@ namespace ET.Server
                 }
             }
 
-            // 设置位置面向
             unit.Position = new float3(numericComponent.GetAsFloat(NumericType.X), numericComponent.GetAsFloat(NumericType.Y), numericComponent.GetAsFloat(NumericType.Z));
             unit.Rotation = quaternion.Euler(0, math.radians(numericComponent.Get(NumericType.Yaw)), 0);
-            
+
             unit.AddComponent<MoveComponent>();
             unit.AddComponent<TurnComponent>();
-            // 加入aoi
             unit.AddComponent<AOIEntity>();
             unit.AddComponent<TargetComponent>();
             unit.AddComponent<SpellComponent>();
             unit.AddComponent<BuffComponent>();
-            
+
             switch (unit.UnitType)
             {
                 case UnitType.Player:
@@ -74,7 +70,7 @@ namespace ET.Server
             {
                 BuffHelper.CreateBuff(unit, unit.Id, IdGenerater.Instance.GenerateId(), ai, null);
             }
-            
+
             unitComponent.Add(unit);
             return unit;
         }

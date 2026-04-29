@@ -4,67 +4,6 @@ using System.Collections.Generic;
 namespace ET
 {
     [MemoryPackable]
-    [Message(Opcode.C2G_EnterMap)]
-    [ResponseType(nameof(G2C_EnterMap))]
-    public partial class C2G_EnterMap : MessageObject, ISessionRequest
-    {
-        public static C2G_EnterMap Create(bool isFromPool = false)
-        {
-            return ObjectPool.Fetch<C2G_EnterMap>(isFromPool);
-        }
-
-        [MemoryPackOrder(0)]
-        public int RpcId { get; set; }
-        public override void Dispose()
-        {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-
-            ObjectPool.Recycle(this);
-        }
-    }
-
-    [MemoryPackable]
-    [Message(Opcode.G2C_EnterMap)]
-    public partial class G2C_EnterMap : MessageObject, ISessionResponse
-    {
-        public static G2C_EnterMap Create(bool isFromPool = false)
-        {
-            return ObjectPool.Fetch<G2C_EnterMap>(isFromPool);
-        }
-
-        [MemoryPackOrder(0)]
-        public int RpcId { get; set; }
-        [MemoryPackOrder(1)]
-        public int Error { get; set; }
-        [MemoryPackOrder(2)]
-        public string Message { get; set; }
-        /// <summary>
-        /// 自己的UnitId
-        /// </summary>
-        [MemoryPackOrder(3)]
-        public long MyId { get; set; }
-        public override void Dispose()
-        {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.MyId = default;
-
-            ObjectPool.Recycle(this);
-        }
-    }
-
-    [MemoryPackable]
     [Message(Opcode.PetInfo)]
     public partial class PetInfo : MessageObject
     {
@@ -294,61 +233,6 @@ namespace ET
     }
 
     [MemoryPackable]
-    [Message(Opcode.C2M_TransferMap)]
-    [ResponseType(nameof(M2C_TransferMap))]
-    public partial class C2M_TransferMap : MessageObject, ILocationRequest
-    {
-        public static C2M_TransferMap Create(bool isFromPool = false)
-        {
-            return ObjectPool.Fetch<C2M_TransferMap>(isFromPool);
-        }
-
-        [MemoryPackOrder(0)]
-        public int RpcId { get; set; }
-        public override void Dispose()
-        {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-
-            ObjectPool.Recycle(this);
-        }
-    }
-
-    [MemoryPackable]
-    [Message(Opcode.M2C_TransferMap)]
-    public partial class M2C_TransferMap : MessageObject, ILocationResponse
-    {
-        public static M2C_TransferMap Create(bool isFromPool = false)
-        {
-            return ObjectPool.Fetch<M2C_TransferMap>(isFromPool);
-        }
-
-        [MemoryPackOrder(0)]
-        public int RpcId { get; set; }
-        [MemoryPackOrder(1)]
-        public int Error { get; set; }
-        [MemoryPackOrder(2)]
-        public string Message { get; set; }
-        public override void Dispose()
-        {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-
-            ObjectPool.Recycle(this);
-        }
-    }
-
-    [MemoryPackable]
     [Message(Opcode.C2M_PetAttack)]
     public partial class C2M_PetAttack : MessageObject, ILocationMessage
     {
@@ -377,18 +261,14 @@ namespace ET
 
     public static partial class Opcode
     {
-        public const ushort C2G_EnterMap = 11201;
-        public const ushort G2C_EnterMap = 11202;
-        public const ushort PetInfo = 11203;
-        public const ushort UnitInfo = 11204;
-        public const ushort M2C_CreateUnits = 11205;
-        public const ushort M2C_CreateMyUnit = 11206;
-        public const ushort M2C_StartSceneChange = 11207;
-        public const ushort M2C_RemoveUnits = 11208;
-        public const ushort M2C_Error = 11209;
-        public const ushort M2C_NumericChange = 11210;
-        public const ushort C2M_TransferMap = 11211;
-        public const ushort M2C_TransferMap = 11212;
-        public const ushort C2M_PetAttack = 11213;
+        public const ushort PetInfo = 11201;
+        public const ushort UnitInfo = 11202;
+        public const ushort M2C_CreateUnits = 11203;
+        public const ushort M2C_CreateMyUnit = 11204;
+        public const ushort M2C_StartSceneChange = 11205;
+        public const ushort M2C_RemoveUnits = 11206;
+        public const ushort M2C_Error = 11207;
+        public const ushort M2C_NumericChange = 11208;
+        public const ushort C2M_PetAttack = 11209;
     }
 }

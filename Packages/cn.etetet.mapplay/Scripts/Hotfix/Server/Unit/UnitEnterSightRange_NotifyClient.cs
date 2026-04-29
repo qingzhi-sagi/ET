@@ -17,8 +17,10 @@
             {
                 return;
             }
-
-            MapMessageHelper.NoticeUnitAdd(a, b);
+            
+            M2C_CreateUnits createUnits = M2C_CreateUnits.Create();
+            createUnits.Units.Add(UnitHelper.CreateUnitInfo(b));
+            MapMessageHelper.NoticeClient(a, createUnits, NoticeType.Self);
             
             await ETTask.CompletedTask;
         }

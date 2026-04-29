@@ -100,4 +100,14 @@
 	<HintPath>..\..\..\..\Assets\Plugins\Sirenix\Assemblies\Sirenix.OdinInspector.Attributes.dll</HintPath>
 	</Reference>
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="..\..\..\cn.etetet.transfer\Scripts\Model\Server\">
+	    <Link>Packages\cn.etetet.transfer\Scripts\Model\Server</Link>
+	  </Folder>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Remove="..\..\..\cn.etetet.transfer\Scripts\Model\Server\Transfer\**" />
+	</ItemGroup>
 </Project>

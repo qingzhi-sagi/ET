@@ -1,0 +1,38 @@
+{
+  "name": "cn.etetet.transfer",
+  "displayName": "ET.Transfer",
+  "version": "1.0.0",
+  "description": "ET transfer package, owns map transfer orchestration, scene change, and transfer rule assets.",
+  "author": {
+    "name": "tanghai",
+    "url": "https://github.com/egametang/ET"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/egametang/ET"
+  },
+  "relatedPackages": {},
+  "dependencies": {
+    "cn.etetet.actorlocation": "2.0.1",
+    "cn.etetet.aoi": "4.0.0",
+    "cn.etetet.config": "2.0.0",
+    "cn.etetet.core": "4.0.0",
+    "cn.etetet.item": "4.0.0",
+    "cn.etetet.loader": "2.0.7",
+    "cn.etetet.login": "2.0.1",
+    "cn.etetet.map": "1.0.0",
+    "cn.etetet.mapplay": "1.0.0",
+    "cn.etetet.move": "2.0.0",
+    "cn.etetet.netinner": "2.0.1",
+    "cn.etetet.numeric": "2.0.0",
+    "cn.etetet.proto": "4.0.0",
+    "cn.etetet.quest": "4.0.0",
+    "cn.etetet.recast": "2.0.0",
+    "cn.etetet.servicediscovery": "4.0.0",
+    "cn.etetet.spell": "4.0.0",
+    "cn.etetet.unit": "2.0.0"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/@ET-Packages"
+  }
+}
