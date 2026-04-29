@@ -1,0 +1,43 @@
+syntax = "proto3";
+package ET;
+
+
+message MoveInfo
+{
+	repeated Unity.Mathematics.float3 Points = 1;
+	Unity.Mathematics.quaternion Rotation = 2;
+	int32 TurnSpeed = 3;
+}
+
+message C2M_PathfindingResult // ILocationMessage
+{
+	int32 RpcId = 1;
+	Unity.Mathematics.float3 Position = 2;
+}
+
+message C2M_Stop // ILocationMessage
+{
+	int32 RpcId = 1;
+}
+
+message M2C_PathfindingResult // ICurrentMessage
+{
+	int64 Id = 1;
+	Unity.Mathematics.float3 Position = 2;
+	repeated Unity.Mathematics.float3 Points = 3;
+}
+
+message M2C_Stop // ICurrentMessage
+{
+	int32 Error = 1;
+	int64 Id = 2;
+	Unity.Mathematics.float3 Position = 3;
+	Unity.Mathematics.quaternion Rotation = 4;
+}
+
+message M2C_Turn // ICurrentMessage
+{
+	int64 UnitId = 1;
+	Unity.Mathematics.quaternion Rotation = 2;
+	int32 TurnTime = 3;
+}

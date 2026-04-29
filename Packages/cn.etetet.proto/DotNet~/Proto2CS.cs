@@ -290,7 +290,7 @@ namespace ET
             sb.Append('}');
 
             sb.Replace("\t", "    ");
-            string result = sb.ToString().ReplaceLineEndings("\r\n");
+            string result = sb.ToString();
 
             if (cs.Contains('C'))
             {

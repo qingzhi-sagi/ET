@@ -65,37 +65,6 @@ namespace ET
     }
 
     [MemoryPackable]
-    [Message(Opcode.MoveInfo)]
-    public partial class MoveInfo : MessageObject
-    {
-        public static MoveInfo Create(bool isFromPool = false)
-        {
-            return ObjectPool.Fetch<MoveInfo>(isFromPool);
-        }
-
-        [MemoryPackOrder(0)]
-        public List<Unity.Mathematics.float3> Points { get; set; } = new();
-
-        [MemoryPackOrder(1)]
-        public Unity.Mathematics.quaternion Rotation { get; set; }
-        [MemoryPackOrder(2)]
-        public int TurnSpeed { get; set; }
-        public override void Dispose()
-        {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.Points.Clear();
-            this.Rotation = default;
-            this.TurnSpeed = default;
-
-            ObjectPool.Recycle(this);
-        }
-    }
-
-    [MemoryPackable]
     [Message(Opcode.PetInfo)]
     public partial class PetInfo : MessageObject
     {
@@ -380,151 +349,6 @@ namespace ET
     }
 
     [MemoryPackable]
-    [Message(Opcode.C2M_PathfindingResult)]
-    public partial class C2M_PathfindingResult : MessageObject, ILocationMessage
-    {
-        public static C2M_PathfindingResult Create(bool isFromPool = false)
-        {
-            return ObjectPool.Fetch<C2M_PathfindingResult>(isFromPool);
-        }
-
-        [MemoryPackOrder(0)]
-        public int RpcId { get; set; }
-        [MemoryPackOrder(1)]
-        public Unity.Mathematics.float3 Position { get; set; }
-        public override void Dispose()
-        {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Position = default;
-
-            ObjectPool.Recycle(this);
-        }
-    }
-
-    [MemoryPackable]
-    [Message(Opcode.C2M_Stop)]
-    public partial class C2M_Stop : MessageObject, ILocationMessage
-    {
-        public static C2M_Stop Create(bool isFromPool = false)
-        {
-            return ObjectPool.Fetch<C2M_Stop>(isFromPool);
-        }
-
-        [MemoryPackOrder(0)]
-        public int RpcId { get; set; }
-        public override void Dispose()
-        {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-
-            ObjectPool.Recycle(this);
-        }
-    }
-
-    [MemoryPackable]
-    [Message(Opcode.M2C_PathfindingResult)]
-    public partial class M2C_PathfindingResult : MessageObject, ICurrentMessage
-    {
-        public static M2C_PathfindingResult Create(bool isFromPool = false)
-        {
-            return ObjectPool.Fetch<M2C_PathfindingResult>(isFromPool);
-        }
-
-        [MemoryPackOrder(0)]
-        public long Id { get; set; }
-        [MemoryPackOrder(1)]
-        public Unity.Mathematics.float3 Position { get; set; }
-        [MemoryPackOrder(2)]
-        public List<Unity.Mathematics.float3> Points { get; set; } = new();
-
-        public override void Dispose()
-        {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.Id = default;
-            this.Position = default;
-            this.Points.Clear();
-
-            ObjectPool.Recycle(this);
-        }
-    }
-
-    [MemoryPackable]
-    [Message(Opcode.M2C_Stop)]
-    public partial class M2C_Stop : MessageObject, ICurrentMessage
-    {
-        public static M2C_Stop Create(bool isFromPool = false)
-        {
-            return ObjectPool.Fetch<M2C_Stop>(isFromPool);
-        }
-
-        [MemoryPackOrder(0)]
-        public int Error { get; set; }
-        [MemoryPackOrder(1)]
-        public long Id { get; set; }
-        [MemoryPackOrder(2)]
-        public Unity.Mathematics.float3 Position { get; set; }
-        [MemoryPackOrder(3)]
-        public Unity.Mathematics.quaternion Rotation { get; set; }
-        public override void Dispose()
-        {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.Error = default;
-            this.Id = default;
-            this.Position = default;
-            this.Rotation = default;
-
-            ObjectPool.Recycle(this);
-        }
-    }
-
-    [MemoryPackable]
-    [Message(Opcode.M2C_Turn)]
-    public partial class M2C_Turn : MessageObject, ICurrentMessage
-    {
-        public static M2C_Turn Create(bool isFromPool = false)
-        {
-            return ObjectPool.Fetch<M2C_Turn>(isFromPool);
-        }
-
-        [MemoryPackOrder(0)]
-        public long UnitId { get; set; }
-        [MemoryPackOrder(1)]
-        public Unity.Mathematics.quaternion Rotation { get; set; }
-        [MemoryPackOrder(2)]
-        public int TurnTime { get; set; }
-        public override void Dispose()
-        {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.UnitId = default;
-            this.Rotation = default;
-            this.TurnTime = default;
-
-            ObjectPool.Recycle(this);
-        }
-    }
-
-    [MemoryPackable]
     [Message(Opcode.C2M_PetAttack)]
     public partial class C2M_PetAttack : MessageObject, ILocationMessage
     {
@@ -555,22 +379,16 @@ namespace ET
     {
         public const ushort C2G_EnterMap = 11201;
         public const ushort G2C_EnterMap = 11202;
-        public const ushort MoveInfo = 11203;
-        public const ushort PetInfo = 11204;
-        public const ushort UnitInfo = 11205;
-        public const ushort M2C_CreateUnits = 11206;
-        public const ushort M2C_CreateMyUnit = 11207;
-        public const ushort M2C_StartSceneChange = 11208;
-        public const ushort M2C_RemoveUnits = 11209;
-        public const ushort M2C_Error = 11210;
-        public const ushort M2C_NumericChange = 11211;
-        public const ushort C2M_TransferMap = 11212;
-        public const ushort M2C_TransferMap = 11213;
-        public const ushort C2M_PathfindingResult = 11214;
-        public const ushort C2M_Stop = 11215;
-        public const ushort M2C_PathfindingResult = 11216;
-        public const ushort M2C_Stop = 11217;
-        public const ushort M2C_Turn = 11218;
-        public const ushort C2M_PetAttack = 11219;
+        public const ushort PetInfo = 11203;
+        public const ushort UnitInfo = 11204;
+        public const ushort M2C_CreateUnits = 11205;
+        public const ushort M2C_CreateMyUnit = 11206;
+        public const ushort M2C_StartSceneChange = 11207;
+        public const ushort M2C_RemoveUnits = 11208;
+        public const ushort M2C_Error = 11209;
+        public const ushort M2C_NumericChange = 11210;
+        public const ushort C2M_TransferMap = 11211;
+        public const ushort M2C_TransferMap = 11212;
+        public const ushort C2M_PetAttack = 11213;
     }
 }
