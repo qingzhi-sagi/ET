@@ -57,7 +57,6 @@ namespace ET.Test
 
         private static async ETTask<int> VerifyForceParentSchedulerSingleton(Fiber fiber)
         {
-            fiber.AddSingleton<ForceParentSchedulerSingleton>();
             InheritableFiberSingletonContract singleton = new();
             singleton.Awake(8201);
             fiber.AddSingleton(singleton);
@@ -85,7 +84,6 @@ namespace ET.Test
             {
                 await fiber.RemoveFiber(childId);
                 fiber.RemoveSingleton<InheritableFiberSingletonContract>();
-                fiber.RemoveSingleton<ForceParentSchedulerSingleton>();
             }
         }
     }

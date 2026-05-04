@@ -16,9 +16,8 @@ namespace ET.Test
             root.AddComponent<ObjectWait>();
             root.AddComponent<MailBoxComponent, int>(MailBoxType.UnOrderedMessage);
             root.AddComponent<ProcessInnerSender>();
-            root.AddComponent<Server.ConsoleComponent>();
+            root.AddComponent<ConsoleComponent>();
 
-            fiber.AddSingleton<ForceParentSchedulerSingleton>();
             EnsureGlobalConfigSingletons(fiber);
             World.Instance.AddSingleton<AddressSingleton>();
             World.Instance.AddSingleton<TestDispatcher>();

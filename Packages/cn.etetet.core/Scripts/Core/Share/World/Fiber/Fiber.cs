@@ -438,7 +438,7 @@ namespace ET
 
         private SchedulerType NormalizeChildSchedulerType(SchedulerType schedulerType)
         {
-            if (Options.Instance.SingleThread == 1 || this.GetSingleton<ForceParentSchedulerSingleton>() != null)
+            if (Options.Instance.SingleThread == 1)
             {
                 return SchedulerType.Parent;
             }

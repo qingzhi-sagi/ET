@@ -69,12 +69,7 @@ namespace ET
             this.mainThreadScheduler = new MainThreadScheduler();
             this.schedulers[(int)SchedulerType.Main] = this.mainThreadScheduler;
 
-            if (Options.Instance.SingleThread == 1)
-            {
-                this.schedulers[(int)SchedulerType.Thread] = this.mainThreadScheduler;
-                this.schedulers[(int)SchedulerType.ThreadPool] = this.mainThreadScheduler;
-            }
-            else
+            if (Options.Instance.SingleThread != 1)
             {
                 this.schedulers[(int)SchedulerType.Thread] = new ThreadScheduler();
                 this.schedulers[(int)SchedulerType.ThreadPool] = new ThreadPoolScheduler();
@@ -109,7 +104,7 @@ namespace ET
             // 把调度器全部停止
             foreach (IScheduler scheduler in this.schedulers)
             {
-                scheduler.Dispose();
+                scheduler?.Dispose();
             }
             (this.mainFiber as IScheduler)?.Dispose();
         }
