@@ -18,6 +18,7 @@ namespace ET.Test
             root.AddComponent<ProcessInnerSender>();
             root.AddComponent<Server.ConsoleComponent>();
 
+            fiber.AddSingleton<ForceParentSchedulerSingleton>();
             EnsureGlobalConfigSingletons(fiber);
             World.Instance.AddSingleton<AddressSingleton>();
             World.Instance.AddSingleton<TestDispatcher>();

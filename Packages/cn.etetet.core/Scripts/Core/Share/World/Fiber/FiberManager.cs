@@ -153,6 +153,10 @@ namespace ET
                 
                 // 如果调度器是父fiber，那么日志也是父fiber的日志
                 Fiber fiber = new(runtimeFiberId, rootId, zone, sceneType, name, schedulerType, parent);
+                if (schedulerType == SchedulerType.Parent)
+                {
+                    fiber.InheritSingletonsFrom(parent);
+                }
 
                 IScheduler iScheduler = schedulerType == SchedulerType.Parent ? parent : this.schedulers[(int)schedulerType];
                 iScheduler.AddToScheduler(fiber);

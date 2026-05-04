@@ -347,16 +347,19 @@ namespace ET.Server
 
                 if (self.ServiceDiscoveryActorId == default)
                 {
-                    await self.TryLoadActiveMasterFromDbAsync();
-                    self = selfRef;
-                    if (self == null)
+                    if (!self.TryApplyInheritedMasterEndpoint())
                     {
-                        return false;
-                    }
+                        await self.TryLoadActiveMasterFromDbAsync();
+                        self = selfRef;
+                        if (self == null)
+                        {
+                            return false;
+                        }
 
-                    if (self.ServiceDiscoveryActorId == default)
-                    {
-                        return false;
+                        if (self.ServiceDiscoveryActorId == default)
+                        {
+                            return false;
+                        }
                     }
                 }
 
@@ -380,6 +383,24 @@ namespace ET.Server
 
                 return self.IsReady();
             }
+        }
+
+        private static bool TryApplyInheritedMasterEndpoint(this ServiceDiscoveryAgent self)
+        {
+            ServiceDiscoveryBootstrapSingleton bootstrap =
+                    self.Fiber().GetSingleton<ServiceDiscoveryBootstrapSingleton>();
+            if (bootstrap == null || bootstrap.MasterActorId == default)
+            {
+                return false;
+            }
+
+            if (self.CurrentMasterEpoch <= 0)
+            {
+                self.CurrentMasterEpoch = 1;
+            }
+
+            self.SwitchToEndpoint(bootstrap.MasterActorId, "inheritable-endpoint");
+            return true;
         }
 
         private static async ETTask EnsureReadyForRequestAsync(this ServiceDiscoveryAgent self, string requestName)

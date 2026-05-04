@@ -223,11 +223,7 @@ namespace ET
 
         public async ETTask<int> CreateFiber(SchedulerType schedulerType, long rootId, int sceneType, string name)
         {
-            // 如果是单线程模式，强制设置为父fiber调度
-            if (Options.Instance.SingleThread == 1)
-            {
-                schedulerType = SchedulerType.Parent;
-            }
+            schedulerType = this.NormalizeChildSchedulerType(schedulerType);
             
             Fiber fiber = await FiberManager.Instance.CreateFiber(schedulerType, rootId, this.Zone, sceneType, name, this);
             this.children.Add(fiber.Id, fiber);
@@ -236,11 +232,7 @@ namespace ET
         
         public async ETTask<int> CreateFiberWithId(int localSlot, SchedulerType schedulerType, long rootId, int sceneType, string name)
         {
-            // 如果是单线程模式，强制设置为父fiber调度
-            if (Options.Instance.SingleThread == 1)
-            {
-                schedulerType = SchedulerType.Parent;
-            }
+            schedulerType = this.NormalizeChildSchedulerType(schedulerType);
             
             Fiber fiber = await FiberManager.Instance.CreateFiber(localSlot, schedulerType, rootId, this.Zone, sceneType, name, this);
             this.children.Add(fiber.Id, fiber);
@@ -263,10 +255,7 @@ namespace ET
 
         public async ETTask<int> CreateZoneFiber(int zone, SchedulerType schedulerType, long rootId, int sceneType, string name)
         {
-            if (Options.Instance.SingleThread == 1)
-            {
-                schedulerType = SchedulerType.Parent;
-            }
+            schedulerType = this.NormalizeChildSchedulerType(schedulerType);
 
             Fiber fiber = await FiberManager.Instance.CreateFiber(schedulerType, rootId, zone, sceneType, name, this);
             this.children.Add(fiber.Id, fiber);
@@ -275,10 +264,7 @@ namespace ET
 
         public async ETTask<int> CreateZoneFiberWithId(int zone, int localSlot, SchedulerType schedulerType, long rootId, int sceneType, string name)
         {
-            if (Options.Instance.SingleThread == 1)
-            {
-                schedulerType = SchedulerType.Parent;
-            }
+            schedulerType = this.NormalizeChildSchedulerType(schedulerType);
 
             Fiber fiber = await FiberManager.Instance.CreateFiber(localSlot, schedulerType, rootId, zone, sceneType, name, this);
             this.children.Add(fiber.Id, fiber);
@@ -429,6 +415,35 @@ namespace ET
                 return false;
             }
             return this.singletons.Remove(typeof(T));
+        }
+
+        internal void InheritSingletonsFrom(Fiber parent)
+        {
+            if (parent?.singletons == null)
+            {
+                return;
+            }
+
+            foreach ((Type type, object singleton) in parent.singletons)
+            {
+                if (singleton is not IInheritableSingleton)
+                {
+                    continue;
+                }
+
+                this.singletons ??= new Dictionary<Type, object>();
+                this.singletons.TryAdd(type, singleton);
+            }
+        }
+
+        private SchedulerType NormalizeChildSchedulerType(SchedulerType schedulerType)
+        {
+            if (Options.Instance.SingleThread == 1 || this.GetSingleton<ForceParentSchedulerSingleton>() != null)
+            {
+                return SchedulerType.Parent;
+            }
+
+            return schedulerType;
         }
 
         /// <summary>

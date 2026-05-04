@@ -37,6 +37,8 @@ namespace ET.Test
                 Fiber testFiber = scope.TestFiber;
                 Scene root = testFiber.Root;
                 EntityRef<Scene> rootRef = root;
+                root.GetComponent<TestFiberDatabaseCleanupComponent>()
+                        .RegisterLogicalDbName(nameof(Test_TestCaseFiberCleanup_DropsZoneDb_Test));
                 DBManagerComponent dbManagerComponent = root.GetComponent<DBManagerComponent>();
                 zoneDbName = dbManagerComponent.GetZoneDBName(testFiber.Zone);
 

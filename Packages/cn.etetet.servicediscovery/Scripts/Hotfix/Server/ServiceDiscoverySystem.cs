@@ -42,6 +42,11 @@ namespace ET.Server
             long now = self.GetMonotonicServerNow();
             self.FlushPendingServiceChangeNotifications(false);
 
+            if (self.IsMongoDisabled())
+            {
+                return;
+            }
+
             if (self.IsLeaseCircuitOpen(now))
             {
                 return;
@@ -69,6 +74,31 @@ namespace ET.Server
             self.GetOrAddLease().LastMasterLeaseCheckTime = now;
             self.GetOrAddNotificationBuffer().LastNotificationFlushTime = now;
             self.SyncHeartbeatCheckerComponent();
+
+            ServiceDiscoveryBootstrapSingleton bootstrap = self.GetServiceDiscoveryBootstrap();
+            if (bootstrap != null)
+            {
+                ServiceDiscoveryLeaseComponent lease = self.GetOrAddLease();
+                Scene root = self.Root();
+
+                lease.CurrentMasterSceneName = root.Name;
+                lease.CurrentMasterActorId = root.GetActorId();
+                lease.CurrentMasterEpoch = 1;
+                lease.CurrentMasterLeaseExpireTime = long.MaxValue;
+                lease.IsActiveMaster = true;
+                lease.LastMasterLeaseCheckTime = now;
+                lease.NextLeaseRetryTime = 0;
+                lease.LeaseTickRunning = false;
+                lease.LeaseFailureCount = 0;
+                lease.LeaseCircuitOpenUntil = 0;
+                bootstrap.SetMasterActorId(lease.CurrentMasterActorId);
+
+                self.SyncHeartbeatCheckerComponent();
+                Log.Info(
+                    $"ServiceDiscovery init activeRole: LocalSingleMaster scene: {root.Name} currentMaster: {lease.CurrentMasterSceneName}");
+                await ETTask.CompletedTask;
+                return;
+            }
 
             await self.EnsureActiveMasterAsync();
             self = selfRef;
@@ -987,6 +1017,16 @@ namespace ET.Server
             }
 
             return dbManagerComponent.GetZoneDB(root.Fiber.Zone);
+        }
+
+        private static bool IsMongoDisabled(this ServiceDiscovery self)
+        {
+            return self.GetServiceDiscoveryBootstrap() != null;
+        }
+
+        private static ServiceDiscoveryBootstrapSingleton GetServiceDiscoveryBootstrap(this ServiceDiscovery self)
+        {
+            return self.Fiber().GetSingleton<ServiceDiscoveryBootstrapSingleton>();
         }
 
         private static async ETTask<ServiceInfo> UpsertServiceAsync(this ServiceDiscovery self, string sceneName, ActorId actorId,

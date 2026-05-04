@@ -19,9 +19,7 @@ namespace ET.Test
             root.AddComponent<CoroutineLockComponent>();
             root.AddComponent<DBManagerComponent>();
 
-            TestFiberDatabaseCleanupComponent cleanupComponent = root.AddComponent<TestFiberDatabaseCleanupComponent>();
-            cleanupComponent.RegisterLogicalDbName(ServiceDiscoveryPersistenceConst.DBName);
-            await cleanupComponent.CleanupAsync("FiberInit_TestCase");
+            root.AddComponent<TestFiberDatabaseCleanupComponent>();
             
             int process = Options.Instance.Process;
             
@@ -31,7 +29,9 @@ namespace ET.Test
             // 先看环境变量是否有地址传过来，如果没有，则使用StartProcessConfig的地址跟端口
             AddressHelper.SetInnerIPInnerPortOuterIP(fiber, startProcessConfig);
 
-            await fiber.CreateFiber(IdGenerater.Instance.GenerateId(), SceneType.ServiceDiscovery, nameof(SceneType.ServiceDiscovery));
+            fiber.AddSingleton<ServiceDiscoveryBootstrapSingleton>();
+            Fiber serviceDiscoveryFiber =
+                    await fiber.CreateFiber(IdGenerater.Instance.GenerateId(), SceneType.ServiceDiscovery, nameof(SceneType.ServiceDiscovery));
 
             // 进程级ServiceDiscovery Agent Fiber：所有业务Fiber的ServiceDiscoveryProxy统一通过此Fiber转发。
             await fiber.CreateFiberWithId(Const.ServiceDiscoveryAgentFiberId, SchedulerType.ThreadPool, IdGenerater.Instance.GenerateId(),
