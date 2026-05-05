@@ -593,7 +593,7 @@ namespace ET.Test
                 string agentName = $"ServiceDiscoveryAgent@{process}@{Options.Instance.ReplicaIndex}";
                 try
                 {
-                    int agentFiberId = await parent.CreateFiber(0, SchedulerType.ThreadPool, IdGenerater.Instance.GenerateId(),
+                    int agentFiberId = await parent.CreateFiber(SchedulerType.ThreadPool, 0, IdGenerater.Instance.GenerateId(),
                         SceneType.ServiceDiscoveryAgent, agentName);
                     agentFiber = parent.GetFiber(agentFiberId);
                 }

@@ -34,7 +34,7 @@ namespace ET.Test
                     await fiber.CreateFiber(0, IdGenerater.Instance.GenerateId(), SceneType.ServiceDiscovery, nameof(SceneType.ServiceDiscovery));
 
             // 进程级ServiceDiscovery Agent Fiber：所有业务Fiber的ServiceDiscoveryProxy统一通过此Fiber转发。
-            await fiber.CreateFiber(0, SchedulerType.ThreadPool, IdGenerater.Instance.GenerateId(),
+            await fiber.CreateFiber(SchedulerType.ThreadPool, 0, IdGenerater.Instance.GenerateId(),
                 SceneType.ServiceDiscoveryAgent, $"ServiceDiscoveryAgent@{process}@{Options.Instance.ReplicaIndex}");
 
             // 根据配置创建纤程

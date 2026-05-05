@@ -210,14 +210,14 @@ namespace ET
 
         public async ETTask<Fiber> CreateFiber(long rootId, int sceneType, string name)
         {
-            Fiber fiber = await FiberManager.Instance.CreateFiber(SchedulerType.Parent, rootId, this.Zone, sceneType, name, this);
+            Fiber fiber = await FiberManager.Instance.CreateFiber(SchedulerType.Parent, this.Zone, rootId, sceneType, name, this);
             this.children.Add(fiber.Id, fiber);
             return fiber;
         }
 
         public async ETTask<Fiber> CreateFiber(int zone, long rootId, int sceneType, string name)
         {
-            Fiber fiber = await FiberManager.Instance.CreateFiber(SchedulerType.Parent, rootId, zone, sceneType, name, this);
+            Fiber fiber = await FiberManager.Instance.CreateFiber(SchedulerType.Parent, zone, rootId, sceneType, name, this);
             this.children.Add(fiber.Id, fiber);
             return fiber;
         }
@@ -226,16 +226,16 @@ namespace ET
         {
             schedulerType = this.NormalizeChildSchedulerType(schedulerType);
             
-            Fiber fiber = await FiberManager.Instance.CreateFiber(schedulerType, rootId, this.Zone, sceneType, name, this);
+            Fiber fiber = await FiberManager.Instance.CreateFiber(schedulerType, this.Zone, rootId, sceneType, name, this);
             this.children.Add(fiber.Id, fiber);
             return fiber.Id;
         }
         
-        public async ETTask<int> CreateFiber(int zone, SchedulerType schedulerType, long rootId, int sceneType, string name)
+        public async ETTask<int> CreateFiber(SchedulerType schedulerType, int zone, long rootId, int sceneType, string name)
         {
             schedulerType = this.NormalizeChildSchedulerType(schedulerType);
 
-            Fiber fiber = await FiberManager.Instance.CreateFiber(schedulerType, rootId, zone, sceneType, name, this);
+            Fiber fiber = await FiberManager.Instance.CreateFiber(schedulerType, zone, rootId, sceneType, name, this);
             this.children.Add(fiber.Id, fiber);
             return fiber.Id;
         }

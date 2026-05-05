@@ -118,7 +118,7 @@ namespace ET
             {
                 throw new Exception("FiberManager is already created");
             }
-            this.mainFiber = await this.CreateFiber(SchedulerType.Main, IdGenerater.Instance.GenerateId(), 0, sceneType, sceneName, null);
+            this.mainFiber = await this.CreateFiber(SchedulerType.Main, 0, IdGenerater.Instance.GenerateId(), sceneType, sceneName, null);
             return this.mainFiber.Id;
         }
 
@@ -216,7 +216,7 @@ namespace ET
         /// <param name="name">纤程名称</param>
         /// <param name="parent"></param>
         /// <returns>纤程id</returns>
-        internal async ETTask<Fiber> CreateFiber(SchedulerType schedulerType, long rootId, int zone, int sceneType, string name, Fiber parent)
+        internal async ETTask<Fiber> CreateFiber(SchedulerType schedulerType, int zone, long rootId, int sceneType, string name, Fiber parent)
         {
             int localSlot = this.AllocateLocalSlot(zone);
             int fiberId = FiberIdHelper.Encode(zone, localSlot);
