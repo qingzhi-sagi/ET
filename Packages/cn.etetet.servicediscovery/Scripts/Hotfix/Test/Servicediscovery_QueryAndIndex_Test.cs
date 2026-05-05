@@ -51,17 +51,19 @@ namespace ET.Test
 
             // 2. 注册三类测试服务（Gate*2 + Realm*1）
             Address address = node.Root.GetActorId().Address;
-            await sd.RegisterServiceAsync("QueryGate_1", ServiceDiscovery_HA_TestHelper.CreateActorId(testFiber, address, 810001), new StringKV
+            // 这里模拟其它进程的集群服务，避免被本进程 Agent 当作非本地发布的陈旧服务清理。
+            Address serviceAddress = new(address.IP, address.Port + testFiber.Zone);
+            await sd.RegisterServiceAsync("QueryGate_1", ServiceDiscovery_HA_TestHelper.CreateActorId(testFiber, serviceAddress, 810001), new StringKV
             {
                 { ServiceMetaKey.SceneType, "Gate" },
                 { "Group", "A" },
             });
-            await sd.RegisterServiceAsync("QueryGate_2", ServiceDiscovery_HA_TestHelper.CreateActorId(testFiber, address, 810002), new StringKV
+            await sd.RegisterServiceAsync("QueryGate_2", ServiceDiscovery_HA_TestHelper.CreateActorId(testFiber, serviceAddress, 810002), new StringKV
             {
                 { ServiceMetaKey.SceneType, "Gate" },
                 { "Group", "B" },
             });
-            await sd.RegisterServiceAsync("QueryRealm_1", ServiceDiscovery_HA_TestHelper.CreateActorId(testFiber, address, 810003), new StringKV
+            await sd.RegisterServiceAsync("QueryRealm_1", ServiceDiscovery_HA_TestHelper.CreateActorId(testFiber, serviceAddress, 810003), new StringKV
             {
                 { ServiceMetaKey.SceneType, "Realm" },
                 { "Group", "B" },
@@ -70,7 +72,7 @@ namespace ET.Test
             // 3. 验证仅通过 Agent 查询，结果与预期一致
             MessageSender sender = node.Root.GetComponent<MessageSender>();
             ActorId agentActorId = new ActorId(node.Root.GetActorId().Address,
-                ServiceDiscovery_HA_TestHelper.CreateServiceDiscoveryAgentFiberInstanceId(testFiber.Zone));
+                ServiceDiscovery_HA_TestHelper.CreateServiceDiscoveryAgentFiberInstanceId(testFiber));
 
             bool gateMatched = await WaitForAgentQueryCount(sender, agentActorId, timer, new StringKV
             {

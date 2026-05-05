@@ -28,7 +28,8 @@ namespace ET.Server
             a2NetInnerMessage.ActorId = actorId;
             a2NetInnerMessage.MessageObject = message;
 
-            MessageQueue.Instance.Send(fiber, new FiberInstanceId(ConstFiberId.NetInnerFiberId), a2NetInnerMessage);
+            FiberInstanceId netInnerFiberInstanceId = self.GetSingleton<ProcessFiberAddressSingleton>().Get(SceneType.NetInner);
+            MessageQueue.Instance.Send(fiber, netInnerFiberInstanceId, a2NetInnerMessage);
         }
 
         public static async ETTask<IResponse> Call(this MessageSender self, ActorId actorId, IRequest request, bool needException = true)
@@ -56,8 +57,9 @@ namespace ET.Server
                 a2NetInner_Request.ActorId = actorId;
                 a2NetInner_Request.MessageObject = request;
 
+                FiberInstanceId netInnerFiberInstanceId = self.GetSingleton<ProcessFiberAddressSingleton>().Get(SceneType.NetInner);
                 using A2NetInner_Response a2NetInnerResponse = await self.ProcessInnerSender.Call(
-                    new FiberInstanceId(ConstFiberId.NetInnerFiberId), a2NetInner_Request, timeout) as A2NetInner_Response;
+                    netInnerFiberInstanceId, a2NetInner_Request, timeout) as A2NetInner_Response;
                 response = a2NetInnerResponse.MessageObject;
             }
 

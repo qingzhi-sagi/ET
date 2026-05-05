@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -32,7 +33,9 @@ namespace ET
     [AllowInstance]
     public class FiberManager: Singleton<FiberManager>, ISingletonAwake
     {
-        private int idGenerator;
+        private readonly object localSlotLock = new();
+
+        private readonly Dictionary<int, int> nextLocalSlotByZone = new();
         
         private readonly IScheduler[] schedulers = new IScheduler[3];
         
@@ -123,13 +126,14 @@ namespace ET
         /// 创建纤程
         /// </summary>
         /// <param name="schedulerType">纤程调度器，-1: 主线程，-2: 当前线程，-3: 线程池, 其它: 纤程</param>
-        /// <param name="fiberId">纤程id</param>
+        /// <param name="fiberId">运行时纤程id</param>
         /// <param name="rootId"></param>
         /// <param name="zone">区</param>
         /// <param name="sceneType">场景类型</param>
         /// <param name="name">纤程名称</param>
         /// <param name="parent"></param>
-        internal async ETTask<Fiber> CreateFiber(int fiberId, SchedulerType schedulerType, long rootId, int zone, int sceneType, string name, Fiber parent)
+        private async ETTask<Fiber> CreateFiberInternal(int fiberId, SchedulerType schedulerType, long rootId, int zone, int sceneType,
+            string name, Fiber parent)
         {
             if (sceneType == 0)
             {
@@ -137,17 +141,11 @@ namespace ET
             }
             try
             {
-                int runtimeFiberId = fiberId;
-                if (zone != 0 && fiberId > 0 && fiberId <= FiberIdHelper.MaxLocalSlot)
-                {
-                    runtimeFiberId = FiberIdHelper.Encode(zone, fiberId);
-                }
-
                 int parentId = parent?.Id ?? 0;
-                Log.Debug($"create fiber: {name} {runtimeFiberId} {zone} {sceneType} {schedulerType} {parentId}");
+                Log.Debug($"create fiber: {name} {fiberId} {zone} {sceneType} {schedulerType} {parentId}");
                 
                 // 如果调度器是父fiber，那么日志也是父fiber的日志
-                Fiber fiber = new(runtimeFiberId, rootId, zone, sceneType, name, schedulerType, parent);
+                Fiber fiber = new(fiberId, rootId, sceneType, name, schedulerType, parent);
                 if (schedulerType == SchedulerType.Parent)
                 {
                     fiber.InheritSingletonsFrom(parent);
@@ -187,9 +185,25 @@ namespace ET
             }
         }
 
-        private int GetFiberId()
+        private int AllocateLocalSlot(int zone)
         {
-            return Interlocked.Increment(ref this.idGenerator);
+            FiberIdHelper.ValidateZone(zone);
+
+            lock (this.localSlotLock)
+            {
+                int localSlot = this.nextLocalSlotByZone.TryGetValue(zone, out int nextLocalSlot)
+                        ? nextLocalSlot
+                        : FiberIdHelper.DynamicLocalSlotStart;
+
+                if (localSlot >= FiberIdHelper.ReservedLocalSlotStart)
+                {
+                    throw new Exception(
+                        $"fiber local slot exhausted, zone: {zone}, nextLocalSlot: {localSlot}, dynamic range: [{FiberIdHelper.DynamicLocalSlotStart}, {FiberIdHelper.ReservedLocalSlotStart - 1}]");
+                }
+
+                this.nextLocalSlotByZone[zone] = localSlot + 1;
+                return localSlot;
+            }
         }
 
         /// <summary>
@@ -204,8 +218,9 @@ namespace ET
         /// <returns>纤程id</returns>
         internal async ETTask<Fiber> CreateFiber(SchedulerType schedulerType, long rootId, int zone, int sceneType, string name, Fiber parent)
         {
-            int fiberId = this.GetFiberId();
-            return await this.CreateFiber(fiberId, schedulerType, rootId, zone, sceneType, name, parent);
+            int localSlot = this.AllocateLocalSlot(zone);
+            int fiberId = FiberIdHelper.Encode(zone, localSlot);
+            return await this.CreateFiberInternal(fiberId, schedulerType, rootId, zone, sceneType, name, parent);
         }
     }
 }

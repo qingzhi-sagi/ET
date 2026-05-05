@@ -61,7 +61,7 @@ namespace ET.Test
 
             ActorId masterActorId = node.Root.GetActorId();
             ActorId agentActorId = new ActorId(masterActorId.Address,
-                ServiceDiscovery_HA_TestHelper.CreateServiceDiscoveryAgentFiberInstanceId(testFiber.Zone));
+                ServiceDiscovery_HA_TestHelper.CreateServiceDiscoveryAgentFiberInstanceId(testFiber));
             Address address = masterActorId.Address;
             const int clientCount = 300;
             const int removeCount = 120;

@@ -19,7 +19,7 @@ namespace ET.Test
         {
             TestFiberScope scope = new(fiber);
             int zone = AllocateZone(fiber);
-            scope.TestFiber = await fiber.CreateZoneFiber(zone, IdGenerater.Instance.GenerateId(), sceneType, testName);
+            scope.TestFiber = await fiber.CreateFiber(zone, IdGenerater.Instance.GenerateId(), sceneType, testName);
             return scope;
         }
 

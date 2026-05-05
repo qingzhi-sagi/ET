@@ -33,7 +33,7 @@ namespace ET.Test
                 return 3;
             }
 
-            Fiber agentFiber = testFiber.GetFiber(ServiceDiscoveryFiberHelper.GetAgentFiberId(testFiber.Zone));
+            Fiber agentFiber = ServiceDiscovery_HA_TestHelper.GetServiceDiscoveryAgentFiber(testFiber);
             if (agentFiber == null)
             {
                 Log.Console("test case service discovery agent fiber not found");

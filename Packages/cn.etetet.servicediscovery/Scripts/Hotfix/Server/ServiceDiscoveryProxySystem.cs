@@ -52,7 +52,13 @@ namespace ET.Server
                 throw new Exception($"service discovery proxy process inner sender is null, scene: {root.Name}");
             }
 
-            self.AgentFiberInstanceId = ServiceDiscoveryFiberHelper.CreateAgentFiberInstanceId(self.Fiber().Zone);
+            ProcessFiberAddressSingleton processFiberAddressSingleton = self.Fiber().GetSingleton<ProcessFiberAddressSingleton>();
+            if (processFiberAddressSingleton == null)
+            {
+                throw new Exception($"process fiber address singleton is null, scene: {root.Name}");
+            }
+
+            self.AgentFiberInstanceId = processFiberAddressSingleton.Get(SceneType.ServiceDiscoveryAgent);
             if (self.AgentFiberInstanceId == default)
             {
                 throw new Exception($"service discovery agent fiber instance id is empty, scene: {root.Name}");

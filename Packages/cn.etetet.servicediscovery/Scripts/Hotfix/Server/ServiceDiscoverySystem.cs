@@ -145,6 +145,11 @@ namespace ET.Server
                     return false;
                 }
 
+                if (self.IsMongoDisabled())
+                {
+                    return self.GetOrAddLease().IsActiveMaster;
+                }
+
                 long now = self.GetMonotonicServerNow();
                 if (self.IsLeaseCircuitOpen(now) || now < self.GetOrAddLease().NextLeaseRetryTime)
                 {
@@ -236,7 +241,7 @@ namespace ET.Server
         /// </summary>
         public static async ETTask RegisterServiceAsync(this ServiceDiscovery self, string sceneName, ActorId actorId, StringKV metadata)
         {
-            ServiceInfo serviceInfo = await self.UpsertServiceAsync(sceneName, actorId, metadata, true, true);
+            ServiceInfo serviceInfo = await self.UpsertServiceAsync(sceneName, actorId, metadata, true);
             if (serviceInfo != null)
             {
                 Log.Debug($"Service registered: {sceneName} actorId: {actorId}");
@@ -1000,7 +1005,7 @@ namespace ET.Server
                 {
                     return;
                 }
-                await self.UpsertServiceAsync(sceneName, actorId, metadata, true, false, now);
+                await self.UpsertServiceAsync(sceneName, actorId, metadata, true, now);
             }
 
             self = selfRef;
@@ -1030,7 +1035,7 @@ namespace ET.Server
         }
 
         private static async ETTask<ServiceInfo> UpsertServiceAsync(this ServiceDiscovery self, string sceneName, ActorId actorId,
-            StringKV metadata, bool notify, bool refreshAgentRoute, long now = 0)
+            StringKV metadata, bool notify, long now = 0)
         {
             EntityRef<ServiceDiscovery> selfRef = self;
             using (await self.Root().CoroutineLockComponent.Wait(CoroutineLockType.ServiceDiscoveryServiceMutation,
@@ -1064,13 +1069,6 @@ namespace ET.Server
                 bool changed;
                 ServiceInfo serviceInfo = self.UpsertServiceInMemory(sceneName, actorId, metadata, false, 0, now, out changed);
                 self.TouchAgentHeartbeat(actorId.Address, now);
-                if (refreshAgentRoute)
-                {
-                    int zone = FiberIdHelper.DecodeZone(actorId.FiberInstanceId.Fiber);
-                    self.AgentActorIds[actorId.Address] = new ActorId(actorId.Address,
-                        ServiceDiscoveryFiberHelper.CreateAgentFiberInstanceId(zone));
-                }
-
                 if (!notify || !changed || serviceInfo == null)
                 {
                     return serviceInfo;

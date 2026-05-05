@@ -42,7 +42,9 @@ namespace ET
         
         public int Id { get; }
 
-        public int Zone { get; }
+        public int Zone => FiberIdHelper.DecodeZone(this.Id);
+
+        public int LocalSlot => FiberIdHelper.DecodeLocalSlot(this.Id);
 
         private EntityRef<Scene> root;
         
@@ -86,10 +88,9 @@ namespace ET
         
         private Dictionary<Type, object> singletons;
         
-        internal Fiber(int id, long rootId, int zone, int sceneType, string name, SchedulerType schedulerType, Fiber parent)
+        internal Fiber(int id, long rootId, int sceneType, string name, SchedulerType schedulerType, Fiber parent)
         {
             this.Id = id;
-            this.Zone = zone;
             this.SchedulerType = schedulerType;
             this.EntitySystem = new EntitySystem();
             this.Mailboxes = new Mailboxes();
@@ -214,9 +215,9 @@ namespace ET
             return fiber;
         }
 
-        public async ETTask<Fiber> CreateFiberWithId(int localSlot, long rootId, int sceneType, string name)
+        public async ETTask<Fiber> CreateFiber(int zone, long rootId, int sceneType, string name)
         {
-            Fiber fiber = await FiberManager.Instance.CreateFiber(localSlot, SchedulerType.Parent, rootId, this.Zone, sceneType, name, this);
+            Fiber fiber = await FiberManager.Instance.CreateFiber(SchedulerType.Parent, rootId, zone, sceneType, name, this);
             this.children.Add(fiber.Id, fiber);
             return fiber;
         }
@@ -230,43 +231,11 @@ namespace ET
             return fiber.Id;
         }
         
-        public async ETTask<int> CreateFiberWithId(int localSlot, SchedulerType schedulerType, long rootId, int sceneType, string name)
-        {
-            schedulerType = this.NormalizeChildSchedulerType(schedulerType);
-            
-            Fiber fiber = await FiberManager.Instance.CreateFiber(localSlot, schedulerType, rootId, this.Zone, sceneType, name, this);
-            this.children.Add(fiber.Id, fiber);
-            return fiber.Id;
-        }
-
-        public async ETTask<Fiber> CreateZoneFiber(int zone, long rootId, int sceneType, string name)
-        {
-            Fiber fiber = await FiberManager.Instance.CreateFiber(SchedulerType.Parent, rootId, zone, sceneType, name, this);
-            this.children.Add(fiber.Id, fiber);
-            return fiber;
-        }
-
-        public async ETTask<Fiber> CreateZoneFiberWithId(int zone, int localSlot, long rootId, int sceneType, string name)
-        {
-            Fiber fiber = await FiberManager.Instance.CreateFiber(localSlot, SchedulerType.Parent, rootId, zone, sceneType, name, this);
-            this.children.Add(fiber.Id, fiber);
-            return fiber;
-        }
-
-        public async ETTask<int> CreateZoneFiber(int zone, SchedulerType schedulerType, long rootId, int sceneType, string name)
+        public async ETTask<int> CreateFiber(int zone, SchedulerType schedulerType, long rootId, int sceneType, string name)
         {
             schedulerType = this.NormalizeChildSchedulerType(schedulerType);
 
             Fiber fiber = await FiberManager.Instance.CreateFiber(schedulerType, rootId, zone, sceneType, name, this);
-            this.children.Add(fiber.Id, fiber);
-            return fiber.Id;
-        }
-
-        public async ETTask<int> CreateZoneFiberWithId(int zone, int localSlot, SchedulerType schedulerType, long rootId, int sceneType, string name)
-        {
-            schedulerType = this.NormalizeChildSchedulerType(schedulerType);
-
-            Fiber fiber = await FiberManager.Instance.CreateFiber(localSlot, schedulerType, rootId, zone, sceneType, name, this);
             this.children.Add(fiber.Id, fiber);
             return fiber.Id;
         }

@@ -20,6 +20,7 @@ namespace ET.Server
             // Agent 启动不阻塞等待向主节点注册完成：
             // 只拉起后台 bootstrap 协程，后续由协程完成 master 解析与注册。
             root.AddComponent<ServiceDiscoveryAgent>();
+            root.AddComponent<ProcessFiberAddressComponent>();
             await ETTask.CompletedTask;
         }
     }

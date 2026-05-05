@@ -22,7 +22,7 @@ namespace ET.Test
             try
             {
                 testFiber.AddSingleton<ServiceDiscoveryBootstrapSingleton>();
-                serviceDiscoveryFiber = await testFiber.CreateFiber(IdGenerater.Instance.GenerateId(),
+                serviceDiscoveryFiber = await testFiber.CreateFiber(0, IdGenerater.Instance.GenerateId(),
                     SceneType.ServiceDiscovery, "ServiceDiscovery_LocalNoMongo");
 
                 if (serviceDiscoveryFiber.Root.GetComponent<DBManagerComponent>() != null)
@@ -52,8 +52,7 @@ namespace ET.Test
                     return 8;
                 }
 
-                int agentFiberId = ServiceDiscovery_HA_TestHelper.GetServiceDiscoveryAgentFiberId(testFiber.Zone);
-                int createdAgentId = await testFiber.CreateFiberWithId(agentFiberId, SchedulerType.ThreadPool,
+                int createdAgentId = await testFiber.CreateFiber(0, SchedulerType.ThreadPool,
                     IdGenerater.Instance.GenerateId(), SceneType.ServiceDiscoveryAgent, "ServiceDiscoveryAgent@NoMongo");
                 agentFiber = testFiber.GetFiber(createdAgentId);
                 if (agentFiber == null || agentFiber.SchedulerType != SchedulerType.Parent)

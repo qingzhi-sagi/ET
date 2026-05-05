@@ -19,14 +19,10 @@
             AddressHelper.SetInnerIPInnerPortOuterIP(fiber, startProcessConfig);
             
             // 因为bind的地址有可能是0.0.0.0:0,NetInner创建完成会设置具体的地址到AddressSingleton中
-            await fiber.CreateFiberWithId(ConstFiberId.NetInnerFiberId, SchedulerType.ThreadPool, ConstFiberId.NetInnerFiberId, SceneType.NetInner, $"NetInner@{process}@{Options.Instance.ReplicaIndex}");
+            await fiber.CreateFiber(0, SchedulerType.ThreadPool, IdGenerater.Instance.GenerateId(), SceneType.NetInner,
+                $"NetInner@{process}@{Options.Instance.ReplicaIndex}");
 
-            int serviceDiscoveryAgentFiberId = ServiceDiscoveryFiberHelper.GetAgentFiberId(fiber.Zone);
-            await fiber.CreateFiberWithId(
-                serviceDiscoveryAgentFiberId,
-                SchedulerType.ThreadPool,
-                IdGenerater.Instance.GenerateId(),
-                SceneType.ServiceDiscoveryAgent,
+            await fiber.CreateFiber(0, SchedulerType.ThreadPool, IdGenerater.Instance.GenerateId(), SceneType.ServiceDiscoveryAgent,
                 $"ServiceDiscoveryAgent@{process}@{Options.Instance.ReplicaIndex}");
 
             if (startProcessConfig != null)
@@ -39,11 +35,13 @@
                     int sceneType = SceneTypeSingleton.Instance.GetSceneType(startConfig.SceneType);
                     if (sceneType == SceneType.ServiceDiscovery)
                     {
-                        await fiber.CreateZoneFiberWithId(startConfig.Zone, ConstFiberId.ServiceDiscoveryFiberId, SchedulerType.ThreadPool, ConstFiberId.ServiceDiscoveryFiberId, sceneType, $"{startConfig.Name}@{process}@{Options.Instance.ReplicaIndex}");
+                        await fiber.CreateFiber(0, SchedulerType.ThreadPool, startConfig.Id, sceneType,
+                            $"{startConfig.Name}@{process}@{Options.Instance.ReplicaIndex}");
                     }
                     else
                     {
-                        await fiber.CreateZoneFiber(startConfig.Zone, SchedulerType.ThreadPool, startConfig.Id, sceneType, $"{startConfig.Name}@{process}@{Options.Instance.ReplicaIndex}");
+                        await fiber.CreateFiber(startConfig.Zone, SchedulerType.ThreadPool, startConfig.Id, sceneType,
+                            $"{startConfig.Name}@{process}@{Options.Instance.ReplicaIndex}");
                     }
                 }
             }

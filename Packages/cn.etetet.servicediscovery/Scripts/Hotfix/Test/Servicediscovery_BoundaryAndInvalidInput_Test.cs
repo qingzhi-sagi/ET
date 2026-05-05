@@ -54,7 +54,7 @@ namespace ET.Test
             }
 
             ActorId agentActorId = new ActorId(node.Root.GetActorId().Address,
-                ServiceDiscovery_HA_TestHelper.CreateServiceDiscoveryAgentFiberInstanceId(testFiber.Zone));
+                ServiceDiscovery_HA_TestHelper.CreateServiceDiscoveryAgentFiberInstanceId(testFiber));
 
             // 2. 查询边界：直连ServiceDiscovery查询应失败（查询职责在Agent）
             bool notFoundRejected = await IsDirectServiceDiscoveryQueryRejected(

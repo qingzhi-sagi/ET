@@ -14,7 +14,7 @@ namespace ET.Server
 
 			EntityRef<Scene> rootRef = root;
 			
-			int fiberId = await fiber.CreateFiber(SchedulerType.ThreadPool, fiber.Zone, SceneType.RoomRoot, "RoomRoot");
+			int fiberId = await fiber.CreateFiber(SchedulerType.ThreadPool, IdGenerater.Instance.GenerateId(), SceneType.RoomRoot, "RoomRoot");
 			ActorId roomRootActorId = new(fiber.Process, fiberId);
 
 			// 发送消息给房间纤程，初始化

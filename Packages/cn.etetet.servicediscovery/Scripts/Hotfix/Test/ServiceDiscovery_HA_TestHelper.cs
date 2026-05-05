@@ -54,14 +54,14 @@ namespace ET.Test
             return CreateActorId(fiber.Zone, address, localSlot);
         }
 
-        public static int GetServiceDiscoveryAgentFiberId(int zone)
+        public static int GetServiceDiscoveryAgentFiberId(Fiber parent)
         {
-            return ServiceDiscoveryFiberHelper.GetAgentFiberId(zone);
+            return parent.GetSingleton<ProcessFiberAddressSingleton>().Get(SceneType.ServiceDiscoveryAgent).Fiber;
         }
 
-        public static FiberInstanceId CreateServiceDiscoveryAgentFiberInstanceId(int zone)
+        public static FiberInstanceId CreateServiceDiscoveryAgentFiberInstanceId(Fiber parent)
         {
-            return ServiceDiscoveryFiberHelper.CreateAgentFiberInstanceId(zone);
+            return parent.GetSingleton<ProcessFiberAddressSingleton>().Get(SceneType.ServiceDiscoveryAgent);
         }
 
         public static DBComponent GetServiceDiscoveryDB(DBManagerComponent dbManager)
@@ -71,7 +71,7 @@ namespace ET.Test
                 return null;
             }
 
-            return dbManager.GetZoneDB(dbManager.Root().Fiber.Zone);
+            return dbManager.GetZoneDB(0);
         }
 
         public static async ETTask SaveMasterRecordAsync(Scene ownerScene, DBComponent db, string sceneName, ActorId actorId,
@@ -128,7 +128,7 @@ namespace ET.Test
 
             foreach (StartSceneConfig config in GetServiceDiscoveryConfigs(parent))
             {
-                Fiber fiber = parent.GetFiber(GetFiberId(parent.Zone, config.Id));
+                Fiber fiber = parent.GetFiber(config.Name);
                 ServiceDiscovery serviceDiscovery = fiber?.Root?.GetComponent<ServiceDiscovery>();
                 if (serviceDiscovery != null && serviceDiscovery.GetOrAddLease().IsActiveMaster)
                 {
@@ -574,20 +574,36 @@ namespace ET.Test
                 return 1;
             }
 
-            int agentFiberId = GetServiceDiscoveryAgentFiberId(parent.Zone);
-            Fiber agentFiber = parent.GetFiber(agentFiberId);
+            ProcessFiberAddressSingleton processFiberAddressSingleton = parent.GetSingleton<ProcessFiberAddressSingleton>();
+            if (processFiberAddressSingleton == null)
+            {
+                Log.Console("ensure service discovery agent fiber failed: process fiber address singleton is null");
+                return 3;
+            }
+
+            Fiber agentFiber = null;
+            if (processFiberAddressSingleton.TryGet(SceneType.ServiceDiscoveryAgent, out FiberInstanceId agentFiberInstanceId))
+            {
+                agentFiber = parent.GetFiber(agentFiberInstanceId.Fiber);
+            }
+
             if (agentFiber == null)
             {
                 int process = Options.Instance.Process;
                 string agentName = $"ServiceDiscoveryAgent@{process}@{Options.Instance.ReplicaIndex}";
                 try
                 {
-                    agentFiber = await parent.CreateFiberWithId(agentFiberId, IdGenerater.Instance.GenerateId(), 
+                    int agentFiberId = await parent.CreateFiber(0, SchedulerType.ThreadPool, IdGenerater.Instance.GenerateId(),
                         SceneType.ServiceDiscoveryAgent, agentName);
+                    agentFiber = parent.GetFiber(agentFiberId);
                 }
                 catch (Exception e)
                 {
-                    agentFiber = parent.GetFiber(agentFiberId);
+                    if (processFiberAddressSingleton.TryGet(SceneType.ServiceDiscoveryAgent, out agentFiberInstanceId))
+                    {
+                        agentFiber = parent.GetFiber(agentFiberInstanceId.Fiber);
+                    }
+
                     if (agentFiber == null)
                     {
                         Log.Console($"ensure service discovery agent fiber failed: {e.Message}");
@@ -608,7 +624,14 @@ namespace ET.Test
                 return null;
             }
 
-            return parent.GetFiber(GetServiceDiscoveryAgentFiberId(parent.Zone));
+            ProcessFiberAddressSingleton processFiberAddressSingleton = parent.GetSingleton<ProcessFiberAddressSingleton>();
+            if (processFiberAddressSingleton == null ||
+                !processFiberAddressSingleton.TryGet(SceneType.ServiceDiscoveryAgent, out FiberInstanceId agentFiberInstanceId))
+            {
+                return null;
+            }
+
+            return parent.GetFiber(agentFiberInstanceId.Fiber);
         }
 
         public static ServiceDiscoveryAgent GetServiceDiscoveryAgent(Fiber parent)
@@ -782,10 +805,10 @@ namespace ET.Test
             if (configs.Count > configIndex)
             {
                 StartSceneConfig config = configs[configIndex];
-                return await parent.CreateFiberWithId(config.Id, config.Id, SceneType.ServiceDiscovery, config.Name);
+                return await parent.CreateFiber(0, config.Id, SceneType.ServiceDiscovery, config.Name);
             }
 
-            return await parent.CreateFiber(IdGenerater.Instance.GenerateId(), SceneType.ServiceDiscovery, fallbackName);
+            return await parent.CreateFiber(0, IdGenerater.Instance.GenerateId(), SceneType.ServiceDiscovery, fallbackName);
         }
 
         /// <summary>
