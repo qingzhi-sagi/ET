@@ -17,23 +17,21 @@ namespace ET.Test
             Scene root = fiber.Root;
             root.AddComponent<TimerComponent>();
             root.AddComponent<CoroutineLockComponent>();
-            root.AddComponent<DBManagerComponent>();
-
-            root.AddComponent<TestFiberDatabaseCleanupComponent>();
             
             int process = Options.Instance.Process;
             
             StartProcessConfig startProcessConfig = fiber.GetSingleton<StartProcessConfigCategory>().Get(process);
             
-            World.Instance.AddSingleton<AddressSingleton>();
+            fiber.AddSingleton<AddressSingleton>();
             // 先看环境变量是否有地址传过来，如果没有，则使用StartProcessConfig的地址跟端口
             AddressHelper.SetInnerIPInnerPortOuterIP(fiber, startProcessConfig);
 
+            fiber.AddSingleton<ProcessFiberAddressSingleton>();
             fiber.AddSingleton<ServiceDiscoveryBootstrapSingleton>();
-            Fiber serviceDiscoveryFiber =
-                    await fiber.CreateFiber(0, IdGenerater.Instance.GenerateId(), SceneType.ServiceDiscovery, nameof(SceneType.ServiceDiscovery));
 
-            // 进程级ServiceDiscovery Agent Fiber：所有业务Fiber的ServiceDiscoveryProxy统一通过此Fiber转发。
+            await fiber.CreateFiber(0, IdGenerater.Instance.GenerateId(), SceneType.ServiceDiscovery, nameof(SceneType.ServiceDiscovery));
+
+            // TestCase本地ServiceDiscovery Agent Fiber：当前Test fiber下的业务Fiber统一通过此Fiber转发。
             await fiber.CreateFiber(SchedulerType.ThreadPool, 0, IdGenerater.Instance.GenerateId(),
                 SceneType.ServiceDiscoveryAgent, $"ServiceDiscoveryAgent@{process}@{Options.Instance.ReplicaIndex}");
 

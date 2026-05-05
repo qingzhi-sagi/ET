@@ -9,6 +9,17 @@ namespace ET.Test
             await using TestFiberScope scope = await TestFiberScope.Create(context.Fiber, SceneType.TestCase,
                 nameof(Test_TestCaseServiceDiscoveryWithoutMongo_Test));
             Fiber testFiber = scope.TestFiber;
+            if (testFiber.Root.GetComponent<DBManagerComponent>() != null)
+            {
+                Log.Console("test case root should not add db manager by default");
+                return 7;
+            }
+
+            if (testFiber.Root.GetComponent<TestFiberDatabaseCleanupComponent>() != null)
+            {
+                Log.Console("test case root should not add database cleanup by default");
+                return 8;
+            }
 
             Fiber serviceDiscoveryFiber = testFiber.GetFiber(nameof(SceneType.ServiceDiscovery));
             if (serviceDiscoveryFiber == null)

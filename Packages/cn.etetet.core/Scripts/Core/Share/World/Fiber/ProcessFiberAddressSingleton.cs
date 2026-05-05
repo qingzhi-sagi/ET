@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace ET
 {
     [CodeProcess]
-    public class ProcessFiberAddressSingleton : Singleton<ProcessFiberAddressSingleton>, ISingletonAwake
+    public class ProcessFiberAddressSingleton : Singleton<ProcessFiberAddressSingleton>, ISingletonAwake, IInheritableSingleton
     {
         private readonly Dictionary<int, FiberInstanceId> fiberInstanceIds = new();
 

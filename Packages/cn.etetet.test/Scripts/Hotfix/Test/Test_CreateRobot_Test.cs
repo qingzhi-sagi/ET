@@ -37,12 +37,13 @@ namespace ET.Test
                 Fiber testFiber = scope.TestFiber;
                 Scene root = testFiber.Root;
                 EntityRef<Scene> rootRef = root;
-                root.GetComponent<TestFiberDatabaseCleanupComponent>()
-                        .RegisterLogicalDbName(nameof(Test_TestCaseFiberCleanup_DropsZoneDb_Test));
-                DBManagerComponent dbManagerComponent = root.GetComponent<DBManagerComponent>();
+                DBManagerComponent dbManagerComponent = root.AddComponent<DBManagerComponent>();
+                TestFiberDatabaseCleanupComponent cleanupComponent = root.AddComponent<TestFiberDatabaseCleanupComponent>();
+                cleanupComponent.RegisterLogicalDbName(nameof(Test_TestCaseFiberCleanup_DropsZoneDb_Test));
                 zoneDbName = dbManagerComponent.GetZoneDBName(testFiber.Zone);
 
-                Fiber robot = await TestHelper.CreateRobot(testFiber, nameof(Test_TestCaseFiberCleanup_DropsZoneDb_Test));
+                DBComponent dbComponent = dbManagerComponent.GetZoneDB(testFiber.Zone);
+                await dbComponent.CreateCollection(nameof(Test_TestCaseFiberCleanup_DropsZoneDb_Test));
                 root = rootRef;
                 bool dbExists = await WaitForDatabaseStateAsync(root, zoneDbName, true, DatabaseWaitTimeoutMs);
                 if (!dbExists)
