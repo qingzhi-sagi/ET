@@ -8,7 +8,7 @@ namespace ET.Test
     /// 故障恢复与客户端状态测试：
     /// 验证主挂掉后备接管，以及注册/订阅/本地缓存状态恢复完整性。
     /// </summary>
-public class Servicediscovery_FailureRecoveryAndClientState_Test : ATestHandler
+    public class Servicediscovery_FailureRecoveryAndClientState_Test : ATestHandler
     {
         public override async ETTask<int> Handle(TestContext context)
         {

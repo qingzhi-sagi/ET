@@ -99,7 +99,7 @@ namespace ET.Test
             }
 
             long now = testFiber.GetSingleton<TimeInfo>().ServerNow();
-            await ServiceDiscovery_HA_TestHelper.SaveMasterRecordAsync(context.Fiber.Root, db, slowMasterRoot.Name,
+            await ServiceDiscovery_HA_TestHelper.SaveMasterRecordAsync(testFiber.Root, db, slowMasterRoot.Name,
                 slowMasterRoot.GetActorId(), 1, now + 10 * 1000, 10 * 1000, now);
 
             int ensureAgentError = await ServiceDiscovery_HA_TestHelper.EnsureServiceDiscoveryAgentFiberAsync(testFiber);
@@ -207,7 +207,7 @@ namespace ET.Test
             }
 
             long now = testFiber.GetSingleton<TimeInfo>().ServerNow();
-            await ServiceDiscovery_HA_TestHelper.SaveMasterRecordAsync(context.Fiber.Root, db, slowMasterRoot.Name,
+            await ServiceDiscovery_HA_TestHelper.SaveMasterRecordAsync(testFiber.Root, db, slowMasterRoot.Name,
                 slowMasterRoot.GetActorId(), 1, now + 10 * 1000, 10 * 1000, now);
 
             int ensureAgentError = await ServiceDiscovery_HA_TestHelper.EnsureServiceDiscoveryAgentFiberAsync(testFiber);

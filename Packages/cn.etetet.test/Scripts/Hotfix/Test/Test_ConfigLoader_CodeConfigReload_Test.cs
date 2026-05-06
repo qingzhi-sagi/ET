@@ -3,6 +3,7 @@ using ET.Server;
 
 namespace ET.Test
 {
+    [TestExecution(TestExecutionMode.Exclusive)]
     public class Test_ConfigLoader_CodeConfigReload_Test : ATestHandler
     {
         public override async ETTask<int> Handle(TestContext context)

@@ -20,6 +20,10 @@ namespace ET.Test
             TestFiberScope scope = new(fiber);
             int zone = AllocateZone(fiber);
             scope.TestFiber = await fiber.CreateFiber(zone, IdGenerater.Instance.GenerateId(), sceneType, testName);
+            if (sceneType == SceneType.TestEmpty)
+            {
+                scope.TestFiber.AddSingleton<ProcessFiberAddressSingleton>();
+            }
             return scope;
         }
 

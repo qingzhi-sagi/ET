@@ -71,7 +71,7 @@ namespace ET.Test
                 return null;
             }
 
-            return dbManager.GetZoneDB(0);
+            return dbManager.GetZoneDB(dbManager.Root().Fiber.Zone);
         }
 
         public static async ETTask SaveMasterRecordAsync(Scene ownerScene, DBComponent db, string sceneName, ActorId actorId,
@@ -593,7 +593,7 @@ namespace ET.Test
                 string agentName = $"ServiceDiscoveryAgent@{process}@{Options.Instance.ReplicaIndex}";
                 try
                 {
-                    int agentFiberId = await parent.CreateFiber(SchedulerType.ThreadPool, 0, IdGenerater.Instance.GenerateId(),
+                    int agentFiberId = await parent.CreateFiber(SchedulerType.ThreadPool, parent.Zone, IdGenerater.Instance.GenerateId(),
                         SceneType.ServiceDiscoveryAgent, agentName);
                     agentFiber = parent.GetFiber(agentFiberId);
                 }
@@ -805,10 +805,10 @@ namespace ET.Test
             if (configs.Count > configIndex)
             {
                 StartSceneConfig config = configs[configIndex];
-                return await parent.CreateFiber(0, config.Id, SceneType.ServiceDiscovery, config.Name);
+                return await parent.CreateFiber(parent.Zone, config.Id, SceneType.ServiceDiscovery, config.Name);
             }
 
-            return await parent.CreateFiber(0, IdGenerater.Instance.GenerateId(), SceneType.ServiceDiscovery, fallbackName);
+            return await parent.CreateFiber(parent.Zone, IdGenerater.Instance.GenerateId(), SceneType.ServiceDiscovery, fallbackName);
         }
 
         /// <summary>

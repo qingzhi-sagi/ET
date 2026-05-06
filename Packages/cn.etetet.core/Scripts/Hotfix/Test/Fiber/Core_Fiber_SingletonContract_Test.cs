@@ -1,5 +1,6 @@
 namespace ET.Test
 {
+    [TestExecution(TestExecutionMode.Exclusive)]
     public class Core_Fiber_SingletonContract_Test : ATestHandler
     {
         public override async ETTask<int> Handle(TestContext context)

@@ -36,10 +36,10 @@ namespace ET.Test
         /// 获取匹配的测试处理器列表
         /// </summary>
         /// <param name="name">处理器名正则表达式，null或空表示匹配所有处理器</param>
-        /// <returns>匹配的测试处理器列表</returns>
-        public List<ITestHandler> Get(string name)
+        /// <returns>匹配的测试用例描述列表</returns>
+        public List<TestCaseInfo> Get(string name)
         {
-            List<ITestHandler> result = new();
+            List<TestCaseInfo> result = new();
             
             // 创建正则表达式
             System.Text.RegularExpressions.Regex nameRegex = new(name);
@@ -53,14 +53,14 @@ namespace ET.Test
                     continue;
                 }
                 
-                result.Add(iTestHandler);
+                object[] executionAttributes = iTestHandler.GetType().GetCustomAttributes(typeof(TestExecutionAttribute), true);
+                TestExecutionMode mode = executionAttributes.Length > 0
+                        ? ((TestExecutionAttribute)executionAttributes[0]).Mode
+                        : TestExecutionMode.Parallel;
+
+                result.Add(new TestCaseInfo(testName, iTestHandler, mode));
             }
 
-            if (result.Count == 0)
-            {
-                return result;
-            }
-            
             return result;
         }
     }
