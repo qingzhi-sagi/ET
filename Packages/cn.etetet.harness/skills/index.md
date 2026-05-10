@@ -5,7 +5,7 @@
 ## 加载策略
 
 1. 先用场景匹配 1 个主 skill；只有跨域任务才叠加其它 skill。
-2. 先读命中的轻量入口；需要细节时再读 `Agents/skills/references/*.md`。
+2. 先读命中的轻量入口；需要细节时再读 `skills/references/*.md`。
 3. 能直接调用现成脚本或 CLI 时，优先现成入口，不重复展开长命令。
 4. 所有命令必须使用 `pwsh`（PowerShell 7），绝对不要使用 Windows 自带的 `powershell.exe`。
 5. 测试相关任务：完整 TDD 用 `et-tdd`，只写测试用 `et-test-write`，只执行或排查测试用 `et-test-run`。
@@ -18,48 +18,48 @@
 
 - `et-code`
   - 场景：Entity / Component / System / Helper、包依赖、程序集、Handler 结构、组件契约、Module analyzer、分析器报错、新建或移动 C# 文件
-  - 补读：`Agents/skills/references/et-code-rules.md`
+  - 补读：`skills/references/et-code-rules.md`
 - `et-async`
   - 场景：`async` / `await` / `ETTask` / `ETCancellationToken`、`EntityRef` await 安全、`NewContext(...)`、并发等待
   - 注意：改任何含 `async` / `ETTask` 的代码时，叠加此 skill
-  - 补读：`Agents/skills/references/et-async-rules.md`
+  - 补读：`skills/references/et-async-rules.md`
 
 ### Unity 编辑器操作
 
 - `et-unitybridge`
   - 场景：查询 Unity 心跳/状态、触发编译/刷新/重新生成项目/进入退出 PlayMode/热更新 Reload、排查桥接返回
-  - 补读：`Agents/skills/references/et-unitybridge-cli.md`
+  - 补读：`skills/references/et-unitybridge-cli.md`
 
 ### 构建与导出
 
 - `et-build`
   - 场景：编译（`dotnet build ET.sln`）、导出 Proto、启动服务器、发布
-  - 补读：`Agents/skills/references/et-build-commands.md`
+  - 补读：`skills/references/et-build-commands.md`
 - `et-luban`
   - 场景：导出 Luban 生成的 C# 配置代码与 C# 数据代码、刷新聚合 `luban.conf`、核对 `CodeMode/Model` / `CodeMode/Config`、排查 `ET.ExcelExporter` / `LubanGen.ps1` / `luban.conf`
-  - 补读：`Agents/skills/references/et-luban-export.md`
+  - 补读：`skills/references/et-luban-export.md`
 
 ### 测试验证
 
 - `et-tdd`
   - 场景：TDD 驱动开发、完整测试闭环（设计 -> 测试方案 -> 编写 -> 编译 -> 运行 -> 回归）
   - 叠加：`et-test-write`、`et-test-run`、涉及业务代码时 `et-code`
-  - 补读：`Agents/skills/references/et-test-guide.md`
+  - 补读：`skills/references/et-test-guide.md`
 - `et-test-write`
   - 场景：编写或修改 `ATestHandler` 测试用例、补 `Test.md` 或最小验证清单
-  - 补读：`Agents/skills/references/et-test-guide.md`
+  - 补读：`skills/references/et-test-guide.md`
 - `et-test-run`
   - 场景：执行测试、查看 `Logs/All.log`、调试测试失败、做回归验证
-  - 补读：`Agents/skills/references/et-test-guide.md`
+  - 补读：`skills/references/et-test-guide.md`
 
 ### 数据与提交
 
 - `et-excel`
   - 场景：通过 `ET.ExcelMcp` 读写 Excel、维护 Luban 配置表、批量导入导出、样式 / 公式 / 图表 / 工作表操作
-  - 补读：`Agents/skills/references/et-excel-cli.md`
+  - 补读：`skills/references/et-excel-cli.md`
 - `et-git`
   - 场景：提交前检查、整理 `git status` / `git diff`、筛除无关文件、编写中文提交信息、与远端 rebase 同步
-  - 补读：`Agents/skills/references/et-git-workflow.md`
+  - 补读：`skills/references/et-git-workflow.md`
 
 ## 组合场景
 

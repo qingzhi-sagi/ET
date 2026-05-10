@@ -136,6 +136,12 @@
         "cn.etetet.unit": "4.0.0"
       }
     },
+    "cn.etetet.harness": {
+      "version": "file:cn.etetet.harness",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "cn.etetet.http": {
       "version": "file:cn.etetet.http",
       "depth": 0,

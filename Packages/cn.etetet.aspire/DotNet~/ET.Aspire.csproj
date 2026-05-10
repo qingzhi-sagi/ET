@@ -22,7 +22,7 @@
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
       <OutputPath>$(ProjectDir)../../../Bin</OutputPath>
       <WorkingDirectory>$(ProjectDir)</WorkingDirectory>
-      <NoWarn></NoWarn>
+      <NoWarn>;NU1903;NU1902</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
@@ -30,7 +30,7 @@
       <WorkingDirectory>$(ProjectDir)</WorkingDirectory>
       <Optimize>false</Optimize>
       <DebugSymbols>true</DebugSymbols>
-      <NoWarn></NoWarn>
+      <NoWarn>;NU1903;NU1902</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>

@@ -29,4 +29,4 @@
 
 ## 按需补读
 
-- `Agents/skills/references/et-excel-cli.md`：工具选择、`pwsh` JSON 传参、常用示例
+- `skills/references/et-excel-cli.md`：工具选择、`pwsh` JSON 传参、常用示例

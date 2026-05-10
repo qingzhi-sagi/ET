@@ -24,7 +24,7 @@
 
 ## 快速分流
 
-- `EntityRef` 正误示例、并发等待、取消控制：补读 `Agents/skills/references/et-async-rules.md`
+- `EntityRef` 正误示例、并发等待、取消控制：补读 `skills/references/et-async-rules.md`
 - Handler `Run`、组件契约、包结构：叠加 `et-code`
 - 测试里的异步等待：叠加 `et-test-write`
 

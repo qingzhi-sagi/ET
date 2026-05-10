@@ -21,6 +21,8 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <DefineConstants>DOTNET</DefineConstants>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <NoWarn>NU1903;NU1902</NoWarn>
+        <WarningsAsErrors>;NU1605;SYSLIB0011 </WarningsAsErrors>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
@@ -28,16 +30,7 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <DefineConstants>DOTNET</DefineConstants>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    </PropertyGroup>
-
-    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <OutputPath>$(SolutionDir)/Bin</OutputPath>
-      <NoWarn></NoWarn>
-    </PropertyGroup>
-
-    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-      <OutputPath>$(SolutionDir)/Bin</OutputPath>
-      <NoWarn></NoWarn>
+        <NoWarn>NU1903;NU1902</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>

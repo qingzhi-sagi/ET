@@ -36,4 +36,4 @@
 
 ## 按需补读
 
-- `Agents/skills/references/et-unitybridge-cli.md`：传输参数、实时轮询、返回值解读、常见错误
+- `skills/references/et-unitybridge-cli.md`：传输参数、实时轮询、返回值解读、常见错误

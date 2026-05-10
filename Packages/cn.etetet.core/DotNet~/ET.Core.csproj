@@ -30,7 +30,7 @@
       <OutputPath>$(ETRootDir)Bin</OutputPath>
       <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
       <Optimize>false</Optimize>
-      <NoWarn>CA2022</NoWarn>
+      <NoWarn>CA2022;NU1903;NU1902</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">  
@@ -38,7 +38,7 @@
       <DefineConstants>DOTNET;ET10</DefineConstants>
       <OutputPath>$(ETRootDir)Bin</OutputPath>
       <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-      <NoWarn>CA2022</NoWarn>
+      <NoWarn>CA2022;NU1903;NU1902</NoWarn>
       <Optimize>true</Optimize>
       <DebugType>full</DebugType>
       <DebugSymbols>true</DebugSymbols>

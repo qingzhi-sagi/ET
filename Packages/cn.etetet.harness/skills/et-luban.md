@@ -29,4 +29,4 @@
 
 ## 按需补读
 
-- `Agents/skills/references/et-luban-export.md`：导出流程、结果落点、常见失败排查
+- `skills/references/et-luban-export.md`：导出流程、结果落点、常见失败排查

@@ -26,7 +26,7 @@
 
 ## 快速分流
 
-- 命名、落点、模板、ObjectWait、数据准备：补读 `Agents/skills/references/et-test-guide.md`
+- 命名、落点、模板、ObjectWait、数据准备：补读 `skills/references/et-test-guide.md`
 - 异步安全：叠加 `et-async`
 - 写完后编译：转 `et-build`
 - 写完后执行：转 `et-test-run`

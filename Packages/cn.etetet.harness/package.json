@@ -1,0 +1,20 @@
+{
+  "name": "cn.etetet.harness",
+  "displayName": "ET.Harness",
+  "version": "1.0.0",
+  "unity": "2022.3",
+  "description": "ET project AI harness skills and routing instructions for distribution.",
+  "author": {
+    "name": "tanghai",
+    "url": "https://github.com/egametang/ET"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ET-Packages/cn.etetet.harness"
+  },
+  "relatedPackages": {},
+  "dependencies": {},
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/@ET-Packages"
+  }
+}

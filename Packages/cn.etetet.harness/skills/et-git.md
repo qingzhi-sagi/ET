@@ -36,4 +36,4 @@
 
 ## 按需补读
 
-- `Agents/skills/references/et-git-workflow.md`：提交前检查、变更筛选、中文提交信息、rebase 规范与风险操作
+- `skills/references/et-git-workflow.md`：提交前检查、变更筛选、中文提交信息、rebase 规范与风险操作

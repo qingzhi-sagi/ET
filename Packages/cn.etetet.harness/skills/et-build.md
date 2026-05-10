@@ -29,6 +29,6 @@
 
 ## 按需补读
 
-- `Agents/skills/references/et-build-commands.md`：命令、前置条件、常见排查
-- `Agents/skills/et-luban.md`：Luban 配置导出
-- `Agents/skills/et-test-run.md`：测试执行
+- `skills/references/et-build-commands.md`：命令、前置条件、常见排查
+- `skills/et-luban.md`：Luban 配置导出
+- `skills/et-test-run.md`：测试执行

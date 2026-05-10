@@ -23,4 +23,4 @@
 
 ## 按需补读
 
-- `Agents/skills/references/et-test-guide.md`：TDD 流程、测试编写、测试执行与日志排查
+- `skills/references/et-test-guide.md`：TDD 流程、测试编写、测试执行与日志排查

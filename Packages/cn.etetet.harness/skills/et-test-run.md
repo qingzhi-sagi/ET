@@ -31,4 +31,4 @@
 
 ## 按需补读
 
-- `Agents/skills/references/et-test-guide.md`：测试执行格式、日志分析、常见失败原因
+- `skills/references/et-test-guide.md`：测试执行格式、日志分析、常见失败原因
