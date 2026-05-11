@@ -57,7 +57,7 @@ namespace ET
 #if UNITY_EDITOR     
                 "ET.Model",
                 "ET.ModelView",
-                "ET.BehaviorTree.Editor",
+                "ET.Editor",
 #endif
             };
 

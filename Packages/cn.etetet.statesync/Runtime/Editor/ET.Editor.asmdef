@@ -1,0 +1,34 @@
+{
+    "name": "ET.Editor",
+    "rootNamespace": "",
+    "references": [
+        "ET.Core",
+        "ET.Hotfix",
+        "ET.HotfixView",
+        "ET.HybridCLR",
+        "ET.Init",
+        "ET.Init.Editor",
+        "ET.Loader",
+        "ET.Model",
+        "ET.ModelView",
+        "ET.YIUIFramework",
+        "ET.YooAssets",
+        "Unity.Mathematics",
+        "Unity.ScriptableBuildPipeline",
+        "Unity.ScriptableBuildPipeline.Editor",
+        "Unity.TextMeshPro",
+        "UnityEngine.UI",
+        "ET.YooAssets.Editor"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

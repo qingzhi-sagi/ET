@@ -10,7 +10,7 @@ namespace ET
 
         private static readonly string[] scriptDirs = { "Scripts", "CodeMode" };
 
-        private static readonly string[] modelDirs = { "Model", "Hotfix", "ModelView", "HotfixView", "Core", "Loader", "Config"};
+        private static readonly string[] modelDirs = { "Model", "Hotfix", "ModelView", "HotfixView", "Core", "Loader", "Config", "Editor" };
 
         private static readonly string[] serverDirs = { "Server", "Client", "Share", "ClientServer" };
 
@@ -35,6 +35,9 @@ namespace ET
             "Client/Scripts/Loader/Client",
             "Client/Scripts/Loader/Share",
             "Client/CodeMode/Loader/Client",
+            "Client/Scripts/Editor/Share",
+            "Client/Scripts/Editor/Client",
+            "Client/CodeMode/Editor/Client",
 
             "Server/Scripts/Model/Server",
             "Server/Scripts/Model/Share",
@@ -49,6 +52,7 @@ namespace ET
             "Server/Scripts/Loader/Server",
             "Server/Scripts/Loader/Share",
             "Server/CodeMode/Loader/Server",
+            "Server/Scripts/Editor/Share",
 
             "ClientServer/Scripts/Model/Client",
             "ClientServer/Scripts/Model/Server",
@@ -75,6 +79,9 @@ namespace ET
             "ClientServer/Scripts/Loader/Share",
             "ClientServer/Scripts/Loader/Server",
             "ClientServer/CodeMode/Loader/ClientServer",
+            "ClientServer/Scripts/Editor/Share",
+            "ClientServer/Scripts/Editor/Client",
+            "ClientServer/CodeMode/Editor/ClientServer",
         };
 
         public static void ChangeToCodeMode(string codeMode, HashSet<string> targetPackages)
@@ -117,7 +124,7 @@ namespace ET
                                     continue;
                                 }
 
-                                // 对于目标包，根据 codeMode 处理；对于非目标包，删除所有 AssemblyReference
+                                // 对于目标包，根据 codeMode 处理；Editor 作为通用扩展入口，对所有包保留。
                                 HandleAssemblyReferenceFile(codeMode, moduleDir, scriptDir, modelDir, serverDir, isTargetPackage);
                             }
                         }
@@ -131,8 +138,7 @@ namespace ET
             string filePath = Path.Combine(moduleDir, scriptDir, modelDir, serverDir, "AssemblyReference.asmref");
             DeleteAssemblyReference(filePath);
 
-            // 只有目标包才根据 codeMode 创建 AssemblyReference
-            if (isTargetPackage)
+            if (isTargetPackage || modelDir == "Editor")
             {
                 string path = $"{codeMode}/{scriptDir}/{modelDir}/{serverDir}";
                 if (v.Contains(path))

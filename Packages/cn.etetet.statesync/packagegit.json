@@ -36,6 +36,28 @@
       "ET.Loader",
       "ET.Model",
       "ET.Recast"
+    ],
+    "Editor": [
+      "DamageNumbersPro",
+      "ET.Core",
+      "ET.Hotfix",
+      "ET.HotfixView",
+      "ET.HybridCLR",
+      "ET.Init",
+      "ET.Init.Editor",
+      "ET.Loader",
+      "ET.MemoryPack",
+      "ET.Model",
+      "ET.ModelView",
+      "ET.Recast",
+      "ET.YIUIFramework",
+      "ET.YooAssets",
+      "MemoryPack",
+      "Unity.Mathematics",
+      "Unity.ScriptableBuildPipeline",
+      "Unity.ScriptableBuildPipeline.Editor",
+      "Unity.TextMeshPro",
+      "UnityEngine.UI"
     ]
   }
 }

@@ -7,9 +7,9 @@
 ## 目录约定
 
 - `Scripts/Model/Share`：行为树节点与通用模型代码
-- `Editor/BehaviorTreeEditor`：行为树编辑器与 Inspector 扩展
+- `Scripts/Editor/Share/BehaviorTreeEditor`：行为树编辑器与 Inspector 扩展，汇入 `ET.Editor`
 
 ## 开发约定
 
-- 运行时逻辑与编辑器逻辑分离，编辑器代码必须放在 `Editor` 目录下
+- 运行时逻辑与编辑器逻辑分离，编辑器代码必须放在 `Scripts/Editor` 目录下，并通过 `.asmref` 汇入 `ET.Editor`
 - BTInput/BTOutput 参数只用于节点参数的输入输出描述，不直接参与运行时逻辑

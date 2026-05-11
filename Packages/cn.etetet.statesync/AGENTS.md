@@ -15,5 +15,7 @@
 |------|------|
 | `DotNet~/Model` | `ET.Model.csproj` 与相关生成脚本 |
 | `DotNet~/Hotfix` | `ET.Hotfix.csproj` 与相关生成脚本 |
+| `Runtime/Editor` | `ET.Editor.asmdef` 通用编辑器程序集入口 |
 | `Scripts` | 状态同步相关代码 |
+| `Scripts/Editor` | 通用编辑器代码，通过 `.asmref` 汇入 `ET.Editor` |
 | `Proto` | 协议定义 |
