@@ -14,12 +14,14 @@ namespace ET
         private List<SpellEditorIssue> issues = new();
         private int selectedMainSpellId;
         private Vector2 scroll;
+        private Vector2 mainSpellListScroll;
         private Vector2 spellTableScroll;
         private Vector2 buffTableScroll;
         private bool needsRebuild;
         private UnityEngine.Object selectedAsset;
         private int renameId;
         private int copyMainSpellId;
+        private string mainSpellFilter = string.Empty;
         private readonly Dictionary<int, int> selectedEffectIndexByBuffId = new();
         private Type[] effectNodeTypes;
         private Type[] costNodeTypes;
@@ -60,7 +62,6 @@ namespace ET
                 this.RefreshIndex();
             }
 
-            this.DrawMainSpellPopup();
             GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
 
@@ -70,6 +71,9 @@ namespace ET
                 return;
             }
 
+            EditorGUILayout.BeginHorizontal();
+            this.DrawMainSpellList();
+            EditorGUILayout.BeginVertical();
             this.DrawAssetToolbar();
 
             this.scroll = EditorGUILayout.BeginScrollView(this.scroll);
@@ -93,6 +97,8 @@ namespace ET
             this.DrawBuffTable();
             EditorGUILayout.EndScrollView();
             EditorGUILayout.EndScrollView();
+            EditorGUILayout.EndVertical();
+            EditorGUILayout.EndHorizontal();
 
             if (this.needsRebuild)
             {
@@ -102,29 +108,83 @@ namespace ET
             }
         }
 
-        private void DrawMainSpellPopup()
+        private void DrawMainSpellList()
         {
             if (this.assetIndex == null)
             {
                 return;
             }
 
-            int[] mainSpellIds = this.assetIndex.Spells.Keys.Where(SpellEditorConstants.IsMainSpell).OrderBy(x => x).ToArray();
-            if (mainSpellIds.Length == 0)
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.Width(260));
+            EditorGUILayout.LabelField("主技能", EditorStyles.boldLabel);
+            this.mainSpellFilter = EditorGUILayout.TextField(this.mainSpellFilter ?? string.Empty, EditorStyles.toolbarSearchField);
+
+            List<int> mainSpellIds = this.assetIndex.Spells.Keys
+                    .Where(SpellEditorConstants.IsMainSpell)
+                    .OrderBy(x => x)
+                    .Where(this.MatchMainSpellFilter)
+                    .ToList();
+
+            EditorGUILayout.LabelField($"显示 {mainSpellIds.Count}", EditorStyles.miniLabel);
+            this.mainSpellListScroll = EditorGUILayout.BeginScrollView(this.mainSpellListScroll, GUILayout.ExpandHeight(true));
+            if (mainSpellIds.Count == 0)
             {
-                GUILayout.Label("无主技能", EditorStyles.toolbarButton, GUILayout.Width(120));
+                EditorGUILayout.HelpBox("没有匹配的主技能。", MessageType.Info);
+                EditorGUILayout.EndScrollView();
+                EditorGUILayout.EndVertical();
                 return;
             }
 
-            string[] mainSpellLabels = mainSpellIds.Select(x => x.ToString()).ToArray();
-            int currentIndex = Array.IndexOf(mainSpellIds, this.selectedMainSpellId);
-            int nextIndex = EditorGUILayout.Popup(Math.Max(0, currentIndex), mainSpellLabels, EditorStyles.toolbarPopup, GUILayout.Width(160));
-            if (nextIndex >= 0 && nextIndex < mainSpellIds.Length && mainSpellIds[nextIndex] != this.selectedMainSpellId)
+            foreach (int mainSpellId in mainSpellIds)
             {
-                this.selectedMainSpellId = mainSpellIds[nextIndex];
-                this.copyMainSpellId = SpellEditorAssetOperations.FindNextMainSpellId(this.assetIndex, this.selectedMainSpellId);
-                this.RebuildGraph();
+                this.assetIndex.Spells.TryGetValue(mainSpellId, out SpellScriptableObject asset);
+                string label = this.FormatMainSpellLabel(mainSpellId, asset);
+                GUIStyle style = mainSpellId == this.selectedMainSpellId ? EditorStyles.toolbarButton : EditorStyles.miniButton;
+                if (GUILayout.Button(label, style, GUILayout.Height(24)))
+                {
+                    if (mainSpellId != this.selectedMainSpellId)
+                    {
+                        this.selectedMainSpellId = mainSpellId;
+                        this.copyMainSpellId = SpellEditorAssetOperations.FindNextMainSpellId(this.assetIndex, this.selectedMainSpellId);
+                        this.SelectAsset(null);
+                        this.RebuildGraph();
+                    }
+
+                    if (asset != null)
+                    {
+                        Selection.activeObject = asset;
+                    }
+                }
             }
+
+            EditorGUILayout.EndScrollView();
+            EditorGUILayout.EndVertical();
+        }
+
+        private bool MatchMainSpellFilter(int mainSpellId)
+        {
+            if (string.IsNullOrWhiteSpace(this.mainSpellFilter))
+            {
+                return true;
+            }
+
+            if (!this.assetIndex.Spells.TryGetValue(mainSpellId, out SpellScriptableObject asset) || asset == null)
+            {
+                return mainSpellId.ToString().Contains(this.mainSpellFilter.Trim(), StringComparison.OrdinalIgnoreCase);
+            }
+
+            string filter = this.mainSpellFilter.Trim();
+            SpellConfig config = asset.SpellConfig;
+            return mainSpellId.ToString().Contains(filter, StringComparison.OrdinalIgnoreCase) ||
+                   (!string.IsNullOrEmpty(config.Desc) && config.Desc.Contains(filter, StringComparison.OrdinalIgnoreCase)) ||
+                   (!string.IsNullOrEmpty(config.IconName) && config.IconName.Contains(filter, StringComparison.OrdinalIgnoreCase)) ||
+                   (!string.IsNullOrEmpty(asset.name) && asset.name.Contains(filter, StringComparison.OrdinalIgnoreCase));
+        }
+
+        private string FormatMainSpellLabel(int mainSpellId, SpellScriptableObject asset)
+        {
+            string desc = asset?.SpellConfig.Desc;
+            return string.IsNullOrEmpty(desc) ? mainSpellId.ToString() : $"{mainSpellId}  {desc}";
         }
 
         private void RefreshIndex()
