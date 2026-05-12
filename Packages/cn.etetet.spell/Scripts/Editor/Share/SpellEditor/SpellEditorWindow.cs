@@ -340,8 +340,8 @@ namespace ET
             GUILayout.Label("BuffId", GUILayout.Width(80));
             GUILayout.Label("Cost", GUILayout.Width(160));
             GUILayout.Label("TargetSelector", GUILayout.Width(180));
-            GUILayout.Label("来源", GUILayout.Width(240));
             GUILayout.Label("资产", GUILayout.Width(360));
+            GUILayout.Label("来源", GUILayout.Width(240));
             EditorGUILayout.EndHorizontal();
 
             if (this.buildResult == null)
@@ -370,8 +370,8 @@ namespace ET
                     GUILayout.Label(string.Empty, GUILayout.Width(80));
                     GUILayout.Label(string.Empty, GUILayout.Width(160));
                     GUILayout.Label(string.Empty, GUILayout.Width(180));
-                    GUILayout.Label(this.FormatSources(row.Sources), GUILayout.Width(240));
                     GUILayout.Label(string.Empty, GUILayout.Width(360));
+                    GUILayout.Label(this.FormatSources(row.Sources), GUILayout.Width(240));
                     EditorGUILayout.EndHorizontal();
                     continue;
                 }
@@ -406,8 +406,8 @@ namespace ET
                 this.DrawRootCell(row.Asset, config.Cost, "Cost", 160, this.GetCostNodeTypes(), root => config.Cost = (CostNode)root);
                 this.DrawRootCell(row.Asset, config.TargetSelector, "TargetSelector", 180, this.GetTargetSelectorTypes(), root => config.TargetSelector = (TargetSelector)root);
 
-                GUILayout.Label(this.FormatSources(row.Sources), GUILayout.Width(240));
                 this.DrawAssetField(row.Asset, GUILayout.Width(360));
+                GUILayout.Label(this.FormatSources(row.Sources), GUILayout.Width(240));
                 EditorGUILayout.EndHorizontal();
             }
         }
@@ -575,8 +575,8 @@ namespace ET
             GUILayout.Label("Notice", GUILayout.Width(120));
             GUILayout.Label("Flags", GUILayout.Width(220));
             GUILayout.Label("Effects", GUILayout.Width(360));
-            GUILayout.Label("来源", GUILayout.Width(240));
             GUILayout.Label("资产", GUILayout.Width(360));
+            GUILayout.Label("来源", GUILayout.Width(240));
             EditorGUILayout.EndHorizontal();
 
             if (this.buildResult == null)
@@ -606,8 +606,8 @@ namespace ET
                     GUILayout.Label(string.Empty, GUILayout.Width(120));
                     GUILayout.Label(string.Empty, GUILayout.Width(220));
                     GUILayout.Label(string.Empty, GUILayout.Width(360));
-                    GUILayout.Label(this.FormatSources(row.Sources), GUILayout.Width(240));
                     GUILayout.Label(string.Empty, GUILayout.Width(360));
+                    GUILayout.Label(this.FormatSources(row.Sources), GUILayout.Width(240));
                     EditorGUILayout.EndHorizontal();
                     continue;
                 }
@@ -638,8 +638,8 @@ namespace ET
 
                 this.DrawFlagsCell(row.Asset, config);
                 this.DrawEffectsCell(row.Asset, config);
-                GUILayout.Label(this.FormatSources(row.Sources), GUILayout.Width(240));
                 this.DrawAssetField(row.Asset, GUILayout.Width(360));
+                GUILayout.Label(this.FormatSources(row.Sources), GUILayout.Width(240));
                 EditorGUILayout.EndHorizontal();
             }
         }
