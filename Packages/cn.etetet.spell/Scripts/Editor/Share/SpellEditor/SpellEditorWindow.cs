@@ -39,6 +39,18 @@ namespace ET
                 this.RefreshIndex();
             }
 
+            if (GUILayout.Button("保存", EditorStyles.toolbarButton, GUILayout.Width(64)))
+            {
+                SpellEditorAssetOperations.SaveAssets();
+                this.RefreshIndex();
+            }
+
+            if (GUILayout.Button("导出配置", EditorStyles.toolbarButton, GUILayout.Width(80)))
+            {
+                SpellEditorAssetOperations.ExportConfig();
+                this.RefreshIndex();
+            }
+
             this.DrawMainSpellPopup();
             GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
@@ -176,10 +188,6 @@ namespace ET
                 int cd = EditorGUILayout.IntField(config.CD, GUILayout.Width(70));
                 int damage = EditorGUILayout.IntField(config.DamageMultiplier, GUILayout.Width(80));
                 int buffId = EditorGUILayout.IntField(config.BuffId, GUILayout.Width(80));
-                GUILayout.Label(this.FormatRoot(config.Cost), GUILayout.Width(160));
-                GUILayout.Label(this.FormatRoot(config.TargetSelector), GUILayout.Width(180));
-                GUILayout.Label(this.FormatSources(row.Sources), GUILayout.Width(240));
-                GUILayout.Label(row.AssetPath, GUILayout.Width(360));
                 if (EditorGUI.EndChangeCheck())
                 {
                     config.Desc = string.IsNullOrEmpty(desc) ? null : desc;
@@ -190,6 +198,19 @@ namespace ET
                     EditorUtility.SetDirty(row.Asset);
                     this.needsRebuild = true;
                 }
+
+                if (GUILayout.Button(this.FormatRoot(config.Cost), EditorStyles.miniButton, GUILayout.Width(160)))
+                {
+                    SpellEditorAssetOperations.OpenBehaviorTree(row.Asset, config.Cost);
+                }
+
+                if (GUILayout.Button(this.FormatRoot(config.TargetSelector), EditorStyles.miniButton, GUILayout.Width(180)))
+                {
+                    SpellEditorAssetOperations.OpenBehaviorTree(row.Asset, config.TargetSelector);
+                }
+
+                GUILayout.Label(this.FormatSources(row.Sources), GUILayout.Width(240));
+                GUILayout.Label(row.AssetPath, GUILayout.Width(360));
                 EditorGUILayout.EndHorizontal();
             }
         }
@@ -247,10 +268,6 @@ namespace ET
                 int stack = EditorGUILayout.IntField(config.Stack, GUILayout.Width(70));
                 OverLayRuleType overlay = (OverLayRuleType)EditorGUILayout.EnumPopup(config.OverLayRuleType, GUILayout.Width(120));
                 NoticeType notice = (NoticeType)EditorGUILayout.EnumPopup(config.NoticeType, GUILayout.Width(120));
-                GUILayout.Label(this.FormatFlags(config), GUILayout.Width(160));
-                GUILayout.Label(this.FormatEffects(config), GUILayout.Width(180));
-                GUILayout.Label(this.FormatSources(row.Sources), GUILayout.Width(240));
-                GUILayout.Label(row.AssetPath, GUILayout.Width(360));
                 if (EditorGUI.EndChangeCheck())
                 {
                     config.Desc = string.IsNullOrEmpty(desc) ? null : desc;
@@ -263,6 +280,16 @@ namespace ET
                     EditorUtility.SetDirty(row.Asset);
                     this.needsRebuild = true;
                 }
+
+                GUILayout.Label(this.FormatFlags(config), GUILayout.Width(160));
+                if (GUILayout.Button(this.FormatEffects(config), EditorStyles.miniButton, GUILayout.Width(180)))
+                {
+                    EffectNode firstEffect = config.Effects != null ? config.Effects.FirstOrDefault(x => x != null) : null;
+                    SpellEditorAssetOperations.OpenBehaviorTree(row.Asset, firstEffect);
+                }
+
+                GUILayout.Label(this.FormatSources(row.Sources), GUILayout.Width(240));
+                GUILayout.Label(row.AssetPath, GUILayout.Width(360));
                 EditorGUILayout.EndHorizontal();
             }
         }
