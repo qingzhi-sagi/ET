@@ -18,6 +18,8 @@ namespace ET
         private Vector2 spellTableScroll;
         private Vector2 buffTableScroll;
         private bool needsRebuild;
+        private float mainSpellPanelWidth = 260f;
+        private bool resizingMainSpellPanel;
         private UnityEngine.Object selectedAsset;
         private int renameId;
         private int copyMainSpellId;
@@ -73,6 +75,7 @@ namespace ET
 
             EditorGUILayout.BeginHorizontal();
             this.DrawMainSpellList();
+            this.DrawMainSpellResizeHandle();
             EditorGUILayout.BeginVertical();
             this.DrawAssetToolbar();
 
@@ -115,7 +118,7 @@ namespace ET
                 return;
             }
 
-            EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.Width(260));
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.Width(this.mainSpellPanelWidth), GUILayout.ExpandHeight(true));
             EditorGUILayout.LabelField("主技能", EditorStyles.boldLabel);
             this.mainSpellFilter = EditorGUILayout.TextField(this.mainSpellFilter ?? string.Empty, EditorStyles.toolbarSearchField);
 
@@ -126,7 +129,11 @@ namespace ET
                     .ToList();
 
             EditorGUILayout.LabelField($"显示 {mainSpellIds.Count}", EditorStyles.miniLabel);
-            this.mainSpellListScroll = EditorGUILayout.BeginScrollView(this.mainSpellListScroll, GUILayout.ExpandHeight(true));
+            this.mainSpellListScroll = EditorGUILayout.BeginScrollView(
+                this.mainSpellListScroll,
+                false,
+                true,
+                GUILayout.ExpandHeight(true));
             if (mainSpellIds.Count == 0)
             {
                 EditorGUILayout.HelpBox("没有匹配的主技能。", MessageType.Info);
@@ -140,7 +147,7 @@ namespace ET
                 this.assetIndex.Spells.TryGetValue(mainSpellId, out SpellScriptableObject asset);
                 string label = this.FormatMainSpellLabel(mainSpellId, asset);
                 GUIStyle style = mainSpellId == this.selectedMainSpellId ? EditorStyles.toolbarButton : EditorStyles.miniButton;
-                if (GUILayout.Button(label, style, GUILayout.Height(24)))
+                if (GUILayout.Button(label, style, GUILayout.ExpandWidth(true), GUILayout.Height(24)))
                 {
                     if (mainSpellId != this.selectedMainSpellId)
                     {
@@ -159,6 +166,33 @@ namespace ET
 
             EditorGUILayout.EndScrollView();
             EditorGUILayout.EndVertical();
+        }
+
+        private void DrawMainSpellResizeHandle()
+        {
+            Rect rect = GUILayoutUtility.GetRect(5f, 5f, GUILayout.ExpandHeight(true));
+            EditorGUIUtility.AddCursorRect(rect, MouseCursor.ResizeHorizontal);
+            EditorGUI.DrawRect(rect, new Color(0.25f, 0.25f, 0.25f));
+
+            Event evt = Event.current;
+            if (evt.type == EventType.MouseDown && rect.Contains(evt.mousePosition))
+            {
+                this.resizingMainSpellPanel = true;
+                evt.Use();
+            }
+
+            if (this.resizingMainSpellPanel && evt.type == EventType.MouseDrag)
+            {
+                this.mainSpellPanelWidth = Mathf.Clamp(this.mainSpellPanelWidth + evt.delta.x, 180f, 520f);
+                this.Repaint();
+                evt.Use();
+            }
+
+            if (this.resizingMainSpellPanel && evt.type == EventType.MouseUp)
+            {
+                this.resizingMainSpellPanel = false;
+                evt.Use();
+            }
         }
 
         private bool MatchMainSpellFilter(int mainSpellId)
