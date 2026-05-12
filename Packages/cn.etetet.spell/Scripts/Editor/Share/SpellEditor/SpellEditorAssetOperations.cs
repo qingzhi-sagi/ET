@@ -51,6 +51,20 @@ namespace ET
             return directory?.Replace("\\", "/") ?? SpellEditorConstants.BtAssetRoot;
         }
 
+        public static string GetNewMainSpellDirectory(int mainSpellId)
+        {
+            string baseDirectory = $"{SpellEditorConstants.BtAssetRoot}/{mainSpellId}-NewSpell";
+            string directory = baseDirectory;
+            int duplicateIndex = 2;
+            while (Directory.Exists(directory))
+            {
+                directory = $"{baseDirectory}-{duplicateIndex}";
+                duplicateIndex++;
+            }
+
+            return directory;
+        }
+
         public static SpellScriptableObject CreateSpellAsset(int spellId, string directory)
         {
             SpellConfig config = new()

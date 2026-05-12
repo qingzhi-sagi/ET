@@ -23,6 +23,7 @@ namespace ET
         private UnityEngine.Object selectedAsset;
         private int renameId;
         private int copyMainSpellId;
+        private int newMainSpellId;
         private string mainSpellFilter = string.Empty;
         private Type[] effectNodeTypes;
         private Type[] costNodeTypes;
@@ -120,6 +121,7 @@ namespace ET
             EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.Width(this.mainSpellPanelWidth), GUILayout.ExpandHeight(true));
             EditorGUILayout.LabelField("主技能", EditorStyles.boldLabel);
             this.mainSpellFilter = EditorGUILayout.TextField(this.mainSpellFilter ?? string.Empty, EditorStyles.toolbarSearchField);
+            this.DrawCreateMainSpellControls();
 
             List<int> mainSpellIds = this.assetIndex.Spells.Keys
                     .Where(SpellEditorConstants.IsMainSpell)
@@ -168,6 +170,19 @@ namespace ET
 
             EditorGUILayout.EndScrollView();
             EditorGUILayout.EndVertical();
+        }
+
+        private void DrawCreateMainSpellControls()
+        {
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("新主Id", EditorStyles.miniLabel, GUILayout.Width(44));
+            this.newMainSpellId = EditorGUILayout.IntField(this.newMainSpellId, GUILayout.MinWidth(70));
+            if (GUILayout.Button("新建", EditorStyles.miniButton, GUILayout.Width(48)))
+            {
+                this.CreateMainSpell();
+            }
+
+            EditorGUILayout.EndHorizontal();
         }
 
         private void DrawMainSpellResizeHandle()
@@ -236,6 +251,11 @@ namespace ET
             if (this.copyMainSpellId == 0 || this.assetIndex.Spells.ContainsKey(this.copyMainSpellId))
             {
                 this.copyMainSpellId = SpellEditorAssetOperations.FindNextMainSpellId(this.assetIndex, this.selectedMainSpellId);
+            }
+
+            if (this.newMainSpellId == 0 || this.assetIndex.Spells.ContainsKey(this.newMainSpellId))
+            {
+                this.newMainSpellId = SpellEditorAssetOperations.FindNextMainSpellId(this.assetIndex, this.selectedMainSpellId);
             }
 
             this.RebuildGraph();
@@ -817,6 +837,42 @@ namespace ET
 
             string directory = SpellEditorAssetOperations.GetAssetDirectory(mainAsset);
             SpellEditorAssetOperations.CreateBuffAsset(buffId, directory);
+            this.RefreshIndex();
+        }
+
+        private void CreateMainSpell()
+        {
+            if (this.newMainSpellId <= 0)
+            {
+                EditorUtility.DisplayDialog("新建失败", "主技能 Id 必须大于 0。", "确定");
+                return;
+            }
+
+            if (!SpellEditorConstants.IsMainSpell(this.newMainSpellId))
+            {
+                EditorUtility.DisplayDialog("新建失败", "主技能 Id 必须是 10 的倍数。", "确定");
+                return;
+            }
+
+            if (this.assetIndex.Spells.ContainsKey(this.newMainSpellId))
+            {
+                EditorUtility.DisplayDialog("新建失败", $"主技能 {this.newMainSpellId} 已存在。", "确定");
+                return;
+            }
+
+            int mainSpellId = this.newMainSpellId;
+            int buffId = SpellEditorAssetOperations.FindNextBuffId(this.assetIndex, mainSpellId);
+            string directory = SpellEditorAssetOperations.GetNewMainSpellDirectory(mainSpellId);
+            SpellScriptableObject asset = SpellEditorAssetOperations.CreateSpellAsset(new SpellConfig { Id = mainSpellId, BuffId = buffId }, directory);
+            if (asset == null)
+            {
+                return;
+            }
+
+            SpellEditorAssetOperations.CreateBuffAsset(buffId, directory);
+            this.selectedMainSpellId = mainSpellId;
+            this.SelectAsset(asset);
+            Selection.activeObject = asset;
             this.RefreshIndex();
         }
 
