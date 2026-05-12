@@ -146,7 +146,10 @@ namespace ET
             {
                 this.assetIndex.Spells.TryGetValue(mainSpellId, out SpellScriptableObject asset);
                 string label = this.FormatMainSpellLabel(mainSpellId, asset);
-                GUIStyle style = mainSpellId == this.selectedMainSpellId ? EditorStyles.toolbarButton : EditorStyles.miniButton;
+                GUIStyle style = new GUIStyle(mainSpellId == this.selectedMainSpellId ? EditorStyles.toolbarButton : EditorStyles.miniButton)
+                {
+                    alignment = TextAnchor.MiddleLeft,
+                };
                 if (GUILayout.Button(label, style, GUILayout.ExpandWidth(true), GUILayout.Height(24)))
                 {
                     if (mainSpellId != this.selectedMainSpellId)
