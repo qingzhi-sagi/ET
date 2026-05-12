@@ -24,6 +24,7 @@ namespace ET
         private Type[] effectNodeTypes;
         private Type[] costNodeTypes;
         private Type[] targetSelectorTypes;
+        private Dictionary<string, Sprite> iconSpritesByName;
 
         [MenuItem(SpellEditorConstants.MenuPath)]
         public static void Open()
@@ -237,7 +238,7 @@ namespace ET
             GUILayout.Label("Id", GUILayout.Width(70));
             GUILayout.Label("类型", GUILayout.Width(60));
             GUILayout.Label("Desc", GUILayout.Width(180));
-            GUILayout.Label("IconName", GUILayout.Width(180));
+            GUILayout.Label("IconName", GUILayout.Width(280));
             GUILayout.Label("CD", GUILayout.Width(70));
             GUILayout.Label("Damage", GUILayout.Width(80));
             GUILayout.Label("BuffId", GUILayout.Width(80));
@@ -268,7 +269,7 @@ namespace ET
                     GUILayout.Label(row.Id.ToString(), GUILayout.Width(70));
                     GUILayout.Label("Missing", GUILayout.Width(60));
                     GUILayout.Label($"Missing Spell {row.Id}", GUILayout.Width(180));
-                    GUILayout.Label(string.Empty, GUILayout.Width(180));
+                    GUILayout.Label(string.Empty, GUILayout.Width(280));
                     GUILayout.Label(string.Empty, GUILayout.Width(70));
                     GUILayout.Label(string.Empty, GUILayout.Width(80));
                     GUILayout.Label(string.Empty, GUILayout.Width(80));
@@ -287,14 +288,20 @@ namespace ET
                 GUILayout.Label(row.IsMain ? "主技能" : "子技能", GUILayout.Width(60));
                 EditorGUI.BeginChangeCheck();
                 string desc = EditorGUILayout.TextField(config.Desc ?? string.Empty, GUILayout.Width(180));
-                string iconName = EditorGUILayout.TextField(config.IconName ?? string.Empty, GUILayout.Width(180));
+                if (EditorGUI.EndChangeCheck())
+                {
+                    config.Desc = string.IsNullOrEmpty(desc) ? null : desc;
+                    EditorUtility.SetDirty(row.Asset);
+                }
+
+                this.DrawIconNameCell(row.Asset, config);
+
+                EditorGUI.BeginChangeCheck();
                 int cd = EditorGUILayout.IntField(config.CD, GUILayout.Width(70));
                 int damage = EditorGUILayout.IntField(config.DamageMultiplier, GUILayout.Width(80));
                 int buffId = EditorGUILayout.IntField(config.BuffId, GUILayout.Width(80));
                 if (EditorGUI.EndChangeCheck())
                 {
-                    config.Desc = string.IsNullOrEmpty(desc) ? null : desc;
-                    config.IconName = string.IsNullOrEmpty(iconName) ? null : iconName;
                     config.CD = cd;
                     config.DamageMultiplier = damage;
                     config.BuffId = buffId;
@@ -308,6 +315,78 @@ namespace ET
                 GUILayout.Label(this.FormatSources(row.Sources), GUILayout.Width(240));
                 this.DrawAssetField(row.Asset, GUILayout.Width(360));
                 EditorGUILayout.EndHorizontal();
+            }
+        }
+
+        private void DrawIconNameCell(SpellScriptableObject asset, SpellConfig config)
+        {
+            EditorGUILayout.BeginHorizontal(GUILayout.Width(280));
+            Sprite currentSprite = this.ResolveIconSprite(config.IconName);
+            EditorGUI.BeginChangeCheck();
+            Sprite nextSprite = (Sprite)EditorGUILayout.ObjectField(currentSprite, typeof(Sprite), false, GUILayout.Width(130));
+            if (EditorGUI.EndChangeCheck())
+            {
+                config.IconName = nextSprite != null ? nextSprite.name : null;
+                EditorUtility.SetDirty(asset);
+                this.Repaint();
+            }
+
+            EditorGUI.BeginChangeCheck();
+            string iconName = EditorGUILayout.TextField(config.IconName ?? string.Empty, GUILayout.Width(112));
+            if (EditorGUI.EndChangeCheck())
+            {
+                config.IconName = string.IsNullOrEmpty(iconName) ? null : iconName;
+                EditorUtility.SetDirty(asset);
+                this.Repaint();
+            }
+
+            using (new EditorGUI.DisabledScope(currentSprite == null))
+            {
+                if (GUILayout.Button("定位", EditorStyles.miniButton, GUILayout.Width(32)))
+                {
+                    Selection.activeObject = currentSprite;
+                    EditorGUIUtility.PingObject(currentSprite);
+                }
+            }
+
+            EditorGUILayout.EndHorizontal();
+        }
+
+        private Sprite ResolveIconSprite(string iconName)
+        {
+            if (string.IsNullOrEmpty(iconName))
+            {
+                return null;
+            }
+
+            this.EnsureIconSpriteIndex();
+            return this.iconSpritesByName.TryGetValue(iconName, out Sprite sprite) ? sprite : null;
+        }
+
+        private void EnsureIconSpriteIndex()
+        {
+            if (this.iconSpritesByName != null)
+            {
+                return;
+            }
+
+            this.iconSpritesByName = new Dictionary<string, Sprite>(StringComparer.Ordinal);
+            foreach (string guid in AssetDatabase.FindAssets("t:Sprite"))
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                foreach (Sprite sprite in AssetDatabase.LoadAllAssetsAtPath(path).OfType<Sprite>())
+                {
+                    if (sprite != null && !this.iconSpritesByName.ContainsKey(sprite.name))
+                    {
+                        this.iconSpritesByName.Add(sprite.name, sprite);
+                    }
+                }
+
+                Sprite mainSprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
+                if (mainSprite != null && !this.iconSpritesByName.ContainsKey(mainSprite.name))
+                {
+                    this.iconSpritesByName.Add(mainSprite.name, mainSprite);
+                }
             }
         }
 
