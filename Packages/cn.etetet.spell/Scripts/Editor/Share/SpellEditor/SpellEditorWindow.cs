@@ -24,7 +24,6 @@ namespace ET
         private int renameId;
         private int copyMainSpellId;
         private string mainSpellFilter = string.Empty;
-        private readonly Dictionary<int, int> selectedEffectIndexByBuffId = new();
         private Type[] effectNodeTypes;
         private Type[] costNodeTypes;
         private Type[] targetSelectorTypes;
@@ -707,102 +706,19 @@ namespace ET
         private void DrawEffectsCell(BuffScriptableObject asset, BuffConfig config)
         {
             config.Effects ??= new List<EffectNode>();
-            int effectCount = config.Effects.Count;
-            if (effectCount <= 0)
+            string effectsLabel = this.FormatEffects(config);
+            Rect rect = GUILayoutUtility.GetRect(new GUIContent(effectsLabel), EditorStyles.popup, GUILayout.Width(360), GUILayout.Height(EditorGUIUtility.singleLineHeight));
+            if (GUI.Button(rect, effectsLabel, EditorStyles.popup))
             {
-                GUILayout.Label("无 Effect", EditorStyles.miniLabel, GUILayout.Width(220));
-                if (GUILayout.Button("+", EditorStyles.miniButton, GUILayout.Width(28)))
-                {
-                    this.ShowAddEffectMenu(asset, config);
-                }
-
-                GUILayout.Label(string.Empty, GUILayout.Width(112));
-                return;
+                PopupWindow.Show(
+                    rect,
+                    new SpellEditorEffectsPopupContent(
+                        config,
+                        this.GetEffectNodeTypes(),
+                        effectType => this.AddEffect(asset, config, effectType),
+                        effect => SpellEditorAssetOperations.OpenBehaviorTree(asset, effect),
+                        effectIndex => this.DeleteEffect(asset, config, effectIndex)));
             }
-
-            int selectedIndex = this.GetSelectedEffectIndex(config.Id, effectCount);
-            string[] effectLabels = config.Effects
-                    .Select((effect, index) => $"{index}: {(effect != null ? effect.GetType().Name : "null")}")
-                    .ToArray();
-            int nextIndex = EditorGUILayout.Popup(selectedIndex, effectLabels, GUILayout.Width(220));
-            if (nextIndex != selectedIndex)
-            {
-                this.selectedEffectIndexByBuffId[config.Id] = nextIndex;
-                selectedIndex = nextIndex;
-            }
-
-            EffectNode selectedEffect = config.Effects[selectedIndex];
-            using (new EditorGUI.DisabledScope(selectedEffect == null))
-            {
-                if (GUILayout.Button("打开", EditorStyles.miniButton, GUILayout.Width(44)))
-                {
-                    SpellEditorAssetOperations.OpenBehaviorTree(asset, selectedEffect);
-                }
-            }
-
-            if (GUILayout.Button("+", EditorStyles.miniButton, GUILayout.Width(28)))
-            {
-                this.ShowAddEffectMenu(asset, config);
-            }
-
-            if (GUILayout.Button("-", EditorStyles.miniButton, GUILayout.Width(28)))
-            {
-                string effectName = selectedEffect != null ? selectedEffect.GetType().Name : "null";
-                if (EditorUtility.DisplayDialog("删除 Effect", $"确认删除 Effects[{selectedIndex}] {effectName}？", "删除", "取消"))
-                {
-                    config.Effects.RemoveAt(selectedIndex);
-                    config.effectDict = null;
-                    if (config.Effects.Count == 0)
-                    {
-                        this.selectedEffectIndexByBuffId.Remove(config.Id);
-                    }
-                    else
-                    {
-                        this.selectedEffectIndexByBuffId[config.Id] = Mathf.Clamp(selectedIndex, 0, config.Effects.Count - 1);
-                    }
-
-                    EditorUtility.SetDirty(asset);
-                    this.needsRebuild = true;
-                }
-            }
-
-            GUILayout.Label($"共 {effectCount}", EditorStyles.miniLabel, GUILayout.Width(40));
-        }
-
-        private int GetSelectedEffectIndex(int buffId, int effectCount)
-        {
-            if (!this.selectedEffectIndexByBuffId.TryGetValue(buffId, out int selectedIndex))
-            {
-                selectedIndex = 0;
-            }
-
-            selectedIndex = Mathf.Clamp(selectedIndex, 0, effectCount - 1);
-            this.selectedEffectIndexByBuffId[buffId] = selectedIndex;
-            return selectedIndex;
-        }
-
-        private void ShowAddEffectMenu(BuffScriptableObject asset, BuffConfig config)
-        {
-            GenericMenu menu = new();
-            HashSet<Type> existingTypes = config.Effects
-                    .Where(effect => effect != null)
-                    .Select(effect => effect.GetType())
-                    .ToHashSet();
-
-            foreach (Type type in this.GetEffectNodeTypes())
-            {
-                Type effectType = type;
-                GUIContent content = new(effectType.Name);
-                if (existingTypes.Contains(effectType))
-                {
-                    menu.AddDisabledItem(content);
-                    continue;
-                }
-
-                menu.AddItem(content, false, () => this.AddEffect(asset, config, effectType));
-            }
-
-            menu.ShowAsContext();
         }
 
         private Type[] GetEffectNodeTypes()
@@ -824,7 +740,20 @@ namespace ET
             config.Effects ??= new List<EffectNode>();
             config.Effects.Add(effect);
             config.effectDict = null;
-            this.selectedEffectIndexByBuffId[config.Id] = config.Effects.Count - 1;
+            EditorUtility.SetDirty(asset);
+            this.needsRebuild = true;
+            this.Repaint();
+        }
+
+        private void DeleteEffect(BuffScriptableObject asset, BuffConfig config, int effectIndex)
+        {
+            if (config.Effects == null || effectIndex < 0 || effectIndex >= config.Effects.Count)
+            {
+                return;
+            }
+
+            config.Effects.RemoveAt(effectIndex);
+            config.effectDict = null;
             EditorUtility.SetDirty(asset);
             this.needsRebuild = true;
             this.Repaint();
@@ -906,10 +835,10 @@ namespace ET
         {
             if (config.Effects == null || config.Effects.Count == 0)
             {
-                return string.Empty;
+                return "Effects: 无";
             }
 
-            return $"{config.Effects.Count}: {string.Join(", ", config.Effects.Select(x => x != null? x.GetType().Name : "null"))}";
+            return $"Effects ({config.Effects.Count}): {string.Join(", ", config.Effects.Select(x => x != null? x.GetType().Name : "null"))}";
         }
 
         private string FormatFlags(BuffConfig config)
