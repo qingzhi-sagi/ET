@@ -24,7 +24,10 @@ namespace ET.Client
 #if UNITY_EDITOR
             int id = int.Parse(this.name);
             this.SpellConfig.Id = id;    // ScriptableObject 的 name 就是 asset 名称
-            this.SpellConfig.BuffId = id + 100000;
+            if (this.SpellConfig.BuffId == 0)
+            {
+                this.SpellConfig.BuffId = id + 100000;
+            }
 #endif
         }
     }

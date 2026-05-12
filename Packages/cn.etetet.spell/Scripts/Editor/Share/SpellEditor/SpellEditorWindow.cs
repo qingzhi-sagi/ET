@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ET.Client;
 using UnityEditor;
 using UnityEngine;
 
@@ -16,6 +17,9 @@ namespace ET
         private Vector2 spellTableScroll;
         private Vector2 buffTableScroll;
         private bool needsRebuild;
+        private UnityEngine.Object selectedAsset;
+        private int renameId;
+        private int copyMainSpellId;
 
         [MenuItem(SpellEditorConstants.MenuPath)]
         public static void Open()
@@ -60,6 +64,8 @@ namespace ET
                 EditorGUILayout.HelpBox("资产索引未初始化。", MessageType.Warning);
                 return;
             }
+
+            this.DrawAssetToolbar();
 
             this.scroll = EditorGUILayout.BeginScrollView(this.scroll);
             foreach (SpellEditorIssue issue in this.issues)
@@ -111,6 +117,7 @@ namespace ET
             if (nextIndex >= 0 && nextIndex < mainSpellIds.Length && mainSpellIds[nextIndex] != this.selectedMainSpellId)
             {
                 this.selectedMainSpellId = mainSpellIds[nextIndex];
+                this.copyMainSpellId = SpellEditorAssetOperations.FindNextMainSpellId(this.assetIndex, this.selectedMainSpellId);
                 this.RebuildGraph();
             }
         }
@@ -122,6 +129,12 @@ namespace ET
             if (this.selectedMainSpellId == 0 || !this.assetIndex.Spells.ContainsKey(this.selectedMainSpellId))
             {
                 this.selectedMainSpellId = firstMain;
+            }
+
+            this.EnsureSelectionValid();
+            if (this.copyMainSpellId == 0 || this.assetIndex.Spells.ContainsKey(this.copyMainSpellId))
+            {
+                this.copyMainSpellId = SpellEditorAssetOperations.FindNextMainSpellId(this.assetIndex, this.selectedMainSpellId);
             }
 
             this.RebuildGraph();
@@ -138,9 +151,85 @@ namespace ET
                     : new List<SpellEditorIssue>();
         }
 
+        private void DrawAssetToolbar()
+        {
+            EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
+            bool hasMain = this.assetIndex.Spells.TryGetValue(this.selectedMainSpellId, out SpellScriptableObject mainAsset);
+            if (GUILayout.Button("新建子技能", EditorStyles.toolbarButton, GUILayout.Width(88)) && hasMain)
+            {
+                int spellId = SpellEditorAssetOperations.FindNextSubSpellId(this.assetIndex, this.selectedMainSpellId);
+                if (spellId == 0)
+                {
+                    EditorUtility.DisplayDialog("新建失败", $"主技能组 {this.selectedMainSpellId} 没有空闲子技能 Id。", "确定");
+                }
+                else
+                {
+                    string directory = SpellEditorAssetOperations.GetAssetDirectory(mainAsset);
+                    int buffId = SpellEditorAssetOperations.FindNextBuffId(this.assetIndex, spellId);
+                    SpellEditorAssetOperations.CreateSpellAsset(new SpellConfig { Id = spellId, BuffId = buffId }, directory);
+                    SpellEditorAssetOperations.CreateBuffAsset(buffId, directory);
+                    this.RefreshIndex();
+                }
+            }
+
+            GUILayout.Space(8);
+            if (this.selectedAsset == null)
+            {
+                GUILayout.Label("未选择资产", EditorStyles.miniLabel, GUILayout.Width(96));
+            }
+            else
+            {
+                GUILayout.Label($"选中 {this.selectedAsset.name}", EditorStyles.miniLabel, GUILayout.Width(120));
+                GUILayout.Label("目标Id", EditorStyles.miniLabel, GUILayout.Width(44));
+                this.renameId = EditorGUILayout.IntField(this.renameId, GUILayout.Width(80));
+                if (GUILayout.Button("改Id", EditorStyles.toolbarButton, GUILayout.Width(56)))
+                {
+                    int oldId = SpellEditorAssetOperations.GetAssetId(this.selectedAsset);
+                    bool wasMain = this.selectedAsset is SpellScriptableObject && oldId == this.selectedMainSpellId;
+                    if (SpellEditorAssetOperations.RenameAssetId(this.assetIndex, this.selectedAsset, this.renameId))
+                    {
+                        if (wasMain)
+                        {
+                            this.selectedMainSpellId = this.renameId;
+                        }
+
+                        this.RefreshIndex();
+                    }
+                }
+
+                if (GUILayout.Button("删除", EditorStyles.toolbarButton, GUILayout.Width(56)))
+                {
+                    string path = AssetDatabase.GetAssetPath(this.selectedAsset);
+                    if (EditorUtility.DisplayDialog("删除资产", $"确认删除 {path}？", "删除", "取消"))
+                    {
+                        SpellEditorAssetOperations.DeleteAsset(this.selectedAsset);
+                        this.SelectAsset(null);
+                        this.RefreshIndex();
+                    }
+                }
+            }
+
+            GUILayout.FlexibleSpace();
+            GUILayout.Label("复制链到主Id", EditorStyles.miniLabel, GUILayout.Width(84));
+            this.copyMainSpellId = EditorGUILayout.IntField(this.copyMainSpellId, GUILayout.Width(80));
+            if (GUILayout.Button("复制链", EditorStyles.toolbarButton, GUILayout.Width(64)))
+            {
+                if (SpellEditorAssetOperations.CopySpellChain(this.assetIndex, this.buildResult, this.selectedMainSpellId, this.copyMainSpellId))
+                {
+                    this.selectedMainSpellId = this.copyMainSpellId;
+                    this.SelectAsset(null);
+                    this.RefreshIndex();
+                }
+            }
+
+            EditorGUILayout.EndHorizontal();
+        }
+
         private void DrawSpellTable()
         {
             EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
+            GUILayout.Label("选", GUILayout.Width(24));
+            GUILayout.Label("操作", GUILayout.Width(70));
             GUILayout.Label("Id", GUILayout.Width(70));
             GUILayout.Label("类型", GUILayout.Width(60));
             GUILayout.Label("Desc", GUILayout.Width(180));
@@ -164,6 +253,14 @@ namespace ET
                 EditorGUILayout.BeginHorizontal();
                 if (row.Asset == null)
                 {
+                    GUILayout.Label(string.Empty, GUILayout.Width(24));
+                    if (GUILayout.Button("创建", EditorStyles.miniButton, GUILayout.Width(70)))
+                    {
+                        this.CreateMissingSpell(row.Id);
+                        EditorGUILayout.EndHorizontal();
+                        continue;
+                    }
+
                     GUILayout.Label(row.Id.ToString(), GUILayout.Width(70));
                     GUILayout.Label("Missing", GUILayout.Width(60));
                     GUILayout.Label($"Missing Spell {row.Id}", GUILayout.Width(180));
@@ -180,6 +277,8 @@ namespace ET
                 }
 
                 SpellConfig config = row.Asset.SpellConfig;
+                this.DrawSelectionToggle(row.Asset);
+                GUILayout.Label(string.Empty, GUILayout.Width(70));
                 GUILayout.Label(config.Id.ToString(), GUILayout.Width(70));
                 GUILayout.Label(row.IsMain ? "主技能" : "子技能", GUILayout.Width(60));
                 EditorGUI.BeginChangeCheck();
@@ -218,6 +317,8 @@ namespace ET
         private void DrawBuffTable()
         {
             EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
+            GUILayout.Label("选", GUILayout.Width(24));
+            GUILayout.Label("操作", GUILayout.Width(70));
             GUILayout.Label("Id", GUILayout.Width(70));
             GUILayout.Label("Desc", GUILayout.Width(180));
             GUILayout.Label("Duration", GUILayout.Width(80));
@@ -242,6 +343,14 @@ namespace ET
                 EditorGUILayout.BeginHorizontal();
                 if (row.Asset == null)
                 {
+                    GUILayout.Label(string.Empty, GUILayout.Width(24));
+                    if (GUILayout.Button("创建", EditorStyles.miniButton, GUILayout.Width(70)))
+                    {
+                        this.CreateMissingBuff(row.Id);
+                        EditorGUILayout.EndHorizontal();
+                        continue;
+                    }
+
                     GUILayout.Label(row.Id.ToString(), GUILayout.Width(70));
                     GUILayout.Label($"Missing Buff {row.Id}", GUILayout.Width(180));
                     GUILayout.Label(string.Empty, GUILayout.Width(80));
@@ -259,6 +368,8 @@ namespace ET
                 }
 
                 BuffConfig config = row.Asset.BuffConfig;
+                this.DrawSelectionToggle(row.Asset);
+                GUILayout.Label(string.Empty, GUILayout.Width(70));
                 GUILayout.Label(config.Id.ToString(), GUILayout.Width(70));
                 EditorGUI.BeginChangeCheck();
                 string desc = EditorGUILayout.TextField(config.Desc ?? string.Empty, GUILayout.Width(180));
@@ -292,6 +403,67 @@ namespace ET
                 GUILayout.Label(row.AssetPath, GUILayout.Width(360));
                 EditorGUILayout.EndHorizontal();
             }
+        }
+
+        private void DrawSelectionToggle(UnityEngine.Object asset)
+        {
+            bool selected = this.selectedAsset == asset;
+            bool next = GUILayout.Toggle(selected, string.Empty, GUILayout.Width(24));
+            if (next != selected)
+            {
+                this.SelectAsset(next ? asset : null);
+            }
+        }
+
+        private void SelectAsset(UnityEngine.Object asset)
+        {
+            this.selectedAsset = asset;
+            this.renameId = SpellEditorAssetOperations.GetAssetId(asset);
+            if (asset != null)
+            {
+                EditorGUIUtility.PingObject(asset);
+            }
+        }
+
+        private void EnsureSelectionValid()
+        {
+            if (this.selectedAsset == null)
+            {
+                this.renameId = 0;
+                return;
+            }
+
+            string path = AssetDatabase.GetAssetPath(this.selectedAsset);
+            if (string.IsNullOrEmpty(path))
+            {
+                this.SelectAsset(null);
+            }
+        }
+
+        private void CreateMissingSpell(int spellId)
+        {
+            if (!this.assetIndex.Spells.TryGetValue(this.selectedMainSpellId, out SpellScriptableObject mainAsset))
+            {
+                EditorUtility.DisplayDialog("创建失败", "当前主技能资产不存在。", "确定");
+                return;
+            }
+
+            string directory = SpellEditorAssetOperations.GetAssetDirectory(mainAsset);
+            SpellEditorAssetOperations.CreateSpellAsset(spellId, directory);
+            this.RefreshIndex();
+        }
+
+        private void CreateMissingBuff(int buffId)
+        {
+            if (!this.assetIndex.Spells.TryGetValue(this.selectedMainSpellId, out SpellScriptableObject mainAsset))
+            {
+                EditorUtility.DisplayDialog("创建失败", "当前主技能资产不存在。", "确定");
+                return;
+            }
+
+            string directory = SpellEditorAssetOperations.GetAssetDirectory(mainAsset);
+            SpellEditorAssetOperations.CreateBuffAsset(buffId, directory);
+            this.RefreshIndex();
         }
 
         private string FormatRoot(BTRoot root)
