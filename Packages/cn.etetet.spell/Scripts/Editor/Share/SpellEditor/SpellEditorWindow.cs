@@ -431,15 +431,6 @@ namespace ET
                 this.Repaint();
             }
 
-            using (new EditorGUI.DisabledScope(currentSprite == null))
-            {
-                if (GUILayout.Button("定位", EditorStyles.miniButton, GUILayout.Width(32)))
-                {
-                    Selection.activeObject = currentSprite;
-                    EditorGUIUtility.PingObject(currentSprite);
-                }
-            }
-
             EditorGUILayout.EndHorizontal();
         }
 
@@ -652,18 +643,7 @@ namespace ET
 
         private void DrawAssetField(UnityEngine.Object asset, params GUILayoutOption[] options)
         {
-            EditorGUILayout.BeginHorizontal(options);
-            EditorGUILayout.ObjectField(asset, asset != null ? asset.GetType() : typeof(UnityEngine.Object), false, GUILayout.Width(300));
-            using (new EditorGUI.DisabledScope(asset == null))
-            {
-                if (GUILayout.Button("定位", EditorStyles.miniButton, GUILayout.Width(52)))
-                {
-                    Selection.activeObject = asset;
-                    EditorGUIUtility.PingObject(asset);
-                }
-            }
-
-            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.ObjectField(asset, asset != null ? asset.GetType() : typeof(UnityEngine.Object), false, options);
         }
 
         private void DrawFlagsCell(BuffScriptableObject asset, BuffConfig config)
