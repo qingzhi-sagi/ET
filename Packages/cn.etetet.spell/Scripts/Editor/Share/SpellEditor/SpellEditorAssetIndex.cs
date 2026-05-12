@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using ET.Client;
 using UnityEditor;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace ET
 {
@@ -12,7 +11,7 @@ namespace ET
         public readonly Dictionary<int, BuffScriptableObject> Buffs = new();
         public readonly Dictionary<int, List<string>> DuplicateSpellPaths = new();
         public readonly Dictionary<int, List<string>> DuplicateBuffPaths = new();
-        public readonly Dictionary<Object, string> AssetPaths = new();
+        public readonly Dictionary<UnityEngine.Object, string> AssetPaths = new();
 
         public static SpellEditorAssetIndex Build()
         {
@@ -47,7 +46,7 @@ namespace ET
             return index;
         }
 
-        public string GetPath(Object asset)
+        public string GetPath(UnityEngine.Object asset)
         {
             return asset != null && this.AssetPaths.TryGetValue(asset, out string path)? path : string.Empty;
         }
@@ -57,7 +56,7 @@ namespace ET
             Dictionary<int, List<string>> duplicates,
             int id,
             T asset,
-            string path) where T: Object
+            string path) where T: UnityEngine.Object
         {
             if (map.TryAdd(id, asset))
             {

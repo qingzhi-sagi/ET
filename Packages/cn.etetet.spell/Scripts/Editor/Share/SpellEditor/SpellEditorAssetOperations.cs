@@ -5,7 +5,6 @@ using ET.Client;
 using Sirenix.Serialization;
 using UnityEditor;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace ET
 {
@@ -23,7 +22,7 @@ namespace ET
             ExportScriptableObjectEditor.ExportScriptableObject();
         }
 
-        public static void OpenBehaviorTree(Object owner, BTRoot root)
+        public static void OpenBehaviorTree(UnityEngine.Object owner, BTRoot root)
         {
             if (owner == null || root == null)
             {
@@ -35,7 +34,7 @@ namespace ET
             EditorApplication.ExecuteMenuItem("ET/BehaviorTree/BehaviorTreeEditor");
         }
 
-        public static int GetAssetId(Object asset)
+        public static int GetAssetId(UnityEngine.Object asset)
         {
             return asset switch
             {
@@ -45,7 +44,7 @@ namespace ET
             };
         }
 
-        public static string GetAssetDirectory(Object asset)
+        public static string GetAssetDirectory(UnityEngine.Object asset)
         {
             string path = AssetDatabase.GetAssetPath(asset);
             string directory = Path.GetDirectoryName(path);
@@ -117,7 +116,7 @@ namespace ET
             return asset;
         }
 
-        public static bool DeleteAsset(Object asset)
+        public static bool DeleteAsset(UnityEngine.Object asset)
         {
             if (asset == null)
             {
@@ -130,7 +129,7 @@ namespace ET
             return ok;
         }
 
-        public static bool RenameAssetId(SpellEditorAssetIndex index, Object asset, int newId)
+        public static bool RenameAssetId(SpellEditorAssetIndex index, UnityEngine.Object asset, int newId)
         {
             if (index == null || asset == null)
             {
@@ -304,7 +303,7 @@ namespace ET
             return true;
         }
 
-        private static bool RenameAssetFile(Object asset, int newId)
+        private static bool RenameAssetFile(UnityEngine.Object asset, int newId)
         {
             string path = AssetDatabase.GetAssetPath(asset);
             string error = AssetDatabase.RenameAsset(path, newId.ToString());
@@ -542,8 +541,8 @@ namespace ET
 
         private static T CloneValue<T>(T value)
         {
-            byte[] bytes = SerializationUtility.SerializeValue(value, DataFormat.Binary);
-            return SerializationUtility.DeserializeValue<T>(bytes, DataFormat.Binary);
+            byte[] bytes = Sirenix.Serialization.SerializationUtility.SerializeValue(value, DataFormat.Binary);
+            return Sirenix.Serialization.SerializationUtility.DeserializeValue<T>(bytes, DataFormat.Binary);
         }
 
         private static void EnsureDirectory(string directory)
