@@ -20,6 +20,8 @@ namespace ET
         private UnityEngine.Object selectedAsset;
         private int renameId;
         private int copyMainSpellId;
+        private readonly Dictionary<int, int> selectedEffectIndexByBuffId = new();
+        private Type[] effectNodeTypes;
 
         [MenuItem(SpellEditorConstants.MenuPath)]
         public static void Open()
@@ -328,7 +330,7 @@ namespace ET
             GUILayout.Label("Overlay", GUILayout.Width(120));
             GUILayout.Label("Notice", GUILayout.Width(120));
             GUILayout.Label("Flags", GUILayout.Width(160));
-            GUILayout.Label("Effects", GUILayout.Width(180));
+            GUILayout.Label("Effects", GUILayout.Width(360));
             GUILayout.Label("来源", GUILayout.Width(240));
             GUILayout.Label("资产路径", GUILayout.Width(360));
             EditorGUILayout.EndHorizontal();
@@ -360,7 +362,7 @@ namespace ET
                     GUILayout.Label(string.Empty, GUILayout.Width(120));
                     GUILayout.Label(string.Empty, GUILayout.Width(120));
                     GUILayout.Label(string.Empty, GUILayout.Width(160));
-                    GUILayout.Label(string.Empty, GUILayout.Width(180));
+                    GUILayout.Label(string.Empty, GUILayout.Width(360));
                     GUILayout.Label(this.FormatSources(row.Sources), GUILayout.Width(240));
                     GUILayout.Label(string.Empty, GUILayout.Width(360));
                     EditorGUILayout.EndHorizontal();
@@ -393,16 +395,137 @@ namespace ET
                 }
 
                 GUILayout.Label(this.FormatFlags(config), GUILayout.Width(160));
-                if (GUILayout.Button(this.FormatEffects(config), EditorStyles.miniButton, GUILayout.Width(180)))
-                {
-                    EffectNode firstEffect = config.Effects != null ? config.Effects.FirstOrDefault(x => x != null) : null;
-                    SpellEditorAssetOperations.OpenBehaviorTree(row.Asset, firstEffect);
-                }
-
+                this.DrawEffectsCell(row.Asset, config);
                 GUILayout.Label(this.FormatSources(row.Sources), GUILayout.Width(240));
                 GUILayout.Label(row.AssetPath, GUILayout.Width(360));
                 EditorGUILayout.EndHorizontal();
             }
+        }
+
+        private void DrawEffectsCell(BuffScriptableObject asset, BuffConfig config)
+        {
+            config.Effects ??= new List<EffectNode>();
+            int effectCount = config.Effects.Count;
+            if (effectCount <= 0)
+            {
+                GUILayout.Label("无 Effect", EditorStyles.miniLabel, GUILayout.Width(220));
+                if (GUILayout.Button("+", EditorStyles.miniButton, GUILayout.Width(28)))
+                {
+                    this.ShowAddEffectMenu(asset, config);
+                }
+
+                GUILayout.Label(string.Empty, GUILayout.Width(112));
+                return;
+            }
+
+            int selectedIndex = this.GetSelectedEffectIndex(config.Id, effectCount);
+            string[] effectLabels = config.Effects
+                    .Select((effect, index) => $"{index}: {(effect != null ? effect.GetType().Name : "null")}")
+                    .ToArray();
+            int nextIndex = EditorGUILayout.Popup(selectedIndex, effectLabels, GUILayout.Width(220));
+            if (nextIndex != selectedIndex)
+            {
+                this.selectedEffectIndexByBuffId[config.Id] = nextIndex;
+                selectedIndex = nextIndex;
+            }
+
+            EffectNode selectedEffect = config.Effects[selectedIndex];
+            using (new EditorGUI.DisabledScope(selectedEffect == null))
+            {
+                if (GUILayout.Button("打开", EditorStyles.miniButton, GUILayout.Width(44)))
+                {
+                    SpellEditorAssetOperations.OpenBehaviorTree(asset, selectedEffect);
+                }
+            }
+
+            if (GUILayout.Button("+", EditorStyles.miniButton, GUILayout.Width(28)))
+            {
+                this.ShowAddEffectMenu(asset, config);
+            }
+
+            if (GUILayout.Button("-", EditorStyles.miniButton, GUILayout.Width(28)))
+            {
+                string effectName = selectedEffect != null ? selectedEffect.GetType().Name : "null";
+                if (EditorUtility.DisplayDialog("删除 Effect", $"确认删除 Effects[{selectedIndex}] {effectName}？", "删除", "取消"))
+                {
+                    config.Effects.RemoveAt(selectedIndex);
+                    config.effectDict = null;
+                    if (config.Effects.Count == 0)
+                    {
+                        this.selectedEffectIndexByBuffId.Remove(config.Id);
+                    }
+                    else
+                    {
+                        this.selectedEffectIndexByBuffId[config.Id] = Mathf.Clamp(selectedIndex, 0, config.Effects.Count - 1);
+                    }
+
+                    EditorUtility.SetDirty(asset);
+                    this.needsRebuild = true;
+                }
+            }
+
+            GUILayout.Label($"共 {effectCount}", EditorStyles.miniLabel, GUILayout.Width(40));
+        }
+
+        private int GetSelectedEffectIndex(int buffId, int effectCount)
+        {
+            if (!this.selectedEffectIndexByBuffId.TryGetValue(buffId, out int selectedIndex))
+            {
+                selectedIndex = 0;
+            }
+
+            selectedIndex = Mathf.Clamp(selectedIndex, 0, effectCount - 1);
+            this.selectedEffectIndexByBuffId[buffId] = selectedIndex;
+            return selectedIndex;
+        }
+
+        private void ShowAddEffectMenu(BuffScriptableObject asset, BuffConfig config)
+        {
+            GenericMenu menu = new();
+            HashSet<Type> existingTypes = config.Effects
+                    .Where(effect => effect != null)
+                    .Select(effect => effect.GetType())
+                    .ToHashSet();
+
+            foreach (Type type in this.GetEffectNodeTypes())
+            {
+                Type effectType = type;
+                GUIContent content = new(effectType.Name);
+                if (existingTypes.Contains(effectType))
+                {
+                    menu.AddDisabledItem(content);
+                    continue;
+                }
+
+                menu.AddItem(content, false, () => this.AddEffect(asset, config, effectType));
+            }
+
+            menu.ShowAsContext();
+        }
+
+        private Type[] GetEffectNodeTypes()
+        {
+            return this.effectNodeTypes ??= TypeCache.GetTypesDerivedFrom<EffectNode>()
+                    .Where(type => type is { IsAbstract: false } && !type.ContainsGenericParameters)
+                    .OrderBy(type => type.Name)
+                    .ToArray();
+        }
+
+        private void AddEffect(BuffScriptableObject asset, BuffConfig config, Type effectType)
+        {
+            if (Activator.CreateInstance(effectType) is not EffectNode effect)
+            {
+                EditorUtility.DisplayDialog("添加失败", $"无法创建 EffectNode: {effectType.Name}", "确定");
+                return;
+            }
+
+            config.Effects ??= new List<EffectNode>();
+            config.Effects.Add(effect);
+            config.effectDict = null;
+            this.selectedEffectIndexByBuffId[config.Id] = config.Effects.Count - 1;
+            EditorUtility.SetDirty(asset);
+            this.needsRebuild = true;
+            this.Repaint();
         }
 
         private void DrawSelectionToggle(UnityEngine.Object asset)
