@@ -329,7 +329,7 @@ namespace ET
             GUILayout.Label("Stack", GUILayout.Width(70));
             GUILayout.Label("Overlay", GUILayout.Width(120));
             GUILayout.Label("Notice", GUILayout.Width(120));
-            GUILayout.Label("Flags", GUILayout.Width(160));
+            GUILayout.Label("Flags", GUILayout.Width(220));
             GUILayout.Label("Effects", GUILayout.Width(360));
             GUILayout.Label("来源", GUILayout.Width(240));
             GUILayout.Label("资产路径", GUILayout.Width(360));
@@ -361,7 +361,7 @@ namespace ET
                     GUILayout.Label(string.Empty, GUILayout.Width(70));
                     GUILayout.Label(string.Empty, GUILayout.Width(120));
                     GUILayout.Label(string.Empty, GUILayout.Width(120));
-                    GUILayout.Label(string.Empty, GUILayout.Width(160));
+                    GUILayout.Label(string.Empty, GUILayout.Width(220));
                     GUILayout.Label(string.Empty, GUILayout.Width(360));
                     GUILayout.Label(this.FormatSources(row.Sources), GUILayout.Width(240));
                     GUILayout.Label(string.Empty, GUILayout.Width(360));
@@ -394,12 +394,67 @@ namespace ET
                     this.needsRebuild = true;
                 }
 
-                GUILayout.Label(this.FormatFlags(config), GUILayout.Width(160));
+                this.DrawFlagsCell(row.Asset, config);
                 this.DrawEffectsCell(row.Asset, config);
                 GUILayout.Label(this.FormatSources(row.Sources), GUILayout.Width(240));
                 GUILayout.Label(row.AssetPath, GUILayout.Width(360));
                 EditorGUILayout.EndHorizontal();
             }
+        }
+
+        private void DrawFlagsCell(BuffScriptableObject asset, BuffConfig config)
+        {
+            string label = string.IsNullOrEmpty(this.FormatFlags(config)) ? "无 Flags" : this.FormatFlags(config);
+            if (GUILayout.Button(label, EditorStyles.miniButton, GUILayout.Width(220)))
+            {
+                this.ShowFlagsMenu(asset, config);
+            }
+        }
+
+        private void ShowFlagsMenu(BuffScriptableObject asset, BuffConfig config)
+        {
+            config.Flags ??= new HashSet<BuffFlags>();
+            GenericMenu menu = new();
+            foreach (BuffFlags flag in Enum.GetValues(typeof(BuffFlags)).Cast<BuffFlags>().OrderBy(x => (int)x))
+            {
+                if (flag == BuffFlags.None)
+                {
+                    continue;
+                }
+
+                BuffFlags currentFlag = flag;
+                bool selected = config.Flags.Contains(currentFlag);
+                menu.AddItem(new GUIContent(currentFlag.ToString()), selected, () => this.ToggleFlag(asset, config, currentFlag));
+            }
+
+            menu.AddSeparator(string.Empty);
+            if (config.Flags.Count == 0)
+            {
+                menu.AddDisabledItem(new GUIContent("清空"));
+            }
+            else
+            {
+                menu.AddItem(new GUIContent("清空"), false, () =>
+                {
+                    config.Flags.Clear();
+                    EditorUtility.SetDirty(asset);
+                    this.Repaint();
+                });
+            }
+
+            menu.ShowAsContext();
+        }
+
+        private void ToggleFlag(BuffScriptableObject asset, BuffConfig config, BuffFlags flag)
+        {
+            config.Flags ??= new HashSet<BuffFlags>();
+            if (!config.Flags.Add(flag))
+            {
+                config.Flags.Remove(flag);
+            }
+
+            EditorUtility.SetDirty(asset);
+            this.Repaint();
         }
 
         private void DrawEffectsCell(BuffScriptableObject asset, BuffConfig config)
@@ -614,7 +669,7 @@ namespace ET
         {
             return config.Flags == null || config.Flags.Count == 0
                     ? string.Empty
-                    : string.Join(", ", config.Flags.Select(x => x.ToString()));
+                    : string.Join(", ", config.Flags.OrderBy(x => (int)x).Select(x => x.ToString()));
         }
 
         private string FormatSources(List<SpellEditorSourceInfo> sources)
