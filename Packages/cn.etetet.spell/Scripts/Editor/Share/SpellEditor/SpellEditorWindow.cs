@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System;
 using System.Linq;
 using UnityEditor;
@@ -9,6 +10,7 @@ namespace ET
     {
         private SpellEditorAssetIndex assetIndex;
         private SpellEditorBuildResult buildResult;
+        private List<SpellEditorIssue> issues = new();
         private int selectedMainSpellId;
         private Vector2 scroll;
 
@@ -45,6 +47,11 @@ namespace ET
             }
 
             this.scroll = EditorGUILayout.BeginScrollView(this.scroll);
+            foreach (SpellEditorIssue issue in this.issues)
+            {
+                EditorGUILayout.HelpBox(issue.Message, issue.Severity);
+            }
+
             EditorGUILayout.LabelField($"Spell: {this.assetIndex.Spells.Count}", EditorStyles.boldLabel);
             EditorGUILayout.LabelField($"Buff: {this.assetIndex.Buffs.Count}", EditorStyles.boldLabel);
             EditorGUILayout.LabelField($"Duplicate Spell Id: {this.assetIndex.DuplicateSpellPaths.Count}", EditorStyles.boldLabel);
@@ -103,6 +110,9 @@ namespace ET
             this.buildResult = this.assetIndex != null && this.selectedMainSpellId != 0
                     ? SpellEditorGraphBuilder.Build(this.assetIndex, this.selectedMainSpellId)
                     : new SpellEditorBuildResult();
+            this.issues = this.assetIndex != null && this.buildResult != null
+                    ? SpellEditorValidator.Validate(this.assetIndex, this.buildResult)
+                    : new List<SpellEditorIssue>();
         }
     }
 }
