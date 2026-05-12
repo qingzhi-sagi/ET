@@ -294,7 +294,6 @@ namespace ET
         {
             EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
             GUILayout.Label("选", GUILayout.Width(24));
-            GUILayout.Label("操作", GUILayout.Width(70));
             GUILayout.Label("Id", GUILayout.Width(70));
             GUILayout.Label("类型", GUILayout.Width(60));
             GUILayout.Label("Desc", GUILayout.Width(180));
@@ -319,16 +318,15 @@ namespace ET
                 if (row.Asset == null)
                 {
                     GUILayout.Label(string.Empty, GUILayout.Width(24));
-                    if (GUILayout.Button("创建", EditorStyles.miniButton, GUILayout.Width(70)))
+                    GUILayout.Label(row.Id.ToString(), GUILayout.Width(70));
+                    GUILayout.Label("Missing", GUILayout.Width(60));
+                    if (GUILayout.Button($"创建 Spell {row.Id}", EditorStyles.miniButton, GUILayout.Width(180)))
                     {
                         this.CreateMissingSpell(row.Id);
                         EditorGUILayout.EndHorizontal();
                         continue;
                     }
 
-                    GUILayout.Label(row.Id.ToString(), GUILayout.Width(70));
-                    GUILayout.Label("Missing", GUILayout.Width(60));
-                    GUILayout.Label($"Missing Spell {row.Id}", GUILayout.Width(180));
                     GUILayout.Label(string.Empty, GUILayout.Width(280));
                     GUILayout.Label(string.Empty, GUILayout.Width(70));
                     GUILayout.Label(string.Empty, GUILayout.Width(80));
@@ -343,7 +341,6 @@ namespace ET
 
                 SpellConfig config = row.Asset.SpellConfig;
                 this.DrawSelectionToggle(row.Asset);
-                GUILayout.Label(string.Empty, GUILayout.Width(70));
                 GUILayout.Label(config.Id.ToString(), GUILayout.Width(70));
                 GUILayout.Label(row.IsMain ? "主技能" : "子技能", GUILayout.Width(60));
                 EditorGUI.BeginChangeCheck();
@@ -540,7 +537,6 @@ namespace ET
         {
             EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
             GUILayout.Label("选", GUILayout.Width(24));
-            GUILayout.Label("操作", GUILayout.Width(70));
             GUILayout.Label("Id", GUILayout.Width(70));
             GUILayout.Label("Desc", GUILayout.Width(180));
             GUILayout.Label("Duration", GUILayout.Width(80));
@@ -566,15 +562,14 @@ namespace ET
                 if (row.Asset == null)
                 {
                     GUILayout.Label(string.Empty, GUILayout.Width(24));
-                    if (GUILayout.Button("创建", EditorStyles.miniButton, GUILayout.Width(70)))
+                    GUILayout.Label(row.Id.ToString(), GUILayout.Width(70));
+                    if (GUILayout.Button($"创建 Buff {row.Id}", EditorStyles.miniButton, GUILayout.Width(180)))
                     {
                         this.CreateMissingBuff(row.Id);
                         EditorGUILayout.EndHorizontal();
                         continue;
                     }
 
-                    GUILayout.Label(row.Id.ToString(), GUILayout.Width(70));
-                    GUILayout.Label($"Missing Buff {row.Id}", GUILayout.Width(180));
                     GUILayout.Label(string.Empty, GUILayout.Width(80));
                     GUILayout.Label(string.Empty, GUILayout.Width(80));
                     GUILayout.Label(string.Empty, GUILayout.Width(80));
@@ -591,7 +586,6 @@ namespace ET
 
                 BuffConfig config = row.Asset.BuffConfig;
                 this.DrawSelectionToggle(row.Asset);
-                GUILayout.Label(string.Empty, GUILayout.Width(70));
                 GUILayout.Label(config.Id.ToString(), GUILayout.Width(70));
                 EditorGUI.BeginChangeCheck();
                 string desc = EditorGUILayout.TextField(config.Desc ?? string.Empty, GUILayout.Width(180));
