@@ -242,7 +242,7 @@ namespace ET
             GUILayout.Label("Cost", GUILayout.Width(160));
             GUILayout.Label("TargetSelector", GUILayout.Width(180));
             GUILayout.Label("来源", GUILayout.Width(240));
-            GUILayout.Label("资产路径", GUILayout.Width(360));
+            GUILayout.Label("资产", GUILayout.Width(360));
             EditorGUILayout.EndHorizontal();
 
             if (this.buildResult == null)
@@ -311,7 +311,7 @@ namespace ET
                 }
 
                 GUILayout.Label(this.FormatSources(row.Sources), GUILayout.Width(240));
-                GUILayout.Label(row.AssetPath, GUILayout.Width(360));
+                this.DrawAssetField(row.Asset, GUILayout.Width(360));
                 EditorGUILayout.EndHorizontal();
             }
         }
@@ -332,7 +332,7 @@ namespace ET
             GUILayout.Label("Flags", GUILayout.Width(220));
             GUILayout.Label("Effects", GUILayout.Width(360));
             GUILayout.Label("来源", GUILayout.Width(240));
-            GUILayout.Label("资产路径", GUILayout.Width(360));
+            GUILayout.Label("资产", GUILayout.Width(360));
             EditorGUILayout.EndHorizontal();
 
             if (this.buildResult == null)
@@ -397,9 +397,25 @@ namespace ET
                 this.DrawFlagsCell(row.Asset, config);
                 this.DrawEffectsCell(row.Asset, config);
                 GUILayout.Label(this.FormatSources(row.Sources), GUILayout.Width(240));
-                GUILayout.Label(row.AssetPath, GUILayout.Width(360));
+                this.DrawAssetField(row.Asset, GUILayout.Width(360));
                 EditorGUILayout.EndHorizontal();
             }
+        }
+
+        private void DrawAssetField(UnityEngine.Object asset, params GUILayoutOption[] options)
+        {
+            EditorGUILayout.BeginHorizontal(options);
+            EditorGUILayout.ObjectField(asset, asset != null ? asset.GetType() : typeof(UnityEngine.Object), false, GUILayout.Width(300));
+            using (new EditorGUI.DisabledScope(asset == null))
+            {
+                if (GUILayout.Button("定位", EditorStyles.miniButton, GUILayout.Width(52)))
+                {
+                    Selection.activeObject = asset;
+                    EditorGUIUtility.PingObject(asset);
+                }
+            }
+
+            EditorGUILayout.EndHorizontal();
         }
 
         private void DrawFlagsCell(BuffScriptableObject asset, BuffConfig config)
