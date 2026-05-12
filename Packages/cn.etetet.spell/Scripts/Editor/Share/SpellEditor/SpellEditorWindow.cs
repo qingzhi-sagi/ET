@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -5,6 +6,9 @@ namespace ET
 {
     public sealed class SpellEditorWindow: EditorWindow
     {
+        private SpellEditorAssetIndex assetIndex;
+        private Vector2 scroll;
+
         [MenuItem(SpellEditorConstants.MenuPath)]
         public static void Open()
         {
@@ -14,10 +18,44 @@ namespace ET
             window.Show();
         }
 
+        private void OnEnable()
+        {
+            this.RefreshIndex();
+        }
+
         private void OnGUI()
         {
-            EditorGUILayout.LabelField("Spell Editor", EditorStyles.boldLabel);
-            EditorGUILayout.HelpBox("Spell/Buff 表格式编辑器入口已创建。后续任务会接入资产扫描、链路构建和表格编辑。", MessageType.Info);
+            EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
+            if (GUILayout.Button("刷新", EditorStyles.toolbarButton, GUILayout.Width(64)))
+            {
+                this.RefreshIndex();
+            }
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndHorizontal();
+
+            if (this.assetIndex == null)
+            {
+                EditorGUILayout.HelpBox("资产索引未初始化。", MessageType.Warning);
+                return;
+            }
+
+            this.scroll = EditorGUILayout.BeginScrollView(this.scroll);
+            EditorGUILayout.LabelField($"Spell: {this.assetIndex.Spells.Count}", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField($"Buff: {this.assetIndex.Buffs.Count}", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField($"Duplicate Spell Id: {this.assetIndex.DuplicateSpellPaths.Count}", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField($"Duplicate Buff Id: {this.assetIndex.DuplicateBuffPaths.Count}", EditorStyles.boldLabel);
+
+            foreach (int id in this.assetIndex.Spells.Keys.OrderBy(x => x).Take(20))
+            {
+                EditorGUILayout.LabelField(id.ToString(), this.assetIndex.GetPath(this.assetIndex.Spells[id]));
+            }
+            EditorGUILayout.EndScrollView();
+        }
+
+        private void RefreshIndex()
+        {
+            this.assetIndex = SpellEditorAssetIndex.Build();
+            this.Repaint();
         }
     }
 }
