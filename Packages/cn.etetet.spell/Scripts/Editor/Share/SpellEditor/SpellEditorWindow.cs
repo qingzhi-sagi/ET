@@ -22,6 +22,8 @@ namespace ET
         private int copyMainSpellId;
         private readonly Dictionary<int, int> selectedEffectIndexByBuffId = new();
         private Type[] effectNodeTypes;
+        private Type[] costNodeTypes;
+        private Type[] targetSelectorTypes;
 
         [MenuItem(SpellEditorConstants.MenuPath)]
         public static void Open()
@@ -300,20 +302,99 @@ namespace ET
                     this.needsRebuild = true;
                 }
 
-                if (GUILayout.Button(this.FormatRoot(config.Cost), EditorStyles.miniButton, GUILayout.Width(160)))
-                {
-                    SpellEditorAssetOperations.OpenBehaviorTree(row.Asset, config.Cost);
-                }
-
-                if (GUILayout.Button(this.FormatRoot(config.TargetSelector), EditorStyles.miniButton, GUILayout.Width(180)))
-                {
-                    SpellEditorAssetOperations.OpenBehaviorTree(row.Asset, config.TargetSelector);
-                }
+                this.DrawRootCell(row.Asset, config.Cost, "Cost", 160, this.GetCostNodeTypes(), root => config.Cost = (CostNode)root);
+                this.DrawRootCell(row.Asset, config.TargetSelector, "TargetSelector", 180, this.GetTargetSelectorTypes(), root => config.TargetSelector = (TargetSelector)root);
 
                 GUILayout.Label(this.FormatSources(row.Sources), GUILayout.Width(240));
                 this.DrawAssetField(row.Asset, GUILayout.Width(360));
                 EditorGUILayout.EndHorizontal();
             }
+        }
+
+        private void DrawRootCell(UnityEngine.Object asset, BTRoot root, string label, float width, Type[] candidateTypes, Action<BTRoot> assignRoot)
+        {
+            EditorGUILayout.BeginHorizontal(GUILayout.Width(width));
+            if (root == null)
+            {
+                if (GUILayout.Button($"创建 {label}", EditorStyles.miniButton, GUILayout.Width(width)))
+                {
+                    this.ShowCreateRootMenu(asset, candidateTypes, assignRoot);
+                }
+
+                EditorGUILayout.EndHorizontal();
+                return;
+            }
+
+            if (GUILayout.Button(this.FormatRoot(root), EditorStyles.miniButton, GUILayout.Width(width - 28)))
+            {
+                SpellEditorAssetOperations.OpenBehaviorTree(asset, root);
+            }
+
+            if (GUILayout.Button("-", EditorStyles.miniButton, GUILayout.Width(24)))
+            {
+                if (EditorUtility.DisplayDialog("清空行为树", $"确认清空 {label}？", "清空", "取消"))
+                {
+                    assignRoot(null);
+                    EditorUtility.SetDirty(asset);
+                    this.needsRebuild = true;
+                }
+            }
+
+            EditorGUILayout.EndHorizontal();
+        }
+
+        private void ShowCreateRootMenu(UnityEngine.Object asset, Type[] candidateTypes, Action<BTRoot> assignRoot)
+        {
+            if (candidateTypes.Length == 0)
+            {
+                EditorUtility.DisplayDialog("创建失败", "没有可创建的行为树类型。", "确定");
+                return;
+            }
+
+            GenericMenu menu = new();
+            foreach (Type type in candidateTypes)
+            {
+                Type rootType = type;
+                menu.AddItem(new GUIContent(rootType.Name), false, () =>
+                {
+                    if (Activator.CreateInstance(rootType) is not BTRoot root)
+                    {
+                        EditorUtility.DisplayDialog("创建失败", $"无法创建行为树类型：{rootType.Name}", "确定");
+                        return;
+                    }
+
+                    assignRoot(root);
+                    EditorUtility.SetDirty(asset);
+                    this.needsRebuild = true;
+                    this.Repaint();
+                });
+            }
+
+            menu.ShowAsContext();
+        }
+
+        private Type[] GetCostNodeTypes()
+        {
+            return this.costNodeTypes ??= this.GetRootTypes(typeof(CostNode));
+        }
+
+        private Type[] GetTargetSelectorTypes()
+        {
+            return this.targetSelectorTypes ??= this.GetRootTypes(typeof(TargetSelector));
+        }
+
+        private Type[] GetRootTypes(Type baseType)
+        {
+            List<Type> types = new();
+            if (!baseType.IsAbstract && !baseType.ContainsGenericParameters)
+            {
+                types.Add(baseType);
+            }
+
+            types.AddRange(TypeCache.GetTypesDerivedFrom(baseType)
+                    .Where(type => type is { IsAbstract: false } && !type.ContainsGenericParameters));
+
+            return types.OrderBy(type => type.Name).ToArray();
         }
 
         private void DrawBuffTable()
