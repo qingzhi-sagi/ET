@@ -107,7 +107,16 @@ MonoBehaviour:
       Data: false
     - Name: DescCollapsed
       Entry: 5
+      Data: true
+    - Name: EditorLayoutVisible
+      Entry: 5
       Data: false
+    - Name: EditorNodeWidth
+      Entry: 4
+      Data: 250
+    - Name: EditorHorizontalSpacing
+      Entry: 4
+      Data: 50
     - Name: Position
       Entry: 7
       Data: UnityEngine.Vector2, UnityEngine.CoreModule
@@ -116,7 +125,7 @@ MonoBehaviour:
       Data: 300
     - Name: 
       Entry: 4
-      Data: -100
+      Data: -107.5
     - Name: 
       Entry: 8
       Data: 
@@ -158,7 +167,16 @@ MonoBehaviour:
       Data: false
     - Name: DescCollapsed
       Entry: 5
+      Data: true
+    - Name: EditorLayoutVisible
+      Entry: 5
       Data: false
+    - Name: EditorNodeWidth
+      Entry: 4
+      Data: 250
+    - Name: EditorHorizontalSpacing
+      Entry: 4
+      Data: 50
     - Name: Position
       Entry: 7
       Data: UnityEngine.Vector2, UnityEngine.CoreModule
@@ -167,7 +185,7 @@ MonoBehaviour:
       Data: 300
     - Name: 
       Entry: 4
-      Data: 100
+      Data: 133.5
     - Name: 
       Entry: 8
       Data: 
@@ -203,7 +221,16 @@ MonoBehaviour:
       Data: false
     - Name: DescCollapsed
       Entry: 5
+      Data: true
+    - Name: EditorLayoutVisible
+      Entry: 5
       Data: false
+    - Name: EditorNodeWidth
+      Entry: 4
+      Data: 250
+    - Name: EditorHorizontalSpacing
+      Entry: 4
+      Data: 50
     - Name: Position
       Entry: 7
       Data: UnityEngine.Vector2, UnityEngine.CoreModule

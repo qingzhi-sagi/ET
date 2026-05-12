@@ -27,36 +27,33 @@ MonoBehaviour:
     - Name: Id
       Entry: 3
       Data: 100002
+    - Name: BuffId
+      Entry: 3
+      Data: 200002
     - Name: Desc
       Entry: 1
       Data: "\u666E\u901A\u653B\u51FB\u5B50\u6280\u80FD\u7684\u5B50\u6280\u80FD\uFF0C\u7528\u6765\u4F24\u5BB3\u6280\u80FD"
-    - Name: Icon
-      Entry: 7
-      Data: 1|ET.OdinUnityObject, ET.Model
-    - Name: Name
+    - Name: IconName
       Entry: 6
-      Data: 
-    - Name: 
-      Entry: 8
       Data: 
     - Name: CD
       Entry: 3
       Data: 0
-    - Name: BuffId
+    - Name: DamageMultiplier
       Entry: 3
-      Data: 1100002
+      Data: 0
     - Name: Cost
       Entry: 6
       Data: 
     - Name: TargetSelector
       Entry: 7
-      Data: 2|ET.TargetSelectorSingle, ET.Model
+      Data: 1|ET.TargetSelectorSingle, ET.Model
     - Name: Id
       Entry: 3
       Data: 1
     - Name: Children
       Entry: 7
-      Data: 3|System.Collections.Generic.List`1[[ET.BTNode, ET.Model]], mscorlib
+      Data: 2|System.Collections.Generic.List`1[[ET.BTNode, ET.Model]], mscorlib
     - Name: 
       Entry: 12
       Data: 0
@@ -78,6 +75,15 @@ MonoBehaviour:
     - Name: DescCollapsed
       Entry: 5
       Data: false
+    - Name: EditorLayoutVisible
+      Entry: 5
+      Data: false
+    - Name: EditorNodeWidth
+      Entry: 4
+      Data: 0
+    - Name: EditorHorizontalSpacing
+      Entry: 4
+      Data: 0
     - Name: Position
       Entry: 7
       Data: UnityEngine.Vector2, UnityEngine.CoreModule

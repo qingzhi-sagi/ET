@@ -36,15 +36,6 @@ MonoBehaviour:
     - Name: IconName
       Entry: 1
       Data: Ability_Warrior_OffensiveStance
-    - Name: legacyIcon
-      Entry: 7
-      Data: 1|ET.OdinUnityObject, ET.Model
-    - Name: Name
-      Entry: 1
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
     - Name: CD
       Entry: 3
       Data: 2000
@@ -56,13 +47,13 @@ MonoBehaviour:
       Data: 
     - Name: TargetSelector
       Entry: 7
-      Data: 2|ET.TargetSelectorSingle, ET.Model
+      Data: 1|ET.TargetSelectorSingle, ET.Model
     - Name: Id
       Entry: 3
       Data: 1
     - Name: Children
       Entry: 7
-      Data: 3|System.Collections.Generic.List`1[[ET.BTNode, ET.Model]], mscorlib
+      Data: 2|System.Collections.Generic.List`1[[ET.BTNode, ET.Model]], mscorlib
     - Name: 
       Entry: 12
       Data: 0
@@ -83,16 +74,16 @@ MonoBehaviour:
       Data: false
     - Name: DescCollapsed
       Entry: 5
-      Data: false
+      Data: true
     - Name: EditorLayoutVisible
       Entry: 5
       Data: false
     - Name: EditorNodeWidth
       Entry: 4
-      Data: 0
+      Data: 250
     - Name: EditorHorizontalSpacing
       Entry: 4
-      Data: 0
+      Data: 50
     - Name: Position
       Entry: 7
       Data: UnityEngine.Vector2, UnityEngine.CoreModule

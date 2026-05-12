@@ -320,7 +320,7 @@ MonoBehaviour:
       Data: 300
     - Name: 
       Entry: 4
-      Data: -109.5
+      Data: -107.5
     - Name: 
       Entry: 8
       Data: 
@@ -380,7 +380,7 @@ MonoBehaviour:
       Data: 300
     - Name: 
       Entry: 4
-      Data: 135.5
+      Data: 133.5
     - Name: 
       Entry: 8
       Data: 
@@ -588,15 +588,6 @@ MonoBehaviour:
     - Name: IconName
       Entry: 1
       Data: Spell_Frost_IceStorm
-    - Name: legacyIcon
-      Entry: 7
-      Data: 21|ET.OdinUnityObject, ET.Model
-    - Name: Name
-      Entry: 1
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
     - Name: 
       Entry: 8
       Data: 
@@ -656,25 +647,25 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 22|ET.EffectClientBuffRemove, ET.Model
+      Data: 21|ET.EffectClientBuffRemove, ET.Model
     - Name: Id
       Entry: 3
       Data: 1
     - Name: Children
       Entry: 7
-      Data: 23|System.Collections.Generic.List`1[[ET.BTNode, ET.Model]], mscorlib
+      Data: 22|System.Collections.Generic.List`1[[ET.BTNode, ET.Model]], mscorlib
     - Name: 
       Entry: 12
       Data: 1
     - Name: 
       Entry: 7
-      Data: 24|ET.BTAnimatorSetBool, ET.Model
+      Data: 23|ET.BTAnimatorSetBool, ET.Model
     - Name: Id
       Entry: 3
       Data: 2
     - Name: Children
       Entry: 7
-      Data: 25|System.Collections.Generic.List`1[[ET.BTNode, ET.Model]], mscorlib
+      Data: 24|System.Collections.Generic.List`1[[ET.BTNode, ET.Model]], mscorlib
     - Name: 
       Entry: 12
       Data: 0
@@ -785,25 +776,25 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 26|ET.EffectServerBuffHitted, ET.Model
+      Data: 25|ET.EffectServerBuffHitted, ET.Model
     - Name: Id
       Entry: 3
       Data: 1
     - Name: Children
       Entry: 7
-      Data: 27|System.Collections.Generic.List`1[[ET.BTNode, ET.Model]], mscorlib
+      Data: 26|System.Collections.Generic.List`1[[ET.BTNode, ET.Model]], mscorlib
     - Name: 
       Entry: 12
       Data: 1
     - Name: 
       Entry: 7
-      Data: 28|ET.BTBuffAddExpireTime, ET.Model
+      Data: 27|ET.BTBuffAddExpireTime, ET.Model
     - Name: Id
       Entry: 3
       Data: 2
     - Name: Children
       Entry: 7
-      Data: 29|System.Collections.Generic.List`1[[ET.BTNode, ET.Model]], mscorlib
+      Data: 28|System.Collections.Generic.List`1[[ET.BTNode, ET.Model]], mscorlib
     - Name: 
       Entry: 12
       Data: 0
