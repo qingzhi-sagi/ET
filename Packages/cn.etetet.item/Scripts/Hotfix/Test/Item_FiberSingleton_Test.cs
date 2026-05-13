@@ -19,7 +19,7 @@ namespace ET.Test
             ItemConfig globalConfig = itemFiber.GetSingleton<ItemConfigCategory>().Get(10001);
             ItemConfigCategory mockCategory = new ItemConfigCategory(new Dictionary<int, ItemConfig>
             {
-                [10001] = new ItemConfig(10001, "MockFiberItem", globalConfig.Type, 50, globalConfig.Quality, globalConfig.UseType, globalConfig.Level)
+                [10001] = CreateMockItemConfig(globalConfig)
             });
 
             itemFiber.AddSingleton(mockCategory);
@@ -52,6 +52,25 @@ namespace ET.Test
 
             return ErrorCode.ERR_Success;
         }
+
+        private static ItemConfig CreateMockItemConfig(ItemConfig globalConfig)
+        {
+            Type itemConfigType = typeof(ItemConfig);
+            Type[] clientServerSignature =
+            {
+                typeof(int), typeof(string), typeof(string), typeof(int), typeof(int), typeof(string), typeof(int), typeof(int), typeof(int)
+            };
+
+            if (itemConfigType.GetConstructor(clientServerSignature) != null)
+            {
+                string desc = itemConfigType.GetField("Desc")?.GetValue(globalConfig) as string ?? string.Empty;
+                string icon = itemConfigType.GetField("Icon")?.GetValue(globalConfig) as string ?? string.Empty;
+                return (ItemConfig)Activator.CreateInstance(itemConfigType,
+                    10001, "MockFiberItem", desc, globalConfig.Type, 50, icon, globalConfig.Quality, globalConfig.UseType, globalConfig.Level);
+            }
+
+            return (ItemConfig)Activator.CreateInstance(itemConfigType,
+                10001, "MockFiberItem", globalConfig.Type, 50, globalConfig.Quality, globalConfig.UseType, globalConfig.Level);
+        }
     }
 }
-

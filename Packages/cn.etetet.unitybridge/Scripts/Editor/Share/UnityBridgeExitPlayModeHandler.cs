@@ -5,23 +5,18 @@ namespace ET
 {
     internal sealed class UnityBridgeExitPlayModeHandler : AUnityBridgeDeferredHandler<ExitPlay, ExitPlayResponse>
     {
-        protected override async ETTask<IResponse> Run(ExitPlay command)
+        protected override async ETTask<ExitPlayResponse> Run(ExitPlay command, UnityBridgeDeferredContext deferred)
         {
-            await ETTask.CompletedTask;
-            if (!EditorApplication.isPlaying && !EditorApplication.isPlayingOrWillChangePlaymode)
+            if (!deferred.IsResuming && !EditorApplication.isPlaying && !EditorApplication.isPlayingOrWillChangePlaymode)
             {
                 throw new Exception("unity not in playmode");
             }
 
-            EditorApplication.isPlaying = false;
-            return null;
-        }
+            await deferred.Defer(() => EditorApplication.isPlaying = false);
 
-        protected override ExitPlayResponse Deferred(ExitPlay command, long startedAt)
-        {
             if (EditorApplication.isPlayingOrWillChangePlaymode)
             {
-                return null;
+                return deferred.NotReady<ExitPlayResponse>();
             }
 
             ExitPlayResponse response = ExitPlayResponse.Create();

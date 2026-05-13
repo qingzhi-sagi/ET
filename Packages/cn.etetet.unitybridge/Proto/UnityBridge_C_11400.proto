@@ -1,0 +1,731 @@
+syntax = "proto3";
+package ET;
+
+// ResponseType GameObjectCreateResponse
+message GameObjectCreateRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Name = 2;
+	string PrimitiveType = 3;
+	string ParentPath = 4;
+}
+
+message GameObjectCreateResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	bool Created = 4;
+	BridgeObjectInfo Object = 5;
+}
+
+// ResponseType GameObjectDestroyResponse
+message GameObjectDestroyRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Path = 2;
+	int32 InstanceId = 3;
+}
+
+message GameObjectDestroyResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	bool Destroyed = 4;
+	string DestroyedName = 5;
+	string DestroyedPath = 6;
+}
+
+// ResponseType GameObjectFindResponse
+message GameObjectFindRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Name = 2;
+	string Tag = 3;
+	string WithComponent = 4;
+	int32 MaxResults = 5;
+	bool IncludeInactive = 6;
+	bool IncludeComponents = 7;
+}
+
+message GameObjectFindResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	repeated BridgeObjectInfo Objects = 4;
+	int32 Count = 5;
+}
+
+// ResponseType GameObjectSetActiveResponse
+message GameObjectSetActiveRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Path = 2;
+	int32 InstanceId = 3;
+	bool Active = 4;
+	bool Toggle = 5;
+}
+
+message GameObjectSetActiveResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	BridgeObjectInfo Object = 4;
+	bool ActiveSelf = 5;
+	bool ActiveInHierarchy = 6;
+}
+
+// ResponseType GameObjectRenameResponse
+message GameObjectRenameRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Path = 2;
+	int32 InstanceId = 3;
+	string NewName = 4;
+}
+
+message GameObjectRenameResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string OldName = 4;
+	string NewName = 5;
+	BridgeObjectInfo Object = 6;
+}
+
+// ResponseType GameObjectDuplicateResponse
+message GameObjectDuplicateRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Path = 2;
+	int32 InstanceId = 3;
+}
+
+message GameObjectDuplicateResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	BridgeObjectInfo Original = 4;
+	BridgeObjectInfo Duplicate = 5;
+}
+
+// ResponseType GameObjectGetInfoResponse
+message GameObjectGetInfoRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Path = 2;
+	int32 InstanceId = 3;
+	bool IncludeComponents = 4;
+	int32 MaxChildren = 5;
+}
+
+message GameObjectGetInfoResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	BridgeObjectInfo Object = 4;
+	int32 ChildCount = 5;
+	repeated string Children = 6;
+	string ParentName = 7;
+}
+
+// ResponseType TransformGetResponse
+message TransformGetRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Path = 2;
+	int32 InstanceId = 3;
+}
+
+message TransformGetResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string Name = 4;
+	string Path = 5;
+	BridgeTransformInfo Transform = 6;
+}
+
+// ResponseType TransformSetPositionResponse
+message TransformSetPositionRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Path = 2;
+	int32 InstanceId = 3;
+	BridgeVector3 Position = 4;
+	bool Local = 5;
+}
+
+message TransformSetPositionResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string Name = 4;
+	string Path = 5;
+	BridgeTransformInfo Transform = 6;
+}
+
+// ResponseType TransformSetRotationResponse
+message TransformSetRotationRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Path = 2;
+	int32 InstanceId = 3;
+	BridgeVector3 EulerAngles = 4;
+	bool Local = 5;
+}
+
+message TransformSetRotationResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string Name = 4;
+	string Path = 5;
+	BridgeTransformInfo Transform = 6;
+}
+
+// ResponseType TransformSetScaleResponse
+message TransformSetScaleRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Path = 2;
+	int32 InstanceId = 3;
+	BridgeVector3 Scale = 4;
+	bool UseUniform = 5;
+	float Uniform = 6;
+}
+
+message TransformSetScaleResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string Name = 4;
+	string Path = 5;
+	BridgeTransformInfo Transform = 6;
+}
+
+// ResponseType TransformSetParentResponse
+message TransformSetParentRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Path = 2;
+	int32 InstanceId = 3;
+	string ParentPath = 4;
+	int32 ParentInstanceId = 5;
+	bool WorldPositionStays = 6;
+}
+
+message TransformSetParentResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string Name = 4;
+	string Path = 5;
+	string ParentPath = 6;
+	BridgeTransformInfo Transform = 7;
+}
+
+// ResponseType TransformLookAtResponse
+message TransformLookAtRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Path = 2;
+	int32 InstanceId = 3;
+	string TargetPath = 4;
+	int32 TargetInstanceId = 5;
+	BridgeVector3 TargetPosition = 6;
+	bool HasTargetPosition = 7;
+}
+
+message TransformLookAtResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string Name = 4;
+	string Path = 5;
+	BridgeTransformInfo Transform = 6;
+}
+
+// ResponseType TransformResetResponse
+message TransformResetRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Path = 2;
+	int32 InstanceId = 3;
+	bool ResetPosition = 4;
+	bool ResetRotation = 5;
+	bool ResetScale = 6;
+}
+
+message TransformResetResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string Name = 4;
+	string Path = 5;
+	BridgeTransformInfo Transform = 6;
+}
+
+// ResponseType TransformSetSiblingIndexResponse
+message TransformSetSiblingIndexRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Path = 2;
+	int32 InstanceId = 3;
+	int32 Index = 4;
+	bool First = 5;
+	bool Last = 6;
+}
+
+message TransformSetSiblingIndexResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string Name = 4;
+	string Path = 5;
+	int32 SiblingIndex = 6;
+	BridgeTransformInfo Transform = 7;
+}
+
+// ResponseType MenuItemExecuteResponse
+message MenuItemExecuteRequest // IRequest
+{
+	int32 RpcId = 1;
+	string MenuPath = 2;
+}
+
+message MenuItemExecuteResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string MenuPath = 4;
+	bool Executed = 5;
+}
+
+// ResponseType PrefabInstantiateResponse
+message PrefabInstantiateRequest // IRequest
+{
+	int32 RpcId = 1;
+	string PrefabPath = 2;
+	BridgeVector3 Position = 3;
+}
+
+message PrefabInstantiateResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string PrefabPath = 4;
+	BridgeObjectInfo Instance = 5;
+}
+
+// ResponseType PrefabSaveResponse
+message PrefabSaveRequest // IRequest
+{
+	int32 RpcId = 1;
+	string GameObjectPath = 2;
+	string SavePath = 3;
+}
+
+message PrefabSaveResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string GameObjectName = 4;
+	string PrefabPath = 5;
+	bool Saved = 6;
+	BridgeAssetInfo Asset = 7;
+}
+
+// ResponseType PrefabUnpackResponse
+message PrefabUnpackRequest // IRequest
+{
+	int32 RpcId = 1;
+	string GameObjectPath = 2;
+	bool Completely = 3;
+}
+
+message PrefabUnpackResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string GameObjectName = 4;
+	bool Unpacked = 5;
+	bool Completely = 6;
+	BridgeObjectInfo Object = 7;
+}
+
+// ResponseType PrefabGetInfoResponse
+message PrefabGetInfoRequest // IRequest
+{
+	int32 RpcId = 1;
+	string PrefabPath = 2;
+	string GameObjectPath = 3;
+}
+
+message PrefabGetInfoResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string Name = 4;
+	bool IsPrefabAsset = 5;
+	bool IsPrefabInstance = 6;
+	string PrefabAssetPath = 7;
+	string PrefabType = 8;
+	string PrefabStatus = 9;
+}
+
+// ResponseType PrefabGetHierarchyResponse
+message PrefabGetHierarchyRequest // IRequest
+{
+	int32 RpcId = 1;
+	string PrefabPath = 2;
+	int32 Depth = 3;
+	bool IncludeInactive = 4;
+	bool IncludeComponents = 5;
+}
+
+message PrefabGetHierarchyResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string PrefabPath = 4;
+	string PrefabName = 5;
+	int32 RootCount = 6;
+	bool Truncated = 7;
+	repeated BridgeSceneNode Roots = 8;
+}
+
+// ResponseType PrefabApplyResponse
+message PrefabApplyRequest // IRequest
+{
+	int32 RpcId = 1;
+	string GameObjectPath = 2;
+}
+
+message PrefabApplyResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string GameObjectName = 4;
+	string PrefabPath = 5;
+	bool Applied = 6;
+}
+
+// ResponseType InspectorGetComponentsResponse
+message InspectorGetComponentsRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Path = 2;
+	int32 InstanceId = 3;
+	string AssetPath = 4;
+	string ObjectPath = 5;
+}
+
+message InspectorGetComponentsResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string GameObjectName = 4;
+	string AssetPath = 5;
+	string ObjectPath = 6;
+	repeated BridgeComponentInfo Components = 7;
+	int32 Count = 8;
+}
+
+// ResponseType InspectorGetPropertiesResponse
+message InspectorGetPropertiesRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Path = 2;
+	int32 InstanceId = 3;
+	string AssetPath = 4;
+	string ObjectPath = 5;
+	string ComponentName = 6;
+	int32 ComponentIndex = 7;
+	int32 ComponentInstanceId = 8;
+	bool IncludeChildren = 9;
+}
+
+message InspectorGetPropertiesResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string TargetName = 4;
+	string TargetType = 5;
+	string GameObjectName = 6;
+	string ComponentName = 7;
+	string AssetPath = 8;
+	string ObjectPath = 9;
+	repeated BridgePropertyInfo Properties = 10;
+}
+
+// ResponseType InspectorGetPropertyResponse
+message InspectorGetPropertyRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Path = 2;
+	int32 InstanceId = 3;
+	string AssetPath = 4;
+	string ObjectPath = 5;
+	string ComponentName = 6;
+	int32 ComponentIndex = 7;
+	int32 ComponentInstanceId = 8;
+	string PropertyName = 9;
+}
+
+message InspectorGetPropertyResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string TargetName = 4;
+	string TargetType = 5;
+	string ComponentName = 6;
+	string AssetPath = 7;
+	string ObjectPath = 8;
+	BridgePropertyInfo Property = 9;
+}
+
+// ResponseType InspectorFindPropertyResponse
+message InspectorFindPropertyRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Path = 2;
+	int32 InstanceId = 3;
+	string AssetPath = 4;
+	string ObjectPath = 5;
+	string ComponentName = 6;
+	int32 ComponentIndex = 7;
+	int32 ComponentInstanceId = 8;
+	string Keyword = 9;
+}
+
+message InspectorFindPropertyResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string TargetName = 4;
+	string TargetType = 5;
+	string ComponentName = 6;
+	string Keyword = 7;
+	int32 Count = 8;
+	string AssetPath = 9;
+	string ObjectPath = 10;
+	repeated BridgePropertyInfo Properties = 11;
+}
+
+// ResponseType InspectorSetPropertyResponse
+message InspectorSetPropertyRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Path = 2;
+	int32 InstanceId = 3;
+	string AssetPath = 4;
+	string ObjectPath = 5;
+	string ComponentName = 6;
+	int32 ComponentIndex = 7;
+	int32 ComponentInstanceId = 8;
+	string PropertyName = 9;
+	BridgePropertyInfo Value = 10;
+}
+
+message InspectorSetPropertyResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string TargetName = 4;
+	string TargetType = 5;
+	string GameObjectName = 6;
+	string ComponentName = 7;
+	string AssetPath = 8;
+	string ObjectPath = 9;
+	bool Changed = 10;
+	repeated BridgePropertyInfo Properties = 11;
+}
+
+// ResponseType InspectorSetPropertiesResponse
+message InspectorSetPropertiesRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Path = 2;
+	int32 InstanceId = 3;
+	string AssetPath = 4;
+	string ObjectPath = 5;
+	string ComponentName = 6;
+	int32 ComponentIndex = 7;
+	int32 ComponentInstanceId = 8;
+	repeated BridgePropertyInfo Values = 9;
+}
+
+message InspectorSetPropertiesResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string TargetName = 4;
+	string TargetType = 5;
+	string GameObjectName = 6;
+	string ComponentName = 7;
+	string AssetPath = 8;
+	string ObjectPath = 9;
+	bool Changed = 10;
+	repeated BridgePropertyInfo Properties = 11;
+}
+
+// ResponseType InspectorAddComponentResponse
+message InspectorAddComponentRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Path = 2;
+	int32 InstanceId = 3;
+	string AssetPath = 4;
+	string ObjectPath = 5;
+	string TypeName = 6;
+}
+
+message InspectorAddComponentResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string GameObjectName = 4;
+	string AssetPath = 5;
+	string ObjectPath = 6;
+	BridgeComponentInfo AddedComponent = 7;
+}
+
+// ResponseType InspectorRemoveComponentResponse
+message InspectorRemoveComponentRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Path = 2;
+	int32 InstanceId = 3;
+	string AssetPath = 4;
+	string ObjectPath = 5;
+	string ComponentName = 6;
+	int32 ComponentIndex = 7;
+	int32 ComponentInstanceId = 8;
+}
+
+message InspectorRemoveComponentResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string GameObjectName = 4;
+	string AssetPath = 5;
+	string ObjectPath = 6;
+	BridgeComponentInfo RemovedComponent = 7;
+}
+
+// ResponseType EditorUndoResponse
+message EditorUndoRequest // IRequest
+{
+	int32 RpcId = 1;
+	int32 Count = 2;
+}
+
+message EditorUndoResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	int32 Count = 4;
+}
+
+// ResponseType EditorRedoResponse
+message EditorRedoRequest // IRequest
+{
+	int32 RpcId = 1;
+	int32 Count = 2;
+}
+
+message EditorRedoResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	int32 Count = 4;
+}
+
+// ResponseType EditorPauseResponse
+message EditorPauseRequest // IRequest
+{
+	int32 RpcId = 1;
+	bool Toggle = 2;
+	bool Pause = 3;
+}
+
+message EditorPauseResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	bool IsPaused = 4;
+}
+
+// ResponseType EditorGetStateResponse
+message EditorGetStateRequest // IRequest
+{
+	int32 RpcId = 1;
+}
+
+message EditorGetStateResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	bool IsPlaying = 4;
+	bool IsPaused = 5;
+	bool IsCompiling = 6;
+	bool IsUpdating = 7;
+	string ApplicationPath = 8;
+	string ApplicationContentsPath = 9;
+	bool EnterPlayModeOptionsEnabled = 10;
+	string EnterPlayModeOptions = 11;
+}
+
+// ResponseType BatchExecuteResponse
+message BatchExecuteRequest // IRequest
+{
+	int32 RpcId = 1;
+	repeated string Commands = 2;
+	bool StopOnError = 3;
+}
+
+message BatchExecuteResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	repeated BridgeBatchStepResult Results = 4;
+	int32 Count = 5;
+	int32 Failed = 6;
+	bool Completed = 7;
+}
+

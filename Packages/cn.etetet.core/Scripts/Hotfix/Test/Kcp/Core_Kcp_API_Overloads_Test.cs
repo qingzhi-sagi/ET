@@ -101,11 +101,10 @@ namespace ET.Test
             {
                 spanArray[i] = (byte)(i + 300);
             }
-            ReadOnlySpan<byte> spanData = new ReadOnlySpan<byte>(spanArray);
-            int sent4 = client.Send(spanData);
-            if (sent4 != spanData.Length)
+            int sent4 = SendReadOnlySpan(client, spanArray);
+            if (sent4 != spanArray.Length)
             {
-                Log.Console($"Send(ReadOnlySpan<byte>) failed: expected {spanData.Length}, got {sent4}");
+                Log.Console($"Send(ReadOnlySpan<byte>) failed: expected {spanArray.Length}, got {sent4}");
                 return 4;
             }
 
@@ -286,8 +285,7 @@ namespace ET.Test
             if (server.PeekSize() > 0)
             {
                 int peekSize = server.PeekSize();
-                Span<byte> receiveSpan = new byte[peekSize];
-                int received4 = server.Receive(receiveSpan);
+                int received4 = ReceiveSpan(server, peekSize);
                 if (received4 != peekSize)
                 {
                     Log.Console($"Receive(Span<byte>) failed: expected {peekSize}, got {received4}");
@@ -407,6 +405,18 @@ namespace ET.Test
 
             Log.Debug("Core_Kcp_API_Overloads_Test all passed");
             return ErrorCode.ERR_Success;
+        }
+
+        private static int SendReadOnlySpan(Kcp sender, byte[] data)
+        {
+            ReadOnlySpan<byte> spanData = data;
+            return sender.Send(spanData);
+        }
+
+        private static int ReceiveSpan(Kcp receiver, int size)
+        {
+            Span<byte> receiveSpan = new byte[size];
+            return receiver.Receive(receiveSpan);
         }
     }
 }

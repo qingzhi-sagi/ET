@@ -1,0 +1,40 @@
+using System;
+using UnityEditor;
+
+namespace ET
+{
+    internal sealed class UnityBridgeAssetRefreshHandler : AUnityBridgeDeferredHandler<AssetRefreshRequest, AssetRefreshResponse>
+    {
+        protected override async ETTask<AssetRefreshResponse> Run(AssetRefreshRequest command, UnityBridgeDeferredContext deferred)
+        {
+            if (!deferred.IsResuming && EditorApplication.isCompiling)
+            {
+                throw new Exception("unity is compiling");
+            }
+
+            await deferred.Defer(() => AssetDatabase.Refresh(ToImportOptions(command.ForceUpdate)));
+
+            if (EditorApplication.isCompiling)
+            {
+                return deferred.NotReady<AssetRefreshResponse>();
+            }
+
+            AssetRefreshResponse response = AssetRefreshResponse.Create();
+            response.Refreshed = true;
+            if (EditorUtility.scriptCompilationFailed)
+            {
+                response.Error = UnityBridgeErrorCode.HandlerFail;
+                response.Message = "asset refresh finished with compile errors";
+                return response;
+            }
+
+            response.Message = "asset refresh completed";
+            return response;
+        }
+
+        private static ImportAssetOptions ToImportOptions(bool forceUpdate)
+        {
+            return forceUpdate ? ImportAssetOptions.ForceUpdate : ImportAssetOptions.Default;
+        }
+    }
+}

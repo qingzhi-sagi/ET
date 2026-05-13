@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using ET.Server;
 
 namespace ET.Test
 {
@@ -48,44 +47,7 @@ namespace ET.Test
             }
 
             allocator.Zone = zone + 1;
-            EnsureStartZoneConfigExists(fiber, zone);
             return zone;
-        }
-
-        private static void EnsureStartZoneConfigExists(Fiber fiber, int zone)
-        {
-            StartZoneConfigCategory category = fiber.GetSingleton<StartZoneConfigCategory>();
-            if (category == null)
-            {
-                throw new Exception("StartZoneConfigCategory is not initialized");
-            }
-
-            if (category.GetOrDefault(zone) != null)
-            {
-                return;
-            }
-
-            StartZoneConfig template = category.GetOrDefault(0);
-            if (template == null)
-            {
-                foreach (StartZoneConfig item in category.GetAll().Values)
-                {
-                    if (item != null && !string.IsNullOrEmpty(item.DBConnection))
-                    {
-                        template = item;
-                        break;
-                    }
-                }
-            }
-
-            if (template == null)
-            {
-                throw new Exception($"cannot synthesize start zone config for test zone: {zone}");
-            }
-
-            StartZoneConfig generated = new(zone, template.ZoneType, template.DBConnection, template.DBName);
-
-            category.GetAll().Add(zone, generated);
         }
 
         private static TestZoneAllocatorComponent GetAllocator(Fiber fiber)

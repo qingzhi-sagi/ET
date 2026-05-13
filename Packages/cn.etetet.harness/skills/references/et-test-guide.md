@@ -4,7 +4,8 @@
 
 - TDD 或测试方案：看“TDD 流程”。
 - 写或改 `ATestHandler`：看“测试编写”。
-- 只跑服务端测试：看“测试执行”。
+- 只跑服务端 / Hotfix 测试：看“服务端测试执行”。
+- 只跑 Unity Editor 测试：看“Editor 测试执行”。
 - 排查失败：看“日志分析”和“常见失败原因”。
 
 ## TDD 流程
@@ -29,6 +30,8 @@
 - 类名：`{PackageType}_{TestName}_Test`。
 - 父类：`ATestHandler`。
 - 入口：`protected override async ETTask<int> Run(Fiber fiber, TestArgs args)`。
+- 需要 UnityEditor API 的 Editor 测试放在目标包的 `Scripts/Editor/Test/` 下，通常继承 `ET.Test.ATestHandler`，并通过 UnityBridge 的 `UnityTestRunRequest` 执行。
+- Editor 测试不是 Unity Test Framework 测试，不使用 Unity 官方 Test Runner、`Filter` 或 `ExecutionSettings`。
 
 ### 返回值与日志
 
@@ -100,7 +103,7 @@ namespace ET
 }
 ```
 
-## 测试执行
+## 服务端测试执行
 
 ```powershell
 dotnet build ET.sln
@@ -136,6 +139,47 @@ Test --Name=CreateRobot
 Test --Name=Quest.*
 ```
 
+## Editor 测试执行
+
+Editor 测试用于验证依赖 UnityEditor / UnityEngine 编辑器上下文的代码。执行前必须打开 Unity Editor，并确认项目已加载、UnityBridge 宿主在线。
+
+```powershell
+dotnet build ET.sln
+```
+
+```powershell
+dotnet ./Bin/ET.UnityBridge.dll heartBeat
+```
+
+```powershell
+dotnet ./Bin/ET.UnityBridge.dll '{"_t":"HostState"}'
+```
+
+全量执行：
+
+```powershell
+dotnet ./Bin/ET.UnityBridge.dll '{"_t":"UnityTestRunRequest","Name":".*"}'
+```
+
+指定测试：
+
+```powershell
+dotnet ./Bin/ET.UnityBridge.dll '{"_t":"UnityTestRunRequest","Name":"^Unitybridge_UnityTestRunHandler_Test$"}'
+```
+
+正则执行：
+
+```powershell
+dotnet ./Bin/ET.UnityBridge.dll '{"_t":"UnityTestRunRequest","Name":"^Unitybridge_.*Message_Test$"}'
+```
+
+结果判定：
+
+- 成功：response `Error == 0`、`Matched > 0`、`Failed == 0`、`Passed == Matched`。
+- 失败：response `Error != 0`，优先看 `Message` 和 `Results[].Message`。
+- `Matched == 0` 代表正则没有匹配到任何 Editor 测试类。
+- 找不到 `UnityTestRunRequest` 时，先确认 `HostState` 是否包含该命令；必要时执行 `dotnet ./Bin/ET.UnityBridge.dll '{"_t":"Refresh"}'` 后重试。
+
 ## 日志分析
 
 - 日志位置：`Logs/All.log`。
@@ -145,6 +189,7 @@ Test --Name=Quest.*
 - 失败格式：`Package.TestName fail`，后面跟错误详情。
 - 未找到匹配：`not found test! package: .* name: X`。
 - 即使控制台显示 success，也要检查 `Logs/All.log` 是否存在隐藏异常、错误日志或异步尾部报错。
+- Editor 测试结果以 UnityBridge response 为准，不依赖 `Logs/All.log`；失败详情优先看 `Message` 和 `Results[].Message`。
 
 ## 常见失败原因
 
@@ -155,6 +200,8 @@ Test --Name=Quest.*
 | 消息超时 | 网络消息发送、事件是否真的发布 |
 | Fiber 未找到 | 场景或 Fiber 名称 |
 | 未找到测试 | 类名、`PackageType` 前缀、测试目录 |
+| Editor 测试未匹配 | `Name` 正则、类是否继承 `ET.Test.ATestHandler`、是否在 `Scripts/Editor/Test/` |
+| 找不到 `UnityTestRunRequest` | Unity Editor 是否打开、UnityBridge 是否在线、是否执行过 `Refresh` |
 | 配置不存在 | 测试是否自己用代码构造了最小 Config 数据 |
 
 ## 常见错误
@@ -170,3 +217,4 @@ Test --Name=Quest.*
 - 使用睡眠轮询、`WaitMatch` 或无序过滤跳过事件。
 - 在正式包 `ErrorCode.cs` 里定义测试专用错误码。
 - 为了跑通测试随意修改正常业务逻辑。
+- 用 Unity Test Framework 的 `Filter` / `ExecutionSettings` / Test Runner 跑 UnityBridge Editor 测试。

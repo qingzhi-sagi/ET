@@ -139,3 +139,596 @@ message TestEchoResponse // IResponse
 	int64 HandledAt = 5;
 	string Handler = 6;
 }
+
+message BridgeVector2
+{
+	float X = 1;
+	float Y = 2;
+}
+
+message BridgeVector3
+{
+	float X = 1;
+	float Y = 2;
+	float Z = 3;
+}
+
+message BridgeQuaternion
+{
+	float X = 1;
+	float Y = 2;
+	float Z = 3;
+	float W = 4;
+}
+
+message BridgeTransformInfo
+{
+	BridgeVector3 LocalPosition = 1;
+	BridgeVector3 LocalEulerAngles = 2;
+	BridgeQuaternion LocalRotation = 3;
+	BridgeVector3 LocalScale = 4;
+	string ParentPath = 5;
+	int32 SiblingIndex = 6;
+	BridgeVector3 Position = 7;
+	BridgeVector3 EulerAngles = 8;
+	int32 ChildCount = 9;
+}
+
+message BridgeObjectInfo
+{
+	string Name = 1;
+	string Path = 2;
+	int32 InstanceId = 3;
+	bool ActiveSelf = 4;
+	bool ActiveInHierarchy = 5;
+	string Tag = 6;
+	string LayerName = 7;
+	int32 Layer = 8;
+	BridgeTransformInfo Transform = 9;
+	repeated BridgeComponentInfo Components = 10;
+}
+
+message BridgeAssetInfo
+{
+	string AssetPath = 1;
+	string Guid = 2;
+	string TypeName = 3;
+	string Name = 4;
+	string Extension = 5;
+	int64 FileSize = 6;
+	int32 InstanceId = 7;
+}
+
+message BridgeSceneNode
+{
+	BridgeObjectInfo Object = 1;
+	repeated BridgeSceneNode Children = 2;
+}
+
+message BridgeComponentInfo
+{
+	string TypeName = 1;
+	string FullTypeName = 2;
+	int32 ComponentIndex = 3;
+	int32 InstanceId = 4;
+	bool Enabled = 5;
+}
+
+message BridgePropertyInfo
+{
+	string Name = 1;
+	string DisplayName = 2;
+	string Type = 3;
+	string StringValue = 4;
+	int32 IntValue = 5;
+	float FloatValue = 6;
+	bool BoolValue = 7;
+	BridgeVector2 Vector2Value = 8;
+	BridgeVector3 Vector3Value = 9;
+	string ObjectReferencePath = 10;
+	string ObjectReferenceType = 11;
+	bool IsArray = 12;
+	bool IsEditable = 13;
+	string PropertyPath = 14;
+	bool IsExpanded = 15;
+	bool HasChildren = 16;
+	int32 Depth = 17;
+}
+
+message BridgeConsoleLog
+{
+	string LogType = 1;
+	string Message = 2;
+	string StackTrace = 3;
+	string Time = 4;
+}
+
+message BridgeGameViewResolution
+{
+	int32 Width = 1;
+	int32 Height = 2;
+	string Label = 3;
+	bool IsCurrent = 4;
+}
+
+message BridgeScreenshotInfo
+{
+	string Path = 1;
+	string FileName = 2;
+	int32 Width = 3;
+	int32 Height = 4;
+	int64 FileSize = 5;
+	string MediaType = 6;
+}
+
+message BridgeBatchStepResult
+{
+	string Name = 1;
+	string Command = 2;
+	int32 Error = 3;
+	string Message = 4;
+}
+
+message BridgeTestResult
+{
+	string Name = 1;
+	string FullName = 2;
+	bool Passed = 3;
+	int32 Error = 4;
+	string Message = 5;
+	int64 DurationMs = 6;
+}
+
+// ResponseType AssetSearchResponse
+message AssetSearchRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Mode = 2;
+	string Filter = 3;
+	string Keyword = 4;
+	repeated string SearchInFolders = 5;
+	int32 MaxResults = 6;
+	string Format = 7;
+}
+
+message AssetSearchResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	repeated BridgeAssetInfo Assets = 4;
+	repeated string Paths = 5;
+	string Mode = 6;
+	string Filter = 7;
+	int32 TotalFound = 8;
+	int32 Returned = 9;
+}
+
+// ResponseType AssetFindResponse
+message AssetFindRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Filter = 2;
+	repeated string SearchInFolders = 3;
+	int32 MaxResults = 4;
+	string Format = 5;
+}
+
+message AssetFindResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	repeated BridgeAssetInfo Assets = 4;
+	repeated string Paths = 5;
+	string Filter = 6;
+	int32 TotalFound = 7;
+	int32 Returned = 8;
+}
+
+// ResponseType AssetGetPathResponse
+message AssetGetPathRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Guid = 2;
+}
+
+message AssetGetPathResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string Guid = 4;
+	string AssetPath = 5;
+	bool Exists = 6;
+	BridgeAssetInfo Asset = 7;
+}
+
+// ResponseType AssetLoadResponse
+message AssetLoadRequest // IRequest
+{
+	int32 RpcId = 1;
+	string AssetPath = 2;
+}
+
+message AssetLoadResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	BridgeAssetInfo Asset = 4;
+	bool Exists = 5;
+	int32 InstanceId = 6;
+}
+
+// ResponseType AssetImportResponse
+message AssetImportRequest // IRequest
+{
+	int32 RpcId = 1;
+	string AssetPath = 2;
+	bool ForceUpdate = 3;
+}
+
+message AssetImportResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string AssetPath = 4;
+	bool Imported = 5;
+	BridgeAssetInfo Asset = 6;
+}
+
+// ResponseType AssetRefreshResponse
+message AssetRefreshRequest // IRequest
+{
+	int32 RpcId = 1;
+	bool ForceUpdate = 2;
+}
+
+message AssetRefreshResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	bool Refreshed = 4;
+}
+
+// ResponseType AssetReadTextResponse
+message AssetReadTextRequest // IRequest
+{
+	int32 RpcId = 1;
+	string AssetPath = 2;
+	int32 StartLine = 3;
+	int32 MaxLines = 4;
+	int32 MaxChars = 5;
+}
+
+message AssetReadTextResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string AssetPath = 4;
+	int32 TotalLines = 5;
+	int32 ReturnedLineStart = 6;
+	int32 ReturnedLineEnd = 7;
+	int32 ReturnedLineCount = 8;
+	bool Truncated = 9;
+	string Content = 10;
+}
+
+// ResponseType SceneGetHierarchyResponse
+message SceneGetHierarchyRequest // IRequest
+{
+	int32 RpcId = 1;
+	int32 Depth = 2;
+	bool IncludeInactive = 3;
+}
+
+message SceneGetHierarchyResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string SceneName = 4;
+	string ScenePath = 5;
+	int32 RootCount = 6;
+	repeated BridgeSceneNode Roots = 7;
+}
+
+// ResponseType SceneGetActiveResponse
+message SceneGetActiveRequest // IRequest
+{
+	int32 RpcId = 1;
+}
+
+message SceneGetActiveResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string SceneName = 4;
+	string ScenePath = 5;
+	bool IsLoaded = 6;
+	bool IsDirty = 7;
+	int32 RootCount = 8;
+}
+
+// ResponseType SceneLoadResponse
+message SceneLoadRequest // IRequest
+{
+	int32 RpcId = 1;
+	string ScenePath = 2;
+	string Mode = 3;
+}
+
+message SceneLoadResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string SceneName = 4;
+	string ScenePath = 5;
+	bool Loaded = 6;
+}
+
+// ResponseType SceneSaveResponse
+message SceneSaveRequest // IRequest
+{
+	int32 RpcId = 1;
+	string SaveAs = 2;
+}
+
+message SceneSaveResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string SceneName = 4;
+	string ScenePath = 5;
+	bool Saved = 6;
+}
+
+// ResponseType SceneNewResponse
+message SceneNewRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Setup = 2;
+}
+
+message SceneNewResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string SceneName = 4;
+	string ScenePath = 5;
+	bool Created = 6;
+}
+
+// ResponseType SelectionGetResponse
+message SelectionGetRequest // IRequest
+{
+	int32 RpcId = 1;
+	bool IncludeComponents = 2;
+}
+
+message SelectionGetResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	repeated BridgeObjectInfo Objects = 4;
+	repeated BridgeAssetInfo Assets = 5;
+	string ActiveObjectName = 6;
+	int32 ActiveObjectInstanceId = 7;
+	int32 Count = 8;
+}
+
+// ResponseType SelectionSetResponse
+message SelectionSetRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Path = 2;
+	string AssetPath = 3;
+	int32 InstanceId = 4;
+	repeated int32 InstanceIds = 5;
+}
+
+message SelectionSetResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	int32 SelectedCount = 4;
+	string ActiveObjectName = 5;
+	repeated BridgeObjectInfo Objects = 6;
+	repeated BridgeAssetInfo Assets = 7;
+}
+
+// ResponseType SelectionAddResponse
+message SelectionAddRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Path = 2;
+	string AssetPath = 3;
+	int32 InstanceId = 4;
+}
+
+message SelectionAddResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	bool Added = 4;
+	string ObjectName = 5;
+	int32 SelectedCount = 6;
+	repeated BridgeObjectInfo Objects = 7;
+	repeated BridgeAssetInfo Assets = 8;
+}
+
+// ResponseType SelectionRemoveResponse
+message SelectionRemoveRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Path = 2;
+	string AssetPath = 3;
+	int32 InstanceId = 4;
+}
+
+message SelectionRemoveResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	bool Removed = 4;
+	string ObjectName = 5;
+	int32 SelectedCount = 6;
+	repeated BridgeObjectInfo Objects = 7;
+	repeated BridgeAssetInfo Assets = 8;
+}
+
+// ResponseType SelectionClearResponse
+message SelectionClearRequest // IRequest
+{
+	int32 RpcId = 1;
+}
+
+message SelectionClearResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	bool Cleared = 4;
+	int32 SelectedCount = 5;
+}
+
+// ResponseType UnityTestRunResponse
+message UnityTestRunRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Name = 2;
+}
+
+message UnityTestRunResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	string Name = 4;
+	int32 Matched = 5;
+	int32 Passed = 6;
+	int32 Failed = 7;
+	int64 DurationMs = 8;
+	repeated BridgeTestResult Results = 9;
+}
+
+// ResponseType ConsoleGetLogsResponse
+message ConsoleGetLogsRequest // IRequest
+{
+	int32 RpcId = 1;
+	int32 Count = 2;
+	string LogType = 3;
+}
+
+message ConsoleGetLogsResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	repeated BridgeConsoleLog Logs = 4;
+	int32 Count = 5;
+	int32 TotalCount = 6;
+	string LogType = 7;
+}
+
+// ResponseType EditorLogResponse
+message EditorLogRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Message = 2;
+	string LogType = 3;
+}
+
+message EditorLogResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	bool Logged = 4;
+	string LogType = 5;
+	string LoggedMessage = 6;
+}
+
+// ResponseType ScreenshotCaptureResponse
+message ScreenshotCaptureRequest // IRequest
+{
+	int32 RpcId = 1;
+	string Target = 2;
+	string Format = 3;
+	int32 Quality = 4;
+	bool AllowEditMode = 5;
+}
+
+message ScreenshotCaptureResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	bool Captured = 4;
+	string Target = 5;
+	BridgeScreenshotInfo Screenshot = 6;
+}
+
+// ResponseType GameViewGetResolutionResponse
+message GameViewGetResolutionRequest // IRequest
+{
+	int32 RpcId = 1;
+}
+
+message GameViewGetResolutionResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	BridgeGameViewResolution Resolution = 4;
+	int32 SelectedIndex = 5;
+	string SizeType = 6;
+}
+
+// ResponseType GameViewListResolutionsResponse
+message GameViewListResolutionsRequest // IRequest
+{
+	int32 RpcId = 1;
+}
+
+message GameViewListResolutionsResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	repeated BridgeGameViewResolution Resolutions = 4;
+	int32 Count = 5;
+	int32 CurrentIndex = 6;
+}
+
+// ResponseType GameViewSetResolutionResponse
+message GameViewSetResolutionRequest // IRequest
+{
+	int32 RpcId = 1;
+	int32 Width = 2;
+	int32 Height = 3;
+	string Label = 4;
+}
+
+message GameViewSetResolutionResponse // IResponse
+{
+	int32 RpcId = 1;
+	int32 Error = 2;
+	string Message = 3;
+	BridgeGameViewResolution Resolution = 4;
+	int32 SelectedIndex = 5;
+	bool WasAdded = 6;
+	string SizeType = 7;
+}

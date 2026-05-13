@@ -5,23 +5,18 @@ namespace ET
 {
     internal sealed class UnityBridgeRefreshHandler : AUnityBridgeDeferredHandler<Refresh, RefreshResponse>
     {
-        protected override async ETTask<IResponse> Run(Refresh command)
+        protected override async ETTask<RefreshResponse> Run(Refresh command, UnityBridgeDeferredContext deferred)
         {
-            await ETTask.CompletedTask;
-            if (EditorApplication.isCompiling)
+            if (!deferred.IsResuming && EditorApplication.isCompiling)
             {
                 throw new Exception("unity is compiling");
             }
 
-            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
-            return null;
-        }
+            await deferred.Defer(() => AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate));
 
-        protected override RefreshResponse Deferred(Refresh command, long startedAt)
-        {
             if (EditorApplication.isCompiling)
             {
-                return null;
+                return deferred.NotReady<RefreshResponse>();
             }
 
             RefreshResponse response = RefreshResponse.Create();

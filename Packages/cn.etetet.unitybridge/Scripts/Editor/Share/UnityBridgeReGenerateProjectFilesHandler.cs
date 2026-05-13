@@ -5,28 +5,26 @@ namespace ET
 {
     internal sealed class UnityBridgeReGenerateProjectFilesHandler : AUnityBridgeDeferredHandler<RegenProject, RegenProjectResponse>
     {
-        protected override async ETTask<IResponse> Run(RegenProject command)
+        protected override async ETTask<RegenProjectResponse> Run(RegenProject command, UnityBridgeDeferredContext deferred)
         {
-            await ETTask.CompletedTask;
-            if (EditorApplication.isCompiling)
+            if (!deferred.IsResuming && EditorApplication.isCompiling)
             {
                 throw new Exception("unity is compiling");
             }
 
-            if (!EditorApplication.ExecuteMenuItem("ET/Loader/ReGenerateProjectFiles"))
+            await deferred.Defer(() =>
             {
-                throw new Exception("execute menu item failed: ET/Loader/ReGenerateProjectFiles");
-            }
+                if (!EditorApplication.ExecuteMenuItem("ET/Loader/ReGenerateProjectFiles"))
+                {
+                    throw new Exception("execute menu item failed: ET/Loader/ReGenerateProjectFiles");
+                }
 
-            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
-            return null;
-        }
+                AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
+            });
 
-        protected override RegenProjectResponse Deferred(RegenProject command, long startedAt)
-        {
             if (EditorApplication.isCompiling)
             {
-                return null;
+                return deferred.NotReady<RegenProjectResponse>();
             }
 
             RegenProjectResponse response = RegenProjectResponse.Create();

@@ -1,0 +1,167 @@
+using System.IO;
+using UnityEditor;
+using UnityEngine;
+using UnityObject = UnityEngine.Object;
+
+namespace ET
+{
+    internal sealed class UnityBridgeSelectionGetHandler : AUnityBridgeHandler<SelectionGetRequest, SelectionGetResponse>
+    {
+        protected override async ETTask<IResponse> Run(SelectionGetRequest command)
+        {
+            await ETTask.CompletedTask;
+
+            SelectionGetResponse response = SelectionGetResponse.Create();
+            foreach (UnityObject selected in Selection.objects)
+            {
+                if (selected == null)
+                {
+                    continue;
+                }
+
+                string assetPath = AssetDatabase.GetAssetPath(selected);
+                if (selected is GameObject gameObject && string.IsNullOrWhiteSpace(assetPath))
+                {
+                    response.Objects.Add(CreateObjectInfo(gameObject, command.IncludeComponents));
+                    continue;
+                }
+
+                if (!string.IsNullOrWhiteSpace(assetPath))
+                {
+                    response.Assets.Add(CreateAssetInfo(selected, assetPath));
+                }
+            }
+
+            response.ActiveObjectName = Selection.activeObject == null ? string.Empty : Selection.activeObject.name;
+            response.ActiveObjectInstanceId = Selection.activeObject == null ? 0 : Selection.activeObject.GetInstanceID();
+            response.Count = response.Objects.Count + response.Assets.Count;
+            return response;
+        }
+
+        private static BridgeObjectInfo CreateObjectInfo(GameObject gameObject, bool includeComponents)
+        {
+            BridgeObjectInfo info = BridgeObjectInfo.Create();
+            info.Name = gameObject.name;
+            info.Path = GetPath(gameObject);
+            info.InstanceId = gameObject.GetInstanceID();
+            info.ActiveSelf = gameObject.activeSelf;
+            info.ActiveInHierarchy = gameObject.activeInHierarchy;
+            info.Tag = gameObject.tag;
+            info.Layer = gameObject.layer;
+            info.LayerName = LayerMask.LayerToName(gameObject.layer);
+            info.Transform = CreateTransformInfo(gameObject.transform);
+
+            if (!includeComponents)
+            {
+                return info;
+            }
+
+            Component[] components = gameObject.GetComponents<Component>();
+            for (int i = 0; i < components.Length; ++i)
+            {
+                if (components[i] == null)
+                {
+                    continue;
+                }
+
+                info.Components.Add(CreateComponentInfo(components[i], i));
+            }
+
+            return info;
+        }
+
+        private static BridgeAssetInfo CreateAssetInfo(UnityObject asset, string assetPath)
+        {
+            BridgeAssetInfo info = BridgeAssetInfo.Create();
+            info.AssetPath = assetPath;
+            info.Guid = AssetDatabase.AssetPathToGUID(assetPath);
+            info.TypeName = asset.GetType().Name;
+            info.Name = asset.name;
+            info.Extension = Path.GetExtension(assetPath);
+            info.FileSize = GetFileSize(assetPath);
+            info.InstanceId = asset.GetInstanceID();
+            return info;
+        }
+
+        private static BridgeTransformInfo CreateTransformInfo(Transform transform)
+        {
+            BridgeTransformInfo info = BridgeTransformInfo.Create();
+            info.LocalPosition = CreateVector3(transform.localPosition);
+            info.LocalEulerAngles = CreateVector3(transform.localEulerAngles);
+            info.LocalRotation = CreateQuaternion(transform.localRotation);
+            info.LocalScale = CreateVector3(transform.localScale);
+            info.ParentPath = transform.parent == null ? string.Empty : GetPath(transform.parent.gameObject);
+            info.SiblingIndex = transform.GetSiblingIndex();
+            return info;
+        }
+
+        private static BridgeComponentInfo CreateComponentInfo(Component component, int index)
+        {
+            BridgeComponentInfo info = BridgeComponentInfo.Create();
+            info.TypeName = component.GetType().Name;
+            info.FullTypeName = component.GetType().FullName;
+            info.ComponentIndex = index;
+            info.InstanceId = component.GetInstanceID();
+            info.Enabled = IsComponentEnabled(component);
+            return info;
+        }
+
+        private static bool IsComponentEnabled(Component component)
+        {
+            return component switch
+            {
+                Collider2D collider2D => collider2D.enabled,
+                Behaviour behaviour => behaviour.enabled,
+                Renderer renderer => renderer.enabled,
+                Collider collider => collider.enabled,
+                _ => true
+            };
+        }
+
+        private static BridgeVector3 CreateVector3(Vector3 value)
+        {
+            BridgeVector3 result = BridgeVector3.Create();
+            result.X = value.x;
+            result.Y = value.y;
+            result.Z = value.z;
+            return result;
+        }
+
+        private static BridgeQuaternion CreateQuaternion(Quaternion value)
+        {
+            BridgeQuaternion result = BridgeQuaternion.Create();
+            result.X = value.x;
+            result.Y = value.y;
+            result.Z = value.z;
+            result.W = value.w;
+            return result;
+        }
+
+        private static string GetPath(GameObject gameObject)
+        {
+            string path = gameObject.name;
+            Transform parent = gameObject.transform.parent;
+            while (parent != null)
+            {
+                path = parent.name + "/" + path;
+                parent = parent.parent;
+            }
+
+            return path;
+        }
+
+        private static long GetFileSize(string assetPath)
+        {
+            try
+            {
+                string projectRoot = Path.GetDirectoryName(Application.dataPath);
+                string fullPath = Path.GetFullPath(Path.Combine(projectRoot, assetPath.Replace('\\', '/')));
+                return File.Exists(fullPath) ? new FileInfo(fullPath).Length : 0;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+    }
+}

@@ -30,6 +30,7 @@ namespace ET
         }
     }
 
+    [AllowInstance]
     public class ResourcesComponent : Singleton<ResourcesComponent>, ISingletonAwake
     {
         public void Awake()

@@ -1,3 +1,5 @@
+using System;
+
 namespace ET
 {
     internal abstract class AUnityBridgeDeferredHandler<TRequest, TResponse> :
@@ -16,7 +18,15 @@ namespace ET
 
             try
             {
-                await this.Run(command);
+                await this.Run(command, UnityBridgeDeferredContext.CreateStart());
+                UnityBridgeDeferredRuntime.RollbackCurrent();
+                return this.CreateErrorResponse(
+                    command,
+                    UnityBridgeErrorCode.HandlerFail,
+                    "unity bridge deferred handler completed without starting a deferred operation");
+            }
+            catch (UnityBridgeDeferredStartedException)
+            {
                 return UnityBridgeResponseHelper.CreateDeferredResponse();
             }
             catch (System.Exception e)
@@ -28,10 +38,89 @@ namespace ET
 
         public async ETTask<IResponse> Deferred(IRequest request, long startedAt)
         {
-            await ETTask.CompletedTask;
-            return this.Deferred((TRequest)request, startedAt);
+            TRequest command = (TRequest)request;
+            try
+            {
+                return await this.Run(command, UnityBridgeDeferredContext.CreateResume(startedAt));
+            }
+            catch (UnityBridgeDeferredNotReadyException)
+            {
+                return null;
+            }
+            catch (UnityBridgeDeferredStartedException)
+            {
+                return this.CreateErrorResponse(
+                    command,
+                    UnityBridgeErrorCode.HandlerFail,
+                    "unity bridge deferred handler attempted to start while resuming");
+            }
+            catch (System.Exception e)
+            {
+                return this.CreateErrorResponse(command, UnityBridgeErrorCode.HandlerFail, e.ToString());
+            }
         }
 
-        protected abstract TResponse Deferred(TRequest command, long startedAt);
+        protected sealed override async ETTask<IResponse> Run(TRequest command)
+        {
+            return await this.Run(command, UnityBridgeDeferredContext.CreateResume(0));
+        }
+
+        protected abstract ETTask<TResponse> Run(TRequest command, UnityBridgeDeferredContext deferred);
+    }
+
+    internal sealed class UnityBridgeDeferredContext
+    {
+        private readonly bool isResuming;
+
+        private UnityBridgeDeferredContext(bool isResuming, long startedAt)
+        {
+            this.isResuming = isResuming;
+            this.StartedAt = startedAt;
+        }
+
+        public bool IsResuming => this.isResuming;
+
+        public long StartedAt { get; }
+
+        public static UnityBridgeDeferredContext CreateStart()
+        {
+            return new UnityBridgeDeferredContext(false, 0);
+        }
+
+        public static UnityBridgeDeferredContext CreateResume(long startedAt)
+        {
+            return new UnityBridgeDeferredContext(true, startedAt);
+        }
+
+        public async ETTask Defer(Action start)
+        {
+            await ETTask.CompletedTask;
+            if (this.isResuming)
+            {
+                return;
+            }
+
+            start?.Invoke();
+            throw new UnityBridgeDeferredStartedException();
+        }
+
+        public TResponse NotReady<TResponse>() where TResponse : class, IResponse
+        {
+            throw new UnityBridgeDeferredNotReadyException();
+        }
+    }
+
+    internal sealed class UnityBridgeDeferredStartedException : Exception
+    {
+        internal UnityBridgeDeferredStartedException() : base("unity bridge deferred operation started")
+        {
+        }
+    }
+
+    internal sealed class UnityBridgeDeferredNotReadyException : Exception
+    {
+        internal UnityBridgeDeferredNotReadyException() : base("unity bridge deferred operation is not ready")
+        {
+        }
     }
 }

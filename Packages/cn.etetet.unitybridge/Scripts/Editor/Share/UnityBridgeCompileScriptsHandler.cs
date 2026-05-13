@@ -5,27 +5,24 @@ namespace ET
 {
     internal sealed class UnityBridgeCompileScriptsHandler : AUnityBridgeDeferredHandler<Compile, CompileResponse>
     {
-        protected override async ETTask<IResponse> Run(Compile command)
+        protected override async ETTask<CompileResponse> Run(Compile command, UnityBridgeDeferredContext deferred)
         {
-            await ETTask.CompletedTask;
-            if (EditorApplication.isCompiling)
+            if (!deferred.IsResuming && EditorApplication.isCompiling)
             {
                 throw new Exception("unity is compiling");
             }
 
-            if (!EditorApplication.ExecuteMenuItem("ET/Scripts/Compile"))
+            await deferred.Defer(() =>
             {
-                throw new Exception("execute menu item failed: ET/Scripts/Compile");
-            }
+                if (!EditorApplication.ExecuteMenuItem("ET/Scripts/Compile"))
+                {
+                    throw new Exception("execute menu item failed: ET/Scripts/Compile");
+                }
+            });
 
-            return null;
-        }
-
-        protected override CompileResponse Deferred(Compile command, long startedAt)
-        {
             if (EditorApplication.isCompiling)
             {
-                return null;
+                return deferred.NotReady<CompileResponse>();
             }
 
             CompileResponse response = CompileResponse.Create();
@@ -37,7 +34,7 @@ namespace ET
             }
 
             response.Message = "unity compile completed";
-            response.DurationMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - startedAt;
+            response.DurationMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - deferred.StartedAt;
             return response;
         }
     }

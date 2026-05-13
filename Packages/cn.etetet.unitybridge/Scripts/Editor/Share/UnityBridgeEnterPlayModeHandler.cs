@@ -5,20 +5,15 @@ namespace ET
 {
     internal sealed class UnityBridgeEnterPlayModeHandler : AUnityBridgeDeferredHandler<EnterPlay, EnterPlayResponse>
     {
-        protected override async ETTask<IResponse> Run(EnterPlay command)
+        protected override async ETTask<EnterPlayResponse> Run(EnterPlay command, UnityBridgeDeferredContext deferred)
         {
-            await ETTask.CompletedTask;
-            if (EditorApplication.isPlayingOrWillChangePlaymode)
+            if (!deferred.IsResuming && EditorApplication.isPlayingOrWillChangePlaymode)
             {
                 throw new Exception("unity already in playmode or changing playmode");
             }
 
-            EditorApplication.isPlaying = true;
-            return null;
-        }
+            await deferred.Defer(() => EditorApplication.isPlaying = true);
 
-        protected override EnterPlayResponse Deferred(EnterPlay command, long startedAt)
-        {
             if (EditorApplication.isPlaying)
             {
                 EnterPlayResponse response = EnterPlayResponse.Create();
@@ -29,7 +24,7 @@ namespace ET
 
             if (EditorApplication.isCompiling || EditorApplication.isPlayingOrWillChangePlaymode)
             {
-                return null;
+                return deferred.NotReady<EnterPlayResponse>();
             }
 
             EnterPlayResponse failure = EnterPlayResponse.Create();

@@ -12,7 +12,7 @@ namespace ET
 
         private static readonly string[] modelDirs = { "Model", "Hotfix", "ModelView", "HotfixView", "Core", "Loader", "Config", "Editor" };
 
-        private static readonly string[] serverDirs = { "Server", "Client", "Share", "ClientServer" };
+        private static readonly string[] serverDirs = { "Server", "Client", "Share", "Test", "ClientServer" };
 
         private static readonly HashSet<string> v = new()
         {
@@ -82,6 +82,11 @@ namespace ET
             "ClientServer/Scripts/Editor/Share",
             "ClientServer/Scripts/Editor/Client",
             "ClientServer/CodeMode/Editor/ClientServer",
+            "ClientServer/Scripts/Editor/Test",
+            "ClientServer/Scripts/Hotfix/Test",
+            "ClientServer/Scripts/HotfixView/Test",
+            "ClientServer/Scripts/Model/Test",
+            "ClientServer/Scripts/ModelView/Test",
         };
 
         public static void ChangeToCodeMode(string codeMode, HashSet<string> targetPackages)
