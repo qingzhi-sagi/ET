@@ -7,12 +7,18 @@ namespace ET
     {
         protected override async ETTask<ExitPlayResponse> Run(ExitPlay command, UnityBridgeDeferredContext deferred)
         {
+            await ETTask.CompletedTask;
+            
             if (!deferred.IsResuming && !EditorApplication.isPlaying && !EditorApplication.isPlayingOrWillChangePlaymode)
             {
                 throw new Exception("unity not in playmode");
             }
 
-            await deferred.Defer(() => EditorApplication.isPlaying = false);
+            if (!deferred.IsResuming)
+            {
+                EditorApplication.isPlaying = false;
+                return deferred.Started<ExitPlayResponse>();
+            }
 
             if (EditorApplication.isPlayingOrWillChangePlaymode)
             {

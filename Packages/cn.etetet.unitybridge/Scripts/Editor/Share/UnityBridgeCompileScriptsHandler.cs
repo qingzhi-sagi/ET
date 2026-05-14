@@ -7,18 +7,22 @@ namespace ET
     {
         protected override async ETTask<CompileResponse> Run(Compile command, UnityBridgeDeferredContext deferred)
         {
+            await ETTask.CompletedTask;
+            
             if (!deferred.IsResuming && EditorApplication.isCompiling)
             {
                 throw new Exception("unity is compiling");
             }
 
-            await deferred.Defer(() =>
+            if (!deferred.IsResuming)
             {
                 if (!EditorApplication.ExecuteMenuItem("ET/Scripts/Compile"))
                 {
                     throw new Exception("execute menu item failed: ET/Scripts/Compile");
                 }
-            });
+
+                return deferred.Started<CompileResponse>();
+            }
 
             if (EditorApplication.isCompiling)
             {

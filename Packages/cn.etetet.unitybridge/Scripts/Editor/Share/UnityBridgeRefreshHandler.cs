@@ -7,12 +7,18 @@ namespace ET
     {
         protected override async ETTask<RefreshResponse> Run(Refresh command, UnityBridgeDeferredContext deferred)
         {
+            await ETTask.CompletedTask;
+            
             if (!deferred.IsResuming && EditorApplication.isCompiling)
             {
                 throw new Exception("unity is compiling");
             }
 
-            await deferred.Defer(() => AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate));
+            if (!deferred.IsResuming)
+            {
+                AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
+                return deferred.Started<RefreshResponse>();
+            }
 
             if (EditorApplication.isCompiling)
             {

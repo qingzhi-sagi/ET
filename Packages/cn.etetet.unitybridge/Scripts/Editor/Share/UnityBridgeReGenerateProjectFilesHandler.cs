@@ -7,12 +7,14 @@ namespace ET
     {
         protected override async ETTask<RegenProjectResponse> Run(RegenProject command, UnityBridgeDeferredContext deferred)
         {
+            await ETTask.CompletedTask;
+            
             if (!deferred.IsResuming && EditorApplication.isCompiling)
             {
                 throw new Exception("unity is compiling");
             }
 
-            await deferred.Defer(() =>
+            if (!deferred.IsResuming)
             {
                 if (!EditorApplication.ExecuteMenuItem("ET/Loader/ReGenerateProjectFiles"))
                 {
@@ -20,7 +22,8 @@ namespace ET
                 }
 
                 AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
-            });
+                return deferred.Started<RegenProjectResponse>();
+            }
 
             if (EditorApplication.isCompiling)
             {

@@ -9,6 +9,8 @@ namespace ET
     {
         protected override async ETTask<AssetImportResponse> Run(AssetImportRequest command, UnityBridgeDeferredContext deferred)
         {
+            await ETTask.CompletedTask;
+            
             if (!deferred.IsResuming && EditorApplication.isCompiling)
             {
                 throw new Exception("unity is compiling");
@@ -20,7 +22,11 @@ namespace ET
             }
 
             string assetPath = NormalizeAssetPath(command.AssetPath);
-            await deferred.Defer(() => AssetDatabase.ImportAsset(assetPath, ToImportOptions(command.ForceUpdate)));
+            if (!deferred.IsResuming)
+            {
+                AssetDatabase.ImportAsset(assetPath, ToImportOptions(command.ForceUpdate));
+                return deferred.Started<AssetImportResponse>();
+            }
 
             if (EditorApplication.isCompiling)
             {

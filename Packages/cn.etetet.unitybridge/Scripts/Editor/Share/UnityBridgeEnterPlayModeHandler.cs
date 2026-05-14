@@ -7,12 +7,18 @@ namespace ET
     {
         protected override async ETTask<EnterPlayResponse> Run(EnterPlay command, UnityBridgeDeferredContext deferred)
         {
+            await ETTask.CompletedTask;
+            
             if (!deferred.IsResuming && EditorApplication.isPlayingOrWillChangePlaymode)
             {
                 throw new Exception("unity already in playmode or changing playmode");
             }
 
-            await deferred.Defer(() => EditorApplication.isPlaying = true);
+            if (!deferred.IsResuming)
+            {
+                EditorApplication.isPlaying = true;
+                return deferred.Started<EnterPlayResponse>();
+            }
 
             if (EditorApplication.isPlaying)
             {

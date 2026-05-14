@@ -92,15 +92,8 @@ namespace ET
             return new UnityBridgeDeferredContext(true, startedAt);
         }
 
-        public async ETTask Defer(Action start)
+        public TResponse Started<TResponse>() where TResponse : class, IResponse
         {
-            await ETTask.CompletedTask;
-            if (this.isResuming)
-            {
-                return;
-            }
-
-            start?.Invoke();
             throw new UnityBridgeDeferredStartedException();
         }
 
