@@ -11,7 +11,12 @@ namespace ET
             
             if (!deferred.IsResuming && EditorApplication.isPlayingOrWillChangePlaymode)
             {
-                throw new Exception("unity already in playmode or changing playmode");
+                throw new UnityBridgeCommandStateException(UnityBridgeErrorCode.AlreadyInPlayMode, "unity already in playmode or changing playmode");
+            }
+
+            if (!deferred.IsResuming && EditorApplication.isCompiling)
+            {
+                throw new UnityBridgeCommandStateException(UnityBridgeErrorCode.Compiling, "unity is compiling");
             }
 
             if (!deferred.IsResuming)

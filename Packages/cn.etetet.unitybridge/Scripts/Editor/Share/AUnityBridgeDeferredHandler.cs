@@ -29,6 +29,11 @@ namespace ET
             {
                 return UnityBridgeResponseHelper.CreateDeferredResponse();
             }
+            catch (UnityBridgeCommandStateException e)
+            {
+                UnityBridgeDeferredRuntime.RollbackCurrent();
+                return this.CreateErrorResponse(command, e.Error, e.Message);
+            }
             catch (System.Exception e)
             {
                 UnityBridgeDeferredRuntime.RollbackCurrent();
@@ -53,6 +58,10 @@ namespace ET
                     command,
                     UnityBridgeErrorCode.HandlerFail,
                     "unity bridge deferred handler attempted to start while resuming");
+            }
+            catch (UnityBridgeCommandStateException e)
+            {
+                return this.CreateErrorResponse(command, e.Error, e.Message);
             }
             catch (System.Exception e)
             {

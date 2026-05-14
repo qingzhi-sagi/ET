@@ -11,7 +11,7 @@ namespace ET
             
             if (!deferred.IsResuming && !EditorApplication.isPlaying && !EditorApplication.isPlayingOrWillChangePlaymode)
             {
-                throw new Exception("unity not in playmode");
+                throw new UnityBridgeCommandStateException(UnityBridgeErrorCode.NotInPlayMode, "unity not in playmode");
             }
 
             if (!deferred.IsResuming)

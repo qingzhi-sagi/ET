@@ -11,7 +11,7 @@ namespace ET
             
             if (!deferred.IsResuming && EditorApplication.isCompiling)
             {
-                throw new Exception("unity is compiling");
+                throw new UnityBridgeCommandStateException(UnityBridgeErrorCode.Compiling, "unity is compiling");
             }
 
             if (!deferred.IsResuming)
