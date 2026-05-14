@@ -65,11 +65,6 @@ namespace ET
         [LabelText("技能 ID")]
         public int Id;
         
-        [ReadOnly]
-        [BoxGroup("技能信息")]
-        [LabelText("Buff ID")]
-        public int BuffId;
-
         [BoxGroup("技能信息")]
         [LabelText("描述")]
         public string Desc;

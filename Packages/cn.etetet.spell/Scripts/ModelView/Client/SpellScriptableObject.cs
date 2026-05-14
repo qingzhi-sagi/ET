@@ -13,22 +13,65 @@ namespace ET.Client
     [HideMonoScript]
     public class SpellScriptableObject : SerializedScriptableObject
     {
+        private const string SpellAssetPrefix = "s";
+        private const string LegacySpellAssetPrefix = "Spell";
+
         [Title("技能 配置", TitleAlignment = TitleAlignments.Centered)]
         [NonSerialized, OdinSerialize]
         [HideLabel]
         [HideReferenceObjectPicker]
         public SpellConfig SpellConfig = new();
-        
+
         private void OnValidate()
         {
 #if UNITY_EDITOR
-            int id = int.Parse(this.name);
-            this.SpellConfig.Id = id;    // ScriptableObject 的 name 就是 asset 名称
-            if (this.SpellConfig.BuffId == 0)
+            if (!TryParseAssetName(SpellAssetPrefix, LegacySpellAssetPrefix, this.name, out int id))
             {
-                this.SpellConfig.BuffId = id + 100000;
+                return;
             }
+
+            this.SpellConfig.Id = id;    // ScriptableObject 的 name 就是 asset 名称
 #endif
+        }
+
+        private static bool TryParseAssetName(string prefix, string legacyPrefix, string assetName, out int id)
+        {
+            id = 0;
+            if (string.IsNullOrEmpty(assetName))
+            {
+                return false;
+            }
+
+            string idText = assetName;
+            if (assetName.StartsWith(prefix, StringComparison.Ordinal))
+            {
+                idText = assetName.Substring(prefix.Length);
+            }
+            else if (assetName.StartsWith(legacyPrefix, StringComparison.Ordinal))
+            {
+                idText = assetName.Substring(legacyPrefix.Length);
+            }
+
+            return TryParseId(idText, out id);
+        }
+
+        private static bool TryParseId(string idText, out int id)
+        {
+            id = 0;
+            if (string.IsNullOrEmpty(idText))
+            {
+                return false;
+            }
+
+            foreach (char c in idText)
+            {
+                if (c < '0' || c > '9')
+                {
+                    return false;
+                }
+            }
+
+            return int.TryParse(idText, out id);
         }
     }
 }

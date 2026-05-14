@@ -14,13 +14,13 @@ namespace ET
             TimerComponent timerComponent = root.TimerComponent;
             timerComponent.Remove(ref self.TimeoutTimer);
         }
-        
+
         [EntitySystem]
         private static void Awake(this Buff self, int configId)
         {
             self.ConfigId = configId;
         }
-        
+
         public static Buff GetParentBuff(this Buff self)
         {
             BuffData parentData = self.GetBuffData().ParentData;
@@ -30,7 +30,7 @@ namespace ET
             }
             return parentData.GetParent<Buff>();
         }
-        
+
         public static BuffData GetBuffData(this Buff buff)
         {
             BuffData buffData = buff.BuffData;
@@ -39,18 +39,24 @@ namespace ET
 
         public static BuffConfig GetConfig(this Buff self)
         {
-            
+
             return self.Fiber().GetSingleton<BuffConfigCategory>().Get(self.ConfigId);
         }
 
         public static SpellConfig GetSpellConfig(this Buff self)
         {
-            return self.Fiber().GetSingleton<SpellConfigCategory>().Get(self.ConfigId / 10 * 10 - 100000);
+            return self.Fiber().GetSingleton<SpellConfigCategory>().Get(self.GetSpellConfigId());
         }
 
         public static int GetSpellConfigId(this Buff self)
         {
-            return self.ConfigId / 10 * 10 - 100000;
+            if (self.ConfigId >= 100000 && self.ConfigId < 200000)
+            {
+                return self.ConfigId / 10 * 10;
+            }
+
+            int buffGroupId = self.ConfigId / 10 * 10;
+            return buffGroupId - 100000;
         }
 
         public static Unit GetCaster(this Buff self)

@@ -40,9 +40,10 @@ namespace ET.Client
                 {
                     if (scriptableObject is SpellScriptableObject spellScriptableObject)
                     {
-                        if (scriptableObject.name != spellScriptableObject.SpellConfig.Id.ToString())
+                        string expectedSpellName = $"s{spellScriptableObject.SpellConfig.Id}";
+                        if (scriptableObject.name != expectedSpellName)
                         {
-                            Log.Error($"File name not match Id: {spellScriptableObject.name}");
+                            Log.Error($"File name not match Id: {spellScriptableObject.name}, expected: {expectedSpellName}");
                         }
 
                         // 校验CostNode的BTInput合法性
@@ -79,12 +80,13 @@ namespace ET.Client
                         spellConfigCategory.Add(spellScriptableObject.SpellConfig);
                         continue;
                     }
-                
+
                     if (scriptableObject is BuffScriptableObject buffScriptableObject)
                     {
-                        if (scriptableObject.name != buffScriptableObject.BuffConfig.Id.ToString())
+                        string expectedBuffName = $"b{buffScriptableObject.BuffConfig.Id}";
+                        if (scriptableObject.name != expectedBuffName)
                         {
-                            Log.Error($"File name not match Id: {buffScriptableObject.name}");
+                            Log.Error($"File name not match Id: {buffScriptableObject.name}, expected: {expectedBuffName}");
                         }
 
                         // 校验Effects中每个EffectNode的BTInput合法性
@@ -124,16 +126,16 @@ namespace ET.Client
             }
 
             BTConfigCodeExporter.Export(spellConfigCategory, buffConfigCategory);
-            
+
             Debug.Log("Export ScriptableObject OK!");
         }
-        
-        
+
+
         [MenuItem("ET/Map/ReloadScriptableObject _F4")]
         public static void ReloadScriptableObject()
         {
             Reload().Coroutine();
-            
+
             async ETTask Reload()
             {
                 await World.Instance.AddSingleton<ConfigLoader>().LoadAsync();

@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace ET
 {
-    public sealed class SpellEditorWindow: EditorWindow
+    public sealed class SpellEditorWindow : EditorWindow
     {
         private SpellEditorAssetIndex assetIndex;
         private SpellEditorBuildResult buildResult;
@@ -248,12 +248,12 @@ namespace ET
             }
 
             this.EnsureSelectionValid();
-            if (this.copyMainSpellId == 0 || this.assetIndex.Spells.ContainsKey(this.copyMainSpellId))
+            if (this.copyMainSpellId == 0 || !SpellEditorAssetOperations.IsSpellCreationIdAvailable(this.assetIndex, this.copyMainSpellId))
             {
                 this.copyMainSpellId = SpellEditorAssetOperations.FindNextMainSpellId(this.assetIndex, this.selectedMainSpellId);
             }
 
-            if (this.newMainSpellId == 0 || this.assetIndex.Spells.ContainsKey(this.newMainSpellId))
+            if (this.newMainSpellId == 0 || !SpellEditorAssetOperations.IsSpellCreationIdAvailable(this.assetIndex, this.newMainSpellId))
             {
                 this.newMainSpellId = SpellEditorAssetOperations.FindNextMainSpellId(this.assetIndex, this.selectedMainSpellId);
             }
@@ -286,9 +286,8 @@ namespace ET
                 else
                 {
                     string directory = SpellEditorAssetOperations.GetAssetDirectory(mainAsset);
-                    int buffId = SpellEditorAssetOperations.FindNextBuffId(this.assetIndex, spellId);
-                    SpellEditorAssetOperations.CreateSpellAsset(new SpellConfig { Id = spellId, BuffId = buffId }, directory);
-                    SpellEditorAssetOperations.CreateBuffAsset(buffId, directory);
+                    SpellEditorAssetOperations.CreateSpellAsset(new SpellConfig { Id = spellId }, directory);
+                    SpellEditorAssetOperations.CreateBuffAsset(spellId, directory);
                     this.RefreshIndex();
                 }
             }
@@ -356,7 +355,6 @@ namespace ET
             GUILayout.Label("IconName", GUILayout.Width(280));
             GUILayout.Label("CD", GUILayout.Width(70));
             GUILayout.Label("Damage", GUILayout.Width(80));
-            GUILayout.Label("BuffId", GUILayout.Width(80));
             GUILayout.Label("Cost", GUILayout.Width(160));
             GUILayout.Label("TargetSelector", GUILayout.Width(180));
             GUILayout.Label("资产", GUILayout.Width(360));
@@ -386,7 +384,6 @@ namespace ET
                     GUILayout.Label(string.Empty, GUILayout.Width(280));
                     GUILayout.Label(string.Empty, GUILayout.Width(70));
                     GUILayout.Label(string.Empty, GUILayout.Width(80));
-                    GUILayout.Label(string.Empty, GUILayout.Width(80));
                     GUILayout.Label(string.Empty, GUILayout.Width(160));
                     GUILayout.Label(string.Empty, GUILayout.Width(180));
                     GUILayout.Label(string.Empty, GUILayout.Width(360));
@@ -412,12 +409,10 @@ namespace ET
                 EditorGUI.BeginChangeCheck();
                 int cd = EditorGUILayout.IntField(config.CD, GUILayout.Width(70));
                 int damage = EditorGUILayout.IntField(config.DamageMultiplier, GUILayout.Width(80));
-                int buffId = EditorGUILayout.IntField(config.BuffId, GUILayout.Width(80));
                 if (EditorGUI.EndChangeCheck())
                 {
                     config.CD = cd;
                     config.DamageMultiplier = damage;
-                    config.BuffId = buffId;
                     EditorUtility.SetDirty(row.Asset);
                     this.needsRebuild = true;
                 }
@@ -860,16 +855,21 @@ namespace ET
                 return;
             }
 
+            if (this.assetIndex.Buffs.ContainsKey(this.newMainSpellId))
+            {
+                EditorUtility.DisplayDialog("新建失败", $"同 Id Buff {this.newMainSpellId} 已存在，无法创建主技能。", "确定");
+                return;
+            }
+
             int mainSpellId = this.newMainSpellId;
-            int buffId = SpellEditorAssetOperations.FindNextBuffId(this.assetIndex, mainSpellId);
             string directory = SpellEditorAssetOperations.GetNewMainSpellDirectory(mainSpellId);
-            SpellScriptableObject asset = SpellEditorAssetOperations.CreateSpellAsset(new SpellConfig { Id = mainSpellId, BuffId = buffId }, directory);
+            SpellScriptableObject asset = SpellEditorAssetOperations.CreateSpellAsset(new SpellConfig { Id = mainSpellId }, directory);
             if (asset == null)
             {
                 return;
             }
 
-            SpellEditorAssetOperations.CreateBuffAsset(buffId, directory);
+            SpellEditorAssetOperations.CreateBuffAsset(mainSpellId, directory);
             this.selectedMainSpellId = mainSpellId;
             this.SelectAsset(asset);
             Selection.activeObject = asset;
@@ -894,7 +894,7 @@ namespace ET
                 return "Effects: 无";
             }
 
-            return $"Effects ({config.Effects.Count}): {string.Join(", ", config.Effects.Select(x => x != null? x.GetType().Name : "null"))}";
+            return $"Effects ({config.Effects.Count}): {string.Join(", ", config.Effects.Select(x => x != null ? x.GetType().Name : "null"))}";
         }
 
         private string FormatFlags(BuffConfig config)

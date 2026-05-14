@@ -41,12 +41,12 @@ namespace ET
 
             SpellConfig config = asset.SpellConfig;
             string assetPath = index.GetPath(asset);
-            AddBuff(index, result, config.BuffId, new SpellEditorSourceInfo
+            AddBuff(index, result, config.Id, new SpellEditorSourceInfo
             {
                 Kind = SpellEditorReferenceKind.SpellBuffId,
                 OwnerId = config.Id,
                 OwnerPath = assetPath,
-                NodePath = "BuffId",
+                NodePath = "主 Buff Id",
             }, visitedSpells, visitedBuffs);
 
             List<SpellEditorReference> references = new();

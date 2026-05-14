@@ -15,18 +15,21 @@ namespace ET.Test
             Fiber unitFiber = unit.Fiber();
 
             SpellConfig globalSpellConfig = unitFiber.GetSingleton<SpellConfigCategory>().Get(100100);
-            BuffConfig globalBuffConfig = unitFiber.GetSingleton<BuffConfigCategory>().Get(globalSpellConfig.BuffId);
+            BuffConfig globalBuffConfig = unitFiber.GetSingleton<BuffConfigCategory>().Get(globalSpellConfig.Id);
+            if (globalBuffConfig == null)
+            {
+                throw new Exception($"primary buff config {globalSpellConfig.Id} should exist for spell {globalSpellConfig.Id}");
+            }
 
             SpellConfig mockSpellConfig = new SpellConfig()
             {
                 Id = globalSpellConfig.Id,
-                BuffId = globalSpellConfig.BuffId,
                 Desc = "MockFiberSpell",
                 CD = globalSpellConfig.CD + 1234,
             };
             BuffConfig mockBuffConfig = new BuffConfig()
             {
-                Id = globalBuffConfig.Id,
+                Id = globalSpellConfig.Id,
                 Desc = "MockFiberBuff",
                 Duration = globalBuffConfig.Duration + 1234,
                 TickTime = globalBuffConfig.TickTime,
@@ -91,7 +94,5 @@ namespace ET.Test
         }
     }
 }
-
-
 
 

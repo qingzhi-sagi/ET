@@ -27,7 +27,7 @@ namespace ET.Server
 #endregion
             
             // add
-            Buff buff = BuffHelper.CreateBuffWithoutInit(unit, unit.Id, IdGenerater.Instance.GenerateId(), spellConfig.BuffId, parent);
+            Buff buff = BuffHelper.CreateBuffWithoutInit(unit, unit.Id, IdGenerater.Instance.GenerateId(), spellConfig.Id, parent);
             int castRet = SpellCasting(unit, buff, spellConfig, parent);
             if (castRet != 0)
             {
@@ -66,7 +66,7 @@ namespace ET.Server
             #endregion
             
             // add
-            Buff buff = BuffHelper.CreateBuffWithoutInit(unit, unit.Id, IdGenerater.Instance.GenerateId(), spellConfig.BuffId, parent);
+            Buff buff = BuffHelper.CreateBuffWithoutInit(unit, unit.Id, IdGenerater.Instance.GenerateId(), spellConfig.Id, parent);
             buff.GetBuffData().AddComponent<SpellTargetComponent>().Units.Add(target.Id);
             int castRet = SpellCasting(unit, buff, spellConfig, parent);
             if (castRet != 0)

@@ -62,7 +62,7 @@ namespace ET.Server
 
                 // 同一个技能还未结束
                 Buff current = unit.GetComponent<SpellComponent>().Current;
-                if (current != null && spellConfig.BuffId == current.ConfigId)
+                if (current != null && spellConfig.Id == current.ConfigId)
                 {
                     continue;
                 }

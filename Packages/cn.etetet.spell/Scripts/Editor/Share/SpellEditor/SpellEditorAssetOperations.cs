@@ -70,7 +70,6 @@ namespace ET
             SpellConfig config = new()
             {
                 Id = spellId,
-                BuffId = SpellEditorConstants.DefaultBuffId(spellId),
             };
             return CreateSpellAsset(config, directory);
         }
@@ -92,8 +91,14 @@ namespace ET
                 return null;
             }
 
+            SpellEditorAssetIndex index = SpellEditorAssetIndex.Build();
+            if (!EnsureSpellCreationIdAvailable(index, config.Id, "创建失败"))
+            {
+                return null;
+            }
+
             EnsureDirectory(directory);
-            string path = $"{directory}/{config.Id}.asset";
+            string path = $"{directory}/{SpellEditorConstants.SpellAssetName(config.Id)}.asset";
             if (!EnsurePathAvailable(path))
             {
                 return null;
@@ -115,8 +120,15 @@ namespace ET
                 return null;
             }
 
+            SpellEditorAssetIndex index = SpellEditorAssetIndex.Build();
+            if (index.Buffs.ContainsKey(config.Id))
+            {
+                EditorUtility.DisplayDialog("创建失败", $"Buff Id {config.Id} 已存在。", "确定");
+                return null;
+            }
+
             EnsureDirectory(directory);
-            string path = $"{directory}/{config.Id}.asset";
+            string path = $"{directory}/{SpellEditorConstants.BuffAssetName(config.Id)}.asset";
             if (!EnsurePathAvailable(path))
             {
                 return null;
@@ -170,9 +182,46 @@ namespace ET
                     return false;
                 }
 
+                bool hasPrimaryBuff = index.Buffs.TryGetValue(oldId, out BuffScriptableObject primaryBuffAsset);
+                if (hasPrimaryBuff && index.Buffs.ContainsKey(newId))
+                {
+                    EditorUtility.DisplayDialog("改 Id 失败", $"主 Buff Id {newId} 已存在，无法随 Spell 同步改 Id。", "确定");
+                    return false;
+                }
+
+                if (!EnsureRenameTargetAvailable(spellAsset, SpellEditorConstants.SpellAssetName(newId), "改 Id 失败"))
+                {
+                    return false;
+                }
+
+                if (hasPrimaryBuff && !EnsureRenameTargetAvailable(primaryBuffAsset, SpellEditorConstants.BuffAssetName(newId), "改 Id 失败"))
+                {
+                    return false;
+                }
+
                 spellAsset.SpellConfig.Id = newId;
-                RewriteReferences(index, new Dictionary<int, int> { [oldId] = newId }, null);
-                return RenameAssetFile(spellAsset, newId);
+                Dictionary<int, int> buffIdMap = null;
+                if (hasPrimaryBuff)
+                {
+                    primaryBuffAsset.BuffConfig.Id = newId;
+                    buffIdMap = new Dictionary<int, int> { [oldId] = newId };
+                    EditorUtility.SetDirty(primaryBuffAsset);
+                }
+
+                EditorUtility.SetDirty(spellAsset);
+                RewriteReferences(index, new Dictionary<int, int> { [oldId] = newId }, buffIdMap);
+                if (!RenameAssetFile(spellAsset))
+                {
+                    return false;
+                }
+
+                if (hasPrimaryBuff && !RenameAssetFile(primaryBuffAsset))
+                {
+                    return false;
+                }
+
+                SaveAssets();
+                return true;
             }
 
             if (asset is BuffScriptableObject buffAsset)
@@ -189,9 +238,21 @@ namespace ET
                     return false;
                 }
 
+                if (!EnsureRenameTargetAvailable(buffAsset, SpellEditorConstants.BuffAssetName(newId), "改 Id 失败"))
+                {
+                    return false;
+                }
+
                 buffAsset.BuffConfig.Id = newId;
                 RewriteReferences(index, null, new Dictionary<int, int> { [oldId] = newId });
-                return RenameAssetFile(buffAsset, newId);
+                EditorUtility.SetDirty(buffAsset);
+                if (!RenameAssetFile(buffAsset))
+                {
+                    return false;
+                }
+
+                SaveAssets();
+                return true;
             }
 
             return false;
@@ -203,7 +264,7 @@ namespace ET
             int end = SpellEditorConstants.MainSpellBase(mainSpellId) + SpellEditorConstants.SpellGroupSize - 1;
             for (int id = start; id <= end; id++)
             {
-                if (!index.Spells.ContainsKey(id))
+                if (IsSpellCreationIdAvailable(index, id))
                 {
                     return id;
                 }
@@ -217,7 +278,7 @@ namespace ET
             int candidate = SpellEditorConstants.MainSpellBase(sourceMainSpellId) + SpellEditorConstants.SpellGroupSize;
             while (candidate <= int.MaxValue - SpellEditorConstants.SpellGroupSize)
             {
-                if (!index.Spells.ContainsKey(candidate))
+                if (IsSpellCreationIdAvailable(index, candidate))
                 {
                     return candidate;
                 }
@@ -230,7 +291,7 @@ namespace ET
 
         public static int FindNextBuffId(SpellEditorAssetIndex index, int baseSpellId)
         {
-            int id = SpellEditorConstants.DefaultBuffId(baseSpellId);
+            int id = baseSpellId;
             while (index.Buffs.ContainsKey(id))
             {
                 id++;
@@ -258,6 +319,12 @@ namespace ET
                 return false;
             }
 
+            if (index.Buffs.ContainsKey(targetMainSpellId))
+            {
+                EditorUtility.DisplayDialog("复制失败", $"同 Id Buff {targetMainSpellId} 已存在，无法创建目标主 Spell。", "确定");
+                return false;
+            }
+
             List<SpellEditorSpellRow> spellRows = buildResult.Spells.Where(x => x.Asset != null).ToList();
             List<SpellEditorBuffRow> buffRows = buildResult.Buffs.Where(x => x.Asset != null).ToList();
             if (spellRows.Count == 0 || !spellRows.Any(x => x.Id == sourceMainSpellId))
@@ -271,7 +338,11 @@ namespace ET
                 return false;
             }
 
-            Dictionary<int, int> buffIdMap = BuildBuffIdMap(index, spellRows, buffRows, spellIdMap, targetMainSpellId);
+            if (!TryBuildBuffIdMap(index, spellRows, buffRows, spellIdMap, targetMainSpellId, out Dictionary<int, int> buffIdMap))
+            {
+                return false;
+            }
+
             string targetDirectory = GetCopyDirectory(index, sourceMainSpellId, targetMainSpellId);
 
             AssetDatabase.StartAssetEditing();
@@ -282,10 +353,6 @@ namespace ET
                 {
                     SpellConfig config = CloneValue(row.Asset.SpellConfig);
                     config.Id = spellIdMap[row.Id];
-                    if (buffIdMap.TryGetValue(config.BuffId, out int mappedBuffId))
-                    {
-                        config.BuffId = mappedBuffId;
-                    }
 
                     RewriteNodeReferences(config.Cost, spellIdMap, buffIdMap);
                     RewriteNodeReferences(config.TargetSelector, spellIdMap, buffIdMap);
@@ -317,10 +384,15 @@ namespace ET
             return true;
         }
 
-        private static bool RenameAssetFile(UnityEngine.Object asset, int newId)
+        public static bool IsSpellCreationIdAvailable(SpellEditorAssetIndex index, int spellId)
+        {
+            return index != null && !index.Spells.ContainsKey(spellId) && !index.Buffs.ContainsKey(spellId);
+        }
+
+        private static bool RenameAssetFile(UnityEngine.Object asset)
         {
             string path = AssetDatabase.GetAssetPath(asset);
-            string error = AssetDatabase.RenameAsset(path, newId.ToString());
+            string error = AssetDatabase.RenameAsset(path, GetAssetName(asset));
             if (!string.IsNullOrEmpty(error))
             {
                 EditorUtility.DisplayDialog("重命名失败", error, "确定");
@@ -328,8 +400,55 @@ namespace ET
             }
 
             EditorUtility.SetDirty(asset);
-            SaveAssets();
             return true;
+        }
+
+        private static bool EnsureSpellCreationIdAvailable(SpellEditorAssetIndex index, int spellId, string title)
+        {
+            if (index.Spells.ContainsKey(spellId))
+            {
+                EditorUtility.DisplayDialog(title, $"Spell Id {spellId} 已存在。", "确定");
+                return false;
+            }
+
+            if (index.Buffs.ContainsKey(spellId))
+            {
+                EditorUtility.DisplayDialog(title, $"同 Id Buff {spellId} 已存在，无法创建 Spell。", "确定");
+                return false;
+            }
+
+            return true;
+        }
+
+        private static bool EnsureRenameTargetAvailable(UnityEngine.Object asset, string targetName, string title)
+        {
+            string path = AssetDatabase.GetAssetPath(asset);
+            string directory = Path.GetDirectoryName(path)?.Replace("\\", "/");
+            if (string.IsNullOrEmpty(directory))
+            {
+                EditorUtility.DisplayDialog(title, "无法获取当前资产目录。", "确定");
+                return false;
+            }
+
+            string targetPath = $"{directory}/{targetName}.asset";
+            UnityEngine.Object targetAsset = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(targetPath);
+            if (targetAsset != null && targetAsset != asset)
+            {
+                EditorUtility.DisplayDialog(title, $"目标资产已存在：{targetPath}", "确定");
+                return false;
+            }
+
+            return true;
+        }
+
+        private static string GetAssetName(UnityEngine.Object asset)
+        {
+            return asset switch
+            {
+                SpellScriptableObject spellAsset => SpellEditorConstants.SpellAssetName(spellAsset.SpellConfig.Id),
+                BuffScriptableObject buffAsset => SpellEditorConstants.BuffAssetName(buffAsset.BuffConfig.Id),
+                _ => asset.name,
+            };
         }
 
         private static void RewriteReferences(SpellEditorAssetIndex index, Dictionary<int, int> spellIdMap, Dictionary<int, int> buffIdMap)
@@ -343,12 +462,6 @@ namespace ET
 
                 bool dirty = false;
                 SpellConfig config = spellAsset.SpellConfig;
-                if (buffIdMap != null && buffIdMap.TryGetValue(config.BuffId, out int mappedBuffId))
-                {
-                    config.BuffId = mappedBuffId;
-                    dirty = true;
-                }
-
                 dirty |= RewriteNodeReferences(config.Cost, spellIdMap, buffIdMap);
                 dirty |= RewriteNodeReferences(config.TargetSelector, spellIdMap, buffIdMap);
                 if (dirty)
@@ -418,7 +531,7 @@ namespace ET
             out Dictionary<int, int> spellIdMap)
         {
             spellIdMap = new Dictionary<int, int>();
-            HashSet<int> reserved = index.Spells.Keys.ToHashSet();
+            HashSet<int> reserved = index.Spells.Keys.Concat(index.Buffs.Keys).ToHashSet();
             int sourceBase = SpellEditorConstants.MainSpellBase(sourceMainSpellId);
             int targetBase = SpellEditorConstants.MainSpellBase(targetMainSpellId);
 
@@ -428,6 +541,11 @@ namespace ET
                 if (row.Id == sourceMainSpellId)
                 {
                     targetId = targetMainSpellId;
+                    if (reserved.Contains(targetId))
+                    {
+                        EditorUtility.DisplayDialog("复制失败", $"目标主 Spell Id {targetId} 已被 Spell 或 Buff 占用。", "确定");
+                        return false;
+                    }
                 }
                 else if (row.Id >= sourceBase && row.Id < sourceBase + SpellEditorConstants.SpellGroupSize)
                 {
@@ -456,29 +574,36 @@ namespace ET
             return true;
         }
 
-        private static Dictionary<int, int> BuildBuffIdMap(
+        private static bool TryBuildBuffIdMap(
             SpellEditorAssetIndex index,
             List<SpellEditorSpellRow> spellRows,
             List<SpellEditorBuffRow> buffRows,
             Dictionary<int, int> spellIdMap,
-            int targetMainSpellId)
+            int targetMainSpellId,
+            out Dictionary<int, int> buffIdMap)
         {
-            Dictionary<int, int> buffIdMap = new();
+            buffIdMap = new Dictionary<int, int>();
             HashSet<int> reserved = index.Buffs.Keys.ToHashSet();
-            int fallbackBuffId = SpellEditorConstants.DefaultBuffId(targetMainSpellId);
+            HashSet<int> primaryBuffIds = spellRows.Select(x => x.Id).ToHashSet();
+            int fallbackBuffAssetId = targetMainSpellId;
 
-            foreach (SpellEditorBuffRow row in buffRows.OrderBy(x => x.Id))
+            foreach (SpellEditorBuffRow row in buffRows.OrderBy(x => primaryBuffIds.Contains(x.Id) ? 0 : 1).ThenBy(x => x.Id))
             {
-                SpellEditorSpellRow ownerSpell = spellRows.FirstOrDefault(x => x.Asset.SpellConfig.BuffId == row.Id);
+                SpellEditorSpellRow ownerSpell = spellRows.FirstOrDefault(x => x.Id == row.Id);
                 int targetId = 0;
                 if (ownerSpell != null && spellIdMap.TryGetValue(ownerSpell.Id, out int mappedSpellId))
                 {
-                    targetId = SpellEditorConstants.DefaultBuffId(mappedSpellId);
+                    targetId = mappedSpellId;
+                    if (reserved.Contains(targetId) || buffIdMap.ContainsValue(targetId))
+                    {
+                        EditorUtility.DisplayDialog("复制失败", $"目标主 Buff Id {targetId} 已存在。", "确定");
+                        return false;
+                    }
                 }
 
                 if (targetId == 0)
                 {
-                    targetId = fallbackBuffId;
+                    targetId = fallbackBuffAssetId;
                 }
 
                 while (reserved.Contains(targetId) || buffIdMap.ContainsValue(targetId))
@@ -488,10 +613,10 @@ namespace ET
 
                 buffIdMap[row.Id] = targetId;
                 reserved.Add(targetId);
-                fallbackBuffId = targetId + 1;
+                fallbackBuffAssetId = targetId + 1;
             }
 
-            return buffIdMap;
+            return true;
         }
 
         private static int FindNextAvailableSubSpellId(HashSet<int> reserved, int mainSpellBase)
@@ -539,7 +664,7 @@ namespace ET
         {
             SpellScriptableObject asset = ScriptableObject.CreateInstance<SpellScriptableObject>();
             asset.SpellConfig = config;
-            AssetDatabase.CreateAsset(asset, $"{directory}/{config.Id}.asset");
+            AssetDatabase.CreateAsset(asset, $"{directory}/{SpellEditorConstants.SpellAssetName(config.Id)}.asset");
             EditorUtility.SetDirty(asset);
             return asset;
         }
@@ -548,7 +673,7 @@ namespace ET
         {
             BuffScriptableObject asset = ScriptableObject.CreateInstance<BuffScriptableObject>();
             asset.BuffConfig = config;
-            AssetDatabase.CreateAsset(asset, $"{directory}/{config.Id}.asset");
+            AssetDatabase.CreateAsset(asset, $"{directory}/{SpellEditorConstants.BuffAssetName(config.Id)}.asset");
             EditorUtility.SetDirty(asset);
             return asset;
         }

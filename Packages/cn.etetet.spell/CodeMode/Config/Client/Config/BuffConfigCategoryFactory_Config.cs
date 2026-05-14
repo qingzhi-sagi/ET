@@ -17,7 +17,7 @@ namespace ET
             global::ET.BuffConfigCategory category = new global::ET.BuffConfigCategory();
             category.Add(new global::ET.BuffConfig()
             {
-                Id = 200000,
+                Id = 100000,
                 Desc = @"普攻自动Tick Buff",
                 Duration = 1000000,
                 TickTime = 2000,
@@ -62,7 +62,7 @@ namespace ET
                                         Id = 23,
                                         Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
                                         Unit = @"Unit",
-                                        ConfigId = 200000,
+                                        ConfigId = 100000,
                                         RemoveType = global::ET.BuffFlags.NotFoundTargetRemove,
                                     },
                                 },
@@ -95,7 +95,7 @@ namespace ET
                                         Id = 4,
                                         Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
                                         Unit = @"Unit",
-                                        ConfigId = 200000,
+                                        ConfigId = 100000,
                                         RemoveType = global::ET.BuffFlags.NotFoundTargetRemove,
                                     },
                                 },
@@ -110,7 +110,7 @@ namespace ET
             });
             category.Add(new global::ET.BuffConfig()
             {
-                Id = 200001,
+                Id = 100001,
                 Desc = @"普攻子技能Buff",
                 Duration = 300,
                 TickTime = 0,
@@ -173,7 +173,7 @@ namespace ET
                                         Id = 5,
                                         Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
                                         Unit = @"Caster",
-                                        ConfigId = 200000,
+                                        ConfigId = 100000,
                                         RemoveType = global::ET.BuffFlags.NotFoundTargetRemove,
                                     },
                                 },
@@ -188,7 +188,7 @@ namespace ET
             });
             category.Add(new global::ET.BuffConfig()
             {
-                Id = 200002,
+                Id = 100002,
                 Desc = @"普攻子技能的伤害技能Buff",
                 Duration = 0,
                 TickTime = 0,
@@ -230,7 +230,7 @@ namespace ET
             });
             category.Add(new global::ET.BuffConfig()
             {
-                Id = 200010,
+                Id = 100010,
                 Desc = @"暴风雪引导Buff",
                 Duration = 8000,
                 TickTime = 1000,
@@ -367,7 +367,7 @@ namespace ET
             });
             category.Add(new global::ET.BuffConfig()
             {
-                Id = 200011,
+                Id = 100011,
                 Desc = @"暴风雪每波雪技能Buff",
                 Duration = 500,
                 TickTime = 0,
@@ -448,7 +448,7 @@ namespace ET
             });
             category.Add(new global::ET.BuffConfig()
             {
-                Id = 200020,
+                Id = 100020,
                 Desc = @"寒冰箭读条Buff",
                 Duration = 2000,
                 TickTime = 300,
@@ -602,116 +602,7 @@ namespace ET
             });
             category.Add(new global::ET.BuffConfig()
             {
-                Id = 200021,
-                Desc = @"寒冰箭假子弹Buff",
-                Duration = 0,
-                TickTime = 0,
-                MaxStack = 1,
-                Stack = 1,
-                OverLayRuleType = global::ET.OverLayRuleType.None,
-                Flags = new global::System.Collections.Generic.HashSet<global::ET.BuffFlags>(),
-                NoticeType = global::ET.NoticeType.Broadcast,
-                Effects = new global::System.Collections.Generic.List<global::ET.EffectNode>
-            {
-                    new global::ET.EffectServerBuffRemove()
-            {
-                        Id = 1,
-                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>
-            {
-                            new global::ET.BTAddBuff()
-            {
-                                Id = 2,
-                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
-                                Caster = @"Caster",
-                                Target = @"Unit",
-                                Buff = @"Buff",
-                                ConfigId = 200022,
-                            },
-                            new global::ET.BTDamage()
-            {
-                                Id = 3,
-                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
-                                Caster = @"Caster",
-                                Target = @"Unit",
-                                Buff = @"Buff",
-                                Value = 5,
-                            },
-                        },
-                        TreeId = 8629936956201689519L,
-                        Buff = @"Buff",
-                        Unit = @"Unit",
-                        Caster = @"Caster",
-                    },
-                    new global::ET.EffectClientBuffAdd()
-            {
-                        Id = 1,
-                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>
-            {
-                            new global::ET.BTAnimatorSetTrigger()
-            {
-                                Id = 2,
-                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
-                                Unit = @"Caster",
-                                MotionType = global::ET.MotionType.SpellCastDirected,
-                            },
-                            new global::ET.BTCreateFakeBullet()
-            {
-                                Id = 3,
-                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
-                                Caster = @"Caster",
-                                Target = @"Unit",
-                                CasterBindPoint = global::ET.BindPoint.Attack,
-                                TargetBindPoint = global::ET.BindPoint.Hitted,
-                                Speed = 30000,
-                                EffectName = @"effect_Frost Bolt",
-                                Duration = 60000,
-                            },
-                        },
-                        TreeId = 4087138501667181464L,
-                        Buff = @"Buff",
-                        Unit = @"Unit",
-                        Caster = @"Caster",
-                    },
-                },
-            });
-            category.Add(new global::ET.BuffConfig()
-            {
-                Id = 200022,
-                Desc = @"寒冰箭减速",
-                Duration = 5000,
-                TickTime = 0,
-                MaxStack = 1,
-                Stack = 1,
-                OverLayRuleType = global::ET.OverLayRuleType.Replace,
-                Flags = new global::System.Collections.Generic.HashSet<global::ET.BuffFlags>(),
-                NoticeType = global::ET.NoticeType.Broadcast,
-                Effects = new global::System.Collections.Generic.List<global::ET.EffectNode>
-            {
-                    new global::ET.EffectServerBuffAdd()
-            {
-                        Id = 1,
-                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>
-            {
-                            new global::ET.BTNumericChange()
-            {
-                                Id = 2,
-                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
-                                Unit = @"Unit",
-                                Buff = @"Buff",
-                                NumericType = 10003,
-                                Value = -30,
-                            },
-                        },
-                        TreeId = 767928858192354693L,
-                        Buff = @"Buff",
-                        Unit = @"Unit",
-                        Caster = @"Caster",
-                    },
-                },
-            });
-            category.Add(new global::ET.BuffConfig()
-            {
-                Id = 200030,
+                Id = 100030,
                 Desc = @"捕获宠物",
                 Duration = 8000,
                 TickTime = 0,
@@ -830,6 +721,565 @@ namespace ET
                             },
                         },
                         TreeId = 8552968827601575299L,
+                        Buff = @"Buff",
+                        Unit = @"Unit",
+                        Caster = @"Caster",
+                    },
+                },
+            });
+            category.Add(new global::ET.BuffConfig()
+            {
+                Id = 100040,
+                Desc = null,
+                Duration = 0,
+                TickTime = 0,
+                MaxStack = 1,
+                Stack = 1,
+                OverLayRuleType = global::ET.OverLayRuleType.None,
+                Flags = new global::System.Collections.Generic.HashSet<global::ET.BuffFlags>(),
+                NoticeType = global::ET.NoticeType.NoNotice,
+                Effects = new global::System.Collections.Generic.List<global::ET.EffectNode>
+            {
+                    new global::ET.EffectServerBuffAdd()
+            {
+                        Id = 1,
+                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>
+            {
+                            new global::ET.BTPhaseAdd()
+            {
+                                Id = 2,
+                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
+                                Unit = @"Caster",
+                                phaseType = global::ET.PhaseType.Phase1,
+                            },
+                        },
+                        TreeId = 6680604004401102092L,
+                        Buff = @"Buff",
+                        Unit = @"Unit",
+                        Caster = @"Caster",
+                    },
+                },
+            });
+            category.Add(new global::ET.BuffConfig()
+            {
+                Id = 100050,
+                Desc = null,
+                Duration = 0,
+                TickTime = 0,
+                MaxStack = 1,
+                Stack = 1,
+                OverLayRuleType = global::ET.OverLayRuleType.None,
+                Flags = new global::System.Collections.Generic.HashSet<global::ET.BuffFlags>(),
+                NoticeType = global::ET.NoticeType.NoNotice,
+                Effects = new global::System.Collections.Generic.List<global::ET.EffectNode>
+            {
+                    new global::ET.EffectServerBuffAdd()
+            {
+                        Id = 1,
+                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>
+            {
+                            new global::ET.BTPhaseRemove()
+            {
+                                Id = 2,
+                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
+                                Unit = @"Caster",
+                                phaseType = global::ET.PhaseType.Phase1,
+                            },
+                        },
+                        TreeId = 2997626495283858521L,
+                        Buff = @"Buff",
+                        Unit = @"Unit",
+                        Caster = @"Caster",
+                    },
+                },
+            });
+            category.Add(new global::ET.BuffConfig()
+            {
+                Id = 100100,
+                Desc = @"普攻自动Tick Buff",
+                Duration = 1000000,
+                TickTime = 2000,
+                MaxStack = 1,
+                Stack = 1,
+                OverLayRuleType = global::ET.OverLayRuleType.None,
+                Flags = new global::System.Collections.Generic.HashSet<global::ET.BuffFlags>
+            {
+                    global::ET.BuffFlags.MoveRemove,
+                    global::ET.BuffFlags.StunRemove,
+                },
+                NoticeType = global::ET.NoticeType.NoNotice,
+                Effects = new global::System.Collections.Generic.List<global::ET.EffectNode>
+            {
+                    new global::ET.EffectServerBuffTick()
+            {
+                        Id = 1,
+                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>
+            {
+                            new global::ET.BTGetBuffOwner()
+            {
+                                Id = 7,
+                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
+                                Buff = @"Buff",
+                                Unit = @"Unit",
+                            },
+                            new global::ET.BTGetSpellTargetUnit()
+            {
+                                Id = 2,
+                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
+                                Buff = @"Buff",
+                                Unit = @"Target",
+                            },
+                            new global::ET.BTTurnToUnit()
+            {
+                                Id = 3,
+                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
+                                Caster = @"Unit",
+                                Target = @"Target",
+                                Buff = @"Buff",
+                            },
+                            new global::ET.BTSelector()
+            {
+                                Id = 4,
+                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>
+            {
+                                    new global::ET.BTCreateSpell()
+            {
+                                        Id = 5,
+                                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
+                                        Unit = @"Unit",
+                                        Buff = @"Buff",
+                                        SpellConfigId = 100101,
+                                    },
+                                    new global::ET.BTRemoveBuff()
+            {
+                                        Id = 6,
+                                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
+                                        Unit = @"Unit",
+                                        ConfigId = 100100,
+                                        RemoveType = global::ET.BuffFlags.NotFoundTargetRemove,
+                                    },
+                                },
+                            },
+                        },
+                        TreeId = 564552055616284588L,
+                        Buff = @"Buff",
+                        Override = false,
+                    },
+                    new global::ET.EffectServerBuffAdd()
+            {
+                        Id = 1,
+                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>
+            {
+                            new global::ET.BTGetSpellTargetUnit()
+            {
+                                Id = 2,
+                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
+                                Buff = @"Buff",
+                                Unit = @"Target",
+                            },
+                            new global::ET.BTTurnToUnit()
+            {
+                                Id = 3,
+                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
+                                Caster = @"Caster",
+                                Target = @"Target",
+                                Buff = @"Buff",
+                            },
+                            new global::ET.BTSelector()
+            {
+                                Id = 4,
+                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>
+            {
+                                    new global::ET.BTCreateSpell()
+            {
+                                        Id = 5,
+                                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
+                                        Unit = @"Unit",
+                                        Buff = @"Buff",
+                                        SpellConfigId = 100101,
+                                    },
+                                    new global::ET.BTRemoveBuff()
+            {
+                                        Id = 6,
+                                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
+                                        Unit = @"Unit",
+                                        ConfigId = 100100,
+                                        RemoveType = global::ET.BuffFlags.NotFoundTargetRemove,
+                                    },
+                                },
+                            },
+                        },
+                        TreeId = 1625451776993338754L,
+                        Buff = @"Buff",
+                        Unit = @"Unit",
+                        Caster = @"Caster",
+                    },
+                },
+            });
+            category.Add(new global::ET.BuffConfig()
+            {
+                Id = 100101,
+                Desc = @"普攻子技能Buff",
+                Duration = 300,
+                TickTime = 0,
+                MaxStack = 1,
+                Stack = 1,
+                OverLayRuleType = global::ET.OverLayRuleType.None,
+                Flags = new global::System.Collections.Generic.HashSet<global::ET.BuffFlags>
+            {
+                    global::ET.BuffFlags.MoveRemove,
+                    global::ET.BuffFlags.StunRemove,
+                },
+                NoticeType = global::ET.NoticeType.Broadcast,
+                Effects = new global::System.Collections.Generic.List<global::ET.EffectNode>
+            {
+                    new global::ET.EffectClientBuffAdd()
+            {
+                        Id = 1,
+                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>
+            {
+                            new global::ET.BTAnimatorSetTrigger()
+            {
+                                Id = 2,
+                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
+                                Unit = @"Caster",
+                                MotionType = global::ET.MotionType.MeleeAttack1,
+                            },
+                        },
+                        TreeId = 3902510254283413831L,
+                        Buff = @"Buff",
+                        Unit = @"Unit",
+                        Caster = @"Caster",
+                    },
+                    new global::ET.EffectServerBuffRemove()
+            {
+                        Id = 1,
+                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>
+            {
+                            new global::ET.BTGetSpellTargetUnit()
+            {
+                                Id = 2,
+                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
+                                Buff = @"Buff",
+                                Unit = @"Target",
+                            },
+                            new global::ET.BTSelector()
+            {
+                                Id = 3,
+                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>
+            {
+                                    new global::ET.BTCreateSpell()
+            {
+                                        Id = 4,
+                                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
+                                        Unit = @"Caster",
+                                        Buff = @"Buff",
+                                        SpellConfigId = 100102,
+                                    },
+                                    new global::ET.BTRemoveBuff()
+            {
+                                        Id = 5,
+                                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
+                                        Unit = @"Caster",
+                                        ConfigId = 100100,
+                                        RemoveType = global::ET.BuffFlags.NotFoundTargetRemove,
+                                    },
+                                },
+                            },
+                        },
+                        TreeId = 3456085038844290628L,
+                        Buff = @"Buff",
+                        Unit = @"Unit",
+                        Caster = @"Caster",
+                    },
+                },
+            });
+            category.Add(new global::ET.BuffConfig()
+            {
+                Id = 100102,
+                Desc = @"普攻子技能的伤害技能Buff",
+                Duration = 0,
+                TickTime = 0,
+                MaxStack = 1,
+                Stack = 1,
+                OverLayRuleType = global::ET.OverLayRuleType.None,
+                Flags = new global::System.Collections.Generic.HashSet<global::ET.BuffFlags>(),
+                NoticeType = global::ET.NoticeType.NoNotice,
+                Effects = new global::System.Collections.Generic.List<global::ET.EffectNode>
+            {
+                    new global::ET.EffectServerBuffAdd()
+            {
+                        Id = 1,
+                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>
+            {
+                            new global::ET.BTGetSpellTargetUnit()
+            {
+                                Id = 2,
+                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
+                                Buff = @"Buff",
+                                Unit = @"Unit",
+                            },
+                            new global::ET.BTDamage()
+            {
+                                Id = 3,
+                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
+                                Caster = @"Caster",
+                                Target = @"Unit",
+                                Buff = @"Buff",
+                                Value = 10,
+                            },
+                        },
+                        TreeId = 1275168519374152276L,
+                        Buff = @"Buff",
+                        Unit = @"Unit",
+                        Caster = @"Caster",
+                    },
+                },
+            });
+            category.Add(new global::ET.BuffConfig()
+            {
+                Id = 100110,
+                Desc = @"怪物战斗状态",
+                Duration = 0,
+                TickTime = 0,
+                MaxStack = 1,
+                Stack = 1,
+                OverLayRuleType = global::ET.OverLayRuleType.None,
+                Flags = new global::System.Collections.Generic.HashSet<global::ET.BuffFlags>
+            {
+                    global::ET.BuffFlags.MoveRemove,
+                    global::ET.BuffFlags.StunRemove,
+                },
+                NoticeType = global::ET.NoticeType.NoNotice,
+                Effects = new global::System.Collections.Generic.List<global::ET.EffectNode>
+            {
+                    new global::ET.EffectServerBuffAdd()
+            {
+                        Id = 1,
+                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>
+            {
+                            new global::ET.BTAddBuff()
+            {
+                                Id = 2,
+                                Children = null,
+                                Caster = @"Caster",
+                                Target = @"Caster",
+                                Buff = @"Buff",
+                                ConfigId = 200111,
+                            },
+                        },
+                        TreeId = 8182950534952635943L,
+                        Buff = @"Buff",
+                        Unit = @"Unit",
+                        Caster = @"Caster",
+                    },
+                },
+            });
+            category.Add(new global::ET.BuffConfig()
+            {
+                Id = 100120,
+                Desc = @"传送",
+                Duration = 0,
+                TickTime = 0,
+                MaxStack = 1,
+                Stack = 1,
+                OverLayRuleType = global::ET.OverLayRuleType.None,
+                Flags = new global::System.Collections.Generic.HashSet<global::ET.BuffFlags>(),
+                NoticeType = global::ET.NoticeType.NoNotice,
+                Effects = new global::System.Collections.Generic.List<global::ET.EffectNode>
+            {
+                    new global::ET.EffectServerBuffAdd()
+            {
+                        Id = 1,
+                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>
+            {
+                            new global::ET.BTGetSpellTargetUnits()
+            {
+                                Id = 4,
+                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
+                                Buff = @"Buff",
+                                Units = @"Targets",
+                            },
+                            new global::ET.BTForeachUnit()
+            {
+                                Id = 6,
+                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>
+            {
+                                    new global::ET.BTTransfer()
+            {
+                                        Id = 8,
+                                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
+                                        Caster = @"Caster",
+                                        Target = @"Target",
+                                        Buff = @"Buff",
+                                        TransferId = 1,
+                                    },
+                                },
+                                Units = @"Targets",
+                                Unit = @"Target",
+                            },
+                        },
+                        TreeId = 788757847158858200L,
+                        Buff = @"Buff",
+                        Unit = @"Unit",
+                        Caster = @"Caster",
+                    },
+                },
+            });
+            category.Add(new global::ET.BuffConfig()
+            {
+                Id = 100130,
+                Desc = @"传送",
+                Duration = 0,
+                TickTime = 0,
+                MaxStack = 1,
+                Stack = 1,
+                OverLayRuleType = global::ET.OverLayRuleType.None,
+                Flags = new global::System.Collections.Generic.HashSet<global::ET.BuffFlags>(),
+                NoticeType = global::ET.NoticeType.NoNotice,
+                Effects = new global::System.Collections.Generic.List<global::ET.EffectNode>
+            {
+                    new global::ET.EffectServerBuffAdd()
+            {
+                        Id = 1,
+                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>
+            {
+                            new global::ET.BTGetSpellTargetUnits()
+            {
+                                Id = 4,
+                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
+                                Buff = @"Buff",
+                                Units = @"Targets",
+                            },
+                            new global::ET.BTForeachUnit()
+            {
+                                Id = 6,
+                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>
+            {
+                                    new global::ET.BTTransfer()
+            {
+                                        Id = 7,
+                                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
+                                        Caster = @"Caster",
+                                        Target = @"Target",
+                                        Buff = @"Buff",
+                                        TransferId = 2,
+                                    },
+                                },
+                                Units = @"Targets",
+                                Unit = @"Target",
+                            },
+                        },
+                        TreeId = 6319847410496909763L,
+                        Buff = @"Buff",
+                        Unit = @"Unit",
+                        Caster = @"Caster",
+                    },
+                },
+            });
+            category.Add(new global::ET.BuffConfig()
+            {
+                Id = 200021,
+                Desc = @"寒冰箭假子弹Buff",
+                Duration = 0,
+                TickTime = 0,
+                MaxStack = 1,
+                Stack = 1,
+                OverLayRuleType = global::ET.OverLayRuleType.None,
+                Flags = new global::System.Collections.Generic.HashSet<global::ET.BuffFlags>(),
+                NoticeType = global::ET.NoticeType.Broadcast,
+                Effects = new global::System.Collections.Generic.List<global::ET.EffectNode>
+            {
+                    new global::ET.EffectServerBuffRemove()
+            {
+                        Id = 1,
+                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>
+            {
+                            new global::ET.BTAddBuff()
+            {
+                                Id = 2,
+                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
+                                Caster = @"Caster",
+                                Target = @"Unit",
+                                Buff = @"Buff",
+                                ConfigId = 200022,
+                            },
+                            new global::ET.BTDamage()
+            {
+                                Id = 3,
+                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
+                                Caster = @"Caster",
+                                Target = @"Unit",
+                                Buff = @"Buff",
+                                Value = 5,
+                            },
+                        },
+                        TreeId = 8629936956201689519L,
+                        Buff = @"Buff",
+                        Unit = @"Unit",
+                        Caster = @"Caster",
+                    },
+                    new global::ET.EffectClientBuffAdd()
+            {
+                        Id = 1,
+                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>
+            {
+                            new global::ET.BTAnimatorSetTrigger()
+            {
+                                Id = 2,
+                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
+                                Unit = @"Caster",
+                                MotionType = global::ET.MotionType.SpellCastDirected,
+                            },
+                            new global::ET.BTCreateFakeBullet()
+            {
+                                Id = 3,
+                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
+                                Caster = @"Caster",
+                                Target = @"Unit",
+                                CasterBindPoint = global::ET.BindPoint.Attack,
+                                TargetBindPoint = global::ET.BindPoint.Hitted,
+                                Speed = 30000,
+                                EffectName = @"effect_Frost Bolt",
+                                Duration = 60000,
+                            },
+                        },
+                        TreeId = 4087138501667181464L,
+                        Buff = @"Buff",
+                        Unit = @"Unit",
+                        Caster = @"Caster",
+                    },
+                },
+            });
+            category.Add(new global::ET.BuffConfig()
+            {
+                Id = 200022,
+                Desc = @"寒冰箭减速",
+                Duration = 5000,
+                TickTime = 0,
+                MaxStack = 1,
+                Stack = 1,
+                OverLayRuleType = global::ET.OverLayRuleType.Replace,
+                Flags = new global::System.Collections.Generic.HashSet<global::ET.BuffFlags>(),
+                NoticeType = global::ET.NoticeType.Broadcast,
+                Effects = new global::System.Collections.Generic.List<global::ET.EffectNode>
+            {
+                    new global::ET.EffectServerBuffAdd()
+            {
+                        Id = 1,
+                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>
+            {
+                            new global::ET.BTNumericChange()
+            {
+                                Id = 2,
+                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
+                                Unit = @"Unit",
+                                Buff = @"Buff",
+                                NumericType = 10003,
+                                Value = -30,
+                            },
+                        },
+                        TreeId = 767928858192354693L,
                         Buff = @"Buff",
                         Unit = @"Unit",
                         Caster = @"Caster",
@@ -1005,354 +1455,6 @@ namespace ET
             });
             category.Add(new global::ET.BuffConfig()
             {
-                Id = 200040,
-                Desc = null,
-                Duration = 0,
-                TickTime = 0,
-                MaxStack = 1,
-                Stack = 1,
-                OverLayRuleType = global::ET.OverLayRuleType.None,
-                Flags = new global::System.Collections.Generic.HashSet<global::ET.BuffFlags>(),
-                NoticeType = global::ET.NoticeType.NoNotice,
-                Effects = new global::System.Collections.Generic.List<global::ET.EffectNode>
-            {
-                    new global::ET.EffectServerBuffAdd()
-            {
-                        Id = 1,
-                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>
-            {
-                            new global::ET.BTPhaseAdd()
-            {
-                                Id = 2,
-                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
-                                Unit = @"Caster",
-                                phaseType = global::ET.PhaseType.Phase1,
-                            },
-                        },
-                        TreeId = 6680604004401102092L,
-                        Buff = @"Buff",
-                        Unit = @"Unit",
-                        Caster = @"Caster",
-                    },
-                },
-            });
-            category.Add(new global::ET.BuffConfig()
-            {
-                Id = 200050,
-                Desc = null,
-                Duration = 0,
-                TickTime = 0,
-                MaxStack = 1,
-                Stack = 1,
-                OverLayRuleType = global::ET.OverLayRuleType.None,
-                Flags = new global::System.Collections.Generic.HashSet<global::ET.BuffFlags>(),
-                NoticeType = global::ET.NoticeType.NoNotice,
-                Effects = new global::System.Collections.Generic.List<global::ET.EffectNode>
-            {
-                    new global::ET.EffectServerBuffAdd()
-            {
-                        Id = 1,
-                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>
-            {
-                            new global::ET.BTPhaseRemove()
-            {
-                                Id = 2,
-                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
-                                Unit = @"Caster",
-                                phaseType = global::ET.PhaseType.Phase1,
-                            },
-                        },
-                        TreeId = 2997626495283858521L,
-                        Buff = @"Buff",
-                        Unit = @"Unit",
-                        Caster = @"Caster",
-                    },
-                },
-            });
-            category.Add(new global::ET.BuffConfig()
-            {
-                Id = 200100,
-                Desc = @"普攻自动Tick Buff",
-                Duration = 1000000,
-                TickTime = 2000,
-                MaxStack = 1,
-                Stack = 1,
-                OverLayRuleType = global::ET.OverLayRuleType.None,
-                Flags = new global::System.Collections.Generic.HashSet<global::ET.BuffFlags>
-            {
-                    global::ET.BuffFlags.MoveRemove,
-                    global::ET.BuffFlags.StunRemove,
-                },
-                NoticeType = global::ET.NoticeType.NoNotice,
-                Effects = new global::System.Collections.Generic.List<global::ET.EffectNode>
-            {
-                    new global::ET.EffectServerBuffTick()
-            {
-                        Id = 1,
-                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>
-            {
-                            new global::ET.BTGetBuffOwner()
-            {
-                                Id = 7,
-                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
-                                Buff = @"Buff",
-                                Unit = @"Unit",
-                            },
-                            new global::ET.BTGetSpellTargetUnit()
-            {
-                                Id = 2,
-                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
-                                Buff = @"Buff",
-                                Unit = @"Target",
-                            },
-                            new global::ET.BTTurnToUnit()
-            {
-                                Id = 3,
-                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
-                                Caster = @"Unit",
-                                Target = @"Target",
-                                Buff = @"Buff",
-                            },
-                            new global::ET.BTSelector()
-            {
-                                Id = 4,
-                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>
-            {
-                                    new global::ET.BTCreateSpell()
-            {
-                                        Id = 5,
-                                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
-                                        Unit = @"Unit",
-                                        Buff = @"Buff",
-                                        SpellConfigId = 100101,
-                                    },
-                                    new global::ET.BTRemoveBuff()
-            {
-                                        Id = 6,
-                                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
-                                        Unit = @"Unit",
-                                        ConfigId = 200100,
-                                        RemoveType = global::ET.BuffFlags.NotFoundTargetRemove,
-                                    },
-                                },
-                            },
-                        },
-                        TreeId = 564552055616284588L,
-                        Buff = @"Buff",
-                        Override = false,
-                    },
-                    new global::ET.EffectServerBuffAdd()
-            {
-                        Id = 1,
-                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>
-            {
-                            new global::ET.BTGetSpellTargetUnit()
-            {
-                                Id = 2,
-                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
-                                Buff = @"Buff",
-                                Unit = @"Target",
-                            },
-                            new global::ET.BTTurnToUnit()
-            {
-                                Id = 3,
-                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
-                                Caster = @"Caster",
-                                Target = @"Target",
-                                Buff = @"Buff",
-                            },
-                            new global::ET.BTSelector()
-            {
-                                Id = 4,
-                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>
-            {
-                                    new global::ET.BTCreateSpell()
-            {
-                                        Id = 5,
-                                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
-                                        Unit = @"Unit",
-                                        Buff = @"Buff",
-                                        SpellConfigId = 100101,
-                                    },
-                                    new global::ET.BTRemoveBuff()
-            {
-                                        Id = 6,
-                                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
-                                        Unit = @"Unit",
-                                        ConfigId = 200100,
-                                        RemoveType = global::ET.BuffFlags.NotFoundTargetRemove,
-                                    },
-                                },
-                            },
-                        },
-                        TreeId = 1625451776993338754L,
-                        Buff = @"Buff",
-                        Unit = @"Unit",
-                        Caster = @"Caster",
-                    },
-                },
-            });
-            category.Add(new global::ET.BuffConfig()
-            {
-                Id = 200101,
-                Desc = @"普攻子技能Buff",
-                Duration = 300,
-                TickTime = 0,
-                MaxStack = 1,
-                Stack = 1,
-                OverLayRuleType = global::ET.OverLayRuleType.None,
-                Flags = new global::System.Collections.Generic.HashSet<global::ET.BuffFlags>
-            {
-                    global::ET.BuffFlags.MoveRemove,
-                    global::ET.BuffFlags.StunRemove,
-                },
-                NoticeType = global::ET.NoticeType.Broadcast,
-                Effects = new global::System.Collections.Generic.List<global::ET.EffectNode>
-            {
-                    new global::ET.EffectClientBuffAdd()
-            {
-                        Id = 1,
-                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>
-            {
-                            new global::ET.BTAnimatorSetTrigger()
-            {
-                                Id = 2,
-                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
-                                Unit = @"Caster",
-                                MotionType = global::ET.MotionType.MeleeAttack1,
-                            },
-                        },
-                        TreeId = 3902510254283413831L,
-                        Buff = @"Buff",
-                        Unit = @"Unit",
-                        Caster = @"Caster",
-                    },
-                    new global::ET.EffectServerBuffRemove()
-            {
-                        Id = 1,
-                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>
-            {
-                            new global::ET.BTGetSpellTargetUnit()
-            {
-                                Id = 2,
-                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
-                                Buff = @"Buff",
-                                Unit = @"Target",
-                            },
-                            new global::ET.BTSelector()
-            {
-                                Id = 3,
-                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>
-            {
-                                    new global::ET.BTCreateSpell()
-            {
-                                        Id = 4,
-                                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
-                                        Unit = @"Caster",
-                                        Buff = @"Buff",
-                                        SpellConfigId = 100102,
-                                    },
-                                    new global::ET.BTRemoveBuff()
-            {
-                                        Id = 5,
-                                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
-                                        Unit = @"Caster",
-                                        ConfigId = 200100,
-                                        RemoveType = global::ET.BuffFlags.NotFoundTargetRemove,
-                                    },
-                                },
-                            },
-                        },
-                        TreeId = 3456085038844290628L,
-                        Buff = @"Buff",
-                        Unit = @"Unit",
-                        Caster = @"Caster",
-                    },
-                },
-            });
-            category.Add(new global::ET.BuffConfig()
-            {
-                Id = 200102,
-                Desc = @"普攻子技能的伤害技能Buff",
-                Duration = 0,
-                TickTime = 0,
-                MaxStack = 1,
-                Stack = 1,
-                OverLayRuleType = global::ET.OverLayRuleType.None,
-                Flags = new global::System.Collections.Generic.HashSet<global::ET.BuffFlags>(),
-                NoticeType = global::ET.NoticeType.NoNotice,
-                Effects = new global::System.Collections.Generic.List<global::ET.EffectNode>
-            {
-                    new global::ET.EffectServerBuffAdd()
-            {
-                        Id = 1,
-                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>
-            {
-                            new global::ET.BTGetSpellTargetUnit()
-            {
-                                Id = 2,
-                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
-                                Buff = @"Buff",
-                                Unit = @"Unit",
-                            },
-                            new global::ET.BTDamage()
-            {
-                                Id = 3,
-                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
-                                Caster = @"Caster",
-                                Target = @"Unit",
-                                Buff = @"Buff",
-                                Value = 10,
-                            },
-                        },
-                        TreeId = 1275168519374152276L,
-                        Buff = @"Buff",
-                        Unit = @"Unit",
-                        Caster = @"Caster",
-                    },
-                },
-            });
-            category.Add(new global::ET.BuffConfig()
-            {
-                Id = 200110,
-                Desc = @"怪物战斗状态",
-                Duration = 0,
-                TickTime = 0,
-                MaxStack = 1,
-                Stack = 1,
-                OverLayRuleType = global::ET.OverLayRuleType.None,
-                Flags = new global::System.Collections.Generic.HashSet<global::ET.BuffFlags>
-            {
-                    global::ET.BuffFlags.MoveRemove,
-                    global::ET.BuffFlags.StunRemove,
-                },
-                NoticeType = global::ET.NoticeType.NoNotice,
-                Effects = new global::System.Collections.Generic.List<global::ET.EffectNode>
-            {
-                    new global::ET.EffectServerBuffAdd()
-            {
-                        Id = 1,
-                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>
-            {
-                            new global::ET.BTAddBuff()
-            {
-                                Id = 2,
-                                Children = null,
-                                Caster = @"Caster",
-                                Target = @"Caster",
-                                Buff = @"Buff",
-                                ConfigId = 200111,
-                            },
-                        },
-                        TreeId = 8182950534952635943L,
-                        Buff = @"Buff",
-                        Unit = @"Unit",
-                        Caster = @"Caster",
-                    },
-                },
-            });
-            category.Add(new global::ET.BuffConfig()
-            {
                 Id = 200111,
                 Desc = @"怪物战斗状态提速Buff",
                 Duration = -1,
@@ -1380,57 +1482,6 @@ namespace ET
                             },
                         },
                         TreeId = 1630117608744012799L,
-                        Buff = @"Buff",
-                        Unit = @"Unit",
-                        Caster = @"Caster",
-                    },
-                },
-            });
-            category.Add(new global::ET.BuffConfig()
-            {
-                Id = 200120,
-                Desc = @"传送",
-                Duration = 0,
-                TickTime = 0,
-                MaxStack = 1,
-                Stack = 1,
-                OverLayRuleType = global::ET.OverLayRuleType.None,
-                Flags = new global::System.Collections.Generic.HashSet<global::ET.BuffFlags>(),
-                NoticeType = global::ET.NoticeType.NoNotice,
-                Effects = new global::System.Collections.Generic.List<global::ET.EffectNode>
-            {
-                    new global::ET.EffectServerBuffAdd()
-            {
-                        Id = 1,
-                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>
-            {
-                            new global::ET.BTGetSpellTargetUnits()
-            {
-                                Id = 4,
-                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
-                                Buff = @"Buff",
-                                Units = @"Targets",
-                            },
-                            new global::ET.BTForeachUnit()
-            {
-                                Id = 6,
-                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>
-            {
-                                    new global::ET.BTTransfer()
-            {
-                                        Id = 8,
-                                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
-                                        Caster = @"Caster",
-                                        Target = @"Target",
-                                        Buff = @"Buff",
-                                        TransferId = 1,
-                                    },
-                                },
-                                Units = @"Targets",
-                                Unit = @"Target",
-                            },
-                        },
-                        TreeId = 788757847158858200L,
                         Buff = @"Buff",
                         Unit = @"Unit",
                         Caster = @"Caster",
@@ -1474,57 +1525,6 @@ namespace ET
                         TreeId = 6153392924137937051L,
                         Buff = @"Buff",
                         Override = true,
-                    },
-                },
-            });
-            category.Add(new global::ET.BuffConfig()
-            {
-                Id = 200130,
-                Desc = @"传送",
-                Duration = 0,
-                TickTime = 0,
-                MaxStack = 1,
-                Stack = 1,
-                OverLayRuleType = global::ET.OverLayRuleType.None,
-                Flags = new global::System.Collections.Generic.HashSet<global::ET.BuffFlags>(),
-                NoticeType = global::ET.NoticeType.NoNotice,
-                Effects = new global::System.Collections.Generic.List<global::ET.EffectNode>
-            {
-                    new global::ET.EffectServerBuffAdd()
-            {
-                        Id = 1,
-                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>
-            {
-                            new global::ET.BTGetSpellTargetUnits()
-            {
-                                Id = 4,
-                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
-                                Buff = @"Buff",
-                                Units = @"Targets",
-                            },
-                            new global::ET.BTForeachUnit()
-            {
-                                Id = 6,
-                                Children = new global::System.Collections.Generic.List<global::ET.BTNode>
-            {
-                                    new global::ET.BTTransfer()
-            {
-                                        Id = 7,
-                                        Children = new global::System.Collections.Generic.List<global::ET.BTNode>(),
-                                        Caster = @"Caster",
-                                        Target = @"Target",
-                                        Buff = @"Buff",
-                                        TransferId = 2,
-                                    },
-                                },
-                                Units = @"Targets",
-                                Unit = @"Target",
-                            },
-                        },
-                        TreeId = 6319847410496909763L,
-                        Buff = @"Buff",
-                        Unit = @"Unit",
-                        Caster = @"Caster",
                     },
                 },
             });
@@ -1653,6 +1653,7 @@ namespace ET
                                                         Unit = @"Unit",
                                                     },
                                                 },
+                                                ErrorCode = 0,
                                             },
                                             new global::ET.AI_MonsterXunLuo()
             {

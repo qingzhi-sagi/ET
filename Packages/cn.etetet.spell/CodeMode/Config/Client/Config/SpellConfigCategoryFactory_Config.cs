@@ -18,7 +18,6 @@ namespace ET
             category.Add(new global::ET.SpellConfig()
             {
                 Id = 100000,
-                BuffId = 200000,
                 Desc = @"普通攻击",
                 IconName = @"Ability_Warrior_OffensiveStance",
                 CD = 2000,
@@ -41,7 +40,6 @@ namespace ET
             category.Add(new global::ET.SpellConfig()
             {
                 Id = 100001,
-                BuffId = 200001,
                 Desc = @"普通攻击子技能",
                 IconName = null,
                 CD = 0,
@@ -64,7 +62,6 @@ namespace ET
             category.Add(new global::ET.SpellConfig()
             {
                 Id = 100002,
-                BuffId = 200002,
                 Desc = @"普通攻击子技能的子技能，用来伤害技能",
                 IconName = null,
                 CD = 0,
@@ -87,7 +84,6 @@ namespace ET
             category.Add(new global::ET.SpellConfig()
             {
                 Id = 100010,
-                BuffId = 200010,
                 Desc = @"暴风雪",
                 IconName = @"Spell_Frost_IceStorm",
                 CD = 5000,
@@ -119,7 +115,6 @@ namespace ET
             category.Add(new global::ET.SpellConfig()
             {
                 Id = 100011,
-                BuffId = 200011,
                 Desc = @"暴风雪每波雪技能",
                 IconName = null,
                 CD = 0,
@@ -153,7 +148,6 @@ namespace ET
             category.Add(new global::ET.SpellConfig()
             {
                 Id = 100020,
-                BuffId = 200020,
                 Desc = @"寒冰箭",
                 IconName = @"Spell_Frost_FrostBolt02",
                 CD = 5000,
@@ -184,7 +178,6 @@ namespace ET
             category.Add(new global::ET.SpellConfig()
             {
                 Id = 100030,
-                BuffId = 200030,
                 Desc = @"捕获宠物",
                 IconName = @"Spell_Druid_stampedingroar_cat",
                 CD = 5000,
@@ -207,7 +200,6 @@ namespace ET
             category.Add(new global::ET.SpellConfig()
             {
                 Id = 100040,
-                BuffId = 200040,
                 Desc = null,
                 IconName = @"Ability_Druid_BalanceofPower",
                 CD = 0,
@@ -228,7 +220,6 @@ namespace ET
             category.Add(new global::ET.SpellConfig()
             {
                 Id = 100050,
-                BuffId = 200050,
                 Desc = null,
                 IconName = @"Ability_Druid_Bash",
                 CD = 0,
@@ -249,7 +240,6 @@ namespace ET
             category.Add(new global::ET.SpellConfig()
             {
                 Id = 100100,
-                BuffId = 200100,
                 Desc = @"怪物普通攻击",
                 IconName = @"Ability_Druid_Berserk",
                 CD = 2000,
@@ -272,7 +262,6 @@ namespace ET
             category.Add(new global::ET.SpellConfig()
             {
                 Id = 100101,
-                BuffId = 200101,
                 Desc = @"怪物普通攻击子技能",
                 IconName = null,
                 CD = 0,
@@ -295,7 +284,6 @@ namespace ET
             category.Add(new global::ET.SpellConfig()
             {
                 Id = 100102,
-                BuffId = 200102,
                 Desc = @"普通攻击子技能的子技能，用来伤害技能",
                 IconName = null,
                 CD = 0,
@@ -318,7 +306,6 @@ namespace ET
             category.Add(new global::ET.SpellConfig()
             {
                 Id = 100110,
-                BuffId = 200110,
                 Desc = @"怪物战斗状态",
                 IconName = @"ABILITY_DRUID_DEMORALIZINGROAR",
                 CD = 0,
@@ -339,7 +326,6 @@ namespace ET
             category.Add(new global::ET.SpellConfig()
             {
                 Id = 100120,
-                BuffId = 200120,
                 Desc = null,
                 IconName = null,
                 CD = 0,
@@ -364,7 +350,6 @@ namespace ET
             category.Add(new global::ET.SpellConfig()
             {
                 Id = 100130,
-                BuffId = 200130,
                 Desc = null,
                 IconName = null,
                 CD = 0,

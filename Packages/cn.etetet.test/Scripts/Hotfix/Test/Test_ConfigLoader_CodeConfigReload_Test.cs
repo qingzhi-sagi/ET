@@ -30,10 +30,10 @@ namespace ET.Test
                 return Fail(3, "buff config category should be initialized before reload");
             }
 
-            BuffConfig beforeBuff = beforeBuffCategory.Get(beforeSpell.BuffId);
+            BuffConfig beforeBuff = beforeBuffCategory.Get(beforeSpell.Id);
             if (beforeBuff == null)
             {
-                return Fail(4, "buff config referenced by spell should exist before reload");
+                return Fail(4, "primary buff config with same id as spell should exist before reload");
             }
 
             StartSceneConfigCategory beforeStartSceneCategory = testFiber.GetSingleton<StartSceneConfigCategory>();
@@ -67,15 +67,15 @@ namespace ET.Test
                 return Fail(9, "spell config should still exist after reload");
             }
 
-            if (afterSpell.BuffId != beforeSpell.BuffId || afterSpell.Desc != beforeSpell.Desc || afterSpell.CD != beforeSpell.CD)
+            if (afterSpell.Desc != beforeSpell.Desc || afterSpell.CD != beforeSpell.CD)
             {
                 return Fail(10, "spell config data changed after reload");
             }
 
-            BuffConfig afterBuff = testFiber.GetSingleton<BuffConfigCategory>().Get(afterSpell.BuffId);
+            BuffConfig afterBuff = testFiber.GetSingleton<BuffConfigCategory>().Get(afterSpell.Id);
             if (afterBuff == null)
             {
-                return Fail(11, "buff config should still exist after reload");
+                return Fail(11, "primary buff config with same id as spell should still exist after reload");
             }
 
             if (afterBuff.Desc != beforeBuff.Desc || afterBuff.Duration != beforeBuff.Duration || afterBuff.TickTime != beforeBuff.TickTime)

@@ -42,9 +42,10 @@ namespace ET
             }
 
             SpellConfig config = row.Asset.SpellConfig;
-            if (row.Asset.name != config.Id.ToString())
+            string expectedSpellAssetName = SpellEditorConstants.SpellAssetName(config.Id);
+            if (row.Asset.name != expectedSpellAssetName)
             {
-                issues.Add(new SpellEditorIssue(MessageType.Error, $"Spell 资产名与 Id 不一致: {row.AssetPath} name={row.Asset.name} id={config.Id}"));
+                issues.Add(new SpellEditorIssue(MessageType.Error, $"Spell 资产名与 Id 不一致: {row.AssetPath} name={row.Asset.name} expected={expectedSpellAssetName} id={config.Id}"));
             }
 
             bool rowIsMainSource = false;
@@ -67,9 +68,9 @@ namespace ET
                 issues.Add(new SpellEditorIssue(MessageType.Warning, $"子技能 Id 通常应满足 % 10 != 0: {config.Id}"));
             }
 
-            if (!index.Buffs.ContainsKey(config.BuffId))
+            if (!index.Buffs.ContainsKey(config.Id))
             {
-                issues.Add(new SpellEditorIssue(MessageType.Error, $"Spell {config.Id} 引用缺失 BuffId {config.BuffId}"));
+                issues.Add(new SpellEditorIssue(MessageType.Error, $"Spell {config.Id} 缺失同 Id 主 Buff {config.Id}"));
             }
         }
 
@@ -82,9 +83,10 @@ namespace ET
             }
 
             BuffConfig config = row.Asset.BuffConfig;
-            if (row.Asset.name != config.Id.ToString())
+            string expectedBuffAssetName = SpellEditorConstants.BuffAssetName(config.Id);
+            if (row.Asset.name != expectedBuffAssetName)
             {
-                issues.Add(new SpellEditorIssue(MessageType.Error, $"Buff 资产名与 Id 不一致: {row.AssetPath} name={row.Asset.name} id={config.Id}"));
+                issues.Add(new SpellEditorIssue(MessageType.Error, $"Buff 资产名与 Id 不一致: {row.AssetPath} name={row.Asset.name} expected={expectedBuffAssetName} id={config.Id}"));
             }
         }
     }
