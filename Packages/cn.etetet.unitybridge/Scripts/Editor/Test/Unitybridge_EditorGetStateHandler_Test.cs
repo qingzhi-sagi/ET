@@ -23,6 +23,23 @@ namespace ET.Test
                 return UnityBridgeProtocolTestSupport.Fail(2, "EditorGetStateHandler should mirror Unity editor state");
             }
 
+            IResponse rawPingResponse = await new UnityBridgePingHandler().Handle(Ping.Create());
+            if (rawPingResponse is not PingResponse pingResponse)
+            {
+                return UnityBridgeProtocolTestSupport.Fail(3, "PingHandler should return PingResponse");
+            }
+
+            if (pingResponse.Error != 0 ||
+                pingResponse.Time <= 0 ||
+                pingResponse.IsCompiling != EditorApplication.isCompiling ||
+                pingResponse.IsPlaying != EditorApplication.isPlaying ||
+                pingResponse.IsPlayingOrWillChangePlaymode != EditorApplication.isPlayingOrWillChangePlaymode ||
+                string.IsNullOrWhiteSpace(pingResponse.CodeMode) ||
+                string.IsNullOrWhiteSpace(pingResponse.UnityVersion))
+            {
+                return UnityBridgeProtocolTestSupport.Fail(4, "PingHandler should mirror Unity editor state");
+            }
+
             return ErrorCode.ERR_Success;
         }
     }

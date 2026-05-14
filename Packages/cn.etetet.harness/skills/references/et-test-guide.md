@@ -148,7 +148,7 @@ dotnet build ET.sln
 ```
 
 ```powershell
-dotnet ./Bin/ET.UnityBridge.dll heartBeat
+dotnet ./Bin/ET.UnityBridge.dll '{"_t":"Ping"}'
 ```
 
 ```powershell

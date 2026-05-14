@@ -13,6 +13,11 @@ message PingResponse // IResponse
 	int32 Error = 2;
 	string Message = 3;
 	int64 Time = 4;
+	bool IsCompiling = 5;
+	bool IsPlaying = 6;
+	bool IsPlayingOrWillChangePlaymode = 7;
+	string CodeMode = 8;
+	string UnityVersion = 9;
 }
 
 // ResponseType HostStateResponse

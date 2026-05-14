@@ -29,7 +29,7 @@
 - 服务端全量测试：`"Test" | dotnet ./Bin/ET.App.dll --SceneName=Test`
 - 服务端指定测试：`"Test --Name=CreateRobot" | dotnet ./Bin/ET.App.dll --SceneName=Test`
 - 服务端正则测试：`"Test --Name=Quest.*" | dotnet ./Bin/ET.App.dll --SceneName=Test`
-- Editor 宿主心跳：`dotnet ./Bin/ET.UnityBridge.dll heartBeat`
+- Editor 宿主检查：`dotnet ./Bin/ET.UnityBridge.dll '{"_t":"Ping"}'`
 - Editor 命令发现：`dotnet ./Bin/ET.UnityBridge.dll '{"_t":"HostState"}'`
 - Editor 全量测试：`dotnet ./Bin/ET.UnityBridge.dll '{"_t":"UnityTestRunRequest","Name":".*"}'`
 - Editor 指定测试：`dotnet ./Bin/ET.UnityBridge.dll '{"_t":"UnityTestRunRequest","Name":"^Unitybridge_UnityTestRunHandler_Test$"}'`

@@ -9,11 +9,6 @@ namespace ET
 {
     internal static class Program
     {
-        private static readonly HashSet<string> ReservedCommands = new(StringComparer.OrdinalIgnoreCase)
-        {
-            "heartBeat"
-        };
-
         private static readonly HashSet<string> TransportOptions = new(StringComparer.OrdinalIgnoreCase)
         {
             "--root",
@@ -39,12 +34,7 @@ namespace ET
                     return 2;
                 }
 
-                if (!ReservedCommands.Contains(args[0]))
-                {
-                    return SendDirect(args);
-                }
-
-                return PrintHeartbeat(args);
+                return SendDirect(args);
             }
             catch (Exception e)
             {
@@ -105,12 +95,6 @@ namespace ET
             idempotencyKey = string.IsNullOrWhiteSpace(idempotencyKey) ? Guid.NewGuid().ToString("N") : idempotencyKey;
             string rootPath = UnityBridgePathHelper.ResolveRoot(root);
 
-            if (!HasActiveHeartbeat(rootPath))
-            {
-                Console.Error.WriteLine($"heartBeat not found: {UnityBridgeFileStore.GetHeartbeatPath(rootPath)}");
-                return 1;
-            }
-
             UnityBridgeRequestEnvelope request = new()
             {
                 RpcId = rpcId,
@@ -120,30 +104,6 @@ namespace ET
             };
 
             return SendRequest(rootPath, request, waitMs, hasExplicitWaitMs);
-        }
-
-        private static int PrintHeartbeat(string[] args)
-        {
-            string root = null;
-            for (int i = 1; i < args.Length; ++i)
-            {
-                if (string.Equals(args[i], "--root", StringComparison.OrdinalIgnoreCase) && i + 1 < args.Length)
-                {
-                    root = args[++i];
-                }
-            }
-
-            string rootPath = UnityBridgePathHelper.ResolveRoot(root);
-            string heartbeatPath = UnityBridgeFileStore.GetHeartbeatPath(rootPath);
-            if (!File.Exists(heartbeatPath))
-            {
-                Console.Error.WriteLine($"heartBeat not found: {heartbeatPath}");
-                return 1;
-            }
-
-            UnityBridgeHeartbeat heartbeat = MongoHelper.FromJson<UnityBridgeHeartbeat>(File.ReadAllText(heartbeatPath, Encoding.UTF8));
-            Console.WriteLine(UnityBridgeMongoJsonHelper.ToJson(heartbeat));
-            return 0;
         }
 
         private static int SendRequest(string root, UnityBridgeRequestEnvelope request, int waitMs, bool hasExplicitWaitMs)
@@ -184,33 +144,6 @@ namespace ET
             timeoutResponse.Command = string.Empty;
             Console.WriteLine(UnityBridgeMongoJsonHelper.ToJson(timeoutResponse));
             return 1;
-        }
-
-        private const int HeartbeatFreshnessMs = 3000;
-
-        private static bool HasActiveHeartbeat(string root)
-        {
-            string heartbeatPath = UnityBridgeFileStore.GetHeartbeatPath(root);
-            if (!File.Exists(heartbeatPath))
-            {
-                return false;
-            }
-
-            try
-            {
-                UnityBridgeHeartbeat heartbeat = MongoHelper.FromJson<UnityBridgeHeartbeat>(File.ReadAllText(heartbeatPath, Encoding.UTF8));
-                if (heartbeat == null)
-                {
-                    return false;
-                }
-
-                long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-                return now - heartbeat.Time <= HeartbeatFreshnessMs;
-            }
-            catch
-            {
-                return false;
-            }
         }
 
         private static bool HasPendingDeferredRequest(string root, int rpcId)

@@ -63,21 +63,6 @@ namespace ET
     }
 
     /// <summary>
-    /// Unity Editor 心跳文件。
-    /// </summary>
-    [Serializable]
-    [EnableClass]
-    public sealed class UnityBridgeHeartbeat : Object
-    {
-        public long Time;
-        public bool IsCompiling;
-        public bool IsPlaying;
-        public bool IsPlayingOrWillChangePlaymode;
-        public string CodeMode;
-        public string UnityVersion;
-    }
-
-    /// <summary>
     /// 文件存储帮助类。
     /// </summary>
     public static class UnityBridgeFileStore
@@ -105,11 +90,6 @@ namespace ET
         public static string GetProcessingPath(string root, int rpcId)
         {
             return Path.Combine(UnityBridgePathHelper.GetProcessingDirectory(root), $"{rpcId}.json");
-        }
-
-        public static string GetHeartbeatPath(string root)
-        {
-            return Path.Combine(UnityBridgePathHelper.GetStateDirectory(root), "heartbeat.json");
         }
 
         public static string GetPendingCommandPath(string root)
@@ -220,12 +200,6 @@ namespace ET
 
             EnsureDirectories(root);
             WriteTextAtomic(GetIdempotencyPath(root, idempotencyKey), responseJson);
-        }
-
-        public static void WriteHeartbeat(string root, UnityBridgeHeartbeat heartbeat)
-        {
-            EnsureDirectories(root);
-            WriteTextAtomic(GetHeartbeatPath(root), UnityBridgeMongoJsonHelper.ToJson(heartbeat));
         }
 
         public static bool TryReadPendingCommandState(string root, out UnityBridgeDeferredCommandState pendingState, out string error)

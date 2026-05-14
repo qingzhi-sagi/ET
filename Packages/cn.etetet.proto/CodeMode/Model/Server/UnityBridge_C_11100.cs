@@ -45,6 +45,16 @@ namespace ET
         public string Message { get; set; }
         [MemoryPackOrder(3)]
         public long Time { get; set; }
+        [MemoryPackOrder(4)]
+        public bool IsCompiling { get; set; }
+        [MemoryPackOrder(5)]
+        public bool IsPlaying { get; set; }
+        [MemoryPackOrder(6)]
+        public bool IsPlayingOrWillChangePlaymode { get; set; }
+        [MemoryPackOrder(7)]
+        public string CodeMode { get; set; }
+        [MemoryPackOrder(8)]
+        public string UnityVersion { get; set; }
         public override void Dispose()
         {
             if (!this.IsFromPool)
@@ -56,6 +66,11 @@ namespace ET
             this.Error = default;
             this.Message = default;
             this.Time = default;
+            this.IsCompiling = default;
+            this.IsPlaying = default;
+            this.IsPlayingOrWillChangePlaymode = default;
+            this.CodeMode = default;
+            this.UnityVersion = default;
 
             ObjectPool.Recycle(this);
         }

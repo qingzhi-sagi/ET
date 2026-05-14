@@ -9,10 +9,8 @@ namespace ET
     internal static class UnityBridgeEditorHost
     {
         private const double PollIntervalSeconds = 0.2d;
-        private const double HeartbeatIntervalSeconds = 1.0d;
 
         private static double nextPollTime;
-        private static double nextHeartbeatTime;
         private static bool isProcessingRequest;
         private static readonly string cachedRoot;
 
@@ -23,19 +21,12 @@ namespace ET
             EditorApplication.update -= Update;
             EditorApplication.update += Update;
             nextPollTime = 0d;
-            nextHeartbeatTime = 0d;
         }
 
         private static void Update()
         {
             string root = cachedRoot;
             double now = EditorApplication.timeSinceStartup;
-
-            if (now >= nextHeartbeatTime)
-            {
-                nextHeartbeatTime = now + HeartbeatIntervalSeconds;
-                WriteHeartbeat(root);
-            }
 
             if (UnityBridgeDeferredRuntime.TryPump(root))
             {
@@ -54,26 +45,6 @@ namespace ET
             }
 
             ProcessOneRequestAsync(root).Coroutine();
-        }
-
-        private static void WriteHeartbeat(string root)
-        {
-            try
-            {
-                UnityBridgeFileStore.WriteHeartbeat(root, new UnityBridgeHeartbeat
-                {
-                    Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
-                    IsCompiling = EditorApplication.isCompiling,
-                    IsPlaying = EditorApplication.isPlaying,
-                    IsPlayingOrWillChangePlaymode = EditorApplication.isPlayingOrWillChangePlaymode,
-                    CodeMode = UnityBridgeEditorStatus.GetCodeMode(),
-                    UnityVersion = Application.unityVersion
-                });
-            }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
-            }
         }
 
         private static async ETTask ProcessOneRequestAsync(string root)

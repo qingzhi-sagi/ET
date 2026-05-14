@@ -27,8 +27,8 @@
 ### Unity 编辑器操作
 
 - `et-unitybridge`
-  - 场景：查询 Unity 心跳/状态、触发编译/刷新/重新生成项目/进入退出 PlayMode/热更新 Reload、排查桥接返回
-  - 补读：`skills/references/et-unitybridge-cli.md`
+  - 场景：查询 Unity 心跳/状态、AI 操作 Unity Editor、资源/场景/对象/Inspector/Prefab/GameView/截图/Editor 测试、触发编译/刷新/重新生成项目/进入退出 PlayMode/热更新 Reload、排查桥接返回
+  - 补读：`skills/references/et-unitybridge-ai-ops.md`；只查 CLI 参数或等待机制时读 `skills/references/et-unitybridge-cli.md`
 
 ### 构建与导出
 
