@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace ET
@@ -6,7 +7,7 @@ namespace ET
     [CodeProcess]
     public class ProcessFiberAddressSingleton : Singleton<ProcessFiberAddressSingleton>, ISingletonAwake, IInheritableSingleton
     {
-        private readonly Dictionary<int, FiberInstanceId> fiberInstanceIds = new();
+        private readonly ConcurrentDictionary<int, FiberInstanceId> fiberInstanceIds = new();
 
         public void Awake()
         {
@@ -26,7 +27,7 @@ namespace ET
 
             if (!this.fiberInstanceIds.TryGetValue(sceneType, out FiberInstanceId existing))
             {
-                this.fiberInstanceIds.Add(sceneType, fiberInstanceId);
+                this.fiberInstanceIds.TryAdd(sceneType, fiberInstanceId);
                 return;
             }
 
@@ -66,7 +67,7 @@ namespace ET
                 return;
             }
 
-            this.fiberInstanceIds.Remove(sceneType);
+            this.fiberInstanceIds.TryRemove(sceneType, out _);
         }
     }
 }

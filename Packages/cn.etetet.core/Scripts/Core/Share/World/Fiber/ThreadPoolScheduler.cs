@@ -8,7 +8,7 @@ namespace ET
 {
     internal class ThreadPoolScheduler: IScheduler
     {
-        private bool isDisposed;
+        private volatile bool isDisposed;
         
         private readonly List<Thread> threads;
 
