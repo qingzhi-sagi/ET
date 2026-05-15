@@ -103,6 +103,8 @@ namespace ET
         private BTNode ParseCompare()
         {
             ConditionToken variableToken = this.Expect(ConditionTokenType.Identifier);
+            this.ReadVariable(variableToken.Text, out string ownerKey, out string variable, out bool hasOwnerKey);
+            string[] paramValues = this.ReadParams(out bool hasParams);
             ConditionCompareOp op = this.ReadCompareOp();
             ConditionToken valueToken = this.Expect(ConditionTokenType.Number);
             int errorCode = this.defaultErrorCode;
@@ -117,9 +119,9 @@ namespace ET
                 throw new Exception("condition variable registry is not initialized");
             }
 
-            if (!registry.TryGetNodeType(variableToken.Text, out Type nodeType))
+            if (!registry.TryGetNodeType(variable, out Type nodeType))
             {
-                throw new Exception($"condition variable not registered: {variableToken.Text}");
+                throw new Exception($"condition variable not registered: {variable}");
             }
 
             BTCondition node = Activator.CreateInstance(nodeType) as BTCondition;
@@ -131,21 +133,88 @@ namespace ET
             node.Id = this.NextNodeId();
             if (node is BTNumericCompare numericCompare)
             {
-                if (registry.TryGetNumericType(variableToken.Text, out int numericType))
+                if (hasParams)
+                {
+                    this.SetParamsField(numericCompare, paramValues);
+                }
+
+                if (registry.TryGetNumericType(variable, out int numericType))
                 {
                     numericCompare.NumericType = numericType;
                 }
 
+                this.SetOwnerKeyField(numericCompare, ownerKey);
                 numericCompare.Op = op;
                 numericCompare.Value = valueToken.Number;
                 numericCompare.ErrorCode = errorCode;
                 return numericCompare;
             }
 
+            if (hasOwnerKey)
+            {
+                this.SetOwnerKeyField(node, ownerKey);
+            }
+
+            if (hasParams)
+            {
+                this.SetParamsField(node, paramValues);
+            }
+
             this.SetCompareField(node, nameof(BTNumericCompare.Op), op);
             this.SetCompareField(node, nameof(BTNumericCompare.Value), valueToken.Number);
             this.SetCompareField(node, nameof(BTNumericCompare.ErrorCode), errorCode);
             return node;
+        }
+
+        private void ReadVariable(string text, out string ownerKey, out string variable, out bool hasOwnerKey)
+        {
+            ownerKey = ConditionExprEnvKeys.Unit;
+            variable = text;
+            hasOwnerKey = false;
+
+            int dotIndex = text.IndexOf('.');
+            if (dotIndex < 0)
+            {
+                return;
+            }
+
+            if (dotIndex == 0 || dotIndex == text.Length - 1 || dotIndex != text.LastIndexOf('.'))
+            {
+                throw new Exception($"condition variable reference invalid: {text}");
+            }
+
+            ownerKey = text.Substring(0, dotIndex);
+            variable = text.Substring(dotIndex + 1);
+            hasOwnerKey = true;
+        }
+
+        private string[] ReadParams(out bool hasParams)
+        {
+            hasParams = false;
+            if (!this.Match(ConditionTokenType.LeftParen))
+            {
+                return Array.Empty<string>();
+            }
+
+            hasParams = true;
+            List<string> paramValues = new();
+            if (this.Match(ConditionTokenType.RightParen))
+            {
+                return paramValues.ToArray();
+            }
+
+            while (true)
+            {
+                ConditionToken paramToken = this.Expect(ConditionTokenType.Identifier);
+                paramValues.Add(paramToken.Text);
+                if (!this.Match(ConditionTokenType.Comma))
+                {
+                    break;
+                }
+            }
+
+            this.Expect(ConditionTokenType.RightParen);
+            return paramValues.ToArray();
         }
 
         private ConditionCompareOp ReadCompareOp()
@@ -207,6 +276,38 @@ namespace ET
             }
 
             fieldInfo.SetValue(node, value);
+        }
+
+        private void SetOwnerKeyField(BTCondition node, string ownerKey)
+        {
+            FieldInfo fieldInfo = node.GetType().GetField(nameof(BTNumericCompare.OwnerKey), BindingFlags.Instance | BindingFlags.Public);
+            if (fieldInfo == null)
+            {
+                throw new Exception($"condition node owner key field not found: {node.GetType().FullName}.{nameof(BTNumericCompare.OwnerKey)}");
+            }
+
+            if (fieldInfo.FieldType != typeof(string))
+            {
+                throw new Exception($"condition node owner key field must be string: {node.GetType().FullName}.{nameof(BTNumericCompare.OwnerKey)}");
+            }
+
+            fieldInfo.SetValue(node, ownerKey);
+        }
+
+        private void SetParamsField(BTCondition node, string[] paramValues)
+        {
+            FieldInfo fieldInfo = node.GetType().GetField("Params", BindingFlags.Instance | BindingFlags.Public);
+            if (fieldInfo == null)
+            {
+                throw new Exception($"condition node params field not found: {node.GetType().FullName}.Params");
+            }
+
+            if (fieldInfo.FieldType != typeof(string[]))
+            {
+                throw new Exception($"condition node params field must be string[]: {node.GetType().FullName}.Params");
+            }
+
+            fieldInfo.SetValue(node, paramValues);
         }
 
         private void AddSequenceChild(BTSequence sequence, BTNode child)

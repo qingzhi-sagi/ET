@@ -10,6 +10,8 @@ namespace ET.Test
             UnitComponent unitComponent = scene.AddComponent<UnitComponent>();
             Unit unit = unitComponent.AddChildWithId<Unit, int>(1001, 0);
             NumericComponent numericComponent = unit.AddComponent<NumericComponent>();
+            Unit unit2 = unitComponent.AddChildWithId<Unit, int>(1002, 0);
+            NumericComponent numericComponent2 = unit2.AddComponent<NumericComponent>();
 
             ConditionRoot root = ConditionExprCompiler.Compile("(HP >= 10 : 10001 || MP >= 100 : 10002) && Speed > 0 : 10003", 9999);
 
@@ -49,6 +51,46 @@ namespace ET.Test
             finally
             {
                 env.Dispose();
+            }
+
+            ConditionRoot namedRoot = ConditionExprCompiler.Compile("Unit1.HP > 0 : 20001 || Unit2.MP < 100 : 20002", 9999);
+            BTEnv namedEnv = BTEnv.Create(scene, unit.Id);
+            try
+            {
+                namedEnv.AddEntity("Unit1", unit);
+                namedEnv.AddEntity("Unit2", unit2);
+
+                numericComponent.NumericDic[NumericType.HP] = 0;
+                numericComponent.NumericDic[NumericType.MP] = 150;
+                numericComponent2.NumericDic[NumericType.MP] = 150;
+
+                int ret = BTHelper.RunTree(namedRoot, namedEnv);
+                if (ret != 20001)
+                {
+                    Log.Console($"named owner both branches failed error, expected: 20001, actual: {ret}");
+                    return 4;
+                }
+
+                numericComponent.NumericDic[NumericType.HP] = 1;
+                ret = BTHelper.RunTree(namedRoot, namedEnv);
+                if (ret != ErrorCode.ERR_Success)
+                {
+                    Log.Console($"named owner first branch success error, expected: 0, actual: {ret}");
+                    return 5;
+                }
+
+                numericComponent.NumericDic[NumericType.HP] = 0;
+                numericComponent2.NumericDic[NumericType.MP] = 99;
+                ret = BTHelper.RunTree(namedRoot, namedEnv);
+                if (ret != ErrorCode.ERR_Success)
+                {
+                    Log.Console($"named owner second branch success error, expected: 0, actual: {ret}");
+                    return 6;
+                }
+            }
+            finally
+            {
+                namedEnv.Dispose();
             }
 
             return ErrorCode.ERR_Success;

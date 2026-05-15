@@ -109,6 +109,10 @@ namespace ET
                     this.tokens.Add(new ConditionToken(ConditionTokenType.Colon, ":", 0));
                     ++this.index;
                     return;
+                case ',':
+                    this.tokens.Add(new ConditionToken(ConditionTokenType.Comma, ",", 0));
+                    ++this.index;
+                    return;
                 default:
                     throw new Exception($"condition token error at {this.index}: {c}");
             }
@@ -147,7 +151,7 @@ namespace ET
 
         private bool IsIdentifierPart(char c)
         {
-            return char.IsLetterOrDigit(c) || c == '_';
+            return char.IsLetterOrDigit(c) || c == '_' || c == '.';
         }
     }
 }

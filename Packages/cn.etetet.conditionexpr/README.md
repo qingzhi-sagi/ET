@@ -79,6 +79,23 @@ HP >= 10 : 10001
 HP >= 10
 ```
 
+当 `BTEnv` 中有多个 owner 时，可以用 `OwnerKey.Variable` 指定读取哪个 owner。目标节点必须声明 public string `OwnerKey` 字段，否则编译表达式时报错。当前 `BTNumericCompareHandler` 仍按现有 `NumericComponent` 契约读取 `Unit`：
+
+```text
+Unit1.HP > 0 || Unit2.MP < 100
+```
+
+其中 `Unit1`、`Unit2` 是调用方传入 `BTEnv` 的 owner key，`HP`、`MP` 仍然来自 `NumericType` 常量名，并由 `BTNumericCompare.OwnerKey` 接收 owner key。
+
+专用条件节点可以使用括号传字符串参数：
+
+```text
+Friend1(HP) > 0
+Friend2(HP, MP) < 100
+```
+
+这里 `Friend1`、`Friend2` 是通过 `ConditionVariableAttribute` 注册的节点名，`HP`、`MP` 会按文本写入节点的 public `string[] Params` 字段。只有声明了 `Params` 字段的节点才能使用括号参数，`HP(Friend1)` 这类数值节点参数写法会在编译表达式时报错。
+
 运算优先级：
 
 ```text
@@ -156,6 +173,8 @@ Speed -> BTNumericCompare, NumericType.Speed
 HP >= 10
 MP >= 100
 Speed > 0
+Unit1.HP > 0
+Unit2.MP < 100
 ```
 
 如果变量没有注册，编译时会抛出：
@@ -171,12 +190,25 @@ condition variable not registered: Xxx
 运行时读取：
 
 ```csharp
-Unit unit = env.GetEntity<Unit>(ConditionExprEnvKeys.Unit);
+Unit unit = env.GetEntity<Unit>(node.OwnerKey);
 NumericComponent numericComponent = unit.GetComponent<NumericComponent>();
 long value = numericComponent.GetAsLong(node.NumericType);
 ```
 
-所以调用方必须在 `BTEnv` 中传入 `Unit`，并保证该 `Unit` 有 `NumericComponent`。
+所以调用方必须在 `BTEnv` 中传入表达式使用的 owner key。当前数值比较 Handler 按 `Unit` 读取，并要求对应 `Unit` 有 `NumericComponent`。
+
+裸变量会默认读取：
+
+```csharp
+env.AddEntity(ConditionExprEnvKeys.Unit, unit);
+```
+
+带 owner key 变量读取表达式前缀对应的 key：
+
+```csharp
+env.AddEntity("Unit1", unit1);
+env.AddEntity("Unit2", unit2);
+```
 
 ## 专用变量节点
 
@@ -188,6 +220,7 @@ long value = numericComponent.GetAsLong(node.NumericType);
 [ConditionVariable("VipLevel")]
 public class BTVipLevelCompare : BTCondition
 {
+    public string[] Params;
     public ConditionCompareOp Op;
     public long Value;
     public int ErrorCode;
@@ -199,6 +232,8 @@ public class BTVipLevelCompare : BTCondition
 ```text
 专用节点必须继承 BTCondition
 如果要接收表达式中的比较符、目标值和错误码，需要声明 Op / Value / ErrorCode public 字段
+如果要支持 `OwnerKey.Variable` 语法，需要声明 OwnerKey public 字段，类型必须是 string
+如果要支持 `NodeName(Param1, Param2)` 语法，需要声明 Params public 字段，类型必须是 string[]
 变量名不能和已有 NumericType 或其它 ConditionVariableAttribute 重复
 注册结果保存在 ConditionVariableRegistry 实例字段中，不使用静态字典
 ```
@@ -237,6 +272,27 @@ ConditionRoot root = ConditionExprCompiler.Compile(
     9999);
 ```
 
+多 owner key 示例：
+
+```csharp
+ConditionRoot root = ConditionExprCompiler.Compile(
+    "Unit1.HP > 0 || Unit2.MP < 100",
+    9999);
+
+BTEnv env = BTEnv.Create(scene, unit1.Id);
+try
+{
+    env.AddEntity("Unit1", unit1);
+    env.AddEntity("Unit2", unit2);
+
+    int errorCode = BTHelper.RunTree(root, env);
+}
+finally
+{
+    env.Dispose();
+}
+```
+
 ## 测试
 
 本包测试放在：
@@ -260,4 +316,6 @@ Remove-Item ./Logs -Recurse -Force -ErrorAction SilentlyContinue
 Luban bean EndInit 编译
 NumericType 注册到 BTNumericCompare
 运行时错误码返回
+多 owner key 数值读取
+专用节点 Params 参数解析
 ```

@@ -17,6 +17,7 @@ namespace ET
         LeftParen = 12,
         RightParen = 13,
         Colon = 14,
+        Comma = 15,
     }
 
     public readonly struct ConditionToken

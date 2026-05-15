@@ -24,7 +24,11 @@
 ### 命名与落点
 
 - 测试优先放在被测功能自己的 package 内。
-- 目录：`Packages/cn.etetet.{被测包}/Scripts/Hotfix/Test/`。
+- 测试用例入口目录：`Packages/cn.etetet.{被测包}/Scripts/Hotfix/Test/`。
+- 测试专用的数据结构、Entity、Component、BT 节点或辅助模型类型必须放在被测包的 `Scripts/Model/Test/`。
+- `Scripts/Model/Share/` 只放运行时或配置编译需要的公共模型，不放只为测试声明的类型。
+- `Scripts/Hotfix/Test/` 只放测试入口和测试流程代码，不放测试专用模型数据结构。
+- 移动测试专用 C# 文件时同步移动 `.meta`，并通过 UnityBridge 或项目既有流程刷新工程引用。
 - `cn.etetet.test` 只承载测试框架、公共测试基础设施，以及测试 test 包自身代码的测试；跨包集成测试也不能放到 test 包。
 - 跨包集成测试必须放到拥有该集成场景的业务包；若确实是多业务编排，放到发起该编排的更高层业务包。
 - 类名：`{PackageType}_{TestName}_Test`。
@@ -207,6 +211,7 @@ dotnet ./Bin/ET.UnityBridge.dll '{"_t":"UnityTestRunRequest","Name":"^Unitybridg
 ## 常见错误
 
 - 把功能包自己的测试或跨包集成测试写到 `cn.etetet.test`。
+- 把测试专用数据结构、Entity、Component、BT 节点或辅助模型类型放到 `Scripts/Model/Share/` 或 `Scripts/Hotfix/Test/`。
 - 测试类名前缀与所在包 `PackageType` 不一致。
 - `await` 后直接访问旧 Entity。
 - 不同失败分支返回相同错误码。

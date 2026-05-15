@@ -17,10 +17,11 @@
 2. 写代码前先补 `Test.md` 或最小验证清单，明确测什么、怎么验、预期结果；测试必须是协程式、逻辑确定的验证。
 3. 先写最小可跑测试用例，再实现代码让测试通过。
 4. 凡是新增或修改 `ATestHandler` 测试文件，必须先加载并严格遵守 `et-test-write`；不得仅凭现有测试位置、包名直觉或临时方便决定测试落点与类名。
-5. 编写测试叠加 `et-test-write`；实现业务叠加 `et-code`；涉及异步叠加 `et-async`。
-6. 编译统一走 `et-build` 的 `dotnet build ET.sln`。
-7. 运行目标测试，再做必要回归，统一走 `et-test-run`；成功后也检查 `Logs/All.log`。
-8. 完成后更新包内 `AGENTS.md`，说明实现原理、使用方式、测试入口或本次沉淀的新规则。
+5. 测试专用的数据结构、Entity、Component、BT 节点或辅助模型类型必须放在被测包的 `Scripts/Model/Test/`，不得放到 `Scripts/Model/Share/` 或 `Scripts/Hotfix/Test/`。
+6. 编写测试叠加 `et-test-write`；实现业务叠加 `et-code`；涉及异步叠加 `et-async`。
+7. 编译统一走 `et-build` 的 `dotnet build ET.sln`。
+8. 运行目标测试，再做必要回归，统一走 `et-test-run`；成功后也检查 `Logs/All.log`。
+9. 完成后更新包内 `AGENTS.md`，说明实现原理、使用方式、测试入口或本次沉淀的新规则。
 
 ## 按需补读
 

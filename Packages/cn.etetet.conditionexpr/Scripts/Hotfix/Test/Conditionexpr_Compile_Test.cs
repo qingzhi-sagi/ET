@@ -93,7 +93,111 @@ namespace ET.Test
                 return 14;
             }
 
+            ConditionRoot namedRoot = ConditionExprCompiler.Compile("Unit1.HP > 0 || Unit2.MP < 100", 9999);
+            if (namedRoot.Children.Count != 1 || namedRoot.Children[0] is not BTSelector namedSelector || namedSelector.Children.Count != 2)
+            {
+                Log.Console("named owner root structure error");
+                return 15;
+            }
+
+            if (namedSelector.Children[0] is not BTNumericCompare namedHpCompare)
+            {
+                Log.Console($"named owner first child type error, actual: {namedSelector.Children[0].GetType().Name}");
+                return 16;
+            }
+
+            if (namedHpCompare.OwnerKey != "Unit1" || namedHpCompare.NumericType != NumericType.HP || namedHpCompare.Op != ConditionCompareOp.Greater || namedHpCompare.Value != 0)
+            {
+                Log.Console("named owner hp compare data error");
+                return 17;
+            }
+
+            if (namedSelector.Children[1] is not BTNumericCompare namedMpCompare)
+            {
+                Log.Console($"named owner second child type error, actual: {namedSelector.Children[1].GetType().Name}");
+                return 18;
+            }
+
+            if (namedMpCompare.OwnerKey != "Unit2" || namedMpCompare.NumericType != NumericType.MP || namedMpCompare.Op != ConditionCompareOp.Less || namedMpCompare.Value != 100)
+            {
+                Log.Console("named owner mp compare data error");
+                return 19;
+            }
+
+            RegisterParamCompareNode("Friend1");
+            RegisterParamCompareNode("Friend2");
+            ConditionRoot paramRoot = ConditionExprCompiler.Compile("Friend1(HP) > 0 || Friend2(HP, MP) < 100", 9999);
+            if (paramRoot.Children.Count != 1 || paramRoot.Children[0] is not BTSelector paramSelector || paramSelector.Children.Count != 2)
+            {
+                Log.Console("param root structure error");
+                return 20;
+            }
+
+            if (paramSelector.Children[0] is not Conditionexpr_ParamCompareNode friend1Compare)
+            {
+                Log.Console($"param first child type error, actual: {paramSelector.Children[0].GetType().Name}");
+                return 21;
+            }
+
+            if (friend1Compare.Params.Length != 1 || friend1Compare.Params[0] != "HP" || friend1Compare.Op != ConditionCompareOp.Greater || friend1Compare.Value != 0)
+            {
+                Log.Console("single param node data error");
+                return 22;
+            }
+
+            if (paramSelector.Children[1] is not Conditionexpr_ParamCompareNode friend2Compare)
+            {
+                Log.Console($"param second child type error, actual: {paramSelector.Children[1].GetType().Name}");
+                return 23;
+            }
+
+            if (friend2Compare.Params.Length != 2 || friend2Compare.Params[0] != "HP" || friend2Compare.Params[1] != "MP" ||
+                friend2Compare.Op != ConditionCompareOp.Less || friend2Compare.Value != 100)
+            {
+                Log.Console("multiple param node data error");
+                return 24;
+            }
+
+            try
+            {
+                ConditionExprCompiler.Compile("HP(Friend1) > 0", 9999);
+                Log.Console("numeric node params should fail");
+                return 25;
+            }
+            catch (System.Exception e)
+            {
+                if (!e.Message.Contains("params field not found"))
+                {
+                    Log.Console($"numeric node params fail message error: {e.Message}");
+                    return 26;
+                }
+            }
+
+            try
+            {
+                ConditionExprCompiler.Compile("Unit1.Friend1(HP) > 0", 9999);
+                Log.Console("node owner key without field should fail");
+                return 27;
+            }
+            catch (System.Exception e)
+            {
+                if (!e.Message.Contains("owner key field not found"))
+                {
+                    Log.Console($"owner key field fail message error: {e.Message}");
+                    return 28;
+                }
+            }
+
             return ErrorCode.ERR_Success;
+        }
+
+        private static void RegisterParamCompareNode(string variable)
+        {
+            System.Reflection.FieldInfo fieldInfo = typeof(ConditionVariableRegistry).GetField("variableNodeTypes",
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            System.Collections.Generic.Dictionary<string, System.Type> nodeTypes =
+                    (System.Collections.Generic.Dictionary<string, System.Type>)fieldInfo.GetValue(ConditionVariableRegistry.Instance);
+            nodeTypes[variable] = typeof(Conditionexpr_ParamCompareNode);
         }
     }
 }
