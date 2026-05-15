@@ -1,45 +1,41 @@
-# English: please use your browser to translate to english
+# English: please use AI to translate to english
 
-# ET10: a game development framework with AI harness support.
-1. The open-source version uses the ET License and can be used freely. However, a commercial license is still required before launching a product. Please refer to the LICENSE file for details.  
+# ET10.0 (Zhaojun)  a game development framework with AI harness support.
 
-2. Compared with the open-source version, the course edition includes extensive AI vibe coding support. Specifically, it adds the following three packages:  
-| Package Name | Description |  
-|------|------|  
-| cn.etetet.harness | Contains various AI skills and analyzers, including et-code, et-async, et-excel, et-luban, et-build, et-test, et-tdd, and more. It also includes package analyzers, await analyzers, and other analyzers mainly used to strictly constrain AI behavior. |  
-| cn.etetet.unitybridge | A framework that allows AI to send messages to Unity, used for implementing various AI-driven Unity operation skills. |  
-| cn.etetet.test | A testing framework capable of simulating the entire game environment, including full client-server interactions. For example, for a team-matching feature, you can write a test that creates five client bots and lets them send messages to perform matchmaking, thereby testing the complete client-side and server-side team logic. With the test framework, validating AI-generated work becomes extremely easy: simply ask the AI to write tests, review its own tests, and ensure all tests pass. |  
+1. The open-source version uses the ET License and is intended for learning purposes only. Redistribution of modified versions as open source is prohibited. Commercial use requires purchasing a license. Please refer to the LICENSE file for details.  
 
-3. In addition, many packages in the course edition include a large number of tests, while the open-source version does not include these test cases.  
-   
-4. Although the open-source version does not contain AI development-related features, it is still a major improvement over ET9 and is highly worth learning. Of course, the course edition is recommended, as AI-assisted development becomes dramatically easier.
+2. Purchasing a license grants access to the course edition. Compared to the open-source version, the course edition provides extensive support for AI vibe coding development through three additional packages:  
 
-5. With game development AI harness support, ET10 is far ahead of the competition! Most frameworks focus on either the client side or the server side, making it extremely inconvenient to build a complete vibe coding test framework. Only ET10, which integrates both client and server together, can provide seamless full-stack testing. It allows direct end-to-end testing across both sides, eliminating the need for traditional integration testing. Tests can directly complete both client-side and server-side logic development and validation. In practice, the only remaining workload for gameplay logic development is the UI.  
+   | Package Name | Description |
+   |------|------|
+   | `cn.etetet.harness` | Provides various AI skills and analyzers, including `et-code`, `et-async`, `et-excel`, `et-luban`, `et-build`, `et-test`, `et-tdd`, and more. It also includes package analyzers, await analyzers, and many other analyzers mainly used to strictly constrain and guide AI behavior. |
+   | `cn.etetet.unitybridge` | A Unity Skills package that supports a wide range of Unity operations, such as Refresh, Compile, Play, viewing logs, creating/modifying GameObjects, and dozens of other commands. It is also extremely easy to extend — simply describe the requirement and let the AI implement it. |
+   | `cn.etetet.test` | A testing framework capable of simulating the entire game environment and full client-server interaction flows. For example, for a team matchmaking feature, you can write a test that creates five client bots and has them send messages to form a team, allowing you to test the complete matchmaking workflow across both client and server. With this testing framework, validating AI-generated work becomes extremely easy: simply let the AI write the tests, review the tests yourself, and ensure they pass. It supports not only gameplay logic tests, but also full UI tests. |
 
-6. For usage instructions, see Book/1.1Running Guide.md.
+3. In addition, many packages in the course edition include a large number of tests, while the open-source version does not include these test suites.  
+
+4. Although the open-source version does not include AI development-related features, it has evolved significantly compared to ET9 and is still extremely valuable for learning. Of course, the course edition is highly recommended, as AI-assisted development becomes dramatically easier.  
+
+5. With AI harness support for game development, ET10 is far ahead of the competition! Most frameworks focus on either the client side or the server side, making it extremely difficult to build a complete vibe coding test framework. Only a framework like ET10, which integrates both frontend and backend together, can make dual-end testing incredibly convenient. It directly connects frontend and backend logic, eliminating the need for traditional integration testing — tests themselves complete the end-to-end workflow. As a result, the remaining workload for gameplay logic development is essentially just the UI layer.  
+
+6. For usage instructions, please refer to `Book/1.1 Getting Started Guide.md`.
 
 
-
-# ET10
-1. 开源版本使用ET License，可以随意使用，但是上线前仍然需要购买许可，具体请看LICENSE文件  
-2. 课程版相比开源版多了 ai vibe coding开发的各种支持，具体来说多了三个包：  
+# ET10.0(昭君)
+1. 开源版本使用ET License，只可以用于学习，不可二次修改开源，商业使用需要购买许可，具体请看LICENSE文件  
+2. 购买许可即可获取课程版权限，相比开源版多了 ai vibe coding开发的各种支持，具体来说多了三个包：  
    | 包名 | 详细内容 |  
    |------|------|
    | cn.etetet.harness | ai各种skills跟分析器，包括et-code, et-async, et-excel, et-luban, et-build, et-test, et-tdd等skills，还有包分析器, await分析器等等分析器, 主要用于严格限制ai行为 |  
-   | cn.etetet.unitybridge | 该包是让ai给unity发送消息的框架，用于编写各种ai操作unity的skills |  
-   | cn.etetet.test | 测试框架，可以模拟整个游戏环境，实现整条客户端跟服务器交互。比如组队功能，可以写一个test，里面创建5个客户端机器人，然后让机器人发送消息实现组队，从而可以测试整个客户端跟服务端的组队逻辑。有了test框架，ai的工作检查变得极其轻松，只需要让ai写test，然后 review自己的test，确保test执行通过即可。|  
+   | cn.etetet.unitybridge | 该包是Unity Skills, 实现了各种Unity操作, 比如 Refresh，Compile，Play，看日志，创建修改GameObject 等等几十个指令，并且极其方便扩展，提出需求让ai实现即可 |  
+   | cn.etetet.test | 测试框架，可以模拟整个游戏环境，实现整条客户端跟服务器交互。比如组队功能，可以写一个test，里面创建5个客户端机器人，然后让机器人发送消息实现组队，从而可以测试整个客户端跟服务端的组队逻辑。有了test框架，ai的工作检查变得极其轻松，只需要让ai写test，然后 review自己的test，确保test执行通过即可。不仅成实现逻辑层Test，UI Test也完全可以实现|  
 3. 另外课程版很多包都带有大量test，开源版不包含这些test  
-4. 虽然开源版本不包含ai开发相关内容，但是相比ET9已经大大优化，仍然非常值得学习。当然最好用课程版，ai开发会无比轻松  
+4. 虽然开源版本不包含ai开发相关内容，但是相比ET9已经大大进化，非常值得学习。当然最好用课程版，ai开发会无比轻松  
 5. game develop ai harness支持，ET10遥遥领先! 绝大部分框架要么客户端要么服务端，要想实现完善的vibe coding test框架是非常不舒服的，只有ET10这种前后端一起，才能极其方便开发双端test，直接打通前后端逻辑，联调都不用，test直接完成双端逻辑开发，完成联调工作。逻辑开发的工作量只剩下UI了。  
 6. 使用请参考 Book/1.1运行指南.md
 
 
 # __讨论QQ群 : 474643097__ （已满） 新手请加新手群:688514974 
-
----
-# 公司黑名单：  
-## 成都三猩元宇宙公司，拖欠员工工资，拖欠本人咨询费用  
----
 
 ---
 # 商业项目（已出现多个一个人开发的MMO上线，足以证明ET的强大）：    
