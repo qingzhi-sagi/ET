@@ -3,12 +3,8 @@ using System.Collections.Generic;
 
 namespace ET
 {
-    public class HashSetComponent<T>: HashSet<T>, IDisposable
+    public class HashSetComponent<T>: HashSet<T>, IPool
     {
-        public HashSetComponent()
-        {
-        }
-        
         public static HashSetComponent<T> Create()
         {
             return ObjectPool.Fetch(typeof (HashSetComponent<T>)) as HashSetComponent<T>;
@@ -16,8 +12,15 @@ namespace ET
 
         public void Dispose()
         {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+            
             this.Clear();
             ObjectPool.Recycle(this);
         }
+
+        public bool IsFromPool { get; set; }
     }
 }

@@ -3,12 +3,8 @@ using System.Collections.Generic;
 
 namespace ET
 {
-    public class ListComponent<T>: List<T>, IDisposable
+    public class ListComponent<T>: List<T>, IPool
     {
-        public ListComponent()
-        {
-        }
-        
         public static ListComponent<T> Create()
         {
             return ObjectPool.Fetch(typeof (ListComponent<T>)) as ListComponent<T>;
@@ -16,6 +12,11 @@ namespace ET
 
         public void Dispose()
         {
+            if (!this.IsFromPool)
+            {
+                return;
+            }
+            
             if (this.Capacity > 64) // 超过64，让gc回收
             {
                 return;
@@ -23,5 +24,7 @@ namespace ET
             this.Clear();
             ObjectPool.Recycle(this);
         }
+
+        public bool IsFromPool { get; set; }
     }
 }
