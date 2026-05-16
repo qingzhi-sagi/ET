@@ -1,3 +1,8 @@
+---
+name: et-code
+description: ET framework C# code authoring and review workflow. Use when creating or modifying Entity, Component, System, Helper, message handlers, package dependencies, assemblies, module analyzer boundaries, C# file placement, .meta handling, ECS layering, or component contract logic in WOW/ET packages.
+---
+
 # et-code - ET Code 入口
 
 ## 何时使用
@@ -19,15 +24,15 @@
 2. 检查代码是否位于 `Packages/cn.etetet.*`，并确认是否需要关注 `packagegit.json`、`PackageType.cs`。
 3. 先判断 Entity / System 分离、Handler `Run` 规范、包依赖单向、Module analyzer、禁止 hard code 是否受影响。
 4. 新增组件或判空前先确认组件存在性契约；按设计必然存在的组件不要偷偷兜底创建。
-5. 涉及 `async` / `await` / `ETTask` / `EntityRef` 时，叠加 `skills/et-async.md`。
+5. 涉及 `async` / `await` / `ETTask` / `EntityRef` 时，叠加 `../et-async/SKILL.md`。
 6. 新建类前优先复用现有结构；默认一类一文件。
 7. 严禁 AI 手工生成 `.meta` 或手工修改 `.csproj`；移动 C# 文件时必须同步移动对应 `.meta` 以保留 GUID。
 8. 严禁为了注册表、缓存、映射关系随手新增静态可变字段；先确认生命周期与 owner。
 
 ## 快速分流
 
-- 文件、`.meta`、包落点、包层级：补读 `skills/references/et-code-rules.md`
-- ECS 数据/逻辑边界、组件契约、Module analyzer：补读 `skills/references/et-code-rules.md`
+- 文件、`.meta`、包落点、包层级：补读 `references/et-code-rules.md`
+- ECS 数据/逻辑边界、组件契约、Module analyzer：补读 `references/et-code-rules.md`
 - `await` 后 Entity 访问、`EntityRef<T>`、`NewContext(...)`：叠加 `et-async`
 - 编译或分析器验证：转 `et-build`
 

@@ -1,3 +1,8 @@
+---
+name: et-luban
+description: ET Luban export workflow. Use when exporting generated C# config/data code, refreshing aggregated luban.conf, validating CodeMode outputs, or troubleshooting ET.ExcelExporter, LubanGen.ps1, table definitions, beans, enums, Defines, and Luban export failures.
+---
+
 # et-luban - Luban 导出入口
 
 ## 何时使用
@@ -29,4 +34,4 @@
 
 ## 按需补读
 
-- `skills/references/et-luban-export.md`：导出流程、结果落点、常见失败排查
+- `references/et-luban-export.md`：导出流程、结果落点、常见失败排查

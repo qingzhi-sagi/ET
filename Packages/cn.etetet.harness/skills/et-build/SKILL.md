@@ -1,3 +1,8 @@
+---
+name: et-build
+description: ET build, analyzer, proto export, server startup, and publish workflow. Use when compiling WOW with dotnet build ET.sln, exporting Proto to C#, starting ET.App, publishing, or validating analyzer/build results.
+---
+
 # et-build - ET Build 入口
 
 ## 何时使用
@@ -29,6 +34,6 @@
 
 ## 按需补读
 
-- `skills/references/et-build-commands.md`：命令、前置条件、常见排查
-- `skills/et-luban.md`：Luban 配置导出
-- `skills/et-test-run.md`：测试执行
+- `references/et-build-commands.md`：命令、前置条件、常见排查
+- `../et-luban/SKILL.md`：Luban 配置导出
+- `../../../cn.etetet.test/AGENTS.md`：测试执行路由

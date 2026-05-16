@@ -5,8 +5,10 @@
 ## Contents
 
 - `skills/index.md`: skill routing index.
-- `skills/*.md`: lightweight skill entries.
-- `skills/references/*.md`: detailed rules and command references.
+- `skills/{skill-name}/SKILL.md`: Codex-compatible skill entries.
+- `skills/{skill-name}/references/*.md`: detailed rules and command references loaded on demand.
+- Test skill routing lives in `Packages/cn.etetet.test/AGENTS.md`; harness only routes to that package entry.
+- UnityBridge skill routing lives in `Packages/cn.etetet.unitybridge/AGENTS.md`; harness only routes to that package entry.
 
 ## Install Notes
 

@@ -1,3 +1,8 @@
+---
+name: et-unitybridge
+description: UnityBridge workflow for AI operations in Unity Editor. Use when checking UnityBridge connectivity, Unity compile or PlayMode state, running deferred UnityBridge commands, operating assets/scenes/GameObjects/Inspector/Prefabs/GameView/screenshots, running Editor tests, or troubleshooting UnityBridge responses.
+---
+
 # et-unitybridge - UnityBridge / AI 操作 Unity 入口
 
 ## 何时使用
@@ -47,5 +52,5 @@ dotnet ./Bin/ET.UnityBridge.dll '{"_t":"HostState"}'
 
 ## 按需补读
 
-- `skills/references/et-unitybridge-ai-ops.md`：AI 操作 Unity 的任务路由、命令发现、省 token 操作模式。
-- `skills/references/et-unitybridge-cli.md`：CLI 参数、等待、返回值解读、常见错误。
+- `references/et-unitybridge-ai-ops.md`：AI 操作 Unity 的任务路由、命令发现、省 token 操作模式。
+- `references/et-unitybridge-cli.md`：CLI 参数、等待、返回值解读、常见错误。

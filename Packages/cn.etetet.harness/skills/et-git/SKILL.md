@@ -1,3 +1,8 @@
+---
+name: et-git
+description: ET git workflow for preparing commits and reviewing changes. Use when checking git status or diff, filtering unrelated files, staging task-scoped changes, writing Chinese commit messages, or synchronizing with remotes using rebase instead of merge.
+---
+
 # et-git - ET Git 入口
 
 > 红线：禁止直接使用 `git pull`。远端同步必须使用 `git pull --rebase`，或先 `git fetch` 再 `git rebase`。若与远端冲突，只能用 `rebase` 处理，禁止 `merge`。
@@ -36,4 +41,4 @@
 
 ## 按需补读
 
-- `skills/references/et-git-workflow.md`：提交前检查、变更筛选、中文提交信息、rebase 规范与风险操作
+- `references/et-git-workflow.md`：提交前检查、变更筛选、中文提交信息、rebase 规范与风险操作

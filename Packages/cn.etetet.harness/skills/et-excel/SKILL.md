@@ -1,3 +1,8 @@
+---
+name: et-excel
+description: ET Excel MCP workflow for reading, writing, styling, transforming, and inspecting xlsx data. Use when operating Excel cells, ranges, sheets, formulas, charts, merges, batch data import/export, or editing Luban source spreadsheets before export.
+---
+
 # et-excel - ET Excel 入口
 
 ## 何时使用
@@ -29,4 +34,4 @@
 
 ## 按需补读
 
-- `skills/references/et-excel-cli.md`：工具选择、`pwsh` JSON 传参、常用示例
+- `references/et-excel-cli.md`：工具选择、`pwsh` JSON 传参、常用示例

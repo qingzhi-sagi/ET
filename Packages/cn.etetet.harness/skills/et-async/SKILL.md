@@ -1,3 +1,8 @@
+---
+name: et-async
+description: ET async and EntityRef safety workflow. Use when adding, modifying, or reviewing async/await, ETTask, generic ETTask results, ETCancellationToken, NewContext, concurrent waits, handler Run async safety, or any Entity access after await in WOW/ET code or tests.
+---
+
 # et-async - ET Async 入口
 
 ## 何时使用
@@ -24,7 +29,7 @@
 
 ## 快速分流
 
-- `EntityRef` 正误示例、并发等待、取消控制：补读 `skills/references/et-async-rules.md`
+- `EntityRef` 正误示例、并发等待、取消控制：补读 `references/et-async-rules.md`
 - Handler `Run`、组件契约、包结构：叠加 `et-code`
 - 测试里的异步等待：叠加 `et-test-write`
 
