@@ -19,7 +19,7 @@
         }
 
         // 加到mailbox
-        public static void Add(this MailBoxComponent self, int fromFiber, MessageObject messageObject)
+        public static void Add(this MailBoxComponent self, long fromFiber, MessageObject messageObject)
         {
             // 根据mailboxType进行分发处理
             EventSystem.Instance.Invoke(self.MailBoxType, new MailBoxInvoker() {MailBoxComponent = self, MessageObject = messageObject, FromFiber = fromFiber});
@@ -28,7 +28,7 @@
 
     public struct MailBoxInvoker
     {
-        public int FromFiber { get; set; }
+        public long FromFiber { get; set; }
         public MessageObject MessageObject { get; set; }
         public EntityRef<MailBoxComponent> MailBoxComponent { get; set; }
     }

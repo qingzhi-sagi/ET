@@ -6,7 +6,7 @@ namespace ET.Server
     {
         protected abstract ETTask Run(E entity, Message message);
 
-        public async ETTask Handle(Entity entity, int fromFiber, MessageObject actorMessage)
+        public async ETTask Handle(Entity entity, long fromFiber, MessageObject actorMessage)
         {
             Fiber fiber = entity.Fiber();
             if (actorMessage is not Message message)
@@ -45,7 +45,7 @@ namespace ET.Server
     {
         protected abstract ETTask Run(E unit, Request request, Response response);
 
-        public async ETTask Handle(Entity entity, int fromFiber, MessageObject actorMessage)
+        public async ETTask Handle(Entity entity, long fromFiber, MessageObject actorMessage)
         {
             try
             {

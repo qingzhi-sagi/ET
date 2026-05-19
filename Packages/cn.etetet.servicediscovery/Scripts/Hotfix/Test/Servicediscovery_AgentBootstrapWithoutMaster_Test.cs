@@ -147,7 +147,7 @@ namespace ET.Test
             }
 
             Fiber agentFiber = ServiceDiscovery_HA_TestHelper.GetServiceDiscoveryAgentFiber(testFiber);
-            int expectedAgentFiberId = ServiceDiscovery_HA_TestHelper.GetServiceDiscoveryAgentFiberId(testFiber);
+            long expectedAgentFiberId = ServiceDiscovery_HA_TestHelper.GetServiceDiscoveryAgentFiberId(testFiber);
             if (agentFiber.Id != expectedAgentFiberId)
             {
                 Log.Console($"agent fiber by zone agent id mismatch, expected: {expectedAgentFiberId}, actual: {agentFiber.Id}");

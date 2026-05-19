@@ -19,7 +19,7 @@ namespace ET.Test
         public const int FastLeaseRenewIntervalMs = 200;
         private const long WaitPollIntervalMs = 50;
 
-        public static int GetFiberId(int zone, int localSlot)
+        public static long GetFiberId(int zone, int localSlot)
         {
             return FiberIdHelper.Encode(zone, localSlot);
         }
@@ -54,7 +54,7 @@ namespace ET.Test
             return CreateActorId(fiber.Zone, address, localSlot);
         }
 
-        public static int GetServiceDiscoveryAgentFiberId(Fiber parent)
+        public static long GetServiceDiscoveryAgentFiberId(Fiber parent)
         {
             return parent.GetSingleton<ProcessFiberAddressSingleton>().Get(SceneType.ServiceDiscoveryAgent).Fiber;
         }
@@ -593,7 +593,7 @@ namespace ET.Test
                 string agentName = $"ServiceDiscoveryAgent@{process}@{Options.Instance.ReplicaIndex}";
                 try
                 {
-                    int agentFiberId = await parent.CreateFiber(SchedulerType.ThreadPool, parent.Zone, IdGenerater.Instance.GenerateId(),
+                    long agentFiberId = await parent.CreateFiber(SchedulerType.ThreadPool, parent.Zone, IdGenerater.Instance.GenerateId(),
                         SceneType.ServiceDiscoveryAgent, agentName);
                     agentFiber = parent.GetFiber(agentFiberId);
                 }

@@ -61,7 +61,7 @@ namespace ET.Test
             singleton.Awake(8201);
             fiber.AddSingleton(singleton);
 
-            int childId = await fiber.CreateFiber(SchedulerType.ThreadPool, IdGenerater.Instance.GenerateId(), SceneType.TestEmpty,
+            long childId = await fiber.CreateFiber(SchedulerType.ThreadPool, IdGenerater.Instance.GenerateId(), SceneType.TestEmpty,
                 "ForcedParentChild");
             Fiber child = fiber.GetFiber(childId);
             try

@@ -7,7 +7,7 @@ namespace ET.Test
     [SkipAwaitEntityCheck]
     internal static class Actorlocation_TestHelper
     {
-        public static ActorId CreateActorId(Fiber fiber, int fiberId, int instanceId)
+        public static ActorId CreateActorId(Fiber fiber, long fiberId, long instanceId)
         {
             Address address = fiber.GetSingleton<AddressSingleton>().InnerAddress;
             return new ActorId(address, new FiberInstanceId(fiberId, instanceId));

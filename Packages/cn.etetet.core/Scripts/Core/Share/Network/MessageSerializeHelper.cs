@@ -83,8 +83,8 @@ namespace ET
                 {
                     memoryStream.Seek(Packet.FiberInstanceIdLength + Packet.OpcodeLength, SeekOrigin.Begin);
                     byte[] buffer = memoryStream.GetBuffer();
-                    fiberInstanceId.Fiber = BitConverter.ToInt32(buffer, Packet.FiberInstanceIdIndex);
-                    fiberInstanceId.InstanceId = BitConverter.ToInt32(buffer, Packet.FiberInstanceIdIndex + 4);
+                    fiberInstanceId.Fiber = BitConverter.ToInt64(buffer, Packet.FiberInstanceIdIndex);
+                    fiberInstanceId.InstanceId = BitConverter.ToInt64(buffer, Packet.FiberInstanceIdIndex + 8);
                     ushort opcode = BitConverter.ToUInt16(buffer, Packet.FiberInstanceIdLength);
                     
                     Type type = OpcodeType.Instance.GetType(opcode);

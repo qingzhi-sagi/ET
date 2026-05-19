@@ -15,7 +15,7 @@ namespace ET
         public const int MinPacketSize = 2;
         public const int OpcodeLength = 2;
         public const int FiberInstanceIdIndex = 0;
-        public const int FiberInstanceIdLength = 8;
+        public const int FiberInstanceIdLength = 16;
 
         public ushort Opcode;
         public long ActorId;

@@ -16,7 +16,7 @@ namespace ET
         [MemoryPackOrder(0)]
         public int RpcId { get; set; }
         [MemoryPackOrder(1)]
-        public int OwnerFiberId { get; set; }
+        public long OwnerFiberId { get; set; }
         [MemoryPackOrder(2)]
         public string Address { get; set; }
         /// <summary>

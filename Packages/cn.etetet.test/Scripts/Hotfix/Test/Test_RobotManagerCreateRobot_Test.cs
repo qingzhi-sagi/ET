@@ -13,7 +13,7 @@ namespace ET.Test
 
             root.AddComponent<ProcessInnerSender>();
             RobotManagerComponent robotManagerComponent = root.AddComponent<RobotManagerComponent>();
-            int robotId = await robotManagerComponent.NewRobot(SchedulerType.Parent, nameof(Test_RobotManagerCreateRobot_Test));
+            long robotId = await robotManagerComponent.NewRobot(SchedulerType.Parent, nameof(Test_RobotManagerCreateRobot_Test));
 
             Fiber robotFiber = testFiber.GetFiber(robotId);
             if (robotFiber == null)

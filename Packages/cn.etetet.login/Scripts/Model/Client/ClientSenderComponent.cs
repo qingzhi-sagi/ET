@@ -3,7 +3,7 @@
     [ComponentOf(typeof(Scene))]
     public class ClientSenderComponent: Entity, IAwake, IDestroy
     {
-        public int fiberId;
+        public long fiberId;
 
         public FiberInstanceId FiberInstanceId;
     }

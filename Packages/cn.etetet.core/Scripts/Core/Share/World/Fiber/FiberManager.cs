@@ -45,9 +45,9 @@ namespace ET
         
         private readonly ThreadSynchronizationContext context = new();
         
-        private readonly ConcurrentDictionary<int, FiberMonitorInfo> fiberMonitorInfos = new();
+        private readonly ConcurrentDictionary<long, FiberMonitorInfo> fiberMonitorInfos = new();
         
-        public void AddMonitor(int fiberId, ref FiberMonitorInfo fiberMonitorInfo)
+        public void AddMonitor(long fiberId, ref FiberMonitorInfo fiberMonitorInfo)
         {
             //if (fiberMonitorInfo.UpdateTimeUsed + fiberMonitorInfo.LateUpdateTimeUsed > 5)
             //{
@@ -58,7 +58,7 @@ namespace ET
 #endif
         }
         
-        public void RemoveMonitor(int fiberId)
+        public void RemoveMonitor(long fiberId)
         {
 #if !UNITY
             this.fiberMonitorInfos.TryRemove(fiberId, out _);
@@ -112,7 +112,7 @@ namespace ET
             (this.mainFiber as IScheduler)?.Dispose();
         }
 
-        public async ETTask<int> CreateMainFiber(int sceneType, string sceneName)
+        public async ETTask<long> CreateMainFiber(int sceneType, string sceneName)
         {
             if (this.mainFiber != null)
             {
@@ -132,7 +132,7 @@ namespace ET
         /// <param name="sceneType">场景类型</param>
         /// <param name="name">纤程名称</param>
         /// <param name="parent"></param>
-        private async ETTask<Fiber> CreateFiberInternal(int fiberId, SchedulerType schedulerType, long rootId, int zone, int sceneType,
+        private async ETTask<Fiber> CreateFiberInternal(long fiberId, SchedulerType schedulerType, long rootId, int zone, int sceneType,
             string name, Fiber parent)
         {
             if (sceneType == 0)
@@ -141,7 +141,7 @@ namespace ET
             }
             try
             {
-                int parentId = parent?.Id ?? 0;
+                long parentId = parent?.Id ?? 0;
                 Log.Debug($"create fiber: {name} {fiberId} {zone} {sceneType} {schedulerType} {parentId}");
                 
                 // 如果调度器是父fiber，那么日志也是父fiber的日志
@@ -219,7 +219,7 @@ namespace ET
         internal async ETTask<Fiber> CreateFiber(SchedulerType schedulerType, int zone, long rootId, int sceneType, string name, Fiber parent)
         {
             int localSlot = this.AllocateLocalSlot(zone);
-            int fiberId = FiberIdHelper.Encode(zone, localSlot);
+            long fiberId = FiberIdHelper.Encode(zone, localSlot);
             return await this.CreateFiberInternal(fiberId, schedulerType, rootId, zone, sceneType, name, parent);
         }
     }

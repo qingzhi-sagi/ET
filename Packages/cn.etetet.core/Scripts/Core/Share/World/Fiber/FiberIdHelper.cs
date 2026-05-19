@@ -4,30 +4,30 @@ namespace ET
 {
     public static class FiberIdHelper
     {
-        public const int ZoneBits = 12;
-        public const int LocalSlotBits = 20;
-        public const int MaxZone = (1 << ZoneBits) - 1;
-        public const int MaxLocalSlot = (1 << LocalSlotBits) - 1;
+        public const int ZoneBits = 32;
+        public const int LocalSlotBits = 32;
+        public const int MaxZone = int.MaxValue;
+        public const int MaxLocalSlot = int.MaxValue;
         public const int ConfigLocalSlotMax = 99999;
         public const int DynamicLocalSlotStart = 100000;
-        public const int ReservedLocalSlotStart = 0xFFFF0;
+        public const int ReservedLocalSlotStart = MaxLocalSlot - 15;
 
-        public static int Encode(int zone, int localSlot)
+        public static long Encode(int zone, int localSlot)
         {
             ValidateZone(zone);
             ValidateLocalSlot(localSlot);
-            uint encoded = ((uint)zone << LocalSlotBits) | (uint)localSlot;
-            return unchecked((int)encoded);
+            ulong encoded = ((ulong)(uint)zone << LocalSlotBits) | (uint)localSlot;
+            return unchecked((long)encoded);
         }
 
-        public static int DecodeZone(int fiberId)
+        public static int DecodeZone(long fiberId)
         {
-            return (int)((uint)fiberId >> LocalSlotBits);
+            return (int)((ulong)fiberId >> LocalSlotBits);
         }
 
-        public static int DecodeLocalSlot(int fiberId)
+        public static int DecodeLocalSlot(long fiberId)
         {
-            return (int)((uint)fiberId & MaxLocalSlot);
+            return (int)((ulong)fiberId & uint.MaxValue);
         }
 
         public static bool IsReservedLocalSlot(int localSlot)

@@ -11,7 +11,7 @@ package ET;
 message Main2NetClient_Login // IRequest
 {
 	int32 RpcId = 1;
-	int32 OwnerFiberId = 2;
+	int64 OwnerFiberId = 2;
 	string Address = 3;
 	string Account = 4;		// 账号
 	string Password = 5; 	// 密码

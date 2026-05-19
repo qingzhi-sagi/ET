@@ -18,7 +18,7 @@ namespace ET
             ObjectPool.Recycle(this);
         }
         
-        public int FromFiber;
+        public long FromFiber;
         public ActorId ActorId;
         public IMessage MessageObject;
         

@@ -66,9 +66,9 @@ namespace ET
     public partial struct FiberInstanceId: IEquatable<FiberInstanceId>
     {
         [MemoryPackOrder(0)]
-        public int Fiber;
+        public long Fiber;
         [MemoryPackOrder(1)]
-        public int InstanceId;
+        public long InstanceId;
         
         public bool Equals(FiberInstanceId other)
         {
@@ -85,13 +85,13 @@ namespace ET
             return HashCode.Combine(this.Fiber, this.InstanceId);
         }
         
-        public FiberInstanceId(int fiber, int instanceId)
+        public FiberInstanceId(long fiber, long instanceId)
         {
             this.Fiber = fiber;
             this.InstanceId = instanceId;
         }
         
-        public FiberInstanceId(int fiber)
+        public FiberInstanceId(long fiber)
         {
             this.Fiber = fiber;
             this.InstanceId = 1;

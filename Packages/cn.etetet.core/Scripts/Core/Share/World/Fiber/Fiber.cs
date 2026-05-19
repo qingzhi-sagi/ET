@@ -40,7 +40,7 @@ namespace ET
         
         public bool IsDisposed { get; private set; }
         
-        public int Id { get; }
+        public long Id { get; }
 
         public int Zone => FiberIdHelper.DecodeZone(this.Id);
 
@@ -50,13 +50,13 @@ namespace ET
         
         public SchedulerType SchedulerType { get; }
         
-        public int ParentFiberId { get; }
+        public long ParentFiberId { get; }
 
         private FiberMonitorInfo fiberMonitorInfo;
 
-        private int instanceIdGenerator = 1;
+        private long instanceIdGenerator = 1;
         
-        public int NewInstanceId()
+        public long NewInstanceId()
         {
             return instanceIdGenerator++;
         }
@@ -84,11 +84,11 @@ namespace ET
         
         private readonly Queue<Fiber> schedulerQueue = new();
 
-        private readonly Dictionary<int, Fiber> children = new();
+        private readonly Dictionary<long, Fiber> children = new();
         
         private Dictionary<Type, object> singletons;
         
-        internal Fiber(int id, long rootId, int sceneType, string name, SchedulerType schedulerType, Fiber parent)
+        internal Fiber(long id, long rootId, int sceneType, string name, SchedulerType schedulerType, Fiber parent)
         {
             this.Id = id;
             this.SchedulerType = schedulerType;
@@ -222,7 +222,7 @@ namespace ET
             return fiber;
         }
 
-        public async ETTask<int> CreateFiber(SchedulerType schedulerType, long rootId, int sceneType, string name)
+        public async ETTask<long> CreateFiber(SchedulerType schedulerType, long rootId, int sceneType, string name)
         {
             schedulerType = this.NormalizeChildSchedulerType(schedulerType);
             
@@ -231,7 +231,7 @@ namespace ET
             return fiber.Id;
         }
         
-        public async ETTask<int> CreateFiber(SchedulerType schedulerType, int zone, long rootId, int sceneType, string name)
+        public async ETTask<long> CreateFiber(SchedulerType schedulerType, int zone, long rootId, int sceneType, string name)
         {
             schedulerType = this.NormalizeChildSchedulerType(schedulerType);
 
@@ -240,7 +240,7 @@ namespace ET
             return fiber.Id;
         }
         
-        public async ETTask RemoveFiber(int fiberId)
+        public async ETTask RemoveFiber(long fiberId)
         {
             if (!this.children.Remove(fiberId, out Fiber fiber))
             {
@@ -257,7 +257,7 @@ namespace ET
             
             if (fiber.SchedulerType == SchedulerType.Parent)
             {
-                foreach (int child in fiber.children.Keys.ToArray())
+                foreach (long child in fiber.children.Keys.ToArray())
                 {
                     await fiber.RemoveFiber(child);
                 }
@@ -275,7 +275,7 @@ namespace ET
 
                 async ETTask FiberDestroy()
                 {
-                    foreach (int child in fiber.children.Keys.ToArray())
+                    foreach (long child in fiber.children.Keys.ToArray())
                     {
                         await fiber.RemoveFiber(child);
                     }
@@ -290,13 +290,13 @@ namespace ET
 
         public async ETTask RemoveFibers()
         {
-            foreach (int i in this.children.Keys.ToArray())
+            foreach (long i in this.children.Keys.ToArray())
             {
                 await this.RemoveFiber(i);
             }
         }
         
-        public Fiber GetFiber(int id)
+        public Fiber GetFiber(long id)
         {
             if (!this.children.TryGetValue(id, out Fiber fiber))
             {
@@ -437,7 +437,7 @@ namespace ET
             FiberManager.Instance?.RemoveMonitor(this.Id);
             this.singletons?.Clear();
             
-            foreach (int child in this.children.Keys.ToArray())
+            foreach (long child in this.children.Keys.ToArray())
             {
                 this.RemoveFiber(child).Coroutine();
             }

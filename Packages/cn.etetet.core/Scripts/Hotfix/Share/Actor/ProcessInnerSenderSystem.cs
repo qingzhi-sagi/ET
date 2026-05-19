@@ -42,7 +42,7 @@ namespace ET
 
             FiberInstanceId fiberInstanceId = messageInfo.FiberInstanceId;
             MessageObject message = messageInfo.MessageObject;
-            int fromFiber = fiberInstanceId.Fiber;
+            long fromFiber = fiberInstanceId.Fiber;
             
             Entity entity = self.Fiber().Mailboxes.Get(fiberInstanceId.InstanceId);
             MailBoxComponent mailBoxComponent = entity as MailBoxComponent;
@@ -85,7 +85,7 @@ namespace ET
             self.SetResult(response);
         }
         
-        public static void Reply(this ProcessInnerSender self, int fromFiber, IResponse message)
+        public static void Reply(this ProcessInnerSender self, long fromFiber, IResponse message)
         {
             self.SendInner(new FiberInstanceId(fromFiber, 0), (MessageObject)message);
         }

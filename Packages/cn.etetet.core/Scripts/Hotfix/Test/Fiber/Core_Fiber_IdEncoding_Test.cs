@@ -11,7 +11,7 @@ namespace ET.Test
 
             Fiber first = await parent.CreateFiber(zone, IdGenerater.Instance.GenerateId(), SceneType.TestEmpty,
                 "FiberIdEncodingFirst");
-            int firstId = first.Id;
+            long firstId = first.Id;
             int firstLocalSlot = first.LocalSlot;
 
             if (first.Zone != zone)
@@ -44,7 +44,7 @@ namespace ET.Test
 
             Fiber second = await parent.CreateFiber(zone, IdGenerater.Instance.GenerateId(), SceneType.TestEmpty,
                 "FiberIdEncodingSecond");
-            int secondId = second.Id;
+            long secondId = second.Id;
             int secondLocalSlot = second.LocalSlot;
 
             try

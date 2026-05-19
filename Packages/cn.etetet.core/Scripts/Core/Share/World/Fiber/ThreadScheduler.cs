@@ -10,11 +10,11 @@ namespace ET
     {
         private bool isDisposed;
         
-        private readonly ConcurrentDictionary<int, Thread> dictionary = new();
+        private readonly ConcurrentDictionary<long, Thread> dictionary = new();
 
         private void Update(Fiber fiber)
         {
-            int fiberId = fiber.Id;
+            long fiberId = fiber.Id;
             while (true)
             {
                 if (this.isDisposed)

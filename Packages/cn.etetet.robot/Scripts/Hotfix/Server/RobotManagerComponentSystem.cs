@@ -13,12 +13,12 @@ namespace ET.Server
         [EntitySystem]
         private static void Destroy(this RobotManagerComponent self)
         {
-            async ETTask Remove(int f)
+            async ETTask Remove(long f)
             {
                 await self.Fiber().RemoveFiber(f);
             }
             
-            foreach (int fiberId in self.robots.Values)
+            foreach (long fiberId in self.robots.Values)
             {
                 Remove(fiberId).Coroutine();
             }
@@ -26,7 +26,7 @@ namespace ET.Server
 
         public static bool GetRobotActorId(this RobotManagerComponent self, string account, out ActorId actorId)
         {
-            if (!self.robots.TryGetValue(account, out int fiberId))
+            if (!self.robots.TryGetValue(account, out long fiberId))
             {
                 actorId = default;
                 return false;
@@ -38,11 +38,11 @@ namespace ET.Server
         /// <summary>
         /// 创建机器人，await之后，机器人则登录成功
         /// </summary>
-        public static async ETTask<int> NewRobot(this RobotManagerComponent self, SchedulerType schedulerType, string account)
+        public static async ETTask<long> NewRobot(this RobotManagerComponent self, SchedulerType schedulerType, string account)
         {
             EntityRef<RobotManagerComponent> selfRef = self;
             string routerManagerAddress = GetRouterManagerAddress(self);
-            int robot = await self.Fiber().CreateFiber(schedulerType, IdGenerater.Instance.GenerateId(), SceneType.Client, account);
+            long robot = await self.Fiber().CreateFiber(schedulerType, IdGenerater.Instance.GenerateId(), SceneType.Client, account);
             self = selfRef;
             ProcessInnerSender processInnerSender = self.Root().GetComponent<ProcessInnerSender>();
             Robot_LoginRequest robotLoginRequest = Robot_LoginRequest.Create();

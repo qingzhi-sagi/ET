@@ -12,7 +12,7 @@ namespace ET
     [AllowInstance]
     public class MessageQueue: Singleton<MessageQueue>, ISingletonAwake
     {
-        private readonly ConcurrentDictionary<int, ConcurrentQueue<MessageInfo>> messages = new();
+        private readonly ConcurrentDictionary<long, ConcurrentQueue<MessageInfo>> messages = new();
         
         public void Awake()
         {
@@ -47,13 +47,13 @@ namespace ET
             }
         }
 
-        public void AddQueue(int fiberId)
+        public void AddQueue(long fiberId)
         {
             var queue = new ConcurrentQueue<MessageInfo>();
             this.messages[fiberId] = queue;
         }
         
-        public void RemoveQueue(int fiberId)
+        public void RemoveQueue(long fiberId)
         {
             this.messages.TryRemove(fiberId, out _);
         }

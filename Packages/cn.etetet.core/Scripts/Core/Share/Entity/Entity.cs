@@ -47,7 +47,7 @@ namespace ET
 
         [MemoryPackIgnore]
         [BsonIgnore]
-        public int InstanceId { get; protected set; }
+        public long InstanceId { get; protected set; }
 
         [BsonIgnore]
         private EntityStatus status = EntityStatus.None;

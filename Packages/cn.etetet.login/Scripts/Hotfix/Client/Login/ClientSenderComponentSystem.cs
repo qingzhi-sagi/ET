@@ -25,7 +25,7 @@ namespace ET.Client
                 return;
             }
 
-            int fiberId = self.fiberId;
+            long fiberId = self.fiberId;
             self.fiberId = 0;
             await self.Fiber().RemoveFiber(fiberId);
         }

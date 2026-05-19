@@ -13,7 +13,7 @@ namespace ET.Server
             self.Fiber().RemoveFiber(self.FiberId).Coroutine();
         }
         [EntitySystem]
-        private static void Awake(this MapCopy self, int fiberId)
+        private static void Awake(this MapCopy self, long fiberId)
         {
             self.FiberId = fiberId;
         }
@@ -59,10 +59,24 @@ namespace ET.Server
         
         public static async ETTask RemoveCopy(this MapInfo self, long id)
         {
-            EntityRef<MapInfo> selfRef = self;
-            await self.Fiber().RemoveFiber((int)id);
-            self = selfRef;
             MapCopy mapCopy = self.GetChild<MapCopy>(id);
+            if (mapCopy == null)
+            {
+                return;
+            }
+            long fiberId = mapCopy.FiberId;
+            EntityRef<MapInfo> selfRef = self;
+            await self.Fiber().RemoveFiber(fiberId);
+            self = selfRef;
+            if (self == null)
+            {
+                return;
+            }
+            mapCopy = self.GetChild<MapCopy>(id);
+            if (mapCopy == null)
+            {
+                return;
+            }
             
             Log.Debug($"remove map copy: {self.MapName}:{mapCopy.Id}");
             
@@ -134,9 +148,9 @@ namespace ET.Server
             EntityRef<MapInfo> selfRef = self;
             
             // 创建Copy Fiber
-            int fiberId = await self.Fiber().CreateFiber(SchedulerType.ThreadPool, id, SceneType.Map, $"{self.MapName}@{id}");
+            long fiberId = await self.Fiber().CreateFiber(SchedulerType.ThreadPool, id, SceneType.Map, $"{self.MapName}@{id}");
             self = selfRef;
-            return self.AddChildWithId<MapCopy, int>(id, fiberId);
+            return self.AddChildWithId<MapCopy, long>(id, fiberId);
         }
     }
     

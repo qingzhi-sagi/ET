@@ -3,6 +3,6 @@
     [ComponentOf(typeof(Scene))]
     public class FiberParentComponent: Entity, IAwake
     {
-        public int ParentFiberId { get; set; }
+        public long ParentFiberId { get; set; }
     }
 }

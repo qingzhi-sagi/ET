@@ -70,7 +70,7 @@ namespace ET
 		public static void WriteTo(this byte[] bytes, int offset, FiberInstanceId fiberInstanceId)
 		{
 			bytes.WriteTo(offset, fiberInstanceId.Fiber);
-			bytes.WriteTo(offset + 4, fiberInstanceId.InstanceId);
+			bytes.WriteTo(offset + 8, fiberInstanceId.InstanceId);
 		}
 		
 		public static void WriteTo(this byte[] bytes, int offset, int num)

@@ -79,7 +79,7 @@ namespace ET
             this.messageHandlers[type].Add(handler);
         }
 
-        public async ETTask HandleAsync(Entity entity, int fromFiber, MessageObject message)
+        public async ETTask HandleAsync(Entity entity, long fromFiber, MessageObject message)
         {
             List<MessageDispatcherInfo> list;
             if (!this.messageHandlers.TryGetValue(message.GetType(), out list))
@@ -101,7 +101,7 @@ namespace ET
             }
         }
         
-        public void Handle(Entity entity, int fromFiber, MessageObject message)
+        public void Handle(Entity entity, long fromFiber, MessageObject message)
         {
             List<MessageDispatcherInfo> list;
             if (!this.messageHandlers.TryGetValue(message.GetType(), out list))

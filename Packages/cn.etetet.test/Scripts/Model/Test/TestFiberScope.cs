@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using ET.Server;
 
 namespace ET.Test
 {
@@ -18,6 +20,7 @@ namespace ET.Test
         {
             TestFiberScope scope = new(fiber);
             int zone = AllocateZone(fiber);
+            EnsureStartZoneConfig(fiber, zone);
             scope.TestFiber = await fiber.CreateFiber(zone, IdGenerater.Instance.GenerateId(), sceneType, testName);
             if (sceneType == SceneType.TestEmpty)
             {
@@ -48,6 +51,60 @@ namespace ET.Test
 
             allocator.Zone = zone + 1;
             return zone;
+        }
+
+        private static void EnsureStartZoneConfig(Fiber fiber, int zone)
+        {
+            if (fiber == null)
+            {
+                throw new ArgumentNullException(nameof(fiber));
+            }
+
+            FiberIdHelper.ValidateZone(zone);
+
+            StartZoneConfigCategory category = fiber.GetSingleton<StartZoneConfigCategory>();
+            if (category == null)
+            {
+                throw new Exception("StartZoneConfigCategory is not initialized before creating test fiber.");
+            }
+
+            lock (category)
+            {
+                if (category.GetOrDefault(zone) != null)
+                {
+                    return;
+                }
+
+                StartZoneConfig template = GetTemplateConfig(category);
+                category.GetAll()[zone] = new StartZoneConfig(zone, template.ZoneType, template.DBConnection, template.DBName);
+            }
+        }
+
+        private static StartZoneConfig GetTemplateConfig(StartZoneConfigCategory category)
+        {
+            StartZoneConfig template = category.GetOrDefault(0);
+            if (IsUsableTemplate(template))
+            {
+                return template;
+            }
+
+            Dictionary<int, StartZoneConfig> configs = category.GetAll();
+            foreach (StartZoneConfig config in configs.Values)
+            {
+                if (IsUsableTemplate(config))
+                {
+                    return config;
+                }
+            }
+
+            throw new Exception("StartZoneConfigCategory has no usable DB template for test zone mock.");
+        }
+
+        private static bool IsUsableTemplate(StartZoneConfig config)
+        {
+            return config != null &&
+                   !string.IsNullOrEmpty(config.DBConnection) &&
+                   !string.IsNullOrEmpty(config.DBName);
         }
 
         private static TestZoneAllocatorComponent GetAllocator(Fiber fiber)

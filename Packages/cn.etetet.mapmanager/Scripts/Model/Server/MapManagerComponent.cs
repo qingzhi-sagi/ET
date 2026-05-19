@@ -22,7 +22,7 @@ namespace ET.Server
     
     // 地图副本或者分线，一个MapCopy对应一个Fiber
     [ChildOf(typeof(MapInfo))]
-    public class MapCopy: Entity, IAwake<int>, IDestroy
+    public class MapCopy: Entity, IAwake<long>, IDestroy
     {
         // 该副本已经进入的所有玩家
         public HashSet<long> Players = new();
@@ -34,7 +34,7 @@ namespace ET.Server
 
         public long MergeTime = 0;
 
-        public int FiberId;
+        public long FiberId;
     }
     
     

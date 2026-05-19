@@ -52,7 +52,7 @@ namespace ET.Test
                     return 8;
                 }
 
-                int createdAgentId = await testFiber.CreateFiber(SchedulerType.ThreadPool, testFiber.Zone,
+                long createdAgentId = await testFiber.CreateFiber(SchedulerType.ThreadPool, testFiber.Zone,
                     IdGenerater.Instance.GenerateId(), SceneType.ServiceDiscoveryAgent, "ServiceDiscoveryAgent@NoMongo");
                 agentFiber = testFiber.GetFiber(createdAgentId);
                 if (agentFiber == null || agentFiber.SchedulerType != SchedulerType.Parent)
