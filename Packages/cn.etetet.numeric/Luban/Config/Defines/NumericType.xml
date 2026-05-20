@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<module name="">
+  <enum name="NumericType" group="numeric" comment="Numeric Type">
+    <var name="Speed" value="1000" />
+    <var name="SpeedBase" value="10001" />
+    <var name="SpeedAdd" value="10002" />
+    <var name="SpeedPct" value="10003" />
+    <var name="SpeedFinalAdd" value="10004" />
+    <var name="SpeedFinalPct" value="10005" />
+    <var name="HP" value="1001" />
+    <var name="MaxHP" value="1002" />
+    <var name="MaxHPBase" value="10021" />
+    <var name="MaxHPAdd" value="10022" />
+    <var name="MaxHPPct" value="10023" />
+    <var name="MaxHPFinalAdd" value="10024" />
+    <var name="MaxHPFinalPct" value="10025" />
+    <var name="MP" value="1003" />
+    <var name="MaxMP" value="1004" />
+    <var name="MaxMPBase" value="10041" />
+    <var name="MaxMPAdd" value="10042" />
+    <var name="MaxMPPct" value="10043" />
+    <var name="MaxMPFinalAdd" value="10044" />
+    <var name="MaxMPFinalPct" value="10045" />
+    <var name="Radius" value="1005" />
+    <var name="RadiusBase" value="10051" />
+    <var name="RadiusAdd" value="10052" />
+    <var name="RadiusPct" value="10053" />
+    <var name="RadiusFinalAdd" value="10054" />
+    <var name="RadiusFinalPct" value="10055" />
+    <var name="AOI" value="1006" />
+    <var name="AOIBase" value="10061" />
+    <var name="AOIAdd" value="10062" />
+    <var name="AOIPct" value="10063" />
+    <var name="AOIFinalAdd" value="10064" />
+    <var name="AOIFinalPct" value="10065" />
+    <var name="Height" value="1007" />
+    <var name="HeightBase" value="10071" />
+    <var name="HeightAdd" value="10072" />
+    <var name="HeightPct" value="10073" />
+    <var name="HeightFinalAdd" value="10074" />
+    <var name="HeightFinalPct" value="10075" />
+    <var name="Weight" value="1008" />
+    <var name="WeightBase" value="10081" />
+    <var name="WeightAdd" value="10082" />
+    <var name="WeightPct" value="10083" />
+    <var name="WeightFinalAdd" value="10084" />
+    <var name="WeightFinalPct" value="10085" />
+    <var name="AI" value="1009" />
+    <var name="X" value="1010" comment="出生X坐标" />
+    <var name="Y" value="1011" comment="出生Y坐标" />
+    <var name="Z" value="1012" comment="出生Z坐标" />
+    <var name="Stun" value="1013" comment="眩晕" />
+    <var name="StunBase" value="10131" />
+    <var name="StunAdd" value="10132" />
+    <var name="StunPct" value="10133" />
+    <var name="StunFinalAdd" value="10134" />
+    <var name="StunFinalPct" value="10135" />
+    <var name="Yaw" value="1014" comment="出生朝向" />
+    <var name="Phase" value="1015" comment="相位" />
+  </enum>
+</module>

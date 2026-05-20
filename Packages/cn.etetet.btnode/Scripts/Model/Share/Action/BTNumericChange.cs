@@ -11,8 +11,7 @@
         public string Buff;
         
         [Sirenix.OdinInspector.LabelText("数值类型")]
-        [BTIntDropdown(typeof(ET.NumericTypeEnum))]
-        public int NumericType;
+        public NumericType NumericType;
         
         [Sirenix.OdinInspector.LabelText("数值")]
         public int Value;

@@ -14,7 +14,7 @@ namespace ET.Server
             unit.UnitType = unitConfig.UnitType;
 
             NumericComponent numericComponent = unit.AddComponent<NumericComponent>();
-            foreach ((int k, long v) in unitConfig.KV)
+            foreach ((NumericType k, long v) in unitConfig.KV)
             {
                 numericComponent.SetNoEvent(k, v);
             }
@@ -24,7 +24,7 @@ namespace ET.Server
                 MapUnitConfig mapUnitConfig = scene.Fiber().GetSingleton<MapUnitConfigCategory>().Get((int)id);
                 if (mapUnitConfig != null)
                 {
-                    foreach ((int k, long v) in mapUnitConfig.KV)
+                    foreach ((NumericType k, long v) in mapUnitConfig.KV)
                     {
                         numericComponent.SetNoEvent(k, v);
                     }

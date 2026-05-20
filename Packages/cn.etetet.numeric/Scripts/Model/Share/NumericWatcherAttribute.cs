@@ -7,9 +7,14 @@ namespace ET
 	{
 		public int SceneType { get; }
 		
-		public int NumericType { get; }
+		public NumericType NumericType { get; }
 
 		public NumericWatcherAttribute(int sceneType, int type)
+            : this(sceneType, (NumericType)type)
+		{
+		}
+
+		public NumericWatcherAttribute(int sceneType, NumericType type)
 		{
 			this.SceneType = sceneType;
 			this.NumericType = type;

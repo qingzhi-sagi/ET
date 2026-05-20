@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Text;
 using Path = System.IO.Path;
 
 namespace ET
@@ -52,6 +53,8 @@ namespace ET
                     WorkingDirectory = workingDirectory,
                     RedirectStandardOutput = redirectStandardOutput,
                     RedirectStandardError = redirectStandardError,
+                    StandardErrorEncoding = Encoding.UTF8,
+                    StandardOutputEncoding = Encoding.UTF8
                 };
 
                 Process process = Process.Start(info);

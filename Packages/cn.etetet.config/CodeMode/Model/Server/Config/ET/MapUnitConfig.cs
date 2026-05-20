@@ -14,7 +14,7 @@ namespace ET
     [EnableClass]
     public sealed partial class MapUnitConfig
     {
-        public MapUnitConfig(int Id, int UnitConfigId, string MapName, System.Collections.Generic.Dictionary<int, long> KV) 
+        public MapUnitConfig(int Id, int UnitConfigId, string MapName, System.Collections.Generic.Dictionary<NumericType, long> KV) 
         {
             this.Id = Id;
             this.UnitConfigId = UnitConfigId;
@@ -38,7 +38,7 @@ namespace ET
         /// <summary>
         /// 出生X坐标
         /// </summary>
-        public readonly System.Collections.Generic.Dictionary<int, long> KV;
+        public readonly System.Collections.Generic.Dictionary<NumericType, long> KV;
 
         public  void ResolveRef()
         {

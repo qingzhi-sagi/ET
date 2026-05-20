@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace ET
 {
@@ -9,7 +8,7 @@ namespace ET
     public class ConditionVariableRegistry : Singleton<ConditionVariableRegistry>, ISingletonAwake
     {
         private readonly Dictionary<string, Type> variableNodeTypes = new();
-        private readonly Dictionary<string, int> numericTypes = new();
+        private readonly Dictionary<string, NumericType> numericTypes = new();
 
         public void Awake()
         {
@@ -42,16 +41,10 @@ namespace ET
 
         private void RegisterNumericTypes()
         {
-            FieldInfo[] fieldInfos = typeof(NumericType).GetFields(BindingFlags.Static | BindingFlags.Public);
-            foreach (FieldInfo fieldInfo in fieldInfos)
+            foreach (NumericType numericType in Enum.GetValues(typeof(NumericType)))
             {
-                if (fieldInfo.FieldType != typeof(int))
-                {
-                    continue;
-                }
-
-                string variable = fieldInfo.Name;
-                this.numericTypes.Add(variable, (int)fieldInfo.GetValue(null));
+                string variable = numericType.ToString();
+                this.numericTypes.Add(variable, numericType);
                 this.variableNodeTypes.Add(variable, typeof(BTNumericCompare));
             }
         }
@@ -61,7 +54,7 @@ namespace ET
             return this.variableNodeTypes.TryGetValue(variable, out nodeType);
         }
 
-        public bool TryGetNumericType(string variable, out int numericType)
+        public bool TryGetNumericType(string variable, out NumericType numericType)
         {
             return this.numericTypes.TryGetValue(variable, out numericType);
         }

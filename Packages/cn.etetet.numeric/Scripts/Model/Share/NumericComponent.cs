@@ -7,7 +7,7 @@ namespace ET
     public struct NumbericChange
     {
         public EntityRef<Unit> Unit { get; set; }
-        public int NumericType {get; set;}
+        public NumericType NumericType {get; set;}
         public long Old  {get; set;}
         public long New  {get; set;}
     }
@@ -34,6 +34,6 @@ namespace ET
     public class NumericComponent: Entity, IAwake, ITransfer, IDeserialize
     {
         [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
-        public Dictionary<int, long> NumericDic = new();
+        public Dictionary<NumericType, long> NumericDic = new();
     }
 }

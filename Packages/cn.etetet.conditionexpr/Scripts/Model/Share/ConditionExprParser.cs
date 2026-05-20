@@ -138,7 +138,7 @@ namespace ET
                     this.SetParamsField(numericCompare, paramValues);
                 }
 
-                if (registry.TryGetNumericType(variable, out int numericType))
+                if (registry.TryGetNumericType(variable, out NumericType numericType))
                 {
                     numericCompare.NumericType = numericType;
                 }

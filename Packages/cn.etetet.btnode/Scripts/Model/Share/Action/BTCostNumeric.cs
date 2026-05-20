@@ -9,8 +9,7 @@
         public string Check;
         
         [Sirenix.OdinInspector.LabelText("数值类型")]
-        [BTIntDropdown(typeof(ET.NumericTypeEnum))]
-        public int NumericType;
+        public NumericType NumericType;
         
         public long Value;
         

@@ -7,8 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ET
-{ 
+ 
     /// <summary>
     /// Numeric Type
     /// </summary>
@@ -90,5 +89,5 @@ namespace ET
         Phase = 1015,
     }
 
-} 
+ 
 

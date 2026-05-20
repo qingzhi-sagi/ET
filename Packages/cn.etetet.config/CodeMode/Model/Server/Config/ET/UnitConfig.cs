@@ -14,7 +14,7 @@ namespace ET
     [EnableClass]
     public sealed partial class UnitConfig
     {
-        public UnitConfig(int Id, ET.UnitType UnitType, string Name, ET.EClassType ClassType, System.Collections.Generic.Dictionary<int, long> KV) 
+        public UnitConfig(int Id, ET.UnitType UnitType, string Name, ET.EClassType ClassType, System.Collections.Generic.Dictionary<NumericType, long> KV) 
         {
             this.Id = Id;
             this.UnitType = UnitType;
@@ -43,7 +43,7 @@ namespace ET
         /// <summary>
         /// 速度Base
         /// </summary>
-        public readonly System.Collections.Generic.Dictionary<int, long> KV;
+        public readonly System.Collections.Generic.Dictionary<NumericType, long> KV;
 
         public  void ResolveRef()
         {

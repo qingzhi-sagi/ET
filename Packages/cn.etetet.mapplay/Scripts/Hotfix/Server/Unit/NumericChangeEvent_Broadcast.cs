@@ -6,9 +6,9 @@
         protected override async ETTask Run(Scene scene, NumbericChange a)
         {
             Unit unit = a.Unit;
-            NumericTypeConfig numericTypeConfig = unit.Fiber().GetSingleton<NumericTypeConfigCategory>().Get(a.NumericType);
+            NumericTypeConfig numericTypeConfig = unit.Fiber().GetSingleton<NumericTypeConfigCategory>().Get((int)a.NumericType);
             M2C_NumericChange m2CNumericChange = M2C_NumericChange.Create();
-            m2CNumericChange.NumericType = a.NumericType;
+            m2CNumericChange.NumericType = (int)a.NumericType;
             m2CNumericChange.UnitId = unit.Id;
             m2CNumericChange.Value = a.New;
             MapMessageHelper.NoticeClient(a.Unit, m2CNumericChange, numericTypeConfig.NoticeType);

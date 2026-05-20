@@ -27,45 +27,90 @@ namespace ET
 
         public static float GetAsFloat(this NumericComponent self, int numericType)
         {
+            return self.GetAsFloat((NumericType)numericType);
+        }
+
+        public static float GetAsFloat(this NumericComponent self, NumericType numericType)
+        {
             return (float)self.GetByKey(numericType) / 1000;
         }
 
         public static int Get(this NumericComponent self, int numericType)
+        {
+            return self.Get((NumericType)numericType);
+        }
+
+        public static int Get(this NumericComponent self, NumericType numericType)
         {
             return (int)self.GetByKey(numericType);
         }
 
         public static int GetAsInt(this NumericComponent self, int numericType)
         {
+            return self.GetAsInt((NumericType)numericType);
+        }
+
+        public static int GetAsInt(this NumericComponent self, NumericType numericType)
+        {
             return (int)self.GetByKey(numericType);
         }
 
         public static long GetAsLong(this NumericComponent self, int numericType)
+        {
+            return self.GetAsLong((NumericType)numericType);
+        }
+
+        public static long GetAsLong(this NumericComponent self, NumericType numericType)
         {
             return self.GetByKey(numericType);
         }
 
         public static void Set(this NumericComponent self, int nt, float value)
         {
+            self.Set((NumericType)nt, value);
+        }
+
+        public static void Set(this NumericComponent self, NumericType nt, float value)
+        {
             self.Insert(nt, (long)(value * 1000));
         }
 
         public static void Set(this NumericComponent self, int nt, int value)
+        {
+            self.Set((NumericType)nt, value);
+        }
+
+        public static void Set(this NumericComponent self, NumericType nt, int value)
         {
             self.Insert(nt, value);
         }
 
         public static void Set(this NumericComponent self, int nt, long value)
         {
+            self.Set((NumericType)nt, value);
+        }
+
+        public static void Set(this NumericComponent self, NumericType nt, long value)
+        {
             self.Insert(nt, value);
         }
 
         public static void SetNoEvent(this NumericComponent self, int numericType, long value)
         {
+            self.SetNoEvent((NumericType)numericType, value);
+        }
+
+        public static void SetNoEvent(this NumericComponent self, NumericType numericType, long value)
+        {
             self.Insert(numericType, value, false);
         }
 
         public static void Insert(this NumericComponent self, int numericType, long value, bool isPublicEvent = true)
+        {
+            self.Insert((NumericType)numericType, value, isPublicEvent);
+        }
+
+        public static void Insert(this NumericComponent self, NumericType numericType, long value, bool isPublicEvent = true)
         {
             long oldValue = self.GetByKey(numericType);
             if (oldValue == value)
@@ -75,14 +120,15 @@ namespace ET
 
             self.NumericDic[numericType] = value;
 
-            if (numericType >= Max)
+            int numericTypeValue = (int)numericType;
+            if (numericTypeValue >= Max)
             {
                 self.Update(numericType, isPublicEvent);
                 return;
             }
 
             // 如果有最大值，需要限制最大值
-            NumericTypeConfig numericTypeConfig = self.Fiber().GetSingleton<NumericTypeConfigCategory>().Get(numericType);
+            NumericTypeConfig numericTypeConfig = self.Fiber().GetSingleton<NumericTypeConfigCategory>().Get(numericTypeValue);
             if (numericTypeConfig.MaxNumericType > 0)
             {
                 long max = self.GetByKey(numericTypeConfig.MaxNumericType);
@@ -103,8 +149,9 @@ namespace ET
                         Log.Error($"AffectNumericType is {kv.Key}, numericType is {numericTypeConfig.Id}");
                         continue;
                     }
-                    long affectOldValue = self.GetByKey(kv.Key);
-                    self.Insert(kv.Key, affectOldValue + kv.Value * (value - oldValue), isPublicEvent);
+                    NumericType affectNumericType = (NumericType)kv.Key;
+                    long affectOldValue = self.GetByKey(affectNumericType);
+                    self.Insert(affectNumericType, affectOldValue + kv.Value * (value - oldValue), isPublicEvent);
                 }
             }
 
@@ -122,6 +169,11 @@ namespace ET
 
         public static long GetByKey(this NumericComponent self, int key)
         {
+            return self.GetByKey((NumericType)key);
+        }
+
+        public static long GetByKey(this NumericComponent self, NumericType key)
+        {
             long value = 0;
             self.NumericDic.TryGetValue(key, out value);
             return value;
@@ -129,7 +181,13 @@ namespace ET
 
         public static void Update(this NumericComponent self, int numericType, bool isPublicEvent)
         {
-            int final = numericType / 10;
+            self.Update((NumericType)numericType, isPublicEvent);
+        }
+
+        public static void Update(this NumericComponent self, NumericType numericType, bool isPublicEvent)
+        {
+            int numericTypeValue = (int)numericType;
+            int final = numericTypeValue / 10;
             int bas = final * 10 + 1;
             int add = final * 10 + 2;
             int pct = final * 10 + 3;
