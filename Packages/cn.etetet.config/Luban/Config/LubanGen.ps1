@@ -2,6 +2,8 @@ param(
     [string]$ConfigType = "Code"
 )
 
+$ErrorActionPreference = "Stop"
+
 # 设置变量
 $PACKAGE = "Packages/cn.etetet.config"
 $CONFIG_NAME = "Config"
@@ -23,6 +25,15 @@ if (!(Test-Path $GEN_CLIENT))
     $GEN_CLIENT = $SOURCE_GEN_CLIENT
 }
 
+function Invoke-Luban
+{
+    & $DotNet $GEN_CLIENT @args
+    if ($LASTEXITCODE -ne 0)
+    {
+        throw "Luban 导出失败，ExitCode=$LASTEXITCODE Args=$($args -join ' ')"
+    }
+}
+
 function Invoke-ConfigExport
 {
     param(
@@ -36,7 +47,7 @@ function Invoke-ConfigExport
         [string]$OutputDataDir
     )
 
-    & $DotNet $GEN_CLIENT --customTemplateDir $CUSTOM -t $TargetName -c cs-code -d cs-code-data --conf $PACKAGE/Luban/$CONFIG_NAME/luban.conf -x outputCodeDir=$OutputCodeDir -x outputDataDir=$OutputDataDir -x configGroup=$CONFIG_NAME
+    Invoke-Luban --customTemplateDir $CUSTOM -t $TargetName -c cs-code -d cs-code-data --conf $PACKAGE/Luban/$CONFIG_NAME/luban.conf -x outputCodeDir=$OutputCodeDir -x outputDataDir=$OutputDataDir -x configGroup=$CONFIG_NAME
     Write-Host "==================== $TargetName 完成 ===================="
 }
 
@@ -44,7 +55,7 @@ function Invoke-NumericTypeEnumExport
 {
     $OutputCodeDir = "Packages/cn.etetet.numeric/Scripts/Model/Share/"
 
-    & $DotNet $GEN_CLIENT --customTemplateDir $CUSTOM -t numeric -c cs-code --conf $PACKAGE/Luban/$CONFIG_NAME/luban.conf -x outputCodeDir=$OutputCodeDir -x configGroup=$CONFIG_NAME -x outputSaver.cs-code.cleanUpOutputDir=false
+    Invoke-Luban --customTemplateDir $CUSTOM -t numeric -c cs-code --conf $PACKAGE/Luban/$CONFIG_NAME/luban.conf -x outputCodeDir=$OutputCodeDir -x configGroup=$CONFIG_NAME -x outputSaver.cs-code.cleanUpOutputDir=false
     Remove-Item (Join-Path $OutputCodeDir "NumericTypeTables.cs") -ErrorAction SilentlyContinue
     Write-Host "==================== numeric 完成 ===================="
 }

@@ -42,7 +42,10 @@ namespace ET
                     iExcelHandler.Run();
                 }
                 
-                LubanGen.CreateLubanConf("Code");
+                if (!LubanGen.CreateLubanConf("Code"))
+                {
+                    return -1;
+                }
             }
             catch (Exception e)
             {

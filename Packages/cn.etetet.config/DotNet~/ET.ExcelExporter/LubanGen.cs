@@ -111,7 +111,13 @@ namespace ET
 
                     Console.WriteLine($"[INFO] 开始导出 {configCollectionsName}");
                     Console.Out.Flush();
-                    RunLubanGen(lubanInfo.LubanConfigPath, configType);
+                    int exitCode = RunLubanGen(lubanInfo.LubanConfigPath, configType);
+                    if (exitCode != 0)
+                    {
+                        Console.WriteLine($"[ERROR] Luban 导出失败 {configCollectionsName} ExitCode={exitCode}");
+                        Console.Out.Flush();
+                        return false;
+                    }
                 }
                 catch (Exception e)
                 {
@@ -124,15 +130,15 @@ namespace ET
             return true;
         }
 
-        private static void RunLubanGen(string configCollectionPath, string configType)
+        private static int RunLubanGen(string configCollectionPath, string configType)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                RunProcess("pwsh.exe", $"-ExecutionPolicy Bypass -File {Path.Combine(configCollectionPath, "LubanGen.ps1")} -ConfigType {configType}");
+                return RunProcess("pwsh.exe", $"-ExecutionPolicy Bypass -File {Path.Combine(configCollectionPath, "LubanGen.ps1")} -ConfigType {configType}");
             }
             else
             {
-                RunProcess("/usr/local/bin/pwsh", $"-ExecutionPolicy Bypass -File {Path.Combine(configCollectionPath, "LubanGen.ps1")} -ConfigType {configType}");
+                return RunProcess("/usr/local/bin/pwsh", $"-ExecutionPolicy Bypass -File {Path.Combine(configCollectionPath, "LubanGen.ps1")} -ConfigType {configType}");
             }
         }
 
@@ -222,7 +228,15 @@ namespace ET
                 importProcess.Start();
                 importProcess.BeginOutputReadLine();
                 importProcess.BeginErrorReadLine();
-                importProcess.WaitForExit(20000);
+                if (!importProcess.WaitForExit(20000))
+                {
+                    importProcess.Kill();
+                    Console.WriteLine($"[LUBAN ERROR] 导出超时，已终止进程: {exe} {arguments}");
+                    Console.Out.Flush();
+                    return -1;
+                }
+
+                importProcess.WaitForExit();
 
                 // 由于已经实时输出了，这里只输出总结信息
                 var error = ImportAllError.ToString();

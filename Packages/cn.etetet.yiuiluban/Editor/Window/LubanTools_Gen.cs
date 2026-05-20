@@ -16,7 +16,13 @@ namespace YIUI.Luban.Editor
 
             string configType = globalConfig.EditorScripts ? "Json" : "Luban";
             
-            ProcessHelper.DotNet($"./Bin/ET.ExcelExporter.dll {configType}", "./", true).WaitForExit();
+            Process process = ProcessHelper.DotNet($"./Bin/ET.ExcelExporter.dll {configType}", "./", true);
+            //process.WaitForExit();
+            //if (process.ExitCode != 0)
+            //{
+            //    UnityEngine.Debug.LogError($"ExcelExporter 导出失败，ExitCode={process.ExitCode}");
+            //    return;
+            //}
         }        
     }
 }
