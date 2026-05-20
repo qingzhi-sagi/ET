@@ -198,6 +198,17 @@ public class GenerationContext
         return GlobalConf.InputDataDir;
     }
 
+    public static string ResolveInputFilePath(string inputFile)
+    {
+        string standardInputFile = FileUtil.Standardize(inputFile);
+        var (actualFile, sheetName) = FileUtil.SplitFileAndSheetName(standardInputFile);
+        string resolvedFile = Path.IsPathRooted(actualFile)
+            ? actualFile
+            : Path.Combine(Directory.GetCurrentDirectory(), actualFile);
+        resolvedFile = FileUtil.Standardize(resolvedFile);
+        return string.IsNullOrEmpty(sheetName) ? resolvedFile : $"{sheetName}@{resolvedFile}";
+    }
+
     public void AddDataTable(DefTable table, List<Record> mainRecords, List<Record> patchRecords)
     {
         s_logger.Debug("AddDataTable name:{} record count:{}", table.FullName, mainRecords.Count);

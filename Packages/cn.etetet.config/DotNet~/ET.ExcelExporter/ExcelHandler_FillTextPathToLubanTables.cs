@@ -133,15 +133,19 @@ namespace ET
                 
                 if (File.Exists(excelPath))
                 {
-                    // 生成带4个../前缀的相对路径格式
-                    string packageName = Path.GetFileName(packageDir);
-                    string pathWithPrefix = $"../../../../{packageName}/{subPath}/{fileName}";
-                    excelPaths.Add(pathWithPrefix);
-                    Log.Console($"Found {fileName}: {pathWithPrefix}");
+                    string inputPath = ToCurrentDirectoryRelativePath(excelPath);
+                    excelPaths.Add(inputPath);
+                    Log.Console($"Found {fileName}: {inputPath}");
                 }
             }
             
             return excelPaths;
+        }
+
+        private static string ToCurrentDirectoryRelativePath(string fullPath)
+        {
+            string relativePath = Path.GetRelativePath(Directory.GetCurrentDirectory(), Path.GetFullPath(fullPath));
+            return relativePath.Replace('\\', '/');
         }
         
         /// <summary>
