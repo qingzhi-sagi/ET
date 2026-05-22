@@ -7,14 +7,15 @@ using Sirenix.OdinInspector;
 namespace ET
 {
     [ConfigProcess(ConfigType.Code)]
-    public partial class BuffConfigCategory : Singleton<BuffConfigCategory>, ISingletonAwake, IConfig
+    public partial class BuffConfigCategory : Singleton<BuffConfigCategory>, IConfig
     {
         [BsonElement]
         [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
         private Dictionary<int, BuffConfig> _dataMap = new();
 
-        public void Awake()
+        public BuffConfigCategory(System.Collections.Generic.Dictionary<int, ET.BuffConfig> dataMap)
         {
+            _dataMap = dataMap;
         }
         
         public void Add(BuffConfig buffConfig)

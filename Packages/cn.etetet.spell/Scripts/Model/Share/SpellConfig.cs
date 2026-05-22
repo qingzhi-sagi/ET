@@ -7,14 +7,15 @@ using Sirenix.OdinInspector;
 namespace ET
 {
     [ConfigProcess(ConfigType.Code)]
-    public partial class SpellConfigCategory : Singleton<SpellConfigCategory>, ISingletonAwake, IConfig
+    public partial class SpellConfigCategory : Singleton<SpellConfigCategory>, IConfig
     {
         [BsonElement]
         [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
         private Dictionary<int, SpellConfig> _dataMap = new();
 
-        public void Awake()
+        public SpellConfigCategory(System.Collections.Generic.Dictionary<int, ET.SpellConfig> dataMap)
         {
+            _dataMap = dataMap;
         }
         
         public void Add(SpellConfig spellConfig)

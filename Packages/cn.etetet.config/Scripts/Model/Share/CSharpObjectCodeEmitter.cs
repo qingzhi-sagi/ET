@@ -111,7 +111,7 @@ namespace ET
 
             return
 $@"{ctorExpression}
-{{
+{this.Indent(indentLevel)}{{
 {string.Join(Environment.NewLine, initializerAssignments)}
 {this.Indent(indentLevel)}}}";
         }
@@ -130,7 +130,7 @@ $@"{ctorExpression}
 
             return
 $@"new {this.ToCSharpTypeName(listType)}
-{{
+{this.Indent(indentLevel)}{{
 {string.Join(Environment.NewLine, members)}
 {this.Indent(indentLevel)}}}";
         }
@@ -149,7 +149,7 @@ $@"new {this.ToCSharpTypeName(listType)}
 
             return
 $@"new {this.ToCSharpTypeName(hashSetType)}
-{{
+{this.Indent(indentLevel)}{{
 {string.Join(Environment.NewLine, members)}
 {this.Indent(indentLevel)}}}";
         }
@@ -168,7 +168,7 @@ $@"new {this.ToCSharpTypeName(hashSetType)}
 
             return
 $@"new {this.ToCSharpTypeName(elementType)}[]
-{{
+{this.Indent(indentLevel)}{{
 {string.Join(Environment.NewLine, members)}
 {this.Indent(indentLevel)}}}";
         }
@@ -190,7 +190,7 @@ $@"new {this.ToCSharpTypeName(elementType)}[]
 
             return
 $@"new {this.ToCSharpTypeName(dictionaryType)}
-{{
+{this.Indent(indentLevel)}{{
 {string.Join(Environment.NewLine, members)}
 {this.Indent(indentLevel)}}}";
         }

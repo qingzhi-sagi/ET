@@ -25,8 +25,8 @@ namespace ET.Client
             EnsureAllTreeIdUniqueAndSave(allScriptableObjects);
 
             // 2. 第二遍遍历：导出数据
-            SpellConfigCategory spellConfigCategory = new();
-            BuffConfigCategory buffConfigCategory = new();
+            Dictionary<int, SpellConfig> spellConfigs = new();
+            Dictionary<int, BuffConfig> buffConfigs = new();
             foreach (var guid in allScriptableObjects)
             {
                 string path = AssetDatabase.GUIDToAssetPath(guid);
@@ -77,7 +77,7 @@ namespace ET.Client
                             Debug.LogError($"error: {scriptableObject.name}, {e}");
                         }
 
-                        spellConfigCategory.Add(spellScriptableObject.SpellConfig);
+                        spellConfigs.Add(spellScriptableObject.SpellConfig.Id, spellScriptableObject.SpellConfig);
                         continue;
                     }
 
@@ -116,7 +116,7 @@ namespace ET.Client
                             Debug.LogError($"error: {scriptableObject.name}, {e}");
                         }
 
-                        buffConfigCategory.Add(buffScriptableObject.BuffConfig);
+                        buffConfigs.Add(buffScriptableObject.BuffConfig.Id, buffScriptableObject.BuffConfig);
                     }
                 }
                 catch (Exception e)
@@ -125,7 +125,7 @@ namespace ET.Client
                 }
             }
 
-            BTConfigCodeExporter.Export(spellConfigCategory, buffConfigCategory);
+            BTConfigCodeExporter.Export(new SpellConfigCategory(spellConfigs), new BuffConfigCategory(buffConfigs));
 
             Debug.Log("Export ScriptableObject OK!");
         }

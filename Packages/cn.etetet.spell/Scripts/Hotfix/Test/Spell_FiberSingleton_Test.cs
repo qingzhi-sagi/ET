@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using ET.Server;
 
 namespace ET.Test
@@ -40,10 +41,14 @@ namespace ET.Test
             };
             mockBuffConfig.OnAfterDeserialize();
 
-            SpellConfigCategory mockSpellCategory = new SpellConfigCategory();
-            mockSpellCategory.Add(mockSpellConfig);
-            BuffConfigCategory mockBuffCategory = new BuffConfigCategory();
-            mockBuffCategory.Add(mockBuffConfig);
+            SpellConfigCategory mockSpellCategory = new SpellConfigCategory(new Dictionary<int, SpellConfig>()
+            {
+                [mockSpellConfig.Id] = mockSpellConfig,
+            });
+            BuffConfigCategory mockBuffCategory = new BuffConfigCategory(new Dictionary<int, BuffConfig>()
+            {
+                [mockBuffConfig.Id] = mockBuffConfig,
+            });
             mockBuffCategory.ResolveRef();
 
             unitFiber.AddSingleton(mockSpellCategory);
@@ -94,5 +99,4 @@ namespace ET.Test
         }
     }
 }
-
 
