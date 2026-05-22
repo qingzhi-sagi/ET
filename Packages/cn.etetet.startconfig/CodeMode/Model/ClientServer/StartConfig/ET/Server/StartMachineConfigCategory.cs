@@ -18,7 +18,6 @@ public partial class StartMachineConfigCategory : Singleton<StartMachineConfigCa
     public StartMachineConfigCategory(System.Collections.Generic.Dictionary<int, ET.Server.StartMachineConfig> dataMap)
     {
         _dataMap = dataMap;
-        EndInit();
     }
 
     public System.Collections.Generic.Dictionary<int, ET.Server.StartMachineConfig> GetAll() => _dataMap;

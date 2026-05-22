@@ -21,15 +21,6 @@ namespace ET
         public int TurnSpeed { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.Points.Clear();
-            this.Rotation = default;
-            this.TurnSpeed = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -49,14 +40,6 @@ namespace ET
         public Unity.Mathematics.float3 Position { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Position = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -74,13 +57,6 @@ namespace ET
         public int RpcId { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -103,15 +79,6 @@ namespace ET
 
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.Id = default;
-            this.Position = default;
-            this.Points.Clear();
-
             ObjectPool.Recycle(this);
         }
     }
@@ -135,16 +102,6 @@ namespace ET
         public Unity.Mathematics.quaternion Rotation { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.Error = default;
-            this.Id = default;
-            this.Position = default;
-            this.Rotation = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -166,15 +123,6 @@ namespace ET
         public int TurnTime { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.UnitId = default;
-            this.Rotation = default;
-            this.TurnTime = default;
-
             ObjectPool.Recycle(this);
         }
     }

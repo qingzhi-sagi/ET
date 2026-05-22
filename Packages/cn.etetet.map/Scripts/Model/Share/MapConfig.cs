@@ -11,7 +11,7 @@ namespace ET
             return this.nameConfigs[mapName];
         }
         
-        public override void EndInit()
+        partial void EndRef()
         {
             foreach (var kv in this.GetAll())
             {

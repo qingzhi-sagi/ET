@@ -11,7 +11,7 @@ namespace ET
     }
 
     [ChildOf(typeof(TimerComponent))]
-    public class TimerAction: Entity, IAwake, IDestroy
+    public partial class TimerAction: Entity, IAwake, IDestroy, IPool
     {
         public TimerClass TimerClass;
         

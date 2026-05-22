@@ -23,16 +23,6 @@ namespace ET
         public ActorId ActorId { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Type = default;
-            this.Key = default;
-            this.ActorId = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -54,15 +44,6 @@ namespace ET
         public string Message { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -89,17 +70,6 @@ namespace ET
         public int Time { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Type = default;
-            this.Key = default;
-            this.ActorId = default;
-            this.Time = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -123,16 +93,6 @@ namespace ET
         public long LockToken { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.LockToken = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -161,18 +121,6 @@ namespace ET
         public long LockToken { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Type = default;
-            this.Key = default;
-            this.OldActorId = default;
-            this.NewActorId = default;
-            this.LockToken = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -194,15 +142,6 @@ namespace ET
         public string Message { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -227,16 +166,6 @@ namespace ET
         public ActorId ExpectedActorId { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Type = default;
-            this.Key = default;
-            this.ExpectedActorId = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -258,15 +187,6 @@ namespace ET
         public string Message { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -289,15 +209,6 @@ namespace ET
         public long Key { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Type = default;
-            this.Key = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -323,17 +234,6 @@ namespace ET
         public ActorId ActorId { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.Type = default;
-            this.ActorId = default;
-
             ObjectPool.Recycle(this);
         }
     }

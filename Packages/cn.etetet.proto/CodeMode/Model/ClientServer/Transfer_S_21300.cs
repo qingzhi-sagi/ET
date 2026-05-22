@@ -27,18 +27,6 @@ namespace ET
         public int UnitConfigId { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.PlayerId = default;
-            this.GateActorId = default;
-            this.MapName = default;
-            this.MapId = default;
-            this.UnitConfigId = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -60,15 +48,6 @@ namespace ET
         public string Message { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -96,17 +75,6 @@ namespace ET
         public bool ChangeScene { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.OldActorId = default;
-            this.UnitBytes = default;
-            this.EntityBytes.Clear();
-            this.ChangeScene = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -130,16 +98,6 @@ namespace ET
         public ActorId NewActorId { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.NewActorId = default;
-
             ObjectPool.Recycle(this);
         }
     }

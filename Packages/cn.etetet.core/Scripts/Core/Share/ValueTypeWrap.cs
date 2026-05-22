@@ -20,10 +20,9 @@ namespace ET
 
         public bool IsFromPool { get; set; }
 
-        public override void Dispose()
+        void IPool.Clear()
         {
             this.Value = default;
-            ObjectPool.Recycle(this);
         }
     }
 }

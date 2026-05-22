@@ -18,7 +18,6 @@ public partial class QuestObjectiveConfigCategory : Singleton<QuestObjectiveConf
     public QuestObjectiveConfigCategory(System.Collections.Generic.Dictionary<int, ET.QuestObjectiveConfig> dataMap)
     {
         _dataMap = dataMap;
-        EndInit();
     }
 
     public System.Collections.Generic.Dictionary<int, ET.QuestObjectiveConfig> GetAll() => _dataMap;

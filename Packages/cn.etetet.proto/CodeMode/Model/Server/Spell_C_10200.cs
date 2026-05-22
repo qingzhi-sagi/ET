@@ -23,16 +23,6 @@ namespace ET
         public long TargetUnitId { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.SpellConfigId = default;
-            this.TargetPosition = default;
-            this.TargetUnitId = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -59,17 +49,6 @@ namespace ET
         public Unity.Mathematics.float3 TargetPosition { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.UnitId = default;
-            this.SpellId = default;
-            this.SpellConfigId = default;
-            this.TargetUnitId.Clear();
-            this.TargetPosition = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -91,15 +70,6 @@ namespace ET
         public int RemoveType { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.UnitId = default;
-            this.SpellId = default;
-            this.RemoveType = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -120,14 +90,6 @@ namespace ET
         public Unity.Mathematics.float3 TargetPosition { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.TargetUnitId.Clear();
-            this.TargetPosition = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -162,21 +124,6 @@ namespace ET
         public SpellTarget SpellTarget { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.UnitId = default;
-            this.BuffId = default;
-            this.BuffConfigId = default;
-            this.CreateTime = default;
-            this.TickTime = default;
-            this.ExpireTime = default;
-            this.CasterId = default;
-            this.Stack = default;
-            this.SpellTarget = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -202,17 +149,6 @@ namespace ET
         public int Stack { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.UnitId = default;
-            this.BuffId = default;
-            this.TickTime = default;
-            this.ExpireTime = default;
-            this.Stack = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -236,16 +172,6 @@ namespace ET
         public int RemoveType { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.UnitId = default;
-            this.BuffId = default;
-            this.BuffConfigId = default;
-            this.RemoveType = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -273,16 +199,6 @@ namespace ET
         public long Time { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.UnitId = default;
-            this.SpellConfigId = default;
-            this.Time = default;
-
             ObjectPool.Recycle(this);
         }
     }

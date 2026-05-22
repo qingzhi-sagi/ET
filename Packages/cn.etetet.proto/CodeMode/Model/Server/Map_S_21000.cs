@@ -23,16 +23,6 @@ namespace ET
         public long UnitId { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.MapName = default;
-            this.MapId = default;
-            this.UnitId = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -60,18 +50,6 @@ namespace ET
         public ActorId MapActorId { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.MapName = default;
-            this.MapId = default;
-            this.MapActorId = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -98,17 +76,6 @@ namespace ET
         public long PreMapCopyId { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.MapName = default;
-            this.MapId = default;
-            this.UnitId = default;
-            this.PreMapCopyId = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -130,15 +97,6 @@ namespace ET
         public string Message { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -161,15 +119,6 @@ namespace ET
         public long MapId { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.MapName = default;
-            this.MapId = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -191,15 +140,6 @@ namespace ET
         public string Message { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -224,16 +164,6 @@ namespace ET
         public long MapId { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.MapName = default;
-            this.UnitId = default;
-            this.MapId = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -255,15 +185,6 @@ namespace ET
         public string Message { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-
             ObjectPool.Recycle(this);
         }
     }

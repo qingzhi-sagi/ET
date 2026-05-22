@@ -36,16 +36,13 @@ namespace ET
         
         public bool IsFromPool { get; set; }
 
+        void IPool.Clear()
+        {
+            base.Clear();
+        }
+
         public void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-            
-            this.IsFromPool = false;
-            this.Clear();
-            
             ObjectPool.Recycle(this);
         }
     }

@@ -16,13 +16,6 @@ namespace ET
         public long OwnerId { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.OwnerId = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -55,20 +48,6 @@ namespace ET
         public PetInfo PetInfo { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.UnitId = default;
-            this.ConfigId = default;
-            this.Type = default;
-            this.Position = default;
-            this.Forward = default;
-            this.KV.Clear();
-            this.MoveInfo = default;
-            this.PetInfo = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -87,13 +66,6 @@ namespace ET
 
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.Units.Clear();
-
             ObjectPool.Recycle(this);
         }
     }
@@ -111,13 +83,6 @@ namespace ET
         public UnitInfo Unit { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.Unit = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -137,14 +102,6 @@ namespace ET
         public string SceneName { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.SceneId = default;
-            this.SceneName = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -163,13 +120,6 @@ namespace ET
 
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.Units.Clear();
-
             ObjectPool.Recycle(this);
         }
     }
@@ -190,14 +140,6 @@ namespace ET
 
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.Error = default;
-            this.Values.Clear();
-
             ObjectPool.Recycle(this);
         }
     }
@@ -219,15 +161,6 @@ namespace ET
         public long Value { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.UnitId = default;
-            this.NumericType = default;
-            this.Value = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -247,14 +180,6 @@ namespace ET
         public long UnitId { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.UnitId = default;
-
             ObjectPool.Recycle(this);
         }
     }

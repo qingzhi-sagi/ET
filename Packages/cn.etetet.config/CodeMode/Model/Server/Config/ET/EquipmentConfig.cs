@@ -11,8 +11,7 @@
 
 namespace ET
 {
-    [EnableClass]
-    public sealed partial class EquipmentConfig
+    public sealed partial class EquipmentConfig : ET.Object
     {
         public EquipmentConfig(int Id, int EquipSlot, System.Collections.Generic.Dictionary<int, long> KV) 
         {

@@ -6,7 +6,11 @@ namespace ET.Server
     {
         private static void Broadcast(Unit unit, IMessage message, bool withSelf = true)
         {
-            (message as MessageObject).IsFromPool = false;
+            if (message is IPool)
+            {
+                throw new System.Exception($"broadcast message can not be IPool: {message.GetType().FullName}");
+            }
+
             Dictionary<long, EntityRef<AOIEntity>> dict = unit.GetBeSeePlayers();
             MessageSender messageSender = unit.Root().GetComponent<MessageSender>();
             

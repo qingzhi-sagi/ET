@@ -11,7 +11,6 @@
 
 namespace ET
 {
-    [EnableClass]
     public sealed partial class QuestObjectiveParams_CollectItem : ET.QuestObjectiveParams
     {
         public QuestObjectiveParams_CollectItem(int ItemId)  : base()

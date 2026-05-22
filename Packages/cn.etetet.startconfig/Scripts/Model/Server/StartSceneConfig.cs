@@ -48,7 +48,7 @@ namespace ET.Server
             throw new Exception($"scene config count is not one, zone: {zone}, sceneType: {sceneType}, count: {configs.Count}");
         }
         
-        public override void EndInit()
+        partial void EndRef()
         {
             foreach (StartSceneConfig startSceneConfig in this.GetAll().Values)
             {

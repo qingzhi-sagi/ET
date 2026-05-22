@@ -20,14 +20,6 @@ namespace ET
 
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.Realms.Clear();
-            this.Routers.Clear();
-
             ObjectPool.Recycle(this);
         }
     }

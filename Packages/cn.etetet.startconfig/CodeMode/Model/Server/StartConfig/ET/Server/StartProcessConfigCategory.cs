@@ -18,7 +18,6 @@ public partial class StartProcessConfigCategory : Singleton<StartProcessConfigCa
     public StartProcessConfigCategory(System.Collections.Generic.Dictionary<int, ET.Server.StartProcessConfig> dataMap)
     {
         _dataMap = dataMap;
-        EndInit();
     }
 
     public System.Collections.Generic.Dictionary<int, ET.Server.StartProcessConfig> GetAll() => _dataMap;

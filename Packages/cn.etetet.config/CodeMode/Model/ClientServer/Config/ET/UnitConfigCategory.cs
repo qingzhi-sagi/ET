@@ -18,7 +18,6 @@ public partial class UnitConfigCategory : Singleton<UnitConfigCategory>, IConfig
     public UnitConfigCategory(System.Collections.Generic.Dictionary<int, ET.UnitConfig> dataMap)
     {
         _dataMap = dataMap;
-        EndInit();
     }
 
     public System.Collections.Generic.Dictionary<int, ET.UnitConfig> GetAll() => _dataMap;

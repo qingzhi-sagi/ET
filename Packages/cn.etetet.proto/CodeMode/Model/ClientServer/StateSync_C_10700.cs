@@ -18,14 +18,6 @@ namespace ET
         public string Address { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.ConnectId = default;
-            this.Address = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -48,15 +40,6 @@ namespace ET
         public string Password { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Account = default;
-            this.Password = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -78,15 +61,6 @@ namespace ET
         public string Message { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -104,13 +78,6 @@ namespace ET
         public string Info { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.Info = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -129,13 +96,6 @@ namespace ET
         public int RpcId { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -157,15 +117,6 @@ namespace ET
         public string Message { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-
             ObjectPool.Recycle(this);
         }
     }

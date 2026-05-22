@@ -26,16 +26,6 @@ namespace ET
         public StringKV Metadata { get; set; } = new();
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.SceneName = default;
-            this.ActorId = default;
-            this.Metadata = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -57,15 +47,6 @@ namespace ET
         public string Message { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -86,14 +67,6 @@ namespace ET
         public string SceneName { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.SceneName = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -115,15 +88,6 @@ namespace ET
         public string Message { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -146,15 +110,6 @@ namespace ET
         public ActorId AgentActorId { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.SceneName = default;
-            this.AgentActorId = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -176,15 +131,6 @@ namespace ET
         public string Message { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -208,15 +154,6 @@ namespace ET
 
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.AgentActorId = default;
-            this.LocalServices.Clear();
-
             ObjectPool.Recycle(this);
         }
     }
@@ -241,16 +178,6 @@ namespace ET
 
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.Services.Clear();
-
             ObjectPool.Recycle(this);
         }
     }
@@ -274,14 +201,6 @@ namespace ET
         public StringKV Filter { get; set; } = new();
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Filter = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -306,16 +225,6 @@ namespace ET
 
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.Services.Clear();
-
             ObjectPool.Recycle(this);
         }
     }
@@ -345,17 +254,6 @@ namespace ET
         public ActorId SubscriberActorId { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.SceneName = default;
-            this.FilterName = default;
-            this.FilterMetadata = default;
-            this.SubscriberActorId = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -380,16 +278,6 @@ namespace ET
 
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.Services.Clear();
-
             ObjectPool.Recycle(this);
         }
     }
@@ -410,14 +298,6 @@ namespace ET
         public string SceneName { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.SceneName = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -439,15 +319,6 @@ namespace ET
         public string Message { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -476,16 +347,6 @@ namespace ET
 
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.ChangeType = default;
-            this.Epoch = default;
-            this.MasterActorId = default;
-            this.ServiceInfo.Clear();
-
             ObjectPool.Recycle(this);
         }
     }
@@ -504,13 +365,6 @@ namespace ET
         public string SceneName { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.SceneName = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -536,15 +390,6 @@ namespace ET
         public StringKV Metadata { get; set; } = new();
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.SceneName = default;
-            this.ActorId = default;
-            this.Metadata = default;
-
             ObjectPool.Recycle(this);
         }
     }

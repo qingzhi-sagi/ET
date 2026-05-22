@@ -11,8 +11,7 @@
 
 namespace ET
 {
-    [EnableClass]
-    public sealed partial class TextConfig
+    public sealed partial class TextConfig : ET.Object
     {
         public TextConfig(int Id, string Name, string CN, string EN) 
         {

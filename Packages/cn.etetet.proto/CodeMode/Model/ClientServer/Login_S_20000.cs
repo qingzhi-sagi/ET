@@ -19,14 +19,6 @@ namespace ET
         public string Account { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Account = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -52,17 +44,6 @@ namespace ET
         public long GateId { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.Key = default;
-            this.GateId = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -80,13 +61,6 @@ namespace ET
         public int RpcId { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-
             ObjectPool.Recycle(this);
         }
     }

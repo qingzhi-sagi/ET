@@ -11,8 +11,7 @@
 
 namespace ET.Server
 {
-    [EnableClass]
-    public sealed partial class StartZoneConfig
+    public sealed partial class StartZoneConfig : ET.Object
     {
         public StartZoneConfig(int Id, int ZoneType, string DBConnection, string DBName) 
         {

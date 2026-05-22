@@ -11,7 +11,6 @@
 
 namespace ET
 {
-    [EnableClass]
     public sealed partial class QuestObjectiveParams_KillMonster : ET.QuestObjectiveParams
     {
         public QuestObjectiveParams_KillMonster(int MonsterId)  : base()

@@ -17,7 +17,7 @@ namespace ET
             this.typePool = new ConcurrentDictionary<Type, Pool>();
         }
 
-        public static T Fetch<T>(bool isFromPool = true) where T : class, IPool
+        public static T Fetch<T>(bool isFromPool = true) where T : class
         {
             return Fetch(typeof (T), isFromPool) as T;
         }
@@ -57,17 +57,21 @@ namespace ET
                 return;
             }
             
-            if (obj is IPool p)
+            if (obj is not IPool p)
             {
-                if (!p.IsFromPool)
-                {
-                    return;
-                }
-
-                // 这里注释掉，是为了早点发现重复入池的问题
-                // 防止多次入池
-                // p.IsFromPool = false;
+                return;
             }
+            
+            if (!p.IsFromPool)
+            {
+                return;
+            }
+            
+            p.Clear();
+            
+            // 这里注释掉，是为了早点发现重复入池的问题
+            // 防止多次入池
+            // p.IsFromPool = false;
 
             Type type = obj.GetType();
             Pool pool = Instance.GetPool(type);

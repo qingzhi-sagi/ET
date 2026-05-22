@@ -11,8 +11,7 @@
 
 namespace ET
 {
-    [EnableClass]
-    public sealed partial class MapTransferRuleConfig
+    public sealed partial class MapTransferRuleConfig : ET.Object
     {
         public MapTransferRuleConfig(int Id, string ToMap, float[] Pos) 
         {

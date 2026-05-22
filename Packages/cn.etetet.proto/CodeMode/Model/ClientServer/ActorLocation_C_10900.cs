@@ -19,14 +19,6 @@ namespace ET
         public string request { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.request = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -50,16 +42,6 @@ namespace ET
         public string response { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.response = default;
-
             ObjectPool.Recycle(this);
         }
     }

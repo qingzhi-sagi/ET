@@ -1,6 +1,8 @@
+using System;
+
 namespace ET
 {
-    public abstract class ASingleton : DisposeObject
+    public abstract class ASingleton: Object, IDisposable
     {
         internal abstract void Register();
 
@@ -8,6 +10,8 @@ namespace ET
         {
             return 10000;
         }
+
+        public abstract void Dispose();
     }
 
     public abstract class Singleton<T> : ASingleton where T : Singleton<T>

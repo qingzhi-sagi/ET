@@ -11,8 +11,7 @@
 
 namespace ET
 {
-    [EnableClass]
-    public sealed partial class NumericTypeConfig
+    public sealed partial class NumericTypeConfig : ET.Object
     {
         public NumericTypeConfig(int Id, string Name, int NeedSaveDB, NoticeType NoticeType, int MaxNumericType, System.Collections.Generic.Dictionary<int, long> AffectNumeric) 
         {

@@ -18,7 +18,6 @@ public partial class MapTransferRuleConfigCategory : Singleton<MapTransferRuleCo
     public MapTransferRuleConfigCategory(System.Collections.Generic.Dictionary<int, ET.MapTransferRuleConfig> dataMap)
     {
         _dataMap = dataMap;
-        EndInit();
     }
 
     public System.Collections.Generic.Dictionary<int, ET.MapTransferRuleConfig> GetAll() => _dataMap;

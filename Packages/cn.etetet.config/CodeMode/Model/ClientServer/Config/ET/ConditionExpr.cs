@@ -11,8 +11,7 @@
 
 namespace ET
 {
-    [EnableClass]
-    public sealed partial class ConditionExpr
+    public sealed partial class ConditionExpr : ET.Object
     {
         public ConditionExpr(string Expr, int ErrorCode, string Desc) 
         {

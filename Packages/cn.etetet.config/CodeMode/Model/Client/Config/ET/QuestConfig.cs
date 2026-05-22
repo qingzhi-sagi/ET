@@ -11,8 +11,7 @@
 
 namespace ET
 {
-    [EnableClass]
-    public sealed partial class QuestConfig
+    public sealed partial class QuestConfig : ET.Object
     {
         public QuestConfig(int Id, string Name, string Desc, int[] ObjectiveIds, int[] PreQuestIds, int[] NextQuestId, string Title, string Content, string AcceptedContent, string FinishContent, int AcceptNPC, string AcceptNPCMap, int SubmitNPC, string SubmitNPCMap) 
         {

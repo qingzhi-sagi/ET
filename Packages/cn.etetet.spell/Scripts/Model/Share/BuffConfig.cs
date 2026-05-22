@@ -11,7 +11,7 @@ namespace ET
     {
         [BsonElement]
         [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
-        private Dictionary<int, BuffConfig> dict = new();
+        private Dictionary<int, BuffConfig> _dataMap = new();
 
         public void Awake()
         {
@@ -19,37 +19,40 @@ namespace ET
         
         public void Add(BuffConfig buffConfig)
         {
-            this.dict.Add(buffConfig.Id, buffConfig);
+            this._dataMap.Add(buffConfig.Id, buffConfig);
         }
 
         public BuffConfig Get(int id)
         {
-            this.dict.TryGetValue(id, out BuffConfig item);
+            this._dataMap.TryGetValue(id, out BuffConfig item);
             return item;
         }
 
         public bool Contain(int id)
         {
-            return this.dict.ContainsKey(id);
+            return this._dataMap.ContainsKey(id);
         }
 
         public IReadOnlyDictionary<int, BuffConfig> GetAll()
         {
-            return this.dict;
+            return this._dataMap;
         }
 
         public void ResolveRef()
         {
-            foreach (var kv in this.dict)
+            foreach (var kv in this._dataMap)
             {
-                kv.Value.OnAfterDeserialize();
+                kv.Value.ResolveRef();
             }
+            EndRef();
         }
+        
+        partial void EndRef();
     }
 
     [HideReferenceObjectPicker]
     [System.Serializable]
-    public partial class BuffConfig : ProtoObject
+    public partial class BuffConfig : Object
     #if UNITY
             ,UnityEngine.ISerializationCallbackReceiver
     #endif
@@ -121,6 +124,16 @@ namespace ET
         {
             this.effectDict.TryGetValue(typeof(T), out EffectNode effectNode);
             return effectNode as T;
+        }
+        
+        public void ResolveRef()
+        {
+            EndRef();
+        }
+
+        void EndRef()
+        {
+            OnAfterDeserialize();
         }
     }
 

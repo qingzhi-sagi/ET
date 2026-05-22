@@ -8,7 +8,7 @@ namespace ET
         private MultiMapSet<long, int> submitQuest = new();
         private MultiMapSet<long, int> allQuest = new();
         
-        public override void EndInit()
+        partial void EndRef()
         {
             foreach (var kv in this.GetAll())
             {

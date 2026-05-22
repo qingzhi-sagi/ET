@@ -11,8 +11,7 @@
 
 namespace ET.Server
 {
-    [EnableClass]
-    public sealed partial class StartSceneConfig
+    public sealed partial class StartSceneConfig : ET.Object
     {
         public StartSceneConfig(int Id, int Process, int Zone, string SceneType, string Name, int Port) 
         {

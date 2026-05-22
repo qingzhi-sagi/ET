@@ -11,8 +11,7 @@
 
 namespace ET.Server
 {
-    [EnableClass]
-    public sealed partial class StartMachineConfig
+    public sealed partial class StartMachineConfig : ET.Object
     {
         public StartMachineConfig(int Id, string InnerIP, string OuterIP) 
         {

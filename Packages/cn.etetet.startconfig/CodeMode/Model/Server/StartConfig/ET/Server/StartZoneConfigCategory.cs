@@ -18,7 +18,6 @@ public partial class StartZoneConfigCategory : Singleton<StartZoneConfigCategory
     public StartZoneConfigCategory(System.Collections.Generic.Dictionary<int, ET.Server.StartZoneConfig> dataMap)
     {
         _dataMap = dataMap;
-        EndInit();
     }
 
     public System.Collections.Generic.Dictionary<int, ET.Server.StartZoneConfig> GetAll() => _dataMap;

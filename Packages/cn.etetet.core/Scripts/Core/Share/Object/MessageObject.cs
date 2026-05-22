@@ -1,17 +1,7 @@
-﻿using System;
-using System.ComponentModel;
-using MongoDB.Bson.Serialization.Attributes;
-
-namespace ET
+﻿namespace ET
 {
     [DisableNew]
-    public abstract class MessageObject: ProtoObject, IMessage, IPool
+    public abstract class MessageObject: DisposeObject, IMessage
     {
-        public virtual void Dispose()
-        {
-        }
-
-        [BsonIgnore]
-        public bool IsFromPool { get; set; }
     }
 }

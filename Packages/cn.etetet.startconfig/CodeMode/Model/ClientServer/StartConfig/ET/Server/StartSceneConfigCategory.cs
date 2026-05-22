@@ -18,7 +18,6 @@ public partial class StartSceneConfigCategory : Singleton<StartSceneConfigCatego
     public StartSceneConfigCategory(System.Collections.Generic.Dictionary<int, ET.Server.StartSceneConfig> dataMap)
     {
         _dataMap = dataMap;
-        EndInit();
     }
 
     public System.Collections.Generic.Dictionary<int, ET.Server.StartSceneConfig> GetAll() => _dataMap;

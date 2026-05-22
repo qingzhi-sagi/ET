@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using MongoDB.Bson.Serialization.Attributes;
 
 namespace ET
 {
@@ -8,6 +7,7 @@ namespace ET
     {
         public virtual void Dispose()
         {
+            ObjectPool.Recycle(this);
         }
         
         public virtual void BeginInit()
@@ -19,12 +19,14 @@ namespace ET
         }
     }
 
-    public interface IPool: IDisposable
+    public interface IPool
     {
         bool IsFromPool
         {
             get;
             set;
         }
+
+        void Clear();
     }
 }

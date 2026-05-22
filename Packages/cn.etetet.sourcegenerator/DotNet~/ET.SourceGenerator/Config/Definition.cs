@@ -104,5 +104,9 @@ namespace ET
         public const string EnableGetComponentAttribute = "ET.EnableGetComponentAttribute";
 
         public const string AllowInstanceAttribute = "ET.AllowInstanceAttribute";
+
+        public const string IPoolInterface = "ET.IPool";
+
+        public const string ClearMethod = "Clear";
     }
 }

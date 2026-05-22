@@ -11,8 +11,7 @@
 
 namespace ET.Server
 {
-    [EnableClass]
-    public sealed partial class StartProcessConfig
+    public sealed partial class StartProcessConfig : ET.Object
     {
         public StartProcessConfig(int Id, int MachineId, int Port, int Num, string Name) 
         {

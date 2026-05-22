@@ -18,7 +18,6 @@ public partial class ItemConfigCategory : Singleton<ItemConfigCategory>, IConfig
     public ItemConfigCategory(System.Collections.Generic.Dictionary<int, ET.ItemConfig> dataMap)
     {
         _dataMap = dataMap;
-        EndInit();
     }
 
     public System.Collections.Generic.Dictionary<int, ET.ItemConfig> GetAll() => _dataMap;

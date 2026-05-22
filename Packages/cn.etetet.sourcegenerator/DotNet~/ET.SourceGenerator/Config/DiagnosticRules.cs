@@ -590,6 +590,24 @@ namespace ET
                     MessageFormat,
                     DiagnosticCategories.All,
                     DiagnosticSeverity.Error,
+                true,
+                Description);
+    }
+
+    public static class IPoolClearAnalyzerRule
+    {
+        private const string Title = "IPool类型必须可清理";
+
+        private const string MessageFormat = "Type: {0} 实现了 IPool，但无法生成或找到显式 IPool.Clear() 方法。请将类改为 partial，或手写 void IPool.Clear()。";
+
+        private const string Description = "实现 IPool 的类型必须提供显式 IPool.Clear()，用于对象回池前清理字段，避免与业务 Clear() 冲突.";
+
+        public static readonly DiagnosticDescriptor Rule =
+                new DiagnosticDescriptor(DiagnosticIds.IPoolClearAnalyzerRuleId,
+                    Title,
+                    MessageFormat,
+                    DiagnosticCategories.All,
+                    DiagnosticSeverity.Error,
                     true,
                     Description);
     }

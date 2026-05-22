@@ -20,14 +20,6 @@ namespace ET
         public long QuestId { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.QuestId = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -49,15 +41,6 @@ namespace ET
         public string Message { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -79,14 +62,6 @@ namespace ET
         public long QuestId { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.QuestId = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -108,15 +83,6 @@ namespace ET
         public string Message { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -136,14 +102,6 @@ namespace ET
         public int Count { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.QuestObjectiveId = default;
-            this.Count = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -165,14 +123,6 @@ namespace ET
 
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.QuestId = default;
-            this.QuestObjective.Clear();
-
             ObjectPool.Recycle(this);
         }
     }
@@ -198,15 +148,6 @@ namespace ET
         public int Count { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.QuestId = default;
-            this.QuestObjectiveId = default;
-            this.Count = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -230,14 +171,6 @@ namespace ET
         public int State { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.QuestId = default;
-            this.State = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -257,13 +190,6 @@ namespace ET
         public int RpcId { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -299,17 +225,6 @@ namespace ET
         public long CompleteTime { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.QuestId = default;
-            this.Status = default;
-            this.Objectives.Clear();
-            this.AcceptTime = default;
-            this.CompleteTime = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -334,16 +249,6 @@ namespace ET
 
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.QuestList.Clear();
-
             ObjectPool.Recycle(this);
         }
     }
@@ -365,14 +270,6 @@ namespace ET
         public long QuestId { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.QuestId = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -394,15 +291,6 @@ namespace ET
         public string Message { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -427,14 +315,6 @@ namespace ET
         public long NPCId { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.NPCId = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -468,19 +348,6 @@ namespace ET
 
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.QuestId = default;
-            this.QuestName = default;
-            this.QuestDesc = default;
-            this.QuestType = default;
-            this.RewardExp = default;
-            this.RewardGold = default;
-            this.RewardItems.Clear();
-
             ObjectPool.Recycle(this);
         }
     }
@@ -505,16 +372,6 @@ namespace ET
 
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.AvailableQuests.Clear();
-
             ObjectPool.Recycle(this);
         }
     }
@@ -536,14 +393,6 @@ namespace ET
         public long QuestId { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.QuestId = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -599,25 +448,6 @@ namespace ET
         public int MaxLevel { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.QuestId = default;
-            this.QuestName = default;
-            this.QuestDesc = default;
-            this.QuestStory = default;
-            this.QuestType = default;
-            this.AcceptNPC = default;
-            this.SubmitNPC = default;
-            this.RewardExp = default;
-            this.RewardGold = default;
-            this.RewardItems.Clear();
-            this.PreQuests.Clear();
-            this.MinLevel = default;
-            this.MaxLevel = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -641,16 +471,6 @@ namespace ET
         public QuestDetailInfo QuestDetail { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.QuestDetail = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -673,14 +493,6 @@ namespace ET
         public int Status { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.QuestId = default;
-            this.Status = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -701,14 +513,6 @@ namespace ET
         public long UnitId { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.UnitId = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -736,16 +540,6 @@ namespace ET
 
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.questInfo.Clear();
-
             ObjectPool.Recycle(this);
         }
     }

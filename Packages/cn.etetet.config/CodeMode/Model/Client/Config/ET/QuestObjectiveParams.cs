@@ -11,8 +11,7 @@
 
 namespace ET
 {
-    [EnableClass]
-    public abstract partial class QuestObjectiveParams
+    public abstract partial class QuestObjectiveParams : ET.Object
     {
         public QuestObjectiveParams() 
         {

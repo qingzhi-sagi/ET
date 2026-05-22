@@ -143,6 +143,7 @@ namespace ET
             sb.Append("{\n");
 
             bool isMsgStart = false;
+            bool isPoolMessage = false;
             string msgName = "";
             string responseType = "";
             StringBuilder sbDispose = new();
@@ -181,6 +182,7 @@ namespace ET
                 if (newline.StartsWith("message"))
                 {
                     isMsgStart = true;
+                    isPoolMessage = false;
 
                     string parentClass = "";
                     msgName = newline.Split(splitChars, StringSplitOptions.RemoveEmptyEntries)[1];
@@ -189,6 +191,8 @@ namespace ET
                     {
                         parentClass = ss[1].Trim();
                     }
+
+                    isPoolMessage = MessageImplements(parentClass, "IPool");
 
                     msgOpcode.Add(new OpcodeInfo() { Name = msgName, Opcode = ++startOpcode });
 
@@ -224,6 +228,11 @@ namespace ET
                         sbDispose.Clear();
                         sb.Append("\t{\n");
                         sb.Append($"\t\tpublic static {msgName} Create(bool isFromPool = false)\n\t\t{{\n\t\t\treturn ObjectPool.Fetch<{msgName}>(isFromPool);\n\t\t}}\n\n");
+                        if (isPoolMessage)
+                        {
+                            sb.Append("\t\tpublic bool IsFromPool { get; set; }\n\n");
+                        }
+
                         continue;
                     }
 
@@ -235,7 +244,7 @@ namespace ET
                         // 加了no dispose则自己去定义dispose函数，不要自动生成
                         if (!newline.Contains("// no dispose"))
                         {
-                            sb.Append($"\t\tpublic override void Dispose()\n\t\t{{\n\t\t\tif (!this.IsFromPool)\n\t\t\t{{\n\t\t\t\treturn;\n\t\t\t}}\n\n\t\t\t{sbDispose.ToString().TrimEnd('\t')}\n\t\t\tObjectPool.Recycle(this);\n\t\t}}\n");
+                            sb.Append($"\t\tpublic override void Dispose()\n\t\t{{\n\t\t\tObjectPool.Recycle(this);\n\t\t}}\n");
                         }
 
                         sb.Append("\t}\n\n");
@@ -317,6 +326,18 @@ namespace ET
             using FileStream txt = new(csPath, FileMode.Create, FileAccess.ReadWrite);
             using StreamWriter sw = new(txt);
             sw.Write(result);
+        }
+
+        private static bool MessageImplements(string parentClass, string interfaceName)
+        {
+            if (string.IsNullOrWhiteSpace(parentClass))
+            {
+                return false;
+            }
+
+            return parentClass.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(s => s.Trim())
+                    .Any(s => s == interfaceName || s.EndsWith($".{interfaceName}") || s.EndsWith($"::{interfaceName}"));
         }
 
         private static void Map(StringBuilder sb, string newline, StringBuilder sbDispose)

@@ -39,13 +39,8 @@ namespace ET
         public long TreeId { get; private set; }
 #endif
 
-        public override void Dispose()
+        void IPool.Clear()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-            
             foreach (var kv in dict)
             {
                 if (kv.Value is IDisposable disposable)
@@ -59,9 +54,9 @@ namespace ET
 #if UNITY_EDITOR
             this.debugSnapshot = null;
             this.RunPath = null;
+            this.TreeId = 0;
+            this.EntityId = 0;
 #endif
-
-            ObjectPool.Recycle(this);
         }
 
         public BTEnv Clone()

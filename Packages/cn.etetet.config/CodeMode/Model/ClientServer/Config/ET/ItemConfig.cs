@@ -11,8 +11,7 @@
 
 namespace ET
 {
-    [EnableClass]
-    public sealed partial class ItemConfig
+    public sealed partial class ItemConfig : ET.Object
     {
         public ItemConfig(int Id, string Name, string Desc, int Type, int MaxStack, string Icon, int Quality, int UseType, int Level) 
         {

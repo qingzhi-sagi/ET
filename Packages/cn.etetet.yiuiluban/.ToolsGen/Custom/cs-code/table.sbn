@@ -41,7 +41,6 @@ public partial class {{__name}} : Singleton<{{__name}}>, IConfig
     public {{__name}}(System.Collections.Generic.Dictionary<{{declaring_type_name key_type}}, {{declaring_type_name value_type}}> dataMap)
     {
         _dataMap = dataMap;
-        EndInit();
     }
 
     public System.Collections.Generic.Dictionary<{{declaring_type_name key_type}}, {{declaring_type_name value_type}}> GetAll() => _dataMap;
@@ -94,7 +93,6 @@ public partial class {{__name}} : Singleton<{{__name}}>, IConfig
             {{~end~}}
         }
         {{~end~}}
-        EndInit();
     }
 
     public System.Collections.Generic.IReadOnlyList<{{declaring_type_name value_type}}> DataList => _dataList;
@@ -122,7 +120,6 @@ public partial class {{__name}} : Singleton<{{__name}}>, IConfig
     public {{__name}}({{declaring_type_name value_type}} data)
     {
         _data = data;
-        EndInit();
     }
 
     public {{declaring_type_name value_type}} Data => _data;

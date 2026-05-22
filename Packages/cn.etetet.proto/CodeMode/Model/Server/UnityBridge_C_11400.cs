@@ -23,16 +23,6 @@ namespace ET
         public string ParentPath { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Name = default;
-            this.PrimitiveType = default;
-            this.ParentPath = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -58,17 +48,6 @@ namespace ET
         public BridgeObjectInfo Object { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.Created = default;
-            this.Object = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -91,15 +70,6 @@ namespace ET
         public int InstanceId { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Path = default;
-            this.InstanceId = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -127,18 +97,6 @@ namespace ET
         public string DestroyedPath { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.Destroyed = default;
-            this.DestroyedName = default;
-            this.DestroyedPath = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -169,19 +127,6 @@ namespace ET
         public bool IncludeComponents { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Name = default;
-            this.Tag = default;
-            this.WithComponent = default;
-            this.MaxResults = default;
-            this.IncludeInactive = default;
-            this.IncludeComponents = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -208,17 +153,6 @@ namespace ET
         public int Count { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.Objects.Clear();
-            this.Count = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -245,17 +179,6 @@ namespace ET
         public bool Toggle { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Path = default;
-            this.InstanceId = default;
-            this.Active = default;
-            this.Toggle = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -283,18 +206,6 @@ namespace ET
         public bool ActiveInHierarchy { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.Object = default;
-            this.ActiveSelf = default;
-            this.ActiveInHierarchy = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -319,16 +230,6 @@ namespace ET
         public string NewName { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Path = default;
-            this.InstanceId = default;
-            this.NewName = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -356,18 +257,6 @@ namespace ET
         public BridgeObjectInfo Object { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.OldName = default;
-            this.NewName = default;
-            this.Object = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -390,15 +279,6 @@ namespace ET
         public int InstanceId { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Path = default;
-            this.InstanceId = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -424,17 +304,6 @@ namespace ET
         public BridgeObjectInfo Duplicate { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.Original = default;
-            this.Duplicate = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -461,17 +330,6 @@ namespace ET
         public int MaxChildren { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Path = default;
-            this.InstanceId = default;
-            this.IncludeComponents = default;
-            this.MaxChildren = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -502,19 +360,6 @@ namespace ET
         public string ParentName { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.Object = default;
-            this.ChildCount = default;
-            this.Children.Clear();
-            this.ParentName = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -537,15 +382,6 @@ namespace ET
         public int InstanceId { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Path = default;
-            this.InstanceId = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -573,18 +409,6 @@ namespace ET
         public BridgeTransformInfo Transform { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.Name = default;
-            this.Path = default;
-            this.Transform = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -611,17 +435,6 @@ namespace ET
         public bool Local { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Path = default;
-            this.InstanceId = default;
-            this.Position = default;
-            this.Local = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -649,18 +462,6 @@ namespace ET
         public BridgeTransformInfo Transform { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.Name = default;
-            this.Path = default;
-            this.Transform = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -687,17 +488,6 @@ namespace ET
         public bool Local { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Path = default;
-            this.InstanceId = default;
-            this.EulerAngles = default;
-            this.Local = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -725,18 +515,6 @@ namespace ET
         public BridgeTransformInfo Transform { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.Name = default;
-            this.Path = default;
-            this.Transform = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -765,18 +543,6 @@ namespace ET
         public float Uniform { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Path = default;
-            this.InstanceId = default;
-            this.Scale = default;
-            this.UseUniform = default;
-            this.Uniform = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -804,18 +570,6 @@ namespace ET
         public BridgeTransformInfo Transform { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.Name = default;
-            this.Path = default;
-            this.Transform = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -844,18 +598,6 @@ namespace ET
         public bool WorldPositionStays { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Path = default;
-            this.InstanceId = default;
-            this.ParentPath = default;
-            this.ParentInstanceId = default;
-            this.WorldPositionStays = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -885,19 +627,6 @@ namespace ET
         public BridgeTransformInfo Transform { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.Name = default;
-            this.Path = default;
-            this.ParentPath = default;
-            this.Transform = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -928,19 +657,6 @@ namespace ET
         public bool HasTargetPosition { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Path = default;
-            this.InstanceId = default;
-            this.TargetPath = default;
-            this.TargetInstanceId = default;
-            this.TargetPosition = default;
-            this.HasTargetPosition = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -968,18 +684,6 @@ namespace ET
         public BridgeTransformInfo Transform { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.Name = default;
-            this.Path = default;
-            this.Transform = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -1008,18 +712,6 @@ namespace ET
         public bool ResetScale { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Path = default;
-            this.InstanceId = default;
-            this.ResetPosition = default;
-            this.ResetRotation = default;
-            this.ResetScale = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -1047,18 +739,6 @@ namespace ET
         public BridgeTransformInfo Transform { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.Name = default;
-            this.Path = default;
-            this.Transform = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -1087,18 +767,6 @@ namespace ET
         public bool Last { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Path = default;
-            this.InstanceId = default;
-            this.Index = default;
-            this.First = default;
-            this.Last = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -1128,19 +796,6 @@ namespace ET
         public BridgeTransformInfo Transform { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.Name = default;
-            this.Path = default;
-            this.SiblingIndex = default;
-            this.Transform = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -1161,14 +816,6 @@ namespace ET
         public string MenuPath { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.MenuPath = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -1194,17 +841,6 @@ namespace ET
         public bool Executed { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.MenuPath = default;
-            this.Executed = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -1227,15 +863,6 @@ namespace ET
         public BridgeVector3 Position { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.PrefabPath = default;
-            this.Position = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -1261,17 +888,6 @@ namespace ET
         public BridgeObjectInfo Instance { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.PrefabPath = default;
-            this.Instance = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -1294,15 +910,6 @@ namespace ET
         public string SavePath { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.GameObjectPath = default;
-            this.SavePath = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -1332,19 +939,6 @@ namespace ET
         public BridgeAssetInfo Asset { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.GameObjectName = default;
-            this.PrefabPath = default;
-            this.Saved = default;
-            this.Asset = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -1367,15 +961,6 @@ namespace ET
         public bool Completely { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.GameObjectPath = default;
-            this.Completely = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -1405,19 +990,6 @@ namespace ET
         public BridgeObjectInfo Object { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.GameObjectName = default;
-            this.Unpacked = default;
-            this.Completely = default;
-            this.Object = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -1440,15 +1012,6 @@ namespace ET
         public string GameObjectPath { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.PrefabPath = default;
-            this.GameObjectPath = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -1482,21 +1045,6 @@ namespace ET
         public string PrefabStatus { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.Name = default;
-            this.IsPrefabAsset = default;
-            this.IsPrefabInstance = default;
-            this.PrefabAssetPath = default;
-            this.PrefabType = default;
-            this.PrefabStatus = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -1523,17 +1071,6 @@ namespace ET
         public bool IncludeComponents { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.PrefabPath = default;
-            this.Depth = default;
-            this.IncludeInactive = default;
-            this.IncludeComponents = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -1566,20 +1103,6 @@ namespace ET
 
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.PrefabPath = default;
-            this.PrefabName = default;
-            this.RootCount = default;
-            this.Truncated = default;
-            this.Roots.Clear();
-
             ObjectPool.Recycle(this);
         }
     }
@@ -1600,14 +1123,6 @@ namespace ET
         public string GameObjectPath { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.GameObjectPath = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -1635,18 +1150,6 @@ namespace ET
         public bool Applied { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.GameObjectName = default;
-            this.PrefabPath = default;
-            this.Applied = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -1673,17 +1176,6 @@ namespace ET
         public string ObjectPath { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Path = default;
-            this.InstanceId = default;
-            this.AssetPath = default;
-            this.ObjectPath = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -1716,20 +1208,6 @@ namespace ET
         public int Count { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.GameObjectName = default;
-            this.AssetPath = default;
-            this.ObjectPath = default;
-            this.Components.Clear();
-            this.Count = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -1764,21 +1242,6 @@ namespace ET
         public bool IncludeChildren { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Path = default;
-            this.InstanceId = default;
-            this.AssetPath = default;
-            this.ObjectPath = default;
-            this.ComponentName = default;
-            this.ComponentIndex = default;
-            this.ComponentInstanceId = default;
-            this.IncludeChildren = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -1815,22 +1278,6 @@ namespace ET
 
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.TargetName = default;
-            this.TargetType = default;
-            this.GameObjectName = default;
-            this.ComponentName = default;
-            this.AssetPath = default;
-            this.ObjectPath = default;
-            this.Properties.Clear();
-
             ObjectPool.Recycle(this);
         }
     }
@@ -1865,21 +1312,6 @@ namespace ET
         public string PropertyName { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Path = default;
-            this.InstanceId = default;
-            this.AssetPath = default;
-            this.ObjectPath = default;
-            this.ComponentName = default;
-            this.ComponentIndex = default;
-            this.ComponentInstanceId = default;
-            this.PropertyName = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -1913,21 +1345,6 @@ namespace ET
         public BridgePropertyInfo Property { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.TargetName = default;
-            this.TargetType = default;
-            this.ComponentName = default;
-            this.AssetPath = default;
-            this.ObjectPath = default;
-            this.Property = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -1962,21 +1379,6 @@ namespace ET
         public string Keyword { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Path = default;
-            this.InstanceId = default;
-            this.AssetPath = default;
-            this.ObjectPath = default;
-            this.ComponentName = default;
-            this.ComponentIndex = default;
-            this.ComponentInstanceId = default;
-            this.Keyword = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -2015,23 +1417,6 @@ namespace ET
 
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.TargetName = default;
-            this.TargetType = default;
-            this.ComponentName = default;
-            this.Keyword = default;
-            this.Count = default;
-            this.AssetPath = default;
-            this.ObjectPath = default;
-            this.Properties.Clear();
-
             ObjectPool.Recycle(this);
         }
     }
@@ -2068,22 +1453,6 @@ namespace ET
         public BridgePropertyInfo Value { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Path = default;
-            this.InstanceId = default;
-            this.AssetPath = default;
-            this.ObjectPath = default;
-            this.ComponentName = default;
-            this.ComponentIndex = default;
-            this.ComponentInstanceId = default;
-            this.PropertyName = default;
-            this.Value = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -2122,23 +1491,6 @@ namespace ET
 
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.TargetName = default;
-            this.TargetType = default;
-            this.GameObjectName = default;
-            this.ComponentName = default;
-            this.AssetPath = default;
-            this.ObjectPath = default;
-            this.Changed = default;
-            this.Properties.Clear();
-
             ObjectPool.Recycle(this);
         }
     }
@@ -2174,21 +1526,6 @@ namespace ET
 
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Path = default;
-            this.InstanceId = default;
-            this.AssetPath = default;
-            this.ObjectPath = default;
-            this.ComponentName = default;
-            this.ComponentIndex = default;
-            this.ComponentInstanceId = default;
-            this.Values.Clear();
-
             ObjectPool.Recycle(this);
         }
     }
@@ -2227,23 +1564,6 @@ namespace ET
 
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.TargetName = default;
-            this.TargetType = default;
-            this.GameObjectName = default;
-            this.ComponentName = default;
-            this.AssetPath = default;
-            this.ObjectPath = default;
-            this.Changed = default;
-            this.Properties.Clear();
-
             ObjectPool.Recycle(this);
         }
     }
@@ -2272,18 +1592,6 @@ namespace ET
         public string TypeName { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Path = default;
-            this.InstanceId = default;
-            this.AssetPath = default;
-            this.ObjectPath = default;
-            this.TypeName = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -2313,19 +1621,6 @@ namespace ET
         public BridgeComponentInfo AddedComponent { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.GameObjectName = default;
-            this.AssetPath = default;
-            this.ObjectPath = default;
-            this.AddedComponent = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -2358,20 +1653,6 @@ namespace ET
         public int ComponentInstanceId { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Path = default;
-            this.InstanceId = default;
-            this.AssetPath = default;
-            this.ObjectPath = default;
-            this.ComponentName = default;
-            this.ComponentIndex = default;
-            this.ComponentInstanceId = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -2401,19 +1682,6 @@ namespace ET
         public BridgeComponentInfo RemovedComponent { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.GameObjectName = default;
-            this.AssetPath = default;
-            this.ObjectPath = default;
-            this.RemovedComponent = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -2434,14 +1702,6 @@ namespace ET
         public int Count { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Count = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -2465,16 +1725,6 @@ namespace ET
         public int Count { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.Count = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -2495,14 +1745,6 @@ namespace ET
         public int Count { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Count = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -2526,16 +1768,6 @@ namespace ET
         public int Count { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.Count = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -2558,15 +1790,6 @@ namespace ET
         public bool Pause { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Toggle = default;
-            this.Pause = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -2590,16 +1813,6 @@ namespace ET
         public bool IsPaused { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.IsPaused = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -2618,13 +1831,6 @@ namespace ET
         public int RpcId { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -2662,23 +1868,6 @@ namespace ET
         public string EnterPlayModeOptions { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.IsPlaying = default;
-            this.IsPaused = default;
-            this.IsCompiling = default;
-            this.IsUpdating = default;
-            this.ApplicationPath = default;
-            this.ApplicationContentsPath = default;
-            this.EnterPlayModeOptionsEnabled = default;
-            this.EnterPlayModeOptions = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -2702,15 +1891,6 @@ namespace ET
         public bool StopOnError { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Commands.Clear();
-            this.StopOnError = default;
-
             ObjectPool.Recycle(this);
         }
     }
@@ -2741,19 +1921,6 @@ namespace ET
         public bool Completed { get; set; }
         public override void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-
-            this.RpcId = default;
-            this.Error = default;
-            this.Message = default;
-            this.Results.Clear();
-            this.Count = default;
-            this.Failed = default;
-            this.Completed = default;
-
             ObjectPool.Recycle(this);
         }
     }

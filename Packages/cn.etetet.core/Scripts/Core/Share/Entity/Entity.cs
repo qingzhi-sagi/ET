@@ -20,7 +20,7 @@ namespace ET
     }
 
     [MemoryPackable(GenerateType.NoGenerate)]
-    public abstract partial class Entity: DisposeObject, IPool
+    public abstract partial class Entity: DisposeObject
     {
         // 给source generater调用的
         public static T Fetch<T>() where T : Entity
@@ -488,15 +488,12 @@ namespace ET
             }
 
             this.parent = null;
-
-            base.Dispose();
             
-            // 把status字段除了IsFromPool其它的status标记都还原
             bool isFromPool = this.IsFromPool;
             this.status = EntityStatus.None;
             this.IsFromPool = isFromPool;
-            
-            ObjectPool.Recycle(this);
+
+            base.Dispose();
         }
 
         private void AddToComponents(Entity component)
@@ -665,10 +662,34 @@ namespace ET
         private static Entity Create(Type type, bool isFromPool)
         {
             Entity component = (Entity) ObjectPool.Fetch(type, isFromPool);
-
-            component.IsFromPool = isFromPool;
+            component.IsFromPool = true;
             component.IsNoDeserializeSystem = true;
             component.Id = 0;
+            return component;
+        }
+
+        protected Entity CreateComponent(Type type, long id, bool isFromPool)
+        {
+            this.CheckThread();
+            
+            if (this.components != null && this.components.ContainsKey(this.GetComponentLongHashCode(type)))
+            {
+                throw new Exception($"entity already has component: {type.FullName}");
+            }
+
+            Entity component = Create(type, isFromPool);
+            component.Id = id;
+            component.ComponentParent = this;
+            return component;
+        }
+
+        protected Entity CreateChild(Type type, long id, bool isFromPool)
+        {
+            this.CheckThread();
+            
+            Entity component = Create(type, isFromPool);
+            component.Id = id;
+            component.Parent = this;
             return component;
         }
 
@@ -707,98 +728,58 @@ namespace ET
 
         public K AddComponentWithId<K>(long id, bool isFromPool = false) where K : Entity, IAwake, new()
         {
-            this.CheckThread();
-            
-            Type type = typeof (K);
-            if (this.components != null && this.components.ContainsKey(this.GetComponentLongHashCode(type)))
-            {
-                throw new Exception($"entity already has component: {type.FullName}");
-            }
-
-            Entity component = Create(type, isFromPool);
-            component.Id = id;
-            component.ComponentParent = this;
-            EntitySystemSingleton entitySystemSingleton = EntitySystemSingleton.Instance;
-            entitySystemSingleton.Awake(component);
-
+            Entity component = this.CreateComponent(typeof (K), id, isFromPool);
+            EntitySystemSingleton.Instance.Awake(component);
             return component as K;
         }
 
         public K AddComponentWithId<K, P1>(long id, P1 p1, bool isFromPool = false) where K : Entity, IAwake<P1>, new()
         {
-            this.CheckThread();
-            
-            Type type = typeof (K);
-            if (this.components != null && this.components.ContainsKey(this.GetComponentLongHashCode(type)))
-            {
-                throw new Exception($"entity already has component: {type.FullName}");
-            }
-
-            Entity component = Create(type, isFromPool);
-            component.Id = id;
-            component.ComponentParent = this;
-            EntitySystemSingleton entitySystemSingleton = EntitySystemSingleton.Instance;
-            entitySystemSingleton.Awake(component, p1);
-
+            Entity component = this.CreateComponent(typeof (K), id, isFromPool);
+            EntitySystemSingleton.Instance.Awake(component, p1);
             return component as K;
         }
 
         public K AddComponentWithId<K, P1, P2>(long id, P1 p1, P2 p2, bool isFromPool = false) where K : Entity, IAwake<P1, P2>, new()
         {
-            this.CheckThread();
-            
-            Type type = typeof (K);
-            if (this.components != null && this.components.ContainsKey(this.GetComponentLongHashCode(type)))
-            {
-                throw new Exception($"entity already has component: {type.FullName}");
-            }
-
-            Entity component = Create(type, isFromPool);
-            component.Id = id;
-            component.ComponentParent = this;
-            EntitySystemSingleton entitySystemSingleton = EntitySystemSingleton.Instance;
-            entitySystemSingleton.Awake(component, p1, p2);
-
+            Entity component = this.CreateComponent(typeof (K), id, isFromPool);
+            EntitySystemSingleton.Instance.Awake(component, p1, p2);
             return component as K;
         }
 
         public K AddComponentWithId<K, P1, P2, P3>(long id, P1 p1, P2 p2, P3 p3, bool isFromPool = false) where K : Entity, IAwake<P1, P2, P3>, new()
         {
-            this.CheckThread();
-            
-            Type type = typeof (K);
-            if (this.components != null && this.components.ContainsKey(this.GetComponentLongHashCode(type)))
-            {
-                throw new Exception($"entity already has component: {type.FullName}");
-            }
-
-            Entity component = Create(type, isFromPool);
-            component.Id = id;
-            component.ComponentParent = this;
-            EntitySystemSingleton entitySystemSingleton = EntitySystemSingleton.Instance;
-            entitySystemSingleton.Awake(component, p1, p2, p3);
-
+            Entity component = this.CreateComponent(typeof (K), id, isFromPool);
+            EntitySystemSingleton.Instance.Awake(component, p1, p2, p3);
             return component as K;
         }
 
         public K AddComponent<K>(bool isFromPool = false) where K : Entity, IAwake, new()
         {
-            return this.AddComponentWithId<K>(this.Id, isFromPool);
+            Entity component = this.CreateComponent(typeof (K), this.Id, isFromPool);
+            EntitySystemSingleton.Instance.Awake(component);
+            return component as K;
         }
 
         public K AddComponent<K, P1>(P1 p1, bool isFromPool = false) where K : Entity, IAwake<P1>, new()
         {
-            return this.AddComponentWithId<K, P1>(this.Id, p1, isFromPool);
+            Entity component = this.CreateComponent(typeof (K), this.Id, isFromPool);
+            EntitySystemSingleton.Instance.Awake(component, p1);
+            return component as K;
         }
 
         public K AddComponent<K, P1, P2>(P1 p1, P2 p2, bool isFromPool = false) where K : Entity, IAwake<P1, P2>, new()
         {
-            return this.AddComponentWithId<K, P1, P2>(this.Id, p1, p2, isFromPool);
+            Entity component = this.CreateComponent(typeof (K), this.Id, isFromPool);
+            EntitySystemSingleton.Instance.Awake(component, p1, p2);
+            return component as K;
         }
 
         public K AddComponent<K, P1, P2, P3>(P1 p1, P2 p2, P3 p3, bool isFromPool = false) where K : Entity, IAwake<P1, P2, P3>, new()
         {
-            return this.AddComponentWithId<K, P1, P2, P3>(this.Id, p1, p2, p3, isFromPool);
+            Entity component = this.CreateComponent(typeof (K), this.Id, isFromPool);
+            EntitySystemSingleton.Instance.Awake(component, p1, p2, p3);
+            return component as K;
         }
 
         public Entity AddChild(Entity entity)
@@ -809,103 +790,60 @@ namespace ET
 
         public T AddChild<T>(bool isFromPool = false) where T : Entity, IAwake
         {
-            this.CheckThread();
-            
             Type type = typeof (T);
-            T component = (T) Entity.Create(type, isFromPool);
-            component.Id = IdGenerater.Instance.GenerateId();
-            component.Parent = this;
-
+            T component = (T) this.CreateChild(type, IdGenerater.Instance.GenerateId(), isFromPool);
             EntitySystemSingleton.Instance.Awake(component);
             return component;
         }
 
         public T AddChild<T, A>(A a, bool isFromPool = false) where T : Entity, IAwake<A>
         {
-            this.CheckThread();
-            
             Type type = typeof (T);
-            T component = (T) Entity.Create(type, isFromPool);
-            component.Id = IdGenerater.Instance.GenerateId();
-            component.Parent = this;
-
+            T component = (T) this.CreateChild(type, IdGenerater.Instance.GenerateId(), isFromPool);
             EntitySystemSingleton.Instance.Awake(component, a);
             return component;
         }
 
         public T AddChild<T, A, B>(A a, B b, bool isFromPool = false) where T : Entity, IAwake<A, B>
         {
-            this.CheckThread();
-            
             Type type = typeof (T);
-            T component = (T) Entity.Create(type, isFromPool);
-            component.Id = IdGenerater.Instance.GenerateId();
-            component.Parent = this;
-
+            T component = (T) this.CreateChild(type, IdGenerater.Instance.GenerateId(), isFromPool);
             EntitySystemSingleton.Instance.Awake(component, a, b);
             return component;
         }
 
         public T AddChild<T, A, B, C>(A a, B b, C c, bool isFromPool = false) where T : Entity, IAwake<A, B, C>
         {
-            this.CheckThread();
-            
             Type type = typeof (T);
-            T component = (T) Entity.Create(type, isFromPool);
-            component.Id = IdGenerater.Instance.GenerateId();
-            component.Parent = this;
-
+            T component = (T) this.CreateChild(type, IdGenerater.Instance.GenerateId(), isFromPool);
             EntitySystemSingleton.Instance.Awake(component, a, b, c);
             return component;
         }
 
         public T AddChildWithId<T>(long id, bool isFromPool = false) where T : Entity, IAwake
         {
-            this.CheckThread();
-            
-            Type type = typeof (T);
-            T component = Entity.Create(type, isFromPool) as T;
-            component.Id = id;
-            component.Parent = this;
+            T component = (T) this.CreateChild(typeof (T), id, isFromPool);
             EntitySystemSingleton.Instance.Awake(component);
             return component;
         }
 
         public T AddChildWithId<T, A>(long id, A a, bool isFromPool = false) where T : Entity, IAwake<A>
         {
-            this.CheckThread();
-            
-            Type type = typeof (T);
-            T component = (T) Entity.Create(type, isFromPool);
-            component.Id = id;
-            component.Parent = this;
-
+            T component = (T) this.CreateChild(typeof (T), id, isFromPool);
             EntitySystemSingleton.Instance.Awake(component, a);
             return component;
         }
 
         public T AddChildWithId<T, A, B>(long id, A a, B b, bool isFromPool = false) where T : Entity, IAwake<A, B>
         {
-            this.CheckThread();
-            
-            Type type = typeof (T);
-            T component = (T) Entity.Create(type, isFromPool);
-            component.Id = id;
-            component.Parent = this;
-
+            T component = (T) this.CreateChild(typeof (T), id, isFromPool);
             EntitySystemSingleton.Instance.Awake(component, a, b);
             return component;
         }
 
         public T AddChildWithId<T, A, B, C>(long id, A a, B b, C c, bool isFromPool = false) where T : Entity, IAwake<A, B, C>
         {
-            this.CheckThread();
-            
-            Type type = typeof (T);
-            T component = (T) Entity.Create(type, isFromPool);
-            component.Id = id;
-            component.Parent = this;
-
+            T component = (T) this.CreateChild(typeof (T), id, isFromPool);
             EntitySystemSingleton.Instance.Awake(component, a, b, c);
             return component;
         }

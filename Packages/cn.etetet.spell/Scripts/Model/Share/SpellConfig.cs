@@ -11,7 +11,7 @@ namespace ET
     {
         [BsonElement]
         [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
-        private Dictionary<int, SpellConfig> dict = new();
+        private Dictionary<int, SpellConfig> _dataMap = new();
 
         public void Awake()
         {
@@ -19,28 +19,35 @@ namespace ET
         
         public void Add(SpellConfig spellConfig)
         {
-            this.dict.Add(spellConfig.Id, spellConfig);
+            this._dataMap.Add(spellConfig.Id, spellConfig);
         }
 
         public SpellConfig Get(int id)
         {
-            this.dict.TryGetValue(id, out SpellConfig item);
+            this._dataMap.TryGetValue(id, out SpellConfig item);
             return item;
         }
 
         public bool Contain(int id)
         {
-            return this.dict.ContainsKey(id);
+            return this._dataMap.ContainsKey(id);
         }
 
         public IReadOnlyDictionary<int, SpellConfig> GetAll()
         {
-            return this.dict;
+            return this._dataMap;
         }
 
         public void ResolveRef()
         {
+            foreach (var _v in this._dataMap.Values)
+            {
+                _v.ResolveRef();
+            }
+            EndRef();
         }
+
+        partial void EndRef();
     }
 
     [LabelText("施法类型")]
@@ -58,7 +65,7 @@ namespace ET
 
     [Serializable]
     [HideReferenceObjectPicker]
-    public partial class SpellConfig : ProtoObject
+    public partial class SpellConfig: Object
     {
         [ReadOnly]
         [BoxGroup("技能信息")]
@@ -89,5 +96,12 @@ namespace ET
 #endif
         [LabelText("目标选择")]
         public TargetSelector TargetSelector;
+
+        public  void ResolveRef()
+        {
+            EndRef();
+        }
+        
+        partial void EndRef();
     }
 }

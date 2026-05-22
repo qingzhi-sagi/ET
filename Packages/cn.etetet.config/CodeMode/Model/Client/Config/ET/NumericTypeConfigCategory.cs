@@ -18,7 +18,6 @@ public partial class NumericTypeConfigCategory : Singleton<NumericTypeConfigCate
     public NumericTypeConfigCategory(System.Collections.Generic.Dictionary<int, ET.NumericTypeConfig> dataMap)
     {
         _dataMap = dataMap;
-        EndInit();
     }
 
     public System.Collections.Generic.Dictionary<int, ET.NumericTypeConfig> GetAll() => _dataMap;

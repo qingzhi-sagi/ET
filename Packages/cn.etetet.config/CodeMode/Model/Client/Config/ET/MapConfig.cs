@@ -11,8 +11,7 @@
 
 namespace ET
 {
-    [EnableClass]
-    public sealed partial class MapConfig
+    public sealed partial class MapConfig : ET.Object
     {
         public MapConfig(int Id, string Name, string Desc, ET.CopyType CopyType, string MapResName) 
         {

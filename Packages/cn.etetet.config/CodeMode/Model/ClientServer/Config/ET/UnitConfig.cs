@@ -11,8 +11,7 @@
 
 namespace ET
 {
-    [EnableClass]
-    public sealed partial class UnitConfig
+    public sealed partial class UnitConfig : ET.Object
     {
         public UnitConfig(int Id, ET.UnitType UnitType, string Name, string HeadIcon, ET.EClassType ClassType, System.Collections.Generic.Dictionary<NumericType, long> KV) 
         {

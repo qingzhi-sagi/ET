@@ -18,7 +18,6 @@ public partial class MapUnitConfigCategory : Singleton<MapUnitConfigCategory>, I
     public MapUnitConfigCategory(System.Collections.Generic.Dictionary<int, ET.MapUnitConfig> dataMap)
     {
         _dataMap = dataMap;
-        EndInit();
     }
 
     public System.Collections.Generic.Dictionary<int, ET.MapUnitConfig> GetAll() => _dataMap;

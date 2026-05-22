@@ -3,21 +3,21 @@ using System.Collections.Generic;
 
 namespace ET
 {
-    public class HashSetComponent<T>: HashSet<T>, IPool
+    [DisableNew]
+    public class HashSetComponent<T>: HashSet<T>, IPool, IDisposable
     {
         public static HashSetComponent<T> Create()
         {
             return ObjectPool.Fetch(typeof (HashSetComponent<T>)) as HashSetComponent<T>;
         }
 
+        void IPool.Clear()
+        {
+            base.Clear();
+        }
+
         public void Dispose()
         {
-            if (!this.IsFromPool)
-            {
-                return;
-            }
-            
-            this.Clear();
             ObjectPool.Recycle(this);
         }
 

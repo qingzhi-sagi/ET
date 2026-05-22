@@ -18,7 +18,6 @@ public partial class TextConfigCategory : Singleton<TextConfigCategory>, IConfig
     public TextConfigCategory(System.Collections.Generic.Dictionary<int, ET.TextConfig> dataMap)
     {
         _dataMap = dataMap;
-        EndInit();
     }
 
     public System.Collections.Generic.Dictionary<int, ET.TextConfig> GetAll() => _dataMap;
