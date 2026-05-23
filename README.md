@@ -1,6 +1,114 @@
 # English: please use AI to translate to english
 
-# ET10.0(昭君)
+
+ET10
+The AI Native Framework
+
+ET10 is a next-generation game development framework designed for the AI coding era.
+
+Unlike traditional game frameworks that only focus on runtime performance, ET10 is built to make AI-assisted game development practical for large-scale online games.
+
+ET10 combines:
+
+Distributed MMO architecture
+Fiber-based actor runtime
+Cloud-native server infrastructure
+Hot reload workflows
+Automated gameplay testing
+AI harness skills
+Unity runtime bridge
+Analyzer-enforced architecture
+
+so AI can safely develop, test, and maintain complex online game projects without breaking project structure.
+
+Built for AI-Assisted Development
+
+Most AI coding tools can generate code.
+
+ET10 ensures the generated code can:
+
+compile successfully
+pass gameplay tests
+obey architecture rules
+survive hot reload
+scale across distributed servers
+integrate safely with existing systems
+
+before being accepted into production.
+
+ET10 includes a powerful analyzer ecosystem to enforce large-scale project architecture, including:
+
+async safety rules
+entity lifecycle protection
+package dependency constraints
+actor usage validation
+runtime safety checks
+
+This allows AI to work within strict architectural boundaries instead of generating uncontrolled code.
+
+Designed for Large-Scale Online Games
+
+ET10 provides a modern MMO runtime with:
+
+distributed actor model
+dynamic room scaling
+service discovery
+cloud-native deployment
+location services
+hotfix workflows
+runtime observability
+multi-process server architecture
+
+The framework is designed for long-running, scalable online games rather than small standalone projects.
+
+AI Harness + Automated Verification
+
+ET10 goes beyond code generation.
+
+It provides a complete AI development workflow including:
+
+automated compilation
+gameplay verification
+multi-bot testing
+Unity Editor integration
+runtime log analysis
+test harness execution
+automated validation pipelines
+
+AI is not only able to write code, but also verify whether the game actually works.
+
+Unity Runtime Integration
+
+ET10 includes a Unity runtime bridge that allows AI to interact directly with the engine runtime.
+
+Examples include:
+
+creating GameObjects
+modifying components
+controlling Play Mode
+refreshing assets
+reading logs
+running gameplay tests
+inspecting runtime entities
+
+This enables a true AI-driven game development workflow instead of simple file-based code generation.
+
+Why ET10?
+
+Traditional frameworks are designed for human developers.
+
+ET10 is designed for a future where:
+
+AI writes code
+analyzers enforce architecture
+automated systems verify gameplay
+cloud infrastructure scales dynamically
+developers focus on game design instead of repetitive engineering tasks
+ET10
+AI writes code. ET10 makes it production-ready.
+
+
+# ET10.0(昭君) 
 1. 开源版本使用ET License，只可以用于学习，不可二次修改开源，商业使用需要购买许可，价格4999，具体请看LICENSE文件  
    | 包名 | 详细内容 |  
    |------|------|
