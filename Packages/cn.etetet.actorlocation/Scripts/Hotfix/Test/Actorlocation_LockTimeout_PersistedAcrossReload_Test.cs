@@ -15,8 +15,8 @@ namespace ET.Test
             try
             {
                 Scene scene = Actorlocation_TestHelper.PrepareLocationScene(scope.TestFiber);
-                LocationOneType location = Actorlocation_TestHelper.GetLocationOneType(scene, LocationType);
-                EntityRef<LocationOneType> locationRef = location;
+                LocationComponent location = Actorlocation_TestHelper.GetLocationComponent(scene);
+                EntityRef<LocationComponent> locationRef = location;
 
                 TimerComponent timerComponent = scene.TimerComponent;
                 EntityRef<TimerComponent> timerRef = timerComponent;
@@ -24,17 +24,17 @@ namespace ET.Test
                 long key = IdGenerater.Instance.GenerateId();
                 ActorId actorA = Actorlocation_TestHelper.CreateActorId(scope.TestFiber, 301007, 1);
 
-                await location.Add(key, actorA);
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "persist-timeout/add");
+                await location.Add(LocationType, key, actorA);
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "persist-timeout/add");
 
-                long lockToken = await location.Lock(key, actorA, 180);
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "persist-timeout/lock");
+                long lockToken = await location.Lock(LocationType, key, actorA, 180);
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "persist-timeout/lock");
                 Actorlocation_TestHelper.AssertTrue(lockToken != 0, "persist-timeout/lock-token");
 
-                LocationInfo lockInfo = location.GetChild<LocationInfo>(key);
-                Actorlocation_TestHelper.AssertTrue(lockInfo != null, "persist-timeout/lock-info-exists");
-                Actorlocation_TestHelper.AssertTrue(lockInfo.LockToken == lockToken, "persist-timeout/lock-token-match");
-                Actorlocation_TestHelper.AssertTrue(lockInfo.LockExpireTime > lockInfo.GetSingleton<TimeInfo>().ServerNow(),
+                LocationTypeState lockState = Actorlocation_TestHelper.GetLocationTypeState(location, LocationType, key,
+                    "persist-timeout/lock-info");
+                Actorlocation_TestHelper.AssertTrue(lockState.LockToken == lockToken, "persist-timeout/lock-token-match");
+                Actorlocation_TestHelper.AssertTrue(lockState.LockExpireTime > location.GetSingleton<TimeInfo>().ServerNow(),
                     "persist-timeout/lock-expire-time");
 
                 // 清理内存缓存模拟主备切换，仅靠 DB 恢复状态。
@@ -42,9 +42,9 @@ namespace ET.Test
 
                 try
                 {
-                    LocationOneType current = Actorlocation_TestHelper.EnsureLocation(locationRef,
+                    LocationComponent current = Actorlocation_TestHelper.EnsureLocationComponent(locationRef,
                         "persist-timeout/get-retry-before-expire");
-                    await current.Get(key);
+                    await current.Get(LocationType, key);
                     throw new Exception(
                         $"persist-timeout/get-retry-before-expire: expected RpcException({ErrorCode.ERR_LocationGetRetry}), but no exception");
                 }
@@ -56,7 +56,7 @@ namespace ET.Test
                         "persist-timeout/get-retry-before-expire");
                 }
 
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "persist-timeout/clear-cache-before-expire");
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "persist-timeout/clear-cache-before-expire");
                 location.RemoveChild(key);
 
                 timerComponent = timerRef;
@@ -66,26 +66,26 @@ namespace ET.Test
                 }
                 await timerComponent.WaitAsync(260);
 
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "persist-timeout/get-after-expire-before-call");
-                ActorId actorAfterExpire = await location.Get(key);
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "persist-timeout/get-after-expire");
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "persist-timeout/get-after-expire-before-call");
+                ActorId actorAfterExpire = await location.Get(LocationType, key);
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "persist-timeout/get-after-expire");
                 Actorlocation_TestHelper.AssertActorEqual(actorA, actorAfterExpire, "persist-timeout/get-after-expire");
 
-                LocationInfo unlockedInfo = location.GetChild<LocationInfo>(key);
-                Actorlocation_TestHelper.AssertTrue(unlockedInfo != null, "persist-timeout/unlocked-info-exists");
-                Actorlocation_TestHelper.AssertTrue(unlockedInfo.LockToken == 0, "persist-timeout/unlocked-token");
-                Actorlocation_TestHelper.AssertTrue(unlockedInfo.LockExpireTime == 0, "persist-timeout/unlocked-expire-time");
+                LocationTypeState unlockedState = Actorlocation_TestHelper.GetLocationTypeState(location, LocationType, key,
+                    "persist-timeout/unlocked-info");
+                Actorlocation_TestHelper.AssertTrue(unlockedState.LockToken == 0, "persist-timeout/unlocked-token");
+                Actorlocation_TestHelper.AssertTrue(unlockedState.LockExpireTime == 0, "persist-timeout/unlocked-expire-time");
 
                 // 再次清缓存，验证解锁状态已持久化，重载后仍可直接 Get。
                 location.RemoveChild(key);
-                ActorId actorAfterSecondReload = await location.Get(key);
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "persist-timeout/get-after-second-reload");
+                ActorId actorAfterSecondReload = await location.Get(LocationType, key);
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "persist-timeout/get-after-second-reload");
                 Actorlocation_TestHelper.AssertActorEqual(actorA, actorAfterSecondReload,
                     "persist-timeout/get-after-second-reload");
 
-                await location.Remove(key);
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "persist-timeout/remove");
-                Actorlocation_TestHelper.AssertTrue(location.GetChild<LocationInfo>(key) == null, "persist-timeout/remove-cache");
+                await location.Remove(LocationType, key);
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "persist-timeout/remove");
+                Actorlocation_TestHelper.AssertTrue(Actorlocation_TestHelper.GetLocationInfo(location, key) == null, "persist-timeout/remove-cache");
 
                 return ErrorCode.ERR_Success;
             }

@@ -3,11 +3,6 @@ using System.Collections.Generic;
 
 namespace ET.Server
 {
-    public struct LocationLockTokenInfo
-    {
-        public long LockToken;
-    }
-
     [ComponentOf(typeof(Scene))]
     public class LocationProxyComponent: Entity, IAwake
     {

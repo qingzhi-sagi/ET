@@ -1,4 +1,4 @@
-﻿namespace ET.Server
+namespace ET.Server
 {
     [Invoke(SceneType.Location)]
     public class FiberInit_Location: AInvokeHandler<FiberInit, ETTask>
@@ -12,9 +12,9 @@
             root.AddComponent<ProcessInnerSender>();
             root.AddComponent<MessageSender>();
             root.AddComponent<DBManagerComponent>();
-            // location会把LocationManagerComponent.Id作为PriorityId注册到服务发现，所以这个Id需要生成一次
-            LocationManagerComponent locationManagerComponent = root.AddComponentWithId<LocationManagerComponent>(IdGenerater.Instance.GenerateId());
-            EntityRef<LocationManagerComponent> locationManagerComponentRef = locationManagerComponent;
+            // location会把LocationComponent.Id作为PriorityId注册到服务发现，所以这个Id需要生成一次
+            LocationComponent locationComponent = root.AddComponentWithId<LocationComponent>(IdGenerater.Instance.GenerateId());
+            EntityRef<LocationComponent> locationComponentRef = locationComponent;
             
             // 注册服务发现，并订阅 location 服务变化，主节点按稳定排序规则判定。
             string sceneName = root.Name;
@@ -23,7 +23,7 @@
             EntityRef<ServiceDiscoveryProxy> serviceDiscoveryProxyRef = serviceDiscoveryProxy;
             await serviceDiscoveryProxy.RegisterToServiceDiscovery(new StringKV
             {
-                { ServiceMetaKey.PriorityId, locationManagerComponent.Id.ToString() }
+                { ServiceMetaKey.PriorityId, locationComponent.Id.ToString() }
             });
 
             string locationSceneType = SceneTypeSingleton.Instance.GetSceneName(SceneType.Location);
@@ -34,10 +34,10 @@
                 { ServiceMetaKey.SceneType, locationSceneType }
             });
 
-            locationManagerComponent = locationManagerComponentRef;
-            locationManagerComponent.RefreshPrimaryState();
+            locationComponent = locationComponentRef;
+            locationComponent.RefreshPrimaryState();
 
-            Log.Info($"location node registered scene: {sceneName} zone: {zone} priorityId: {locationManagerComponent.Id}");
+            Log.Info($"location node registered scene: {sceneName} zone: {zone} priorityId: {locationComponent.Id}");
         }
     }
 }

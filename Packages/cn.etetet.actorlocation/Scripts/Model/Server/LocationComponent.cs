@@ -1,3 +1,7 @@
+using System.Collections.Generic;
+using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson.Serialization.Options;
+
 namespace ET.Server
 {
     public static class LocationPersistenceConst
@@ -7,16 +11,7 @@ namespace ET.Server
         public const string RouteCollection = "LocationInfo";
     }
 
-    public struct LocationState
-    {
-        public bool Exists;
-        public ActorId ActorId;
-        public long LockToken;
-        public long LockExpireTime;
-    }
-
-    [ChildOf(typeof(LocationOneType))]
-    public class LocationInfo: Entity, IAwake<ActorId>, IDestroy
+    public struct LocationTypeState
     {
         public ActorId ActorId;
 
@@ -25,13 +20,15 @@ namespace ET.Server
         public long LockExpireTime;
     }
 
-    [ChildOf(typeof(LocationManagerComponent))]
-    public class LocationOneType: Entity, IAwake
+    [ChildOf(typeof(LocationComponent))]
+    public class LocationInfo: Entity, IAwake, IDestroy
     {
+        [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
+        public Dictionary<int, LocationTypeState> TypeStates = new();
     }
 
     [ComponentOf(typeof(Scene))]
-    public class LocationManagerComponent: Entity, IAwake
+    public class LocationComponent: Entity, IAwake
     {
         public bool IsPrimaryLocation;
 

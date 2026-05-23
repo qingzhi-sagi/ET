@@ -21,7 +21,7 @@ namespace ET.Test
             scene.AddComponent<CoroutineLockComponent>();
             scene.AddComponent<DBManagerComponent>();
             scene.GetComponent<TestFiberDatabaseCleanupComponent>().RegisterLogicalDbName(LocationPersistenceConst.DBName);
-            scene.AddComponent<LocationManagerComponent>();
+            scene.AddComponent<LocationComponent>();
 
             return scene;
         }
@@ -79,16 +79,29 @@ namespace ET.Test
             proxy.OnServiceChangeNotification(changeType, new List<ServiceInfoProto> { serviceInfoProto });
         }
 
-        public static LocationOneType GetLocationOneType(Scene scene, int locationType)
+        public static LocationComponent GetLocationComponent(Scene scene)
         {
-            LocationManagerComponent locationManagerComponent = scene.GetComponent<LocationManagerComponent>();
-            return locationManagerComponent.Get(locationType);
+            return scene.GetComponent<LocationComponent>();
         }
 
-        public static LocationOneType EnsureLocation(EntityRef<LocationOneType> locationRef, string scenario)
+        public static LocationComponent EnsureLocationComponent(EntityRef<LocationComponent> locationComponentRef, string scenario)
         {
-            LocationOneType location = locationRef;
-            return location ?? throw new Exception($"{scenario}: location disposed");
+            LocationComponent locationComponent = locationComponentRef;
+            return locationComponent ?? throw new Exception($"{scenario}: location component disposed");
+        }
+
+        public static LocationInfo GetLocationInfo(LocationComponent locationComponent, long key)
+        {
+            return locationComponent.GetChild<LocationInfo>(key);
+        }
+
+        public static LocationTypeState GetLocationTypeState(LocationComponent locationComponent, int locationType, long key,
+        string scenario)
+        {
+            LocationInfo locationInfo = GetLocationInfo(locationComponent, key);
+            AssertTrue(locationInfo != null, $"{scenario}: location info missing");
+            AssertTrue(locationInfo.TypeStates.TryGetValue(locationType, out LocationTypeState state), $"{scenario}: route state missing");
+            return state;
         }
 
         public static void AssertTrue(bool condition, string message)

@@ -8,13 +8,13 @@ namespace ET.Test
     {
         protected override async ETTask Run(Scene scene, ObjectAddRequest request, ObjectAddResponse response)
         {
-            LocationManagerComponent locationManagerComponent = scene.GetComponent<LocationManagerComponent>();
-            if (!locationManagerComponent.EnsurePrimary(response))
+            LocationComponent locationComponent = scene.GetComponent<LocationComponent>();
+            if (!locationComponent.EnsurePrimary(response))
             {
                 return;
             }
 
-            await locationManagerComponent.Get(request.Type).Add(request.Key, request.ActorId);
+            await locationComponent.Add(request.Type, request.Key, request.ActorId);
         }
     }
 
@@ -23,13 +23,13 @@ namespace ET.Test
     {
         protected override async ETTask Run(Scene scene, ObjectGetRequest request, ObjectGetResponse response)
         {
-            LocationManagerComponent locationManagerComponent = scene.GetComponent<LocationManagerComponent>();
-            if (!locationManagerComponent.EnsurePrimary(response))
+            LocationComponent locationComponent = scene.GetComponent<LocationComponent>();
+            if (!locationComponent.EnsurePrimary(response))
             {
                 return;
             }
 
-            response.ActorId = await locationManagerComponent.Get(request.Type).Get(request.Key);
+            response.ActorId = await locationComponent.Get(request.Type, request.Key);
         }
     }
 
@@ -38,15 +38,13 @@ namespace ET.Test
     {
         protected override async ETTask Run(Scene scene, ObjectLockRequest request, ObjectLockResponse response)
         {
-            LocationManagerComponent locationManagerComponent = scene.GetComponent<LocationManagerComponent>();
-            if (!locationManagerComponent.EnsurePrimary(response))
+            LocationComponent locationComponent = scene.GetComponent<LocationComponent>();
+            if (!locationComponent.EnsurePrimary(response))
             {
                 return;
             }
 
-            response.LockToken = await locationManagerComponent
-                    .Get(request.Type)
-                    .Lock(request.Key, request.ActorId, request.Time);
+            response.LockToken = await locationComponent.Lock(request.Type, request.Key, request.ActorId, request.Time);
         }
     }
 
@@ -55,14 +53,13 @@ namespace ET.Test
     {
         protected override async ETTask Run(Scene scene, ObjectUnLockRequest request, ObjectUnLockResponse response)
         {
-            LocationManagerComponent locationManagerComponent = scene.GetComponent<LocationManagerComponent>();
-            if (!locationManagerComponent.EnsurePrimary(response))
+            LocationComponent locationComponent = scene.GetComponent<LocationComponent>();
+            if (!locationComponent.EnsurePrimary(response))
             {
                 return;
             }
 
-            await locationManagerComponent.Get(request.Type)
-                    .UnLock(request.Key, request.OldActorId, request.NewActorId, request.LockToken);
+            await locationComponent.UnLock(request.Type, request.Key, request.OldActorId, request.NewActorId, request.LockToken);
         }
     }
 
@@ -71,13 +68,13 @@ namespace ET.Test
     {
         protected override async ETTask Run(Scene scene, ObjectRemoveRequest request, ObjectRemoveResponse response)
         {
-            LocationManagerComponent locationManagerComponent = scene.GetComponent<LocationManagerComponent>();
-            if (!locationManagerComponent.EnsurePrimary(response))
+            LocationComponent locationComponent = scene.GetComponent<LocationComponent>();
+            if (!locationComponent.EnsurePrimary(response))
             {
                 return;
             }
 
-            await locationManagerComponent.Get(request.Type).Remove(request.Key, request.ExpectedActorId);
+            await locationComponent.Remove(request.Type, request.Key, request.ExpectedActorId);
         }
     }
 

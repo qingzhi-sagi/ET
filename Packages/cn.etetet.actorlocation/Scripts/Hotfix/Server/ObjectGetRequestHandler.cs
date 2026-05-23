@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace ET.Server
 {
@@ -7,13 +7,13 @@ namespace ET.Server
     {
         protected override async ETTask Run(Scene scene, ObjectGetRequest request, ObjectGetResponse response)
         {
-            LocationManagerComponent locationManagerComponent = scene.GetComponent<LocationManagerComponent>();
-            if (!locationManagerComponent.EnsurePrimary(response))
+            LocationComponent locationComponent = scene.GetComponent<LocationComponent>();
+            if (!locationComponent.EnsurePrimary(response))
             {
                 return;
             }
 
-            response.ActorId = await locationManagerComponent.Get(request.Type).Get(request.Key);
+            response.ActorId = await locationComponent.Get(request.Type, request.Key);
         }
     }
 }

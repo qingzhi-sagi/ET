@@ -15,25 +15,25 @@ namespace ET.Test
             try
             {
                 Scene scene = Actorlocation_TestHelper.PrepareLocationScene(scope.TestFiber);
-                LocationOneType location = Actorlocation_TestHelper.GetLocationOneType(scene, LocationType);
-                EntityRef<LocationOneType> locationRef = location;
+                LocationComponent location = Actorlocation_TestHelper.GetLocationComponent(scene);
+                EntityRef<LocationComponent> locationRef = location;
 
                 long key = IdGenerater.Instance.GenerateId();
                 ActorId oldActor = Actorlocation_TestHelper.CreateActorId(scope.TestFiber, 300010, 1);
                 ActorId newActor = Actorlocation_TestHelper.CreateActorId(scope.TestFiber, 300011, 1);
 
-                await location.Add(key, oldActor);
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "compensate/add");
+                await location.Add(LocationType, key, oldActor);
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "compensate/add");
 
-                long lockToken = await location.Lock(key, oldActor, 0);
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "compensate/lock");
-                await location.UnLock(key, oldActor, newActor, lockToken);
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "compensate/unlock-first");
+                long lockToken = await location.Lock(LocationType, key, oldActor, 0);
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "compensate/lock");
+                await location.UnLock(LocationType, key, oldActor, newActor, lockToken);
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "compensate/unlock-first");
 
                 try
                 {
-                    LocationOneType current = Actorlocation_TestHelper.EnsureLocation(locationRef, "compensate/unlock-second");
-                    await current.UnLock(key, oldActor, newActor, lockToken);
+                    LocationComponent current = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "compensate/unlock-second");
+                    await current.UnLock(LocationType, key, oldActor, newActor, lockToken);
                     throw new Exception(
                         $"compensate/unlock-second: expected RpcException({ErrorCode.ERR_LocationLockNotFound}), but no exception");
                 }
@@ -46,12 +46,12 @@ namespace ET.Test
                 }
 
                 location.RemoveChild(key);
-                ActorId persistedActor = await location.Get(key);
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "compensate/get-persisted");
+                ActorId persistedActor = await location.Get(LocationType, key);
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "compensate/get-persisted");
                 Actorlocation_TestHelper.AssertActorEqual(newActor, persistedActor, "compensate/persisted-actor");
 
-                await location.Remove(key);
-                Actorlocation_TestHelper.EnsureLocation(locationRef, "compensate/cleanup-remove");
+                await location.Remove(LocationType, key);
+                Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "compensate/cleanup-remove");
 
                 return ErrorCode.ERR_Success;
             }

@@ -18,10 +18,10 @@ namespace ET.Test
 
                 LocationProxyComponent locationProxy = scene.GetComponent<LocationProxyComponent>();
                 ServiceDiscoveryProxy serviceDiscoveryProxy = scene.GetComponent<ServiceDiscoveryProxy>();
-                LocationOneType location = Actorlocation_TestHelper.GetLocationOneType(scene, LocationType);
+                LocationComponent location = Actorlocation_TestHelper.GetLocationComponent(scene);
 
                 EntityRef<LocationProxyComponent> locationProxyRef = locationProxy;
-                EntityRef<LocationOneType> locationRef = location;
+                EntityRef<LocationComponent> locationRef = location;
 
                 ActorId serviceActorId = scene.GetActorId();
                 int zone = scene.Zone();
@@ -53,24 +53,24 @@ namespace ET.Test
                 }
                 Actorlocation_TestHelper.AssertActorEqual(oldActor, afterAdd, "proxy/add-route-written");
 
-                LocationLockTokenInfo lockTokenInfo = await locationProxy.LockWithToken(LocationType, key, oldActor, 0);
+                long lockToken = await locationProxy.LockWithToken(LocationType, key, oldActor, 0);
                 locationProxy = locationProxyRef;
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "proxy/location-after-lock");
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "proxy/location-after-lock");
                 if (locationProxy == null)
                 {
                     throw new Exception("proxy test: location proxy disposed after lock");
                 }
 
-                Actorlocation_TestHelper.AssertTrue(lockTokenInfo.LockToken != 0, "proxy/lock-token");
-                await location.UnLock(key, oldActor, newActor, lockTokenInfo.LockToken);
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "proxy/location-after-direct-unlock");
+                Actorlocation_TestHelper.AssertTrue(lockToken != 0, "proxy/lock-token");
+                await location.UnLock(LocationType, key, oldActor, newActor, lockToken);
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "proxy/location-after-direct-unlock");
                 locationProxy = locationProxyRef;
                 if (locationProxy == null)
                 {
                     throw new Exception("proxy test: location proxy disposed before compensate unlock");
                 }
 
-                await locationProxy.UnLockWithRetry(LocationType, key, oldActor, newActor, lockTokenInfo.LockToken);
+                await locationProxy.UnLockWithRetry(LocationType, key, oldActor, newActor, lockToken);
                 locationProxy = locationProxyRef;
                 if (locationProxy == null)
                 {
@@ -126,12 +126,12 @@ namespace ET.Test
                 ServiceDiscoveryProxy serviceDiscoveryProxy = scene.GetComponent<ServiceDiscoveryProxy>();
                 LocationProxyComponent locationProxy = scene.GetComponent<LocationProxyComponent>();
                 MessageLocationSenderComponent senderComponent = scene.GetComponent<MessageLocationSenderComponent>();
-                LocationOneType location = Actorlocation_TestHelper.GetLocationOneType(scene, LocationType);
+                LocationComponent location = Actorlocation_TestHelper.GetLocationComponent(scene);
                 TimerComponent timerComponent = scene.TimerComponent;
 
                 EntityRef<LocationProxyComponent> locationProxyRef = locationProxy;
                 EntityRef<MessageLocationSenderComponent> senderComponentRef = senderComponent;
-                EntityRef<LocationOneType> locationRef = location;
+                EntityRef<LocationComponent> locationRef = location;
                 EntityRef<TimerComponent> timerRef = timerComponent;
 
                 locationProxy.locationRequestRetryTimes = 3;
@@ -144,8 +144,8 @@ namespace ET.Test
 
                 long entityId = IdGenerater.Instance.GenerateId();
                 ActorId missingActorId = Actorlocation_TestHelper.CreateActorId(scope.TestFiber, scope.TestFiber.Id, int.MaxValue);
-                await location.Add(entityId, missingActorId);
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "sender/add-missing-route");
+                await location.Add(LocationType, entityId, missingActorId);
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "sender/add-missing-route");
 
                 async ETTask SwitchRouteToValid()
                 {
@@ -156,21 +156,21 @@ namespace ET.Test
                     }
 
                     await timer.WaitAsync(60);
-                    LocationOneType current = locationRef;
+                    LocationComponent current = locationRef;
                     if (current == null)
                     {
                         return;
                     }
 
-                    EntityRef<LocationOneType> currentRef = current;
-                    long lockToken = await current.Lock(entityId, missingActorId, 0);
+                    EntityRef<LocationComponent> currentRef = current;
+                    long lockToken = await current.Lock(LocationType, entityId, missingActorId, 0);
                     current = currentRef;
                     if (current == null)
                     {
                         return;
                     }
 
-                    await current.UnLock(entityId, missingActorId, serviceActorId, lockToken);
+                    await current.UnLock(LocationType, entityId, missingActorId, serviceActorId, lockToken);
                 }
 
                 SwitchRouteToValid().Coroutine();
@@ -200,10 +200,10 @@ namespace ET.Test
                 Actorlocation_TestHelper.AssertEqual(ErrorCode.ERR_Success, firstResponse.Error, "sender/first-response-error");
                 Actorlocation_TestHelper.AssertEqual("echo:first", firstResponse.response, "sender/first-response-body");
                 
-                long resetLockToken = await location.Lock(entityId, serviceActorId, 0);
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "sender/lock-route-before-reset");
-                await location.UnLock(entityId, serviceActorId, missingActorId, resetLockToken);
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "sender/reset-route-to-missing");
+                long resetLockToken = await location.Lock(LocationType, entityId, serviceActorId, 0);
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "sender/lock-route-before-reset");
+                await location.UnLock(LocationType, entityId, serviceActorId, missingActorId, resetLockToken);
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "sender/reset-route-to-missing");
                 senderOneType = senderOneTypeRef;
                 if (senderOneType == null)
                 {
@@ -259,12 +259,12 @@ namespace ET.Test
                 ServiceDiscoveryProxy serviceDiscoveryProxy = scene.GetComponent<ServiceDiscoveryProxy>();
                 LocationProxyComponent locationProxy = scene.GetComponent<LocationProxyComponent>();
                 MessageLocationSenderComponent senderComponent = scene.GetComponent<MessageLocationSenderComponent>();
-                LocationOneType location = Actorlocation_TestHelper.GetLocationOneType(scene, LocationType);
+                LocationComponent location = Actorlocation_TestHelper.GetLocationComponent(scene);
 
                 EntityRef<ServiceDiscoveryProxy> serviceDiscoveryProxyRef = serviceDiscoveryProxy;
                 EntityRef<LocationProxyComponent> locationProxyRef = locationProxy;
                 EntityRef<MessageLocationSenderComponent> senderComponentRef = senderComponent;
-                EntityRef<LocationOneType> locationRef = location;
+                EntityRef<LocationComponent> locationRef = location;
 
                 locationProxy.locationRequestRetryTimes = 30;
                 locationProxy.locationRequestRetryIntervalMs = 10;
@@ -285,9 +285,9 @@ namespace ET.Test
                 long entityId = IdGenerater.Instance.GenerateId();
                 ActorId oldActorId = secondaryScene.GetActorId();
 
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "primary-switch/add-old-route-before");
-                await location.Add(entityId, oldActorId);
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "primary-switch/add-old-route");
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "primary-switch/add-old-route-before");
+                await location.Add(LocationType, entityId, oldActorId);
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "primary-switch/add-old-route");
 
                 senderComponent = senderComponentRef;
                 if (senderComponent == null)
@@ -321,11 +321,11 @@ namespace ET.Test
                 }
                 Actorlocation_TestHelper.RemoveLocalLocationService(serviceDiscoveryProxy, primaryServiceName, locationServiceActorId, zone);
 
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "primary-switch/move-route");
-                await location.Remove(entityId);
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "primary-switch/remove-old-route-done");
-                await location.Add(entityId, newActorId);
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "primary-switch/move-route-done");
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "primary-switch/move-route");
+                await location.Remove(LocationType, entityId);
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "primary-switch/remove-old-route-done");
+                await location.Add(LocationType, entityId, newActorId);
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "primary-switch/move-route-done");
 
                 await scope.TestFiber.RemoveFiber(secondaryFiber.Id);
                 secondaryFiber = null;
@@ -410,12 +410,12 @@ namespace ET.Test
                 ServiceDiscoveryProxy serviceDiscoveryProxyB = sceneB.GetComponent<ServiceDiscoveryProxy>();
                 LocationProxyComponent locationProxyB = sceneB.GetComponent<LocationProxyComponent>();
                 MessageLocationSenderComponent senderComponentB = sceneB.GetComponent<MessageLocationSenderComponent>();
-                LocationOneType location = Actorlocation_TestHelper.GetLocationOneType(sceneB, LocationType);
+                LocationComponent location = Actorlocation_TestHelper.GetLocationComponent(sceneB);
 
                 EntityRef<ServiceDiscoveryProxy> serviceDiscoveryProxyBRef = serviceDiscoveryProxyB;
                 EntityRef<LocationProxyComponent> locationProxyBRef = locationProxyB;
                 EntityRef<MessageLocationSenderComponent> senderComponentBRef = senderComponentB;
-                EntityRef<LocationOneType> locationRef = location;
+                EntityRef<LocationComponent> locationRef = location;
 
                 int zone = sceneB.Zone();
                 ActorId locationServiceActorId = sceneB.GetActorId();
@@ -463,9 +463,9 @@ namespace ET.Test
                 Actorlocation_TestHelper.AddLocalLocationService(serviceDiscoveryProxyA, primaryServiceName, locationServiceActorId, zone, 100);
 
                 long entityId = IdGenerater.Instance.GenerateId();
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "three-fiber/add-route-before");
-                await location.Add(entityId, actorAId);
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "three-fiber/add-route-after");
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "three-fiber/add-route-before");
+                await location.Add(LocationType, entityId, actorAId);
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "three-fiber/add-route-after");
 
                 senderComponentB = senderComponentBRef;
                 if (senderComponentB == null)
@@ -499,13 +499,13 @@ namespace ET.Test
                     throw new Exception("three-fiber: location proxy A disposed before lock");
                 }
 
-                LocationLockTokenInfo lockTokenInfo = await locationProxyA.LockWithToken(LocationType, entityId, actorAId, 0);
+                long lockToken = await locationProxyA.LockWithToken(LocationType, entityId, actorAId, 0);
                 locationProxyA = locationProxyARef;
                 if (locationProxyA == null)
                 {
                     throw new Exception("three-fiber: location proxy A disposed after lock");
                 }
-                Actorlocation_TestHelper.AssertTrue(lockTokenInfo.LockToken != 0, "three-fiber/lock-token");
+                Actorlocation_TestHelper.AssertTrue(lockToken != 0, "three-fiber/lock-token");
 
                 serviceDiscoveryProxyB = serviceDiscoveryProxyBRef;
                 if (serviceDiscoveryProxyB == null)
@@ -527,7 +527,7 @@ namespace ET.Test
                     throw new Exception("three-fiber: location proxy A disposed before unlock");
                 }
 
-                await locationProxyA.UnLock(LocationType, entityId, actorAId, actorCId, lockTokenInfo.LockToken);
+                await locationProxyA.UnLock(LocationType, entityId, actorAId, actorCId, lockToken);
                 locationProxyA = locationProxyARef;
                 if (locationProxyA == null)
                 {

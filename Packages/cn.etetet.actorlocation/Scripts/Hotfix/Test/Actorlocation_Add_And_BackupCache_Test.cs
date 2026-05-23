@@ -18,10 +18,10 @@ namespace ET.Test
 
                 ServiceDiscoveryProxy serviceDiscoveryProxy = scene.GetComponent<ServiceDiscoveryProxy>();
                 LocationProxyComponent locationProxy = scene.GetComponent<LocationProxyComponent>();
-                LocationOneType location = Actorlocation_TestHelper.GetLocationOneType(scene, LocationType);
+                LocationComponent location = Actorlocation_TestHelper.GetLocationComponent(scene);
 
                 EntityRef<LocationProxyComponent> locationProxyRef = locationProxy;
-                EntityRef<LocationOneType> locationRef = location;
+                EntityRef<LocationComponent> locationRef = location;
 
                 ActorId serviceActorId = scene.GetActorId();
                 int zone = scene.Zone();
@@ -38,8 +38,8 @@ namespace ET.Test
                     throw new Exception("add-exists: location proxy disposed after first add");
                 }
 
-                LocationOneType currentLocation = Actorlocation_TestHelper.EnsureLocation(locationRef, "add-exists/direct-add-second");
-                await currentLocation.Add(key, actorB);
+                LocationComponent currentLocation = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "add-exists/direct-add-second");
+                await currentLocation.Add(LocationType, key, actorB);
 
                 LocationProxyComponent currentProxy = locationProxyRef;
                 if (currentProxy == null)
@@ -89,25 +89,25 @@ namespace ET.Test
             {
                 Scene scene = Actorlocation_TestHelper.PrepareProxyScene(scope.TestFiber);
                 ServiceDiscoveryProxy serviceDiscoveryProxy = scene.GetComponent<ServiceDiscoveryProxy>();
-                LocationManagerComponent locationManagerComponent = scene.GetComponent<LocationManagerComponent>();
-                LocationOneType location = Actorlocation_TestHelper.GetLocationOneType(scene, LocationType);
+                LocationComponent locationComponent = scene.GetComponent<LocationComponent>();
+                LocationComponent location = Actorlocation_TestHelper.GetLocationComponent(scene);
 
                 EntityRef<ServiceDiscoveryProxy> serviceDiscoveryProxyRef = serviceDiscoveryProxy;
-                EntityRef<LocationManagerComponent> locationManagerRef = locationManagerComponent;
-                EntityRef<LocationOneType> locationRef = location;
+                EntityRef<LocationComponent> locationComponentRef = locationComponent;
+                EntityRef<LocationComponent> locationRef = location;
 
                 ActorId selfActorId = scene.GetActorId();
                 int zone = scene.Zone();
                 Actorlocation_TestHelper.AddLocalLocationService(serviceDiscoveryProxy, scene.Name, selfActorId, zone, 200);
-                locationManagerComponent.RefreshPrimaryState();
-                Actorlocation_TestHelper.AssertTrue(locationManagerComponent.IsPrimaryLocation, "become-backup/become-primary");
+                locationComponent.RefreshPrimaryState();
+                Actorlocation_TestHelper.AssertTrue(locationComponent.IsPrimaryLocation, "become-backup/become-primary");
 
                 long key = IdGenerater.Instance.GenerateId();
                 ActorId routeActorId = Actorlocation_TestHelper.CreateActorId(scope.TestFiber, 301022, 1);
 
-                await location.Add(key, routeActorId);
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "become-backup/add-route");
-                Actorlocation_TestHelper.AssertTrue(location.GetChild<LocationInfo>(key) != null, "become-backup/cache-before-demote");
+                await location.Add(LocationType, key, routeActorId);
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "become-backup/add-route");
+                Actorlocation_TestHelper.AssertTrue(Actorlocation_TestHelper.GetLocationInfo(location, key) != null, "become-backup/cache-before-demote");
 
                 serviceDiscoveryProxy = serviceDiscoveryProxyRef;
                 if (serviceDiscoveryProxy == null)
@@ -121,17 +121,17 @@ namespace ET.Test
                     Actorlocation_TestHelper.CreateActorId(scope.TestFiber, 301023, 1),
                     zone,
                     100);
-                locationManagerComponent = locationManagerRef;
-                if (locationManagerComponent == null)
+                locationComponent = locationComponentRef;
+                if (locationComponent == null)
                 {
-                    throw new Exception("become-backup: location manager disposed before refresh");
+                    throw new Exception("become-backup: location component disposed before refresh");
                 }
-                locationManagerComponent.RefreshPrimaryState();
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "become-backup/cache-cleared-after-demote");
-                Actorlocation_TestHelper.AssertTrue(!locationManagerComponent.IsPrimaryLocation, "become-backup/demoted");
-                Actorlocation_TestHelper.AssertEqual("0_location_primary", locationManagerComponent.PrimaryLocationSceneName,
+                locationComponent.RefreshPrimaryState();
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "become-backup/cache-cleared-after-demote");
+                Actorlocation_TestHelper.AssertTrue(!locationComponent.IsPrimaryLocation, "become-backup/demoted");
+                Actorlocation_TestHelper.AssertEqual("0_location_primary", locationComponent.PrimaryLocationSceneName,
                     "become-backup/new-primary");
-                Actorlocation_TestHelper.AssertTrue(location.GetChild<LocationInfo>(key) == null,
+                Actorlocation_TestHelper.AssertTrue(Actorlocation_TestHelper.GetLocationInfo(location, key) == null,
                     "become-backup/cache-cleared-after-demote");
 
                 return ErrorCode.ERR_Success;
@@ -157,7 +157,7 @@ namespace ET.Test
             {
                 Scene scene = Actorlocation_TestHelper.PrepareProxyScene(scope.TestFiber);
                 ServiceDiscoveryProxy serviceDiscoveryProxy = scene.GetComponent<ServiceDiscoveryProxy>();
-                LocationManagerComponent locationManagerComponent = scene.GetComponent<LocationManagerComponent>();
+                LocationComponent locationComponent = scene.GetComponent<LocationComponent>();
                 MessageSender messageSender = scene.GetComponent<MessageSender>();
 
                 ActorId selfActorId = scene.GetActorId();
@@ -165,9 +165,9 @@ namespace ET.Test
                 Actorlocation_TestHelper.AddLocalLocationService(serviceDiscoveryProxy, scene.Name, selfActorId, zone, 200);
                 Actorlocation_TestHelper.AddLocalLocationService(serviceDiscoveryProxy, "0_location_primary",
                     Actorlocation_TestHelper.CreateActorId(scope.TestFiber, 301024, 1), zone, 100);
-                locationManagerComponent.RefreshPrimaryState();
-                Actorlocation_TestHelper.AssertTrue(!locationManagerComponent.IsPrimaryLocation, "backup-rejects/become-backup");
-                Actorlocation_TestHelper.AssertEqual("0_location_primary", locationManagerComponent.PrimaryLocationSceneName,
+                locationComponent.RefreshPrimaryState();
+                Actorlocation_TestHelper.AssertTrue(!locationComponent.IsPrimaryLocation, "backup-rejects/become-backup");
+                Actorlocation_TestHelper.AssertEqual("0_location_primary", locationComponent.PrimaryLocationSceneName,
                     "backup-rejects/primary-name");
 
                 using ObjectGetRequest request = ObjectGetRequest.Create();

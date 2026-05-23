@@ -76,7 +76,8 @@ namespace ET.Server
             
             ActorId oldActorId = unit.GetActorId();
             //2. location加锁
-            await root.GetComponent<LocationProxyComponent>().Lock(LocationType.Unit, unitId, oldActorId);
+            long locationLockToken = await root.GetComponent<LocationProxyComponent>()
+                    .LockWithToken(LocationType.Unit, unitId, oldActorId);
             
             // 先从AOI中移除
             unit = unitRef;
@@ -134,7 +135,8 @@ namespace ET.Server
 
             root = rootRef;
             //5. 解锁location，可以接收发给Unit的消息
-            await root.GetComponent<LocationProxyComponent>().UnLock(LocationType.Unit, unitId, oldActorId, newActorId);
+            await root.GetComponent<LocationProxyComponent>()
+                    .UnLock(LocationType.Unit, unitId, oldActorId, newActorId, locationLockToken);
             
             Log.Debug("start transfer4 unit: " + unitId + ", mapActorId: " + mapActorId + ", changeScene: " + changeScene);
         }

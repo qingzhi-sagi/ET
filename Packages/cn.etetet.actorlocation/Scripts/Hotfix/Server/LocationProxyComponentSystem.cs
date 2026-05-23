@@ -218,7 +218,7 @@ namespace ET.Server
             }
         }
 
-        public static async ETTask<LocationLockTokenInfo> LockWithToken(this LocationProxyComponent self, int type, long key, ActorId actorId,
+        public static async ETTask<long> LockWithToken(this LocationProxyComponent self, int type, long key, ActorId actorId,
             int time = 60000)
         {
             Log.Info($"location proxy lock {key}, {actorId} {self.GetSingleton<TimeInfo>().ServerNow()}");
@@ -236,22 +236,22 @@ namespace ET.Server
                     $"location lock failed key: {key} actorId: {actorId} error: {response.Message}");
             }
 
-            return new LocationLockTokenInfo()
-            {
-                LockToken = response.LockToken,
-            };
+            return response.LockToken;
         }
 
+        [Obsolete("Use LockWithToken and pass the returned token to UnLock.", true)]
         public static async ETTask Lock(this LocationProxyComponent self, int type, long key, ActorId actorId,
             int time = 60000)
         {
             await self.LockWithToken(type, key, actorId, time);
         }
 
-        public static async ETTask UnLock(this LocationProxyComponent self, int type, long key, ActorId oldActorId,
+        [Obsolete("Use UnLock overload with lockToken.", true)]
+        public static ETTask UnLock(this LocationProxyComponent self, int type, long key, ActorId oldActorId,
             ActorId newActorId)
         {
-            await self.UnLock(type, key, oldActorId, newActorId, 0);
+            throw new RpcException(ErrorCode.ERR_LocationLockTokenMismatch,
+                $"location unlock requires lock token key: {key} oldActorId: {oldActorId} newActorId: {newActorId}");
         }
 
         public static async ETTask UnLock(this LocationProxyComponent self, int type, long key, ActorId oldActorId,

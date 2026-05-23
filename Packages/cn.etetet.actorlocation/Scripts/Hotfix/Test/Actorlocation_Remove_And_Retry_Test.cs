@@ -170,10 +170,10 @@ namespace ET.Test
 
                 ServiceDiscoveryProxy serviceDiscoveryProxy = scene.GetComponent<ServiceDiscoveryProxy>();
                 LocationProxyComponent locationProxy = scene.GetComponent<LocationProxyComponent>();
-                LocationOneType location = Actorlocation_TestHelper.GetLocationOneType(scene, LocationType);
+                LocationComponent location = Actorlocation_TestHelper.GetLocationComponent(scene);
 
                 EntityRef<LocationProxyComponent> locationProxyRef = locationProxy;
-                EntityRef<LocationOneType> locationRef = location;
+                EntityRef<LocationComponent> locationRef = location;
 
                 locationProxy.locationRequestRetryTimes = 3;
                 locationProxy.locationRequestRetryIntervalMs = 1;
@@ -187,15 +187,15 @@ namespace ET.Test
 
                 await locationProxy.Add(LocationType, key, oldActor);
                 locationProxy = locationProxyRef;
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "remove-actor-match/add");
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "remove-actor-match/add");
                 if (locationProxy == null)
                 {
                     throw new Exception("remove-actor-match: location proxy disposed after add");
                 }
 
-                long moveLockToken = await location.Lock(key, oldActor, 0);
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "remove-actor-match/lock-before-move");
-                await location.UnLock(key, oldActor, newActor, moveLockToken);
+                long moveLockToken = await location.Lock(LocationType, key, oldActor, 0);
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "remove-actor-match/lock-before-move");
+                await location.UnLock(LocationType, key, oldActor, newActor, moveLockToken);
 
                 locationProxy = locationProxyRef;
                 if (locationProxy == null)
@@ -212,15 +212,15 @@ namespace ET.Test
 
                 ActorId actorAfterStaleRemove = await locationProxy.Get(LocationType, key);
                 locationProxy = locationProxyRef;
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "remove-actor-match/get-after-stale-remove");
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "remove-actor-match/get-after-stale-remove");
                 if (locationProxy == null)
                 {
                     throw new Exception("remove-actor-match: location proxy disposed after stale remove get");
                 }
                 Actorlocation_TestHelper.AssertActorEqual(newActor, actorAfterStaleRemove, "remove-actor-match/stale-remove-skipped");
 
-                long activeLockToken = await location.Lock(key, newActor, 0);
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "remove-actor-match/lock-before-remove");
+                long activeLockToken = await location.Lock(LocationType, key, newActor, 0);
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "remove-actor-match/lock-before-remove");
 
                 try
                 {
@@ -243,13 +243,13 @@ namespace ET.Test
                 }
 
                 locationProxy = locationProxyRef;
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "remove-actor-match/unlock-after-reject");
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "remove-actor-match/unlock-after-reject");
                 if (locationProxy == null)
                 {
                     throw new Exception("remove-actor-match: location proxy disposed after locked remove");
                 }
 
-                await location.UnLock(key, newActor, newActor, activeLockToken);
+                await location.UnLock(LocationType, key, newActor, newActor, activeLockToken);
 
                 locationProxy = locationProxyRef;
                 if (locationProxy == null)

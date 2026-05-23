@@ -15,32 +15,32 @@ namespace ET.Test
             try
             {
                 Scene scene = Actorlocation_TestHelper.PrepareLocationScene(scope.TestFiber);
-                LocationOneType location = Actorlocation_TestHelper.GetLocationOneType(scene, LocationType);
-                EntityRef<LocationOneType> locationRef = location;
+                LocationComponent location = Actorlocation_TestHelper.GetLocationComponent(scene);
+                EntityRef<LocationComponent> locationRef = location;
 
                 long key = IdGenerater.Instance.GenerateId();
                 ActorId actorA = Actorlocation_TestHelper.CreateActorId(scope.TestFiber, 300001, 1);
 
-                await location.Add(key, actorA);
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "basic/add");
+                await location.Add(LocationType, key, actorA);
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "basic/add");
 
-                ActorId afterAdd = await location.Get(key);
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "basic/get-after-add");
+                ActorId afterAdd = await location.Get(LocationType, key);
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "basic/get-after-add");
                 Actorlocation_TestHelper.AssertActorEqual(actorA, afterAdd, "basic/get-after-add");
-                Actorlocation_TestHelper.AssertTrue(location.GetChild<LocationInfo>(key) != null, "basic/cache-after-add");
+                Actorlocation_TestHelper.AssertTrue(Actorlocation_TestHelper.GetLocationInfo(location, key) != null, "basic/cache-after-add");
 
                 location.RemoveChild(key);
-                ActorId reloadFromDb = await location.Get(key);
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "basic/get-after-cache-remove");
+                ActorId reloadFromDb = await location.Get(LocationType, key);
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "basic/get-after-cache-remove");
                 Actorlocation_TestHelper.AssertActorEqual(actorA, reloadFromDb, "basic/reload-from-db");
-                Actorlocation_TestHelper.AssertTrue(location.GetChild<LocationInfo>(key) != null, "basic/cache-rehydrated");
+                Actorlocation_TestHelper.AssertTrue(Actorlocation_TestHelper.GetLocationInfo(location, key) != null, "basic/cache-rehydrated");
 
-                await location.Remove(key);
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "basic/remove");
-                Actorlocation_TestHelper.AssertTrue(location.GetChild<LocationInfo>(key) == null, "basic/cache-after-remove");
+                await location.Remove(LocationType, key);
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "basic/remove");
+                Actorlocation_TestHelper.AssertTrue(Actorlocation_TestHelper.GetLocationInfo(location, key) == null, "basic/cache-after-remove");
 
-                ActorId afterRemove = await location.Get(key);
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "basic/get-after-remove");
+                ActorId afterRemove = await location.Get(LocationType, key);
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "basic/get-after-remove");
                 Actorlocation_TestHelper.AssertTrue(afterRemove == default, "basic/default-after-remove");
 
                 return ErrorCode.ERR_Success;

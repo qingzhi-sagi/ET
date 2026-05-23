@@ -16,8 +16,8 @@ namespace ET.Test
             {
                 Scene scene = Actorlocation_TestHelper.PrepareProxyScene(scope.TestFiber);
 
-                LocationOneType location = Actorlocation_TestHelper.GetLocationOneType(scene, LocationType);
-                EntityRef<LocationOneType> locationRef = location;
+                LocationComponent location = Actorlocation_TestHelper.GetLocationComponent(scene);
+                EntityRef<LocationComponent> locationRef = location;
 
                 LocationProxyComponent locationProxy = scene.GetComponent<LocationProxyComponent>();
                 EntityRef<LocationProxyComponent> locationProxyRef = locationProxy;
@@ -36,18 +36,18 @@ namespace ET.Test
                 TimerComponent timerComponent = scene.TimerComponent;
                 EntityRef<TimerComponent> timerRef = timerComponent;
 
-                await location.Add(key, oldActor);
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "get-lock-retry/add");
+                await location.Add(LocationType, key, oldActor);
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "get-lock-retry/add");
 
-                long lockToken = await location.Lock(key, oldActor, 0);
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "get-lock-retry/lock");
+                long lockToken = await location.Lock(LocationType, key, oldActor, 0);
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "get-lock-retry/lock");
                 Actorlocation_TestHelper.AssertTrue(lockToken != 0, "get-lock-retry/lock-token");
 
                 try
                 {
-                    LocationOneType current = Actorlocation_TestHelper.EnsureLocation(locationRef,
+                    LocationComponent current = Actorlocation_TestHelper.EnsureLocationComponent(locationRef,
                         "get-lock-retry/direct-get");
-                    await current.Get(key);
+                    await current.Get(LocationType, key);
                     throw new Exception(
                         $"get-lock-retry/direct-get: expected RpcException({ErrorCode.ERR_LocationGetRetry}), but no exception");
                 }
@@ -59,14 +59,14 @@ namespace ET.Test
                         "get-lock-retry/direct-get");
                 }
 
-                location = Actorlocation_TestHelper.EnsureLocation(locationRef, "get-lock-retry/clear-cache");
+                location = Actorlocation_TestHelper.EnsureLocationComponent(locationRef, "get-lock-retry/clear-cache");
                 location.RemoveChild(key);
 
                 try
                 {
-                    LocationOneType current = Actorlocation_TestHelper.EnsureLocation(locationRef,
+                    LocationComponent current = Actorlocation_TestHelper.EnsureLocationComponent(locationRef,
                         "get-lock-retry/direct-get-after-cache-clear");
-                    await current.Get(key);
+                    await current.Get(LocationType, key);
                     throw new Exception(
                         $"get-lock-retry/direct-get-after-cache-clear: expected RpcException({ErrorCode.ERR_LocationGetRetry}), but no exception");
                 }
@@ -87,13 +87,13 @@ namespace ET.Test
                     }
 
                     await timer.WaitAsync(80);
-                    LocationOneType current = locationRef;
+                    LocationComponent current = locationRef;
                     if (current == null)
                     {
                         return;
                     }
 
-                    await current.UnLock(key, oldActor, newActor, lockToken);
+                    await current.UnLock(LocationType, key, oldActor, newActor, lockToken);
                 }
 
                 UnlockLater().Coroutine();
