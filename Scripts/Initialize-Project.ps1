@@ -9,6 +9,7 @@ param(
     [switch]$SkipToolBuild,
     [switch]$SkipCodeMode,
     [switch]$SkipFullBuild,
+    [switch]$BuildSolution,
     [string[]]$DotNetSdkVersions = @(),
     [string]$GitExecutable = 'git'
 )
@@ -317,7 +318,7 @@ function Invoke-InitializationBuilds {
         Invoke-CheckedCommand -FilePath 'dotnet' -ArgumentList @((Resolve-ProjectPath 'Bin/ET.CodeMode.dll'), "--CodeMode=$CodeMode") -Description "执行 ET.CodeMode: $CodeMode"
     }
 
-    if (!$SkipFullBuild) {
+    if ($BuildSolution -and !$SkipFullBuild) {
         Invoke-CheckedCommand -FilePath 'dotnet' -ArgumentList @('build', (Resolve-ProjectPath 'ET.sln')) -Description '编译 ET.sln'
     }
 }
