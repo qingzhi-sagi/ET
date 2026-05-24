@@ -107,6 +107,7 @@ developers focus on game design instead of repetitive engineering tasks
 ET10
 AI writes code. ET10 makes it production-ready.
 
+For running instructions, please refer to [Book/1.1Running Guide.md](Book/1.1Running%20Guide.md).
 
 # ET10.0(昭君) 
 1. 开源版本使用ET License，只可以用于学习，不可二次修改开源，商业使用需要购买许可，价格4999，具体请看LICENSE文件  
@@ -122,7 +123,7 @@ AI writes code. ET10 makes it production-ready.
    | cn.etetet.aspire | Aspire包，整合ET框架与.NET Aspire，会根据StartConfig为每个ET进程和副本创建Aspire服务，自动传递SceneName、StartConfig、内外网端口等启动参数，并接入OTLP/OpenTelemetry，适合分布式应用编排、运行观测和监控 |  
 
 2. game develop ai harness支持，ET10遥遥领先! 绝大部分框架要么客户端要么服务端，要想实现完善的vibe coding test框架是非常不舒服的，只有ET10这种前后端一起，才能极其方便开发双端test，直接打通前后端逻辑，联调都不用，test直接完成双端逻辑开发，完成联调工作。逻辑开发的工作量只剩下UI了。  
-3. 使用请参考 Book/1.1运行指南.md
+3. 使用请参考 [Book/1.1Running Guide.md](Book/1.1Running%20Guide.md)
 
 
 # __讨论QQ群 : 474643097__ （已满） 新手请加新手群:688514974 
